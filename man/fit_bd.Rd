@@ -7,7 +7,8 @@ Fit parameters for cladogenesis birth-death proces
 \description{
 This function helps to fit parameters of the birth-death model to a given phylogeny, by maximizing the likelihood function.
 Outputs are the log-likelihood, the second order Akaike's Information Criterion, and the maximum likelihood estimates of the parameters of diversification. 
-Depending on the model, these parameters include a combination of the speciation rate at present (lamb0), the exponential variation in speciation rate (alpha), the extinction rate at present (mu0), the exponential variation in extinction rate (beta) and the extinction fraction (extinction rate/speciation rate, eps). See notations in the PLoS Biology 2010 paper.
+%Depending on the model, these parameters include a combination of the speciation rate at present (lamb0), the variation in speciation rate (alpha), the extinction rate at present (mu0), the variation in extinction rate (beta) and the extinction fraction (extinction rate/speciation rate, eps). 
+See notations in the PNAS 2011 paper.
 }
 \usage{
 fit_bd(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
