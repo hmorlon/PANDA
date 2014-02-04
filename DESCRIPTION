@@ -1,14 +1,13 @@
-Package: RPANDA
+Package: PANDA
 Version: 1.0
-Date: 2013-12-27
+Date: 2014-02-04
 Type: Package
-Title: Dynamics of Diversification
+Title: Phylogenetic ANalyses of DiversificAtion
 Depends: R (>= 2.14.2), ape, picante
 Encoding: UTF-8
 Author: H. Morlon
-Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "helene.morlon@cmap.polytechnique.fr"))
-Maintainer: H. Morlon <helene.morlon@cmap.polytechnique.fr>
-Description: RPANDA implements maximum likelihood methods based on the birth-death process.
- See Morlon et al. 2010, PLoS Biology
-License: GPL (>=2)
-Packaged: 2014-01-31 17:14:22 UTC; barbier
+Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "helene.morlon@cmap.polytechnique.fr))
+Maintainer: D. Barbier <barbier@imacs.polytechnique.fr>
+Description: PANDA implements maximum likelihood methods based on the birth-death process.
+ See Morlon et al. 2010, PLoS Biology, Morlon et al. 2011, PNAS, Condamine et al. 2013, ELE
+License: GPL-2
