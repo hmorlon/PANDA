@@ -82,7 +82,8 @@ Let \eqn{\Phi(s,t)} the probability that a lineage alive at time t has no descen
 \deqn{L(t_{1},...,t_{n})=\frac{f^n\Psi(t_{2}, t_{1})\prod_{i=2}^{n} \Psi(s_{i,1}, t_{i}) \Psi(s_{i,2}, t_{i}) }{1-\Phi(t_{1})}}{see formula in Morlon et al. PNAS 2011}
 where:
 \itemize{\item f denotes the probability that some extant species were sampled and not included in the sample
-\item \eqn{s_{i,1},s_{i,2}}[s[i,1],s[i,2]} denote the times at which the daughter lineages introduced at time \eqn{t_{i}}{t[i]} themselves branch.
+\item \eqn{s_{i,1},s_{i,2}}{s[i,1],s[i,2]} denote the times at which the daughter lineages introduced at time \eqn{t_{i}}{t[i]} themselves branch.
+}
 
 This function fits this likelihood models. The function returns the the estimates
 of the parameters of diversification, the log-likelihood and the second order Akaike's
