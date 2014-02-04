@@ -22,8 +22,7 @@ fit_bd(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
 phylo is an object of type 'phylo' (see ape documentation)
 }
   \item{tot_time}{
-tot_time is the age of the phylogeny
-This age could be evaluated on a phylogeny thanks to the node.age function.
+tot_time is the age of the phylogeny (crown age or stem age)
 }
   \item{f.lamb}{
 The \eqn{\lambda} function. This corresponds to the speciation rate function at any time.
