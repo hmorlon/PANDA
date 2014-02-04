@@ -6,8 +6,8 @@ Title: Phylogenetic ANalyses of DiversificAtion
 Depends: R (>= 2.14.2), ape, picante
 Encoding: UTF-8
 Author: H. Morlon
-Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "helene.morlon@cmap.polytechnique.fr"))
+Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "helene.morlon@cmap.polytechnique.fr))
 Maintainer: D. Barbier <barbier@imacs.polytechnique.fr>
-Description: PANDA implements maximum likelihood methods based on the birth-death process.
- See Morlon et al. 2010, PLoS Biology, Morlon et al. 2011, PNAS, Condamine et al. 2013, ELE
+Description: PANDA implements maximum likelihood fits of diversification models.
+ See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014)
 License: GPL-2
