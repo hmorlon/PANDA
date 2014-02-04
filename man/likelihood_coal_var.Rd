@@ -1,5 +1,5 @@
-\name{likelihood_coal_bd_mod}
-\alias{likelihood_coal_bd_mod}
+\name{likelihood_coal_var}
+\alias{likelihood_coal_var}
 \title{
 Likelihood of a birth-death model using a coalescent approch
 }
@@ -9,7 +9,7 @@ under assumption of positive ratio (\eqn{\lambda(t) \geq \mu(t)}) and various ki
 With fixed speciation and extinction rate functions, log-likelihood is evaluated for each time-length \eqn{t_i}{t[i]} between nodes i and i+1 of the clade, and summed to give the total log-likelihood.
 }
 \usage{
-likelihood_coal_bd_mod(Vtimes, ntips, lamb0, alpha, mu0, beta, N0, pos = TRUE)
+likelihood_coal_var(Vtimes, ntips, lamb0, alpha, mu0, beta, N0, pos = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -75,7 +75,7 @@ mu.0=TRUE forces the extinction rate to 0 (e.g. Models 5 and 6).
 pos=TRUE forces the rates of speciation and extinction to be positive over the history of the clade.
 }
 \value{
-  "likelihood_coal_bd_mod" returns a list containing the following components:
+  "likelihood_coal_var" returns a list containing the following components:
   \item{res}{The log-likelihood evaluation}
   \item{all}{The likelihood function evaluated for each time-length \eqn{t_i}{t[i]} between nodes i and i+1 of the clade}
 }
@@ -92,5 +92,5 @@ Vtimes <- sort(branching.times(bird.families))
 lamb0 <- 0.1
 alpha <- -0.001
 ntips <- Ntip(bird.families)
-likelihood <- likelihood_coal_bd_mod(Vtimes, ntips, lamb0, alpha, mu0=0, beta=0, N0=1e6)
+likelihood <- likelihood_coal_var(Vtimes, ntips, lamb0, alpha, mu0=0, beta=0, N0=1e6)
 }

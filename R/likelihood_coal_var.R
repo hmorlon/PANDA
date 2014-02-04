@@ -1,4 +1,4 @@
-likelihood_coal_bd_mod  <- function(Vtimes,ntips,lamb0,alpha,mu0,beta,N0,pos=TRUE)
+likelihood_coal_var  <- function(Vtimes,ntips,lamb0,alpha,mu0,beta,N0,pos=TRUE)
 {
 
   Ttimes <- diff(Vtimes)

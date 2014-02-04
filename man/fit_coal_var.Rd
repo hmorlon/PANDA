@@ -1,5 +1,5 @@
-\name{fit_coal_bd_mod}
-\alias{fit_coal_bd_mod}
+\name{fit_coal_var}
+\alias{fit_coal_var}
 \title{
 Fit birth-death model using a coalescent approch
 }
@@ -11,7 +11,7 @@ Depending on the model, these parameters include a combination of the speciation
 }
 
 \usage{
-fit_coal_bd_mod(phylo, lamb0 = 0.1, alpha = 1, mu0 = 0.01, beta = 0,
+fit_coal_var(phylo, lamb0 = 0.1, alpha = 1, mu0 = 0.01, beta = 0,
                 meth = "Nelder-Mead", N0 = 0, cst.lamb = FALSE, cst.mu = FALSE,
                 fix.eps = FALSE, mu.0 = FALSE, pos = TRUE, Vtimes = FALSE)
 }
@@ -88,7 +88,7 @@ mu.0=TRUE forces the extinction rate to 0 (e.g. Models 5 and 6).
 pos=TRUE forces the rates of speciation and extinction to be positive.
 }
 \value{
-  "fit_coal_bd_mod" returns a list containing the following components:
+  "fit_coal_var" returns a list containing the following components:
   \item{model}{The name of the used process}
   \item{LH}{The log-likelihood value}
   \item{aicc}{The second order Akaike's Information Criterion}
@@ -99,6 +99,6 @@ Hélène Morlon, Matthew D. Potts, Joshua B. Plotkin: \emph{Inferring the Dynami
 }
 \examples{
 data(Cetaceae)
-result <- fit_coal_bd_mod(Cetaceae, lamb0=0.01, alpha=-0.001, mu0=0.0, beta=0, N0=1e6)
+result <- fit_coal_var(Cetaceae, lamb0=0.01, alpha=-0.001, mu0=0.0, beta=0, N0=1e6)
 print(result)
 }
