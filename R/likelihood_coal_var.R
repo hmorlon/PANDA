@@ -36,11 +36,11 @@ likelihood_coal_var  <- function(Vtimes,ntips,lamb0,alpha,mu0,beta,N0,pos=TRUE)
     {
       if (pos==FALSE)
       {
-         demfun<-function(x){2*lamb0*exp(alpha*x)/(N0*exp(lamb0/alpha*(1-exp(alpha*x))+mu0*x))}
+         demfun<-function(t){2*lamb0*exp(alpha*t)/(N0*exp(lamb0/alpha*(1-exp(alpha*t))+mu0*t))}
       }
       else
       {
-         demfun<-function(x){2*abs(lamb0)*exp(alpha*x)/(N0*exp(abs(lamb0)/alpha*(1-exp(alpha*x))+abs(mu0)*x))}
+         demfun<-function(t){2*abs(lamb0)*exp(alpha*t)/(N0*exp(abs(lamb0)/alpha*(1-exp(alpha*t))+abs(mu0)*t))}
       }
   }
 
@@ -48,11 +48,11 @@ likelihood_coal_var  <- function(Vtimes,ntips,lamb0,alpha,mu0,beta,N0,pos=TRUE)
   {
      if (pos==FALSE)
      {
-        demfun<-function(x){2*lamb0/(N0*exp(-lamb0*x-mu0/beta*(1-exp(beta*x))))}
+        demfun<-function(t){2*lamb0/(N0*exp(-lamb0*t-mu0/beta*(1-exp(beta*t))))}
      }
      else
      {
-        demfun<-function(x){2*abs(lamb0)/(N0*exp(-abs(lamb0)*x-abs(mu0)/beta*(1-exp(beta*x))))}
+        demfun<-function(t){2*abs(lamb0)/(N0*exp(-abs(lamb0)*t-abs(mu0)/beta*(1-exp(beta*t))))}
      }
   }
 
@@ -60,11 +60,11 @@ likelihood_coal_var  <- function(Vtimes,ntips,lamb0,alpha,mu0,beta,N0,pos=TRUE)
   {
     if (pos==FALSE)
     {
-       demfun<-function(x){2*lamb0*exp(alpha*x)/(N0*exp(lamb0/alpha*(1-exp(alpha*x))-mu0/beta*(1-exp(beta*x))))}
+       demfun<-function(t){2*lamb0*exp(alpha*t)/(N0*exp(lamb0/alpha*(1-exp(alpha*t))-mu0/beta*(1-exp(beta*t))))}
     }
     else
     {
-       demfun<-function(x){2*abs(lamb0)*exp(alpha*x)/(N0*exp(abs(lamb0)/alpha*(1-exp(alpha*x))-abs(mu0)/beta*(1-exp(beta*x))))}
+       demfun<-function(t){2*abs(lamb0)*exp(alpha*t)/(N0*exp(abs(lamb0)/alpha*(1-exp(alpha*t))-abs(mu0)/beta*(1-exp(beta*t))))}
     }
   }
 

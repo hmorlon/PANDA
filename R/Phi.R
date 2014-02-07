@@ -52,7 +52,7 @@
 
   else
   {
-    r <- function(x){f.lamb(x)-f.mu(x)}
+    r <- function(t){f.lamb(t)-f.mu(t)}
     r.int <- function(x,y){.Integrate(Vectorize(r),x,y,stop.on.error=FALSE)}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
     r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}

@@ -17,8 +17,8 @@ fit_bd <-
     {
       lamb_par <- init[1:length(lamb_par)]
       mu_par <- init[(1+length(lamb_par)):length(init)]
-      f.lamb.par <- function(x){abs(f.lamb(x,lamb_par))}
-      f.mu.par <- function(x){abs(f.mu(x,mu_par))}
+      f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
+      f.mu.par <- function(t){abs(f.mu(t,mu_par))}
       LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,cond=cond)
       print(c("LH",LH))
       return(-LH)
@@ -34,8 +34,8 @@ fit_bd <-
     optimLH <- function(init)
     {
       lamb_par <- init[1:length(lamb_par)]
-      f.lamb.par <- function(x){abs(f.lamb(x,lamb_par))}
-      f.mu.par <- function(x){abs(f.mu(x,mu_par))}
+      f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
+      f.mu.par <- function(t){abs(f.mu(t,mu_par))}
       LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,expo.mu=FALSE,cond=cond)
       return(-LH)
     }
