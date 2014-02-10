@@ -33,7 +33,7 @@ fit_coal_cst <- function (phylo, tau0=1.e-2, gamma=1, cst.rate=FALSE, meth = "Ne
     {
       tau0 <- init[1]
       gamma <- init[2]
-      LH <- .likelihood_coal_cst(Vtimes,ntips,tau0,gamma,N0)$res
+      LH <- likelihood_coal_cst(Vtimes,ntips,tau0,gamma,N0)$res
       return(-LH)
     }
 
@@ -52,7 +52,7 @@ fit_coal_cst <- function (phylo, tau0=1.e-2, gamma=1, cst.rate=FALSE, meth = "Ne
     optimLH <- function(init)
     {
       tau0 <- init[1]
-      LH <- .likelihood_coal_cst(Vtimes,ntips,tau0,0.0,N0)$res
+      LH <- likelihood_coal_cst(Vtimes,ntips,tau0,0.0,N0)$res
       return(-LH)
     }
 
