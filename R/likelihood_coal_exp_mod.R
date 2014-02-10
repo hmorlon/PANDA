@@ -1,4 +1,4 @@
-likelihood_coal_exp_mod <- function(Vtimes,ntips,tau0,gamma,N0)
+.likelihood_coal_exp_mod <- function(Vtimes,ntips,tau0,gamma,N0)
 {
   Ttimes <- diff(Vtimes)
   Vtimes <- Vtimes[2:length(Vtimes)]

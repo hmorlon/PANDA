@@ -1,4 +1,4 @@
-likelihood_coal_cst_mod <-function(Vtimes,ntips,tau0,N0)
+.likelihood_coal_cst_mod <-function(Vtimes,ntips,tau0,N0)
 {
   Ttimes <- diff(Vtimes)
   nbint<-length(Ttimes)
