@@ -116,14 +116,16 @@ Hélène Morlon, Matthew D. Potts, Joshua B. Plotkin: \emph{Inferring the Dynami
 }
 
 \examples{
-# Currently this test is too much CPU consuming
-# Need to perform it
+# Phylogenetic data
 data(Cetaceae)
+# Environmental data: temperature
+data(InfTemp)
 #first model
-f.lamb <-function(x,y){y[1] * exp(y[2] * x)}
-f.mu<-function(x,y){0}
+f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
+f.mu<-function(t,y){0}
+# initial points for optimization
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-result <- fit_env_bd(Cetaceae,max(node.age(Cetaceae)$ages),f.lamb,f.mu,
-       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+result <- fit_env_bd(Cetaceae,env_data = InfTemp,dof=4, max(node.age(Cetaceae)$ages),f.lamb,f.mu,
+      lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
