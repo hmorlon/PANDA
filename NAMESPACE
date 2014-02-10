@@ -1,3 +1,4 @@
 import(ape)
 import(picante)
+import(pspline)
 exportPattern("^[[:alpha:]]+")
