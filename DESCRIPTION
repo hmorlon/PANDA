@@ -3,11 +3,11 @@ Version: 1.0
 Date: 2014-02-04
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
-Depends: R (>= 2.14.2), ape, picante
+Depends: R (>= 2.14.2), ape, geiger, picante
 Encoding: UTF-8
 Author: H. Morlon
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"))
 Maintainer: D. Barbier <barbier@imacs.polytechnique.fr>
-Description: PANDA implements maximum likelihood fits of diversification models.
+Description: PANDA implements fits of diversification models to phylogenetic data
  See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014)
 License: GPL-2
