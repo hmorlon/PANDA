@@ -114,6 +114,5 @@ f.lamb <-function(x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(x,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-fit_bd(Cetacea,tot_time,f.lamb,f.mu,
-       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
