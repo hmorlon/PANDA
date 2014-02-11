@@ -24,7 +24,7 @@ Hélène Morlon
 Maintainer: Hélène Morlon <morlon@ens.biologie.fr>
 }
 \references{
-Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach}, PLoS B 8(9): e1000493
+Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach, PLoS B 8(9): e1000493
 
 Morlon, H., Kemps, B., Plotkin, J.B., Brisson, D. (2012) Explosive radiation of a bacterial species group, Evolution, 66: 2577-2586
 
