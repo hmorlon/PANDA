@@ -98,7 +98,7 @@ pos=TRUE forces the rates of speciation and extinction to be positive.
 Hélène Morlon, Matthew D. Potts, Joshua B. Plotkin: \emph{Inferring the Dynamics of Diversification: a Coalescent Approach}, PLoS Biology September 2010, Volume 8, Issue 9
 }
 \examples{
-data(Cetaceae)
-result <- fit_coal_var(Cetaceae, lamb0=0.01, alpha=-0.001, mu0=0.0, beta=0, N0=1e6)
+data(Cetacea)
+result <- fit_coal_var(Cetacea, lamb0=0.01, alpha=-0.001, mu0=0.0, beta=0, N0=1e6)
 print(result)
 }

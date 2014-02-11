@@ -79,15 +79,15 @@ Fabien L. Condamine, Jonathan Rolland, Hélène Morlon: \emph{Macroevolutionary 
 }
 
 \examples{
-data(Cetaceae)
-tot_time <- max(node.age(Cetaceae)$ages)
+data(Cetacea)
+tot_time <- max(node.age(Cetacea)$ages)
 lamb_par <- c(1, -3)
 # lambda(t) and mu(t)
 f.lamb <- function(t){lamb_par[1] * exp(lamb_par[2] * t)}
 f.mu <- function(t){0}
 f <- 87/88
 # model with none extinction & exponential speciation variation
-likelihood <- likelihood_bd(Cetaceae,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE)
+likelihood <- likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE)
 print(likelihood)
 # [1] -2160.751
 }

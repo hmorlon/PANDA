@@ -60,7 +60,7 @@ Hélène Morlon, Matthew D. Potts, Joshua B. Plotkin: \emph{Inferring the Dynami
 }
 
 \examples{
-data(Cetaceae)
-result <- fit_coal_cst_mod(Cetaceae, tau0=1.5, N0=1e6)
+data(Cetacea)
+result <- fit_coal_cst_mod(Cetacea, tau0=1.5, N0=1e6)
 print(result)
 }
