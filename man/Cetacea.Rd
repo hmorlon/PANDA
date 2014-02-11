@@ -1,9 +1,9 @@
-\name{Cetaceae}
-\alias{Cetaceae}
+\name{Cetacea}
+\alias{Cetacea}
 \docType{data}
-\title{The Cetaceae phylogeny}
-\description{Phylogenetic tree with 87 tips and 86 internal nodes.}
-\usage{data(Cetaceae)}
+\title{Cetacean phylogeny}
+\description{Ultrametric phylogenetic tree for 87 of the 89 extant cetacean species}
+\usage{data(Cetacea)}
 \format{
 List with the following 4 components:
 \itemize{
@@ -27,12 +27,18 @@ This phylogeny was derived from six mitochondrial and nine nuclear genes using t
 It was calibrated using seven paleontological age constraints and a relaxed molecular clock approch.
 }
 
-\references{
+\source{
 Steeman ME et al.(2009) Radiation of extant cetaceans driven by restructuring of the oceans, Syst Biol 58:573-585
 }
+
+\references{
+Steeman ME et al.(2009) Radiation of extant cetaceans driven by restructuring of the oceans, Syst Biol 58:573-585
+Morlon, H., Parsons, T.L. and Plotkin, J. (2011) Reconciling molecular phylogenies with the fossil record, Proc Nat Acad Sci 108: 16327-16332
+Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectives to environmental change, Eco Lett 16: 72-85
+}
 \examples{
-data(Cetaceae)
-print(Cetaceae)
-plot(Cetaceae)
+data(Cetacea)
+print(Cetacea)
+plot(Cetacea)
 }
 \keyword{datasets}
