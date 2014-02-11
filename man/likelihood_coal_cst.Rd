@@ -35,8 +35,11 @@ Given a phylogeny, the function computes the likelihood of the distances \eqn{t_
 nodes in that phylogeny using a constant diversity hypothesis.
 If we denote \eqn{t_i} the time-length between nodes i and i+1, \eqn{v_i} is the time-length between node i+1 and the present,
 the likelihood writes as following:
-\eqn{L(t_i) = \frac{i(i+1)}{2} 2\frac{\tau_0}{N_0} exp(-i(i+1) \frac{\tau_0}{N_0 \gamma} exp(\gamma v_i) (1-exp(-\gamma t_i)) ), \gamma \neq 0}
+%
+\eqn{L(t_i) = i(i+1) \frac{\tau_0}{N_0} exp(-i(i+1) \frac{\tau_0}{N_0 \gamma} exp(\gamma v_i) (1-exp(-\gamma t_i)) ), \gamma \neq 0}
+%
 \eqn{L(t_i) = i(i+1) \frac{\tau_0}{N_0} exp(-i(i+1) \frac{\tau_0}{N_0} t_i), \gamma = 0}
+%
 where:
 \itemize{
 \item \eqn{\tau_0} is the turnover rate at present time;
