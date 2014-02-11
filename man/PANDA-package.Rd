@@ -1,16 +1,16 @@
-\name{RPANDA-package}
-\alias{RPANDA-package}
-\alias{RPANDA}
+\name{PANDA-package}
+\alias{PANDA-package}
+\alias{PANDA}
 \docType{package}
 \title{
-RPANDA
+PANDA
 }
 \description{
-The package helps to fit various diversity models
+Implements fits of diversification models to phylogenetic data
 }
 \details{
 \tabular{ll}{
-Package: \tab RPANDA\cr
+Package: \tab PANDA\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2013-12-27\cr
@@ -21,14 +21,18 @@ License: \tab GPL (>= 2)\cr
 \author{
 Hélène Morlon
 
-Maintainer: Hélène Morlon <helene.morlon@cmap.polytechnique.fr>
+Maintainer: Hélène Morlon <morlon@ens.biologie.fr>
 }
 \references{
-Hélène Morlon, Matthew D. Potts, Joshua B. Plotkin: \emph{Inferring the Dynamics of Diversification: a Coalescent Approach}, PLoS Biology September 2010, Volume 8, Issue 9
+Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach}, PLoS B 8(9): e1000493
 
-Hélène Morlon, Todd L. Parsons, Joshua B. Plotkin:  \emph{Reconciling molecular phylogenies with the fossil record}, PNAS 2011
+Morlon, H., Kemps, B., Plotkin, J.B., Brisson, D. (2012) Explosive radiation of a bacterial species group, Evolution, 66: 2577-2586
 
-Fabien L. Condamine, Jonathan Rolland, Hélène Morlon: \emph{Macroevolutionary perspectives to environmental change}, Ecology Letters (2013)
+Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record, Proc Nat Acad Sci 108: 16327-16332
+
+Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectives to environmental change, Eco Lett 16: 72-85
+
+Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 }
 %\keyword{ philogeny }
 \seealso{
