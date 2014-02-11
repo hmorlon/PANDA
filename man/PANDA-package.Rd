@@ -34,7 +34,7 @@ Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectiv
 
 Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 }
-%\keyword{ philogeny }
+%\keyword{ phylogeny }
 \seealso{
 \code{geiger, laser, DDD, TreePar}
 }
