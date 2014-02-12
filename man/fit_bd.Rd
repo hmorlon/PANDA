@@ -96,5 +96,24 @@ f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+# Result
+result_exp <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+result_exp$model <- "birth death - exponential variation rate"
+#fit of a pure birth model (no extinction) with a linear variation of speciation rate with time
+f.lamb <-function(t,y){y[1] + y[2] * t}
+f.mu<-function(t,y){0}
+lamb_par<-c(0.09, 0.001)
+mu_par<-c()
+result_lin <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE)
+result_lin$model <- "birth death - linear variation rate"
+#fit of a pure birth model (no extinction) with a cst speciation rate
+f.lamb <-function(t,y){y[1]}
+f.mu<-function(t,y){0}
+lamb_par<-c(0.09, 0.001)
+mu_par<-c()
+result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb = TRUE, fix.mu=TRUE)
+result_cst$model <- "birth death - cst rate"
+# Best model?
+index <- which.min(c(result_exp$aicc, result_lin$aicc, result_cst$aicc))
+rbind(result_exp, result_lin, result_cst)[index,]
 }
