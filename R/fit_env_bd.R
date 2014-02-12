@@ -1,5 +1,5 @@
 fit_env_bd <-
- function (phylo, env_data, dof, tot_time, f.lamb, f.mu, lamb_par, mu_par, f=1,
+ function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE,
            expo.lamb=FALSE, expo.mu=FALSE, fix.mu=FALSE,
            cond="crown")
@@ -10,7 +10,7 @@ fit_env_bd <-
   nobs <- Ntip(phylo)
 
   # first a spline is used to build the approximation model Env(t)
-  spline_result <- sm.spline(env_data[,1],env_data[,2],df=dof)
+  spline_result <- sm.spline(env_data[,1],env_data[,2])
   env_func <- function(t){predict(spline_result,t)}
   # In order to perform computation, the env_func is tabulated
   # control from lower_bound -10%, upper_bound + 10%
