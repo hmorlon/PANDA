@@ -22,10 +22,10 @@ the age of the phylogeny (crown age, or stem age if known). If working with crow
 }
 
  \item{f.lamb}{
-a function specifying the time-variation of the speciation rate \eqn{\lambda}. This function as a single argument (time).
+a function specifying the time-variation of the speciation rate \eqn{\lambda}. This function as a single argument (time). Any function may be used.
 }
   \item{f.mu}{
-  	a function specifying the time-variation of the speciation rate \eqn{\mu}. This function as a single argument (time).
+  	a function specifying the time-variation of the speciation rate \eqn{\mu}. This function as a single argument (time). Any function may be used.
 }
 
  \item{f}{

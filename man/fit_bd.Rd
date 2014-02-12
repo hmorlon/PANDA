@@ -24,11 +24,11 @@ an object of type 'phylo' (see ape documentation)
 the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
   \item{f.lamb}{
-a function specifying the hypothesized functional form (e.g. linear, exponential, etc.) of the variation of the speciation rate \eqn{\lambda} with time. Any functional form may be used.
+a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the speciation rate \eqn{\lambda} with time. Any functional form may be used.
 This function as two arguments: the first argument is time; the second argument is a numeric vector of the parameters of the time-variation (to be estimated).
 }
   \item{f.mu}{
-a function specifying the hypothesized functional form (e.g. linear, exponential, etc.) of the variation of the extinction rate \eqn{\mu} with time. Any functional form may be used.
+a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the extinction rate \eqn{\mu} with time. Any functional form may be used.
 This function as two arguments: the first argument is time; the second argument is a numeric vector of the parameters of the time-variation (to be estimated).
 }
 
@@ -106,8 +106,8 @@ In the f.lamb and f.mu functions, the first argument (time) runs from the presen
 %# Currently this test is too much CPU consuming
 %# Need to perform it
 data(Cetacea)
-#fit of a pure birth model (no extinction) with an exponential variation of speciation rate with time
 tot_time<-max(node.age(Cetacea)$ages)
+#fit of a pure birth model (no extinction) with an exponential variation of speciation rate with time
 f.lamb <-function(x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(x,y){0}
 lamb_par<-c(0.05, 0.01)
