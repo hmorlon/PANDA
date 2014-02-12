@@ -66,7 +66,7 @@ conditioning to use to fit the model:
 }
 
 \value{
-  \item{loglikelihood}{the loglikelihood value of the phylogeny given f.lamb and f.mu}
+  the loglikelihood value of the phylogeny given f.lamb and f.mu
 }
 \references{
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
