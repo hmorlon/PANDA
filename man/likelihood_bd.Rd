@@ -68,8 +68,8 @@ data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)
 #compute the likelihood for a pure birth model (no extinction) with an exponential variation of speciation rate with time
 lamb_par <- c(0.1, 0.01)
-f.lamb <- function(x){lamb_par[1] * exp(lamb_par[2] * x)}
-f.mu <- function(x){0}
+f.lamb <- function(t){lamb_par[1] * exp(lamb_par[2] * t)}
+f.mu <- function(t){0}
 f <- 87/89
 likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE)
 }

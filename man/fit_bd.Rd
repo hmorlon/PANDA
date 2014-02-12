@@ -92,8 +92,8 @@ In the f.lamb and f.mu functions, the first argument (time) runs from the presen
 data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
 #fit of a pure birth model (no extinction) with an exponential variation of speciation rate with time
-f.lamb <-function(x,y){y[1] * exp(y[2] * x)}
-f.mu<-function(x,y){0}
+f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
+f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
 fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
