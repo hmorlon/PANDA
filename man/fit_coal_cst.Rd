@@ -12,7 +12,8 @@ the phylogeny be 100\% complete.
 In addition to the turnover rate at present/the exponential variation in turnover rate, the log-likelihood and the second order Akaike's Information Criterionare returned.
 }
 \usage{
-fit_coal_cst(phylo, tau0 = 1e-2, gamma = 1, meth = "Nelder-Mead", N0 = 0, Vtimes = FALSE)
+fit_coal_cst(phylo, tau0 = 1e-2, gamma = 1, cst.rate = FALSE,
+             meth = "Nelder-Mead", N0 = 0, Vtimes = FALSE)
 }
 
 \arguments{
