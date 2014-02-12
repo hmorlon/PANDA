@@ -69,7 +69,7 @@ conditioning to use to fit the model:
 
 \value{
 	a list with the following components
-  %\item{model}{The name of the used process}
+  \item{model}{The name of the used process}
   \item{LH}{the maximum log-likelihood value}
   \item{aicc}{the second order Akaike's Information Criterion}
   \item{lamb_par}{a numeric vector of estimated f.lamb parameters, in the same order as defined in f.lamb}
