@@ -104,10 +104,10 @@ data(InfTemp)
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 # initial points for optimization
-lamb_par<-c(0.05, 0.01)
+lamb_par<-c(0.10, -0.001)
 mu_par<-c()
 # fit the model
 # The underlying models are lambda(InfTemp(t)), mu(InfTemp(t))
-result <- fit_env_bd(Cetacea,env_data = InfTemp, max(node.age(Cetacea)$ages),f.lamb,f.mu,
+result_exp <- fit_env_bd(Cetacea,InfTemp, max(node.age(Cetacea)$ages),f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
