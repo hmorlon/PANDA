@@ -79,7 +79,7 @@ conditioning to use to fit the model:
 }
 
 \details{
-	In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.  	
+In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.  	
 %Given a phylogeny, its associated likelihood function accounts at least one lineage surviving to present and being sampled.
 %Let \eqn{\Psi(s,t)} the probability that a lineage alive at time t leaves exactly one descendant
 %at time s (s < t).
@@ -88,16 +88,14 @@ conditioning to use to fit the model:
 %where:
 %\itemize{\item f denotes the probability that some extant species were sampled and not included in the sample
 %\item \eqn{s_{i,1},s_{i,2}}[s[i,1],s[i,2]} denote the times at which the daughter lineages introduced at time \eqn{t_{i}}{t[i]} themselves branch.
-
 %This function fits this likelihood models. The function returns the the estimates
 %of the parameters of diversification, the log-likelihood and the second order Akaike's
 %Information Criterion, and the maximum likelihood.
-
 %The model likelihood is maximized using methods available in \code{\link[stats]{optim}}.
 }
 
 \references{
-	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record, Proc Nat Acad Sci 108: 16327-16332
+	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
 }
 
 \seealso{
