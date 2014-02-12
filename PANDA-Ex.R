@@ -55,14 +55,13 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(Cetacea)
-#fit of a pure birth model (no extinction) with an exponential variation of speciation rate with time
 tot_time<-max(node.age(Cetacea)$ages)
+#fit of a pure birth model (no extinction) with an exponential variation of speciation rate with time
 f.lamb <-function(x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(x,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-fit_bd(Cetacea,tot_time,f.lamb,f.mu,
-       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 
 
 
@@ -127,23 +126,20 @@ nameEx("likelihood_bd")
 flush(stderr()); flush(stdout())
 
 ### Name: likelihood_bd
-### Title: likelihood of a phylogeny conditioned to the presence of at
-###   least one descendant in the sample
+### Title: Compute the likelihood of a phylogeny under the general
+###   birth-death model
 ### Aliases: likelihood_bd
 
 ### ** Examples
 
 data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)
-lamb_par <- c(1, -3)
-# lambda(t) and mu(t)
-f.lamb <- function(t){lamb_par[1] * exp(lamb_par[2] * t)}
-f.mu <- function(t){0}
-f <- 87/88
-# model with none extinction & exponential speciation variation
-likelihood <- likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE)
-print(likelihood)
-# [1] -2160.751
+#compute the likelihood for a pure birth model (no extinction) with an exponential variation of speciation rate with time
+lamb_par <- c(0.1, 0.01)
+f.lamb <- function(x){lamb_par[1] * exp(lamb_par[2] * x)}
+f.mu <- function(x){0}
+f <- 87/89
+likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE)
 
 
 
