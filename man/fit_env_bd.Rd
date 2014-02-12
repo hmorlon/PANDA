@@ -92,7 +92,7 @@ The rate models here are function of environmental data fixed by env_data.
 }
 
 \seealso{
-\code{\link[PANDA]{likelihood_bd}}
+\code{\link[PANDA]{fit_bd},\link[PANDA]{likelihood_bd}}
 }
 
 \examples{
@@ -107,6 +107,7 @@ f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
 # fit the model
+# The underlying models are lambda(InfTemp(t)), mu(InfTemp(t))
 result <- fit_env_bd(Cetacea,env_data = InfTemp, max(node.age(Cetacea)$ages),f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
