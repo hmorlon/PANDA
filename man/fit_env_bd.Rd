@@ -5,7 +5,7 @@
 Maximum likelihood fit of the general birth-death model
 }
 \description{
-Fits the envirionmental birth-death model with time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011.
+Fits the environmental birth-death model with time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011.
 }
 \usage{
 fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
@@ -20,8 +20,8 @@ an object of type 'phylo' (see ape documentation)
 }
   \item{env_data}{
 Environmental data given as data frame with 2 columns
-First column is time, second column is the envirionmental data (temperature for example)
-Spline model is evaluated for the approximation of the envirionmental function
+First column is time, second column is the environmental data (temperature for example)
+Spline model is evaluated for the approximation of the environmental function
 }
   \item{tot_time}{
 the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
@@ -83,7 +83,7 @@ conditioning to use to fit the model:
 
 \details{
 In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. 
-The rate models here are function of envirionmental data fixed by env_data.
+The rate models here are function of environmental data fixed by env_data.
 %Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
 }
 
