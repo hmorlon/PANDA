@@ -69,7 +69,7 @@ H.Morlon, M.D.Plotts, J.B.Plotkin: Inferring the Dynamics of Diversification: a 
 H.Morlon, \email{helene.morlon@cmap.polytechnique.fr}
 }
 \examples{
-data(Cetaceae)
-result <- fit_coal_cst(Cetaceae, tau0=1.e-3, gamma=-1, cst.rate=FALSE)
+data(Cetacea)
+result <- fit_coal_cst(Cetacea, tau0=1.e-3, gamma=-1, cst.rate=FALSE)
 print(result)
 }

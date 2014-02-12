@@ -116,7 +116,7 @@ Hélène Morlon, Matthew D. Potts, Joshua B. Plotkin: \emph{Inferring the Dynami
 
 \examples{
 # Phylogenetic data
-data(Cetaceae)
+data(Cetacea)
 # Environmental data: temperature
 data(InfTemp)
 #first model
@@ -125,6 +125,6 @@ f.mu<-function(t,y){0}
 # initial points for optimization
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-result <- fit_env_bd(Cetaceae,env_data = InfTemp,dof=4, max(node.age(Cetaceae)$ages),f.lamb,f.mu,
+result <- fit_env_bd(Cetacea,env_data = InfTemp,dof=4, max(node.age(Cetacea)$ages),f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
