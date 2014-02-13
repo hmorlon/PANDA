@@ -4,7 +4,7 @@ fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_pa
            cond="crown")
 {
   # first a spline is used to build the approximation model Env(t)
-  spline_result <- sm.spline(env_data[,1],env_data[,2], df=4)
+  spline_result <- sm.spline(env_data[,1],env_data[,2], df=207)
   env_func <- function(t){predict(spline_result,t)}
   # In order to perform computation, the env_func is tabulated
   # control from lower_bound -10%, upper_bound + 10%
