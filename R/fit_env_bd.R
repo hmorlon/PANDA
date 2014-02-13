@@ -29,7 +29,7 @@ fit_env_bd <-
     b <- upper_bound * (1.0 + upper_bound_control)
     a <- lower_bound * (1.0 - lower_bound_control)
     n <- length(env_tabulated)
-    index <- 1 + as.integer( (t - a) * n / (b - a)) 
+    index <- 1 + as.integer( (t - a) * n / (b - a))
     return(env_tabulated[index])
   }
   if (fix.mu==FALSE)

@@ -1,6 +1,6 @@
 likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,cond="crown")
 {
-  if (!inherits(phylo, "phylo")) 
+  if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")
 
   nbtips <- Ntip(phylo)
