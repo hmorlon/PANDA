@@ -5,7 +5,7 @@
 Maximum likelihood fit of the general birth-death model
 }
 \description{
-Fits the environmental birth-death model with time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011.
+Fits the general birth-death model with environmental time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011.
 }
 \usage{
 fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
@@ -34,12 +34,11 @@ This function as two arguments: the first argument is time; the second argument 
 a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the extinction rate \eqn{\mu} with time. Any functional form may be used.
 This function as two arguments: the first argument is time; the second argument is a numeric vector of the parameters of the time-variation (to be estimated).
 }
-
   \item{lamb_par}{
-a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm) 
+a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm)
 }
   \item{mu_par}{
-a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm) 
+a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm)
 }
   \item{f}{
 the fraction of extant species included in the phylogeny
@@ -82,11 +81,16 @@ conditioning to use to fit the model:
 }
 
 \details{
-In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. 
-The rate models here are function of environmental data fixed by env_data.
+In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past.
+The rate models here are function of environmental data fixed by
+env_data.
 %Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
 }
 
+\note{
+Spline model is evaluated with default parameters. Thus if data are
+noisy, this might slow down the convergency of the fit.
+}
 \references{
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
 }
@@ -104,10 +108,11 @@ data(InfTemp)
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 # initial points for optimization
-lamb_par<-c(0.10, -0.001)
+lamb_par<-c(0.10, 0.01)
 mu_par<-c()
 # fit the model
 # The underlying models are lambda(InfTemp(t)), mu(InfTemp(t))
+# Model takes about 1 mn for evaluation
 result_exp <- fit_env_bd(Cetacea,InfTemp, max(node.age(Cetacea)$ages),f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
