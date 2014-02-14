@@ -19,9 +19,7 @@ License: \tab GPL (>= 2)\cr
 
 }
 \author{
-Hélène Morlon
-
-Maintainer: Hélène Morlon <morlon@ens.biologie.fr>
+Hélène Morlon <morlon@ens.biologie.fr>
 }
 \references{
 Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach, PLoS B 8(9): e1000493
