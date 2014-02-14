@@ -23,7 +23,7 @@ the age of the phylogeny (crown age, or stem age if known). If working with crow
 }
   \item{f.lamb}{
 a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the speciation rate \eqn{\lambda} with time. Any functional form may be used.
-This function as two arguments: the first argument is time; the second argument is a numeric vector of the parameters of the time-variation (to be estimated).
+This function has two arguments: the first argument is time; the second argument is a numeric vector of the parameters of the time-variation (to be estimated).
 }
   \item{f.mu}{
 a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the extinction rate \eqn{\mu} with time. Any functional form may be used.
@@ -91,29 +91,35 @@ In the f.lamb and f.mu functions, the first argument (time) runs from the presen
 \examples{
 data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
-#fit of a pure birth model (no extinction) with an exponential variation of speciation rate with time
+# Fit of a pure birth model (no extinction) with an
+# exponential variation of speciation rate with time
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-# Result
-result_exp <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+result_exp <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
+                     expo.lamb = TRUE, fix.mu=TRUE)
 result_exp$model <- "birth death - exponential variation rate"
-#fit of a pure birth model (no extinction) with a linear variation of speciation rate with time
+
+# Fit of a pure birth model (no extinction) with a
+# linear variation of speciation rate with time
 f.lamb <-function(t,y){y[1] + y[2] * t}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09, 0.001)
 mu_par<-c()
 result_lin <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE)
 result_lin$model <- "birth death - linear variation rate"
-#fit of a pure birth model (no extinction) with a cst speciation rate
+
+# Fit of a pure birth model (no extinction) with a constant speciation rate
 f.lamb <-function(t,y){y[1]}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09, 0.001)
 mu_par<-c()
-result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb = TRUE, fix.mu=TRUE)
+result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
+                     cst.lamb = TRUE, fix.mu=TRUE)
 result_cst$model <- "birth death - cst rate"
-# Best model?
+
+# Find the best model
 index <- which.min(c(result_exp$aicc, result_lin$aicc, result_cst$aicc))
 rbind(result_exp, result_lin, result_cst)[index,]
 }
