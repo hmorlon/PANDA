@@ -5,31 +5,37 @@
 Likelihood of a constant diversity model with time-varying rate
 }
 \description{
-This function computes the log-likelihood to a given phylogeny under assumption of constant diversity/exponentially turnover rate model.
-With a fixed number of species at present time, the log-likelihood is evaluated for each time-length \eqn{t_i} between nodes i and i+1 of the clade
-then final log-likelihood is given as sum of these last ones.
+Computes the likelihood of a phylogeny under assumption of constant diversity/exponentially turnover rate model.
+Notations follow Morlon et al. PNAS 2011.
 }
 \usage{
 likelihood_coal_cst(Vtimes, ntips, tau0, gamma, N0)
 }
 \arguments{
   \item{Vtimes}{
-Vector of times
+vector of times
 }
   \item{ntips}{
-Number of tips
+number of tips
 }
   \item{tau0}{
-Turnover rate at present time
+turnover rate at present time
 }
   \item{gamma}{
-Exponential variation in turnover rate
-If gamma=0, the model is time-constant rate
+exponential variation in turnover rate.
+If gamma=0, the model is constant over time.
 }
   \item{N0}{
-Number of species at present time
+number of species at present time
 }
 }
+
+\value{
+  a list containing the following components:
+  \item{res}{the log-likelihood evaluation}
+  \item{all}{the likelihood function evaluated for each time-length \eqn{t_i} between nodes i and i+1 of the clade}
+}
+
 \details{
 Given a phylogeny, the function computes the likelihood of the distances \eqn{t_1,...,t_{k-2}} between
 nodes in that phylogeny using a constant diversity hypothesis.
@@ -43,27 +49,22 @@ the likelihood writes as following:
 where:
 \itemize{
 \item \eqn{\tau_0} is the turnover rate at present time;
-\item \eqn{\gamma} is exponential variation in turnover rate;
+\item \eqn{\gamma} is exponential variation in turnover rate.
 }
 }
-\value{
-  "likelihood_coal_cst" returns a list containing the following components:
-  \item{res}{The log-likelihood evaluation}
-  \item{all}{The likelihood function evaluated for each time-length \eqn{t_i} between nodes i and i+1 of the clade}
-}
+
 \references{
-H.Morlon, M.D.Plotts, J.B.Plotkin: Inferring the Dynamics of Diversification: a Coalescent Approach, PloSB 2010
-R.C.Griffiths, S.Tavare: Sampling theory for neutral alleles in a varying environment
+Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach, PLoS B 8(9): e1000493
+
+Griffiths, R.C., Tavare, S.: Sampling theory for neutral alleles in a varying environment
 }
-\author{
-H.Morlon, \email{helene.morlon@cmap.polytechnique.fr}
-}
+
 \examples{
-data(bird.families)
-Vtimes <- sort(branching.times(bird.families))
+data(Cetacea)
+Vtimes <- sort(branching.times(Cetacea))
 tau0 <- 0.1
 gamma <- -0.001
-ntips <- Ntip(bird.families)
+ntips <- Ntip(Cetacea)
 N0 <- 1e6
 likelihood <- likelihood_coal_cst(Vtimes,ntips,tau0, gamma,N0)
 }

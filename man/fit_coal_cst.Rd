@@ -5,11 +5,7 @@
 Fit diversity model with time-varying rate
 }
 \description{
-This function helps to fit the constant diversity/exponentially turnover rate model to a given phylogeny, by maximizing the likelihood function.
-Assuming we know the total number of species at present, we estimate the turnover rate parameters. 
-The number of species is set to the number of tips in the phylogeny if default value (0) is fixed, assuming
-the phylogeny be 100\% complete.
-In addition to the turnover rate at present/the exponential variation in turnover rate, the log-likelihood and the second order Akaike's Information Criterionare returned.
+Fits the constant diversity/exponentially turnover rate model to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PLoSB 2010.
 }
 \usage{
 fit_coal_cst(phylo, tau0 = 1e-2, gamma = 1, cst.rate = FALSE,
@@ -18,57 +14,63 @@ fit_coal_cst(phylo, tau0 = 1e-2, gamma = 1, cst.rate = FALSE,
 
 \arguments{
   \item{phylo}{
-phylo is an object of type phylogeny
+an object of type 'phylo' (see ape documentation)
 }
   \item{tau0}{
-Initial turnover rate at present time
+initial turnover rate at present time
 }
   \item{gamma}{
-Initial exponentially variation in turnover rate
+initial exponentially variation in turnover rate
 }
   \item{cst.rate}{
-If FALSE, fit diversity model with time-constant rate.
-Otherwise, the function fits model with time-varying rate (exponential)
+logical: should be set to TRUE to fit model with time-constant rate.  By default, a model with time-varying rate (exponential) is used.
 }
   \item{meth}{
-The optimization method that should be used for the maximization of the likelihood function.
-See \emph{optimize} for more details.
+optimization to use to maximize the likelihood function, see \emph{optim} for more details.
 }
   \item{N0}{
-Initial number of species.
-With default value(0), the parameter is set to the number of tips in the phylogeny (i.e. the phylogeny is assumed to be 100% complete)
+initial number of species.
+With default value(0), the parameter is set to the number of tips in the phylogeny (i.e. the phylogeny is assumed to be 100\% complete)
 }
   \item{Vtimes}{
-  Boolean. If TRUE, the function takes into account branching times. Otherwise, the phylogeny is taken into account.
+logical: should be set to TRUE to take branching times into account.  Otherwise, the phylogeny is taken into account.
 }
 }
+
+\value{
+	a list with the following components
+  \item{model}{The name of the used process}
+  \item{LH}{the maximum log-likelihood value}
+  \item{aicc}{the second order Akaike's Information Criterion}
+  \item{tau0}{the estimated turnover rate at present time}
+  \item{gamma}{exponential variation in turnover rate (if cst.rate is FALSE)}
+}
+
 \details{
 The function fits the constant diversity/exponentially turnover rate model to a given phylogeny, by maximizing the associated likelihood function.
-The underlying model (Hey/Moran Model) may be resumed hereafter:
-\eqn{ \tau(t) = \tau_0 exp(-\gamma t)}
-where \eqn{\tau(t)} is the turnover rate function.
-Under these assumtions, the model is said to be satured diversity with positive extinction.
-For more details, see notations in the PloSB 2010 paper (model 2).
-The meth argument fixes the optimization method. Depending on the choose of this one, one should
-care with the default initial value of tau0 (1e-2) and gamma (1). Indeed, the likelihood function has several local maxima.
-To make sure to not be stuck in a local optimum, several inital values might be investigated.
+Assuming we know the total number of species at present, we estimate the turnover rate parameters. 
 The number of species is set to the number of tips in the phylogeny if default value (0) is fixed, assuming
-the phylogeny is 100\% complete.
+the phylogeny be 100\% complete.
+In addition to the turnover rate at present/the exponential variation in turnover rate, the log-likelihood and the second order Akaike's Information Criterion are returned.
+The underlying model (Hey/Moran Model) may be resumed hereafter:
+\eqn{ \tau(t) = \tau_0 e^{-\gamma t}}{ \tau(t) = \tau_0 exp(-\gamma t)}
+where \eqn{\tau(t)} is the turnover rate function.
+Under these assumptions, the model is said to be satured diversity with positive extinction.
+For more details, see notations in the PloSB 2010 paper (model 2).
+
+The meth argument fixes the optimization method. Depending on this choice, one should take
+care of the default values of tau0 (1e-2) and gamma (1). Indeed, the likelihood function has several local maxima.
+To make sure to not be stuck in a local optimum, several inital values might be investigated.
 }
-\value{
-  "fit_coal_cst" returns a list containing the following components:
-  \item{model}{The name of the used process}
-  \item{LH}{The log-likelihood value}
-  \item{aicc}{The second order Akaike's Information Criterion}
-  \item{tau0}{The estimated turnover rate at present time}
-  \item{gamma}{Exponential variation in turnover rate (if cst.rate is FALSE)}
-}
+
 \references{
-H.Morlon, M.D.Plotts, J.B.Plotkin: Inferring the Dynamics of Diversification: a Coalescent Approach, PloSB 2010
+Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach, PLoS B 8(9): e1000493
 }
-\author{
-H.Morlon, \email{helene.morlon@cmap.polytechnique.fr}
+
+\seealso{
+\code{\link[PANDA]{likelihood_coal_cst}}
 }
+
 \examples{
 data(Cetacea)
 result <- fit_coal_cst(Cetacea, tau0=1.e-3, gamma=-1, cst.rate=FALSE)

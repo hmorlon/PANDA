@@ -8,8 +8,8 @@ Compute the likelihood of a phylogeny under the general birth-death model
 Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011.
 }
 \usage{
-likelihood_bd(phylo, tot_time, f.lamb, f.mu, f, cst.lamb = FALSE, cst.mu = FALSE, expo.lamb = FALSE,
-expo.mu = FALSE, cond = "crown")
+likelihood_bd(phylo, tot_time, f.lamb, f.mu, f, cst.lamb = FALSE, cst.mu = FALSE,
+              expo.lamb = FALSE, expo.mu = FALSE, cond = "crown")
 }
 
 \arguments{
@@ -66,7 +66,8 @@ conditioning to use to fit the model:
 \examples{
 data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)
-#compute the likelihood for a pure birth model (no extinction) with an exponential variation of speciation rate with time
+# Compute the likelihood for a pure birth model (no extinction) with
+# an exponential variation of speciation rate with time
 lamb_par <- c(0.1, 0.01)
 f.lamb <- function(t){lamb_par[1] * exp(lamb_par[2] * t)}
 f.mu <- function(t){0}

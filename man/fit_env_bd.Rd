@@ -19,9 +19,8 @@ fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
 an object of type 'phylo' (see ape documentation)
 }
   \item{env_data}{
-Environmental data given as data frame with 2 columns
-First column is time, second column is the environmental data (temperature for example)
-Spline model is evaluated for the approximation of the environmental function
+Environmental data given as a data frame with two columns.
+First column is time, second column is the environmental data (temperature for instance).
 }
   \item{tot_time}{
 the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
@@ -102,17 +101,13 @@ noisy, this might slow down the convergency of the fit.
 \examples{
 # Phylogenetic data
 data(Cetacea)
-# Environmental data: temperature
+tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
-#first model
+
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
-# initial points for optimization
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
-# fit the model
-# The underlying models are lambda(InfTemp(t)), mu(InfTemp(t))
-# Model takes about 1 mn for evaluation
-result_exp <- fit_env_bd(Cetacea,InfTemp, max(node.age(Cetacea)$ages),f.lamb,f.mu,
+result_exp <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
 }
