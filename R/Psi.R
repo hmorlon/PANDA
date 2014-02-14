@@ -1,7 +1,4 @@
 .Psi <- function(s,t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE)
-#### The general expression for Psi that takes in arguments the functions lamda and mu specifying how the speciation and extinction rates vary over time ######
-## f.lamb and f.mu are written from the present to the past
-### If the functional form is constant or exponential this can be specified to use the analytical rather than numerical integration ##############
 {
   if ((cst.lamb==TRUE) & (cst.mu==TRUE))
   {

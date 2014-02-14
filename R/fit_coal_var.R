@@ -1,10 +1,3 @@
-#This code fits various flavors of the birth-death model (Models 3 to 6 from the PLoS Biology 2010 paper) to a given phylogeny, by maximum likelihood, using the Nelder-Mead algorithm.
-#Outputs are the log-likelihood, the second order Akaike's Information Criterion, and the maximum likelihood estimates of the parameters of diversification. Depending on the model, these parameters include a combination of the speciation rate at present (lamb0), the exponential variation in speciation rate (alpha), the extinction rate at present (mu0), the exponential variation in extinction rate (beta) and the extinction fraction (extinction rate/speciation rate, eps). See notations in the PloSB 2010 paper.
-#The code uses the ape package
-#The code uses the likelihood_coal_var code. use source("likelihood_coal_var.R")
-#--
-#The default settings allow to fit the most general model where the rates of speciation and extinction vary over time without a fixed extinction fraction (Model 4d from the PloSB 2010 paper). cst.lamb=TRUE forces the speciation rate to be constant over time (used to fit Models 3, 5 and 4b). cst.mu=TRUE forces the extinction rate to be constant over time (used to fit Models 3, and 4a). fix.eps forces the extinction fraction to be constant over time (used to fit Model 4c). mu.0=TRUE forces the extinction rate to 0 (used to fit Models 5 and 6).
-#pos=TRUE (the default) forces the rates of speciation and extinction to be positive. pos=FALSE removes this forcing.
 fit_coal_var <-
   function (phylo, lamb0=0.1, alpha=1, mu0=0.01, beta=0,
             meth = "Nelder-Mead", N0=0,
