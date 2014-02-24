@@ -5,14 +5,14 @@
 Likelihood of a phylogeny under the equilibrium diversity model
 }
 \description{
-Computes the likelihood of a phylogeny under the equilibrium diversity model with potentially time-varying rates and potentially missing extant species.Notations follow Morlon et al. PloSB 2010.
+Computes the likelihood of a phylogeny under the equilibrium diversity model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PloSB 2010.
 }
 \usage{
 likelihood_coal_cst(Vtimes, ntips, tau0, gamma, N0)
 }
 \arguments{
   \item{Vtimes}{
-a vector of branching times
+a vector of branching times (sorted from present to past)
 }
   \item{ntips}{
 the number of tips in the phylogeny
@@ -34,7 +34,7 @@ the number of extant species
   \item{all}{vector of all the individual loglikelihood values corresponding to each branching event}
 }
 
-\details{Time runs from the present to the past. Hence, a positive gamma means that the turnover rate declines from past to present.
+\details{Time runs from the present to the past. Hence, a positive gamma (for example) means that the turnover rate declines from past to present.
 %Given a phylogeny, the function computes the likelihood of the distances \eqn{t_1,...,t_{k-2}} between
 %nodes in that phylogeny using a constant diversity hypothesis.
 %If we denote \eqn{t_i} the time-length between nodes i and i+1, \eqn{v_i} is the time-length between node i+1 and the present,
@@ -48,7 +48,7 @@ the number of extant species
 %\itemize{
 %\item \eqn{\tau_0} is the turnover rate at present time;
 %\item \eqn{\gamma} is exponential variation in turnover rate.
-}
+%}
 }
 
 \references{
