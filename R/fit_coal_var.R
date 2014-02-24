@@ -2,29 +2,18 @@ fit_coal_var <-
   function (phylo, lamb0=0.1, alpha=1, mu0=0.01, beta=0,
             meth = "Nelder-Mead", N0=0,
             cst.lamb=FALSE, cst.mu=FALSE,
-            fix.eps=FALSE, mu.0=FALSE, pos=TRUE, Vtimes=FALSE)
+            fix.eps=FALSE, mu.0=FALSE, pos=TRUE)
 {
   if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")
 
-  if (Vtimes==TRUE)
-  {
-    Vtimes<-sort(phylo)
-    ntips<-length(phylo)+1
-   if (N0==0)
-   {
-     N0<-ntips
-   }
-  }
-  else
-  {
     Vtimes <- sort(branching.times(phylo))
     ntips<-Ntip(phylo)
     if (N0==0)
     {
       N0<-ntips
     }
-  }
+
 
   nbobs<-length(Vtimes)-1
 
