@@ -72,29 +72,36 @@ The function fits models 3 to 6 from the PloSB 2010 paper. Likelihoods arising f
 
 These models can be fitted using the options specified below:
 \itemize{
-\item model 3: \eqn{\lambda(t) = \lambda_0, \mu(t) = \mu_0}{\lambda(t) = \lambda_0, \mu(t) = \mu_0}
-(with cst.lamb=TRUE, cst.mu=TRUE)
-\item model 4a: \eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = \mu_0}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = \mu_0}
-(with cst.lamb=FALSE, cst.mu=TRUE)
-\item model 4b: \eqn{\lambda(t) = \lambda_0, \mu(t) = \mu_0 e^{\beta t}}{\lambda(t) = \lambda_0, \mu(t) = \mu_0 exp(\beta t)}
-(with cst.lamb=TRUE, cst.mu=FALSE)
-\item model 4c: \eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = \epsilon \lambda(t)}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = \epsilon \lambda(t)}
-(with cst.lamb=FALSE, cst.mu=FALSE, fix.eps=TRUE)
-\item model 4d: \eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = \mu_0 e^{\beta t}}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = \mu_0 exp(\beta t)}
-(with cst.lamb=FALSE, cst.mu=FALSE, fix.eps=FALSE)
-\item model 5: \eqn{\lambda(t) = \lambda_0, \mu(t) = 0}{\lambda(t) = \lambda_0, \mu(t) = 0}
-(with cst.lamb=TRUE, mu.0=TRUE)
-\item model 6: \eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = 0}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = 0}
-(with cst.lamb=FALSE, mu.0=TRUE)
+\item model 3: 
+%\eqn{\lambda(t) = \lambda_0, \mu(t) = \mu_0}{\lambda(t) = \lambda_0, \mu(t) = \mu_0}
+with cst.lamb=TRUE & cst.mu=TRUE
+\item model 4a: 
+%\eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = \mu_0}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = \mu_0}
+with cst.lamb=FALSE & cst.mu=TRUE
+\item model 4b: 
+%\eqn{\lambda(t) = \lambda_0, \mu(t) = \mu_0 e^{\beta t}}{\lambda(t) = \lambda_0, \mu(t) = \mu_0 exp(\beta t)}
+with cst.lamb=TRUE & cst.mu=FALSE
+\item model 4c: 
+%\eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = \epsilon \lambda(t)}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = \epsilon \lambda(t)}
+with cst.lamb=FALSE, cst.mu=FALSE & fix.eps=TRUE
+\item model 4d: 
+%\eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = \mu_0 e^{\beta t}}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = \mu_0 exp(\beta t)}
+with cst.lamb=FALSE, cst.mu=FALSE & fix.eps=FALSE
+\item model 5: 
+%\eqn{\lambda(t) = \lambda_0, \mu(t) = 0}{\lambda(t) = \lambda_0, \mu(t) = 0}
+with cst.lamb=TRUE & mu.0=TRUE)
+\item model 6: 
+%\eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = 0}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = 0}
+with cst.lamb=FALSE & mu.0=TRUE
 }
-where \eqn{\lambda_0, \alpha, \mu_0, \beta, \epsilon} are respectively:
-\itemize{
-\item the speciation rate at present;
-\item the exponential variation in speciation rate;
-\item the extinction rate at present;
-\item the exponential variation in extinction rate;
-\item the extinction fraction (extinction rate/speciation rate).
-}
+%where \eqn{\lambda_0, \alpha, \mu_0, \beta, \epsilon} are respectively:
+%\itemize{
+%\item the speciation rate at present;
+%\item the exponential variation in speciation rate;
+%\item the extinction rate at present;
+%\item the exponential variation in extinction rate;
+%\item the extinction fraction (extinction rate/speciation rate).
+%}
 Time runs from the present to the past. Hence, if alpha is estimated to be positive (for example), this means that the speciation rate decreases from past to present. 
 }
 
