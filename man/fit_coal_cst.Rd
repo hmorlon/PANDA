@@ -24,7 +24,7 @@ initial value of the turnover rate at present (used by the optimization algorith
 initial value of the parameter controlling the exponential variation in turnover rate (used by the optimization algorithm)
 }
   \item{cst.rate}{
-logical: should be set to TRUE to fit an equilibrium diversity model with time-constant turnover rate (know as the Hey model). By default, a model with expontential time-varying rate exponential is fitted.
+logical: should be set to TRUE to fit an equilibrium diversity model with time-constant turnover rate (know as the Hey model, model 1 in Morlon et al. PloSB 2010). By default, a model with expontential time-varying rate exponential is fitted (model 2 in Morlon et al. PloSB 2010).
 }
   \item{meth}{
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.
