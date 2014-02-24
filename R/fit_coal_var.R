@@ -147,7 +147,7 @@ fit_coal_var <-
 
   #######################################################################################
 
-  temp <- optim(init, optimLH.coalBD, method = meth,control=list(ndeps=10^(-4)))
+  temp <- suppressWarnings(optim(init, optimLH.coalBD, method = meth,control=list(ndeps=10^(-4))))
   if (mu.0==TRUE & cst.lamb==TRUE)
   {
     if (pos==FALSE)
