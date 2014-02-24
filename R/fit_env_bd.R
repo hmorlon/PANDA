@@ -1,9 +1,9 @@
 fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
-           expo.mu=FALSE, fix.mu=FALSE, cond="crown")
+           expo.mu=FALSE, fix.mu=FALSE, cond="crown",df)
 {
   # first a spline is used to build the approximation model Env(t)
-  df <- smooth.spline(x=InfTemp[,1], InfTemp[,2])$df
+  # df <- smooth.spline(x=InfTemp[,1], InfTemp[,2])$df
   spline_result <- sm.spline(env_data[,1],env_data[,2], df=df)
   env_func <- function(t){predict(spline_result,t)}
   # In order to perform computation, the env_func is tabulated

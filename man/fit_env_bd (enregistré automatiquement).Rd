@@ -45,16 +45,16 @@ the fraction of extant species included in the phylogeny
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.
 }
   \item{cst.lamb}{
-logical: should be set to TRUE only if f.lamb is constant (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.lamb is constant (i.e. does not depend on time or the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{cst.mu}{
-logical: should be set to TRUE only if f.mu is constant (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.mu is constant (i.e. does not depend on time or the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{expo.lamb}{
-logical: should be set to TRUE only if f.lamb is exponential (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.lamb is an exponential function of time (and does not depend on the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{expo.mu}{
-logical: should be set to TRUE only if f.mu is exponential (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.mu is an exponential function of time (and does not depend on the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{fix.mu}{
  logical: if set to TRUE, the extinction rate \eqn{\mu} is fixed and will not be optimized.
@@ -71,7 +71,7 @@ conditioning to use to fit the model:
 
 \value{
 	a list with the following components
-  \item{model}{The name of the used process}
+  \item{model}{the name of the used process}
   \item{LH}{the maximum log-likelihood value}
   \item{aicc}{the second order Akaike's Information Criterion}
   \item{lamb_par}{a numeric vector of estimated f.lamb parameters, in the same order as defined in f.lamb}
@@ -80,13 +80,13 @@ conditioning to use to fit the model:
 
 \details{
 In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past.
-The rate models here are function of environmental data fixed by
-env_data.
+%The rate models here are function of environmental data fixed by
+%env_data.
 %Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
 }
 
 \note{
-Spline model is evaluated with default parameters. Thus if data are
+The spline model is evaluated with default parameters. Thus if data are
 noisy, this might slow down the convergency of the fit.
 }
 \references{
