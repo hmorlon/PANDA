@@ -89,7 +89,7 @@ with cst.lamb=FALSE, cst.mu=FALSE & fix.eps=TRUE
 with cst.lamb=FALSE, cst.mu=FALSE & fix.eps=FALSE
 \item model 5: 
 %\eqn{\lambda(t) = \lambda_0, \mu(t) = 0}{\lambda(t) = \lambda_0, \mu(t) = 0}
-with cst.lamb=TRUE & mu.0=TRUE)
+with cst.lamb=TRUE & mu.0=TRUE
 \item model 6: 
 %\eqn{\lambda(t) = \lambda_0 e^{\alpha t}, \mu(t) = 0}{\lambda(t) = \lambda_0 exp(\alpha t), \mu(t) = 0}
 with cst.lamb=FALSE & mu.0=TRUE
