@@ -59,9 +59,9 @@ This function fits models 1 (when cst.rate=TRUE) and 2 (when cst.rate=FALSE) fro
 }
 
 \references{
-Hey, J. (1992) Unsing phylogenetic trees to study speciation and extinction, Evolution, 46: 627-640
+Hey, J. (1992) Using phylogenetic trees to study speciation and extinction, Evolution, 46: 627-640
 
-Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the Dynamics of Diversification: a Coalescent Approach, PLoS B 8(9): e1000493
+Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the dynamics of diversification: a coalescent approach, PLoS B 8(9): e1000493
 
 Morlon, H., Kemps, B., Plotkin, J.B., Brisson, D. (2012) Explosive radiation of a bacterial species group, Evolution, 66: 2577-2586
 }
