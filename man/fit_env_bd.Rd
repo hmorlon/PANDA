@@ -67,7 +67,7 @@ conditioning to use to fit the model:
 }
 }
 \item{df}{
- the degree of freedom to use to define the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df may be used. See sm.spline for details.  
+ the degree of freedom to use to define the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df may be used. See \emph{sm.spline} for details.  
 }
 
 }

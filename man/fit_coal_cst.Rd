@@ -2,10 +2,11 @@
 \alias{fit_coal_cst}
 
 \title{
-Fit diversity model with time-varying rate
+Maximum likelihood fit of the equilibrium model
 }
 \description{
-Fits the constant diversity/exponentially turnover rate model to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PLoSB 2010.
+Fits the equilibrium diversity model with potentially time-varying turnover rate and potentially missing extant species to a phylogeny, by maximum likelihood. 
+The implementation allows only exponential time variation of the turnover rate, although this could be modified using expressions in Morlon et al. PloSB 2010. Notations follow Morlon et al. PLoSB 2010.
 }
 \usage{
 fit_coal_cst(phylo, tau0 = 1e-2, gamma = 1, cst.rate = FALSE,
@@ -17,20 +18,19 @@ fit_coal_cst(phylo, tau0 = 1e-2, gamma = 1, cst.rate = FALSE,
 an object of type 'phylo' (see ape documentation)
 }
   \item{tau0}{
-initial turnover rate at present time
+initial value for the turnover rate at present time (used by the optimization algorithm)
 }
   \item{gamma}{
-initial exponentially variation in turnover rate
+initial value for the parameters controlling the exponentially time variation of the turnover rate (used by the optimization algorithm)
 }
   \item{cst.rate}{
-logical: should be set to TRUE to fit model with time-constant rate.  By default, a model with time-varying rate (exponential) is used.
+logical: should be set to TRUE to fit an equilibrium diversity model with time-constant turnover rate (know as the Hey model). By default, a model with expontential time-varying rate exponential is fitted.
 }
   \item{meth}{
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.
 }
-  \item{N0}{
-initial number of species.
-With default value(0), the parameter is set to the number of tips in the phylogeny (i.e. the phylogeny is assumed to be 100\% complete)
+  \item{N0}{Number of extant species.
+With default value(0), N0 is set to the number of tips in the phylogeny. That is, the phylogeny is assumed to be 100\% complete. 
 }
   \item{Vtimes}{
 logical: should be set to TRUE to take branching times into account.  Otherwise, the phylogeny is taken into account.
@@ -39,7 +39,7 @@ logical: should be set to TRUE to take branching times into account.  Otherwise,
 
 \value{
 	a list with the following components
-  \item{model}{The name of the used process}
+  \item{model}{the name of the fitted model}
   \item{LH}{the maximum log-likelihood value}
   \item{aicc}{the second order Akaike's Information Criterion}
   \item{tau0}{the estimated turnover rate at present time}
