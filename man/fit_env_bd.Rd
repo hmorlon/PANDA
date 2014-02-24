@@ -33,10 +33,10 @@ a function specifying the hypothesized functional form of the variation of the e
 This function has three arguments: the first argument is time; the second argument is the environmental variable; the second argument is a numeric vector of the parameters controlling the time and environmental variation (to be estimated).
 }
   \item{lamb_par}{
-a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm)
+a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm). The length of this vector is used to compute the total number of parameters in the model, so to fit a model with constant speciation rate (for example), lamb_par should be a vector of length 1. Otherwise aic values will be wrong.
 }
   \item{mu_par}{
-a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm)
+a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm). The length of this vector is used to compute the total number of parameters in the model, so to fit a model without extinction (for example), mu_par should be empty (vector of length 0). Otherwise aic values will be wrong.
 }
   \item{f}{
 the fraction of extant species included in the phylogeny
@@ -82,8 +82,7 @@ conditioning to use to fit the model:
   \item{mu_par}{a numeric vector of estimated f.mu parameters, in the same order as defined in f.mu (if fix.mu is FALSE)}
 }
 
-\details{
-In the f.lamb and f.mu functions, time runs from the present to the past.
+\details{The lengths of lamb_par and mu_par are used to compute the total number of parameters in the model, so to fit a model with constant speciation rate (for example), lamb_par should be a vector of length 1. Otherwise aic values will be wrong. In the f.lamb and f.mu functions, time runs from the present to the past.
 %The rate models here are function of environmental data fixed by
 %env_data.
 %Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
