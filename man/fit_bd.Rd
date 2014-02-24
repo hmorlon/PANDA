@@ -81,6 +81,8 @@ The lengths of lamb_par and mu_par are used to compute the total number of param
 
 \references{
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
+	
+	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 }
 
 \seealso{
