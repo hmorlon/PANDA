@@ -23,7 +23,7 @@ fit_bd <-
       print(c("LH",LH))
       return(-LH)
     }
-    temp <- optim(init, optimLH, method = meth)
+    temp <- suppressWarnings(optim(init, optimLH, method = meth))
     res <- list(model = "birth death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1) , lamb_par=temp$par[1:length(lamb_par)], mu_par=temp$par[(1+length(lamb_par)):length(init)])
   }
 
@@ -39,7 +39,7 @@ fit_bd <-
       LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,expo.mu=FALSE,cond=cond)
       return(-LH)
     }
-    temp <- optim(init, optimLH, method = meth)
+    temp <- suppressWarnings(optim(init, optimLH, method = meth))
     res <- list(model = "birth death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=temp$par[1:length(lamb_par)])
   }
 
