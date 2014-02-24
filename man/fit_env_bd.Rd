@@ -75,7 +75,7 @@ conditioning to use to fit the model:
 
 \value{
 	a list with the following components
-  \item{model}{the name of the used process}
+  \item{model}{the name of the fitted model}
   \item{LH}{the maximum log-likelihood value}
   \item{aicc}{the second order Akaike's Information Criterion}
   \item{lamb_par}{a numeric vector of estimated f.lamb parameters, in the same order as defined in f.lamb}
@@ -117,5 +117,5 @@ f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
 result_exp <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
-      lamb_par,mu_par,f=87/89, fix.mu=TRUE)
+      lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=df)
 }
