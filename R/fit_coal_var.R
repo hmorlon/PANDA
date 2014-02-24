@@ -152,11 +152,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Pure birth constant speciation", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1])
+      res <- list(model = "Pure birth constant speciation (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1])
     }
     else
     {
-      res <- list(model = "Pure birth constant speciation", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]))
+      res <- list(model = "Pure birth constant speciation (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]))
     }
   }
 
@@ -164,11 +164,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Birth-death constant rates", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1],mu0 = temp$par[2])
+      res <- list(model = "Birth-death constant rates (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1],mu0 = temp$par[2])
     }
     else
     {
-      res <- list(model = "Birth-death constant rates", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]),mu0 = abs(temp$par[2]))
+      res <- list(model = "Birth-death constant rates (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]),mu0 = abs(temp$par[2]))
     }
   }
 
@@ -176,11 +176,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Pure birth varying speciation", LH = -temp$value, aicc = 2 *	temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2])
+      res <- list(model = "Pure birth varying speciation (coalescent approx)", LH = -temp$value, aicc = 2 *	temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2])
     }
     else
     {
-      res <- list(model = "Pure birth varying speciation", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2])
+      res <- list(model = "Pure birth varying speciation (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2])
     }
   }
 
@@ -188,11 +188,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Birth-death varying speciation constant extinction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2], mu0 = temp$par[3])
+      res <- list(model = "Birth-death varying speciation constant extinction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2], mu0 = temp$par[3])
     }
     else
     {
-      res <- list(model = "Birth-death varying speciation constant extinction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2], mu0 = abs(temp$par[3]))
+      res <- list(model = "Birth-death varying speciation constant extinction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2], mu0 = abs(temp$par[3]))
     }
   }
 
@@ -200,11 +200,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Birth-death constant speciation varying extinction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], mu0 = temp$par[2], beta = temp$par[3])
+      res <- list(model = "Birth-death constant speciation varying extinction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], mu0 = temp$par[2], beta = temp$par[3])
     }
     else
     {
-      res <- list(model = "Birth-death constant speciation varying extinction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), mu0 = abs(temp$par[2]), beta = temp$par[3])
+      res <- list(model = "Birth-death constant speciation varying extinction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), mu0 = abs(temp$par[2]), beta = temp$par[3])
     }
   }
 
@@ -212,11 +212,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Birth-death constant extinction fraction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2], eps = temp$par[3])
+      res <- list(model = "Birth-death constant extinction fraction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2], eps = temp$par[3])
     }
     else
     {
-      res <- list(model = "Birth-death constant extinction fraction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2], eps = abs(temp$par[3]))
+      res <- list(model = "Birth-death constant extinction fraction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2], eps = abs(temp$par[3]))
     }
   }
 
@@ -224,11 +224,11 @@ fit_coal_var <-
   {
     if (pos==FALSE)
     {
-      res <- list(model = "Birth-death varying speciation and extinction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2], mu0 = temp$par[3],beta = temp$par[4])
+      res <- list(model = "Birth-death varying speciation and extinction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = temp$par[1], alpha = temp$par[2], mu0 = temp$par[3],beta = temp$par[4])
     }
     else
     {
-      res <- list(model = "Birth-death varying speciation and extinction", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2], mu0 = abs(temp$par[3]),beta = temp$par[4])
+      res <- list(model = "Birth-death varying speciation and extinction (coalescent approx)", LH = -temp$value, aicc = 2 * temp$value + 2*nbpar + 2*nbpar*(nbpar+1)/(nbobs-nbpar-1), lamb0 = abs(temp$par[1]), alpha = temp$par[2], mu0 = abs(temp$par[3]),beta = temp$par[4])
     }
   }
   return(res)
