@@ -72,6 +72,6 @@ Morlon, H., Kemps, B., Plotkin, J.B., Brisson, D. (2012) Explosive radiation of 
 
 \examples{
 data(Cetacea)
-result <- fit_coal_cst(Cetacea, tau0=1.e-3, gamma=-1, cst.rate=FALSE)
+result <- fit_coal_cst(Cetacea, tau0=1.e-3, gamma=-1, cst.rate=FALSE, N0=89)
 print(result)
 }
