@@ -31,10 +31,9 @@ This function has two arguments: the first argument is time; the second argument
 }
 
   \item{lamb_par}{
-a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm) 
-}
+a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm). The length of this vector is used to compute the total number of parameters in the model, so to fit a model with constant speciation rate (for example), lamb_par should be a vector of length 1. Otherwise aic values will be wrong.}
   \item{mu_par}{
-a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm) 
+a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm). The length of this vector is used to compute the total number of parameters in the model, so to fit a model without extinction (for example), mu_par should be empty (vector of length 0). Otherwise aic values will be wrong.
 }
   \item{f}{
 the fraction of extant species included in the phylogeny
@@ -77,7 +76,7 @@ conditioning to use to fit the model:
 }
 
 \details{
-In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.  	
+The lengths of lamb_par and mu_par are used to compute the total number of parameters in the model, so to fit a model with constant speciation rate (for example), lamb_par should be a vector of length 1. Otherwise aic values will be wrong. In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.  	
 }
 
 \references{
@@ -89,37 +88,38 @@ In the f.lamb and f.mu functions, the first argument (time) runs from the presen
 }
 
 \examples{
+# Some examples may take a little bit of time. Be patient!
+
 data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
-# Fit of a pure birth model (no extinction) with an
-# exponential variation of speciation rate with time
+
+# Fit the pure birth model (no extinction) with a constant speciation rate
+f.lamb <-function(t,y){y[1]}
+f.mu<-function(t,y){0}
+lamb_par<-c(0.09)
+mu_par<-c()
+result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
+                     cst.lamb = TRUE, fix.mu=TRUE)
+result_cst$model <- "pure birth with constant speciation rate"
+
+# Fit the pure birth model (no extinction) with exponential variation of the speciation rate with time
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
 result_exp <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
                      expo.lamb = TRUE, fix.mu=TRUE)
-result_exp$model <- "birth death - exponential variation rate"
+result_exp$model <- "pure birth with exponential variation in speciation rate"
 
-# Fit of a pure birth model (no extinction) with a
-# linear variation of speciation rate with time
+# Fit the a pure birth model (no extinction) with linear variation of the speciation rate with time
 f.lamb <-function(t,y){y[1] + y[2] * t}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09, 0.001)
 mu_par<-c()
 result_lin <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE)
-result_lin$model <- "birth death - linear variation rate"
-
-# Fit of a pure birth model (no extinction) with a constant speciation rate
-f.lamb <-function(t,y){y[1]}
-f.mu<-function(t,y){0}
-lamb_par<-c(0.09, 0.001)
-mu_par<-c()
-result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
-                     cst.lamb = TRUE, fix.mu=TRUE)
-result_cst$model <- "birth death - cst rate"
+result_lin$model <- "pure birth with linear variation in speciation rate"
 
 # Find the best model
-index <- which.min(c(result_exp$aicc, result_lin$aicc, result_cst$aicc))
+index <- which.min(c(result_cst$aicc, result_exp$aicc, result_lin$aicc))
 rbind(result_exp, result_lin, result_cst)[index,]
 }
