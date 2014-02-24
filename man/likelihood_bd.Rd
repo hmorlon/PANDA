@@ -38,10 +38,10 @@ logical: should be set to TRUE only if f.lamb is constant (i.e. does not depend 
 logical: should be set to TRUE only if f.mu is constant (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{expo.lamb}{
-logical: should be set to TRUE only if f.lamb is exponential (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.lamb is exponential to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{expo.mu}{
-logical: should be set to TRUE only if f.mu is exponential (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.mu is exponential to use analytical instead of numerical computation in order to reduce computation time.
 }
  
   \item{cond}{
@@ -57,7 +57,7 @@ conditioning to use to fit the model:
 }
 
 \value{
-  the loglikelihood value of the phylogeny given f.lamb and f.mu
+  the loglikelihood value of the phylogeny, given f.lamb and f.mu
 }
 \references{
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
