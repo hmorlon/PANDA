@@ -11,7 +11,7 @@ Fits the environmental birth-death model with potentially missing extant species
 fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
-       cond = "crown")
+       cond = "crown",df)
 }
 
 \arguments{
@@ -45,16 +45,16 @@ the fraction of extant species included in the phylogeny
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.
 }
   \item{cst.lamb}{
-logical: should be set to TRUE only if f.lamb is constant (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.lamb is constant (i.e. does not depend on time or the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{cst.mu}{
-logical: should be set to TRUE only if f.mu is constant (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.mu is constant (i.e. does not depend on time or the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{expo.lamb}{
-logical: should be set to TRUE only if f.lamb is exponential (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.lamb is an exponential function of time (and does not depend on the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{expo.mu}{
-logical: should be set to TRUE only if f.mu is exponential (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
+logical: should be set to TRUE only if f.mu is an exponential function of time (and does not depend on the environmental variable) to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{fix.mu}{
  logical: if set to TRUE, the extinction rate \eqn{\mu} is fixed and will not be optimized.
@@ -66,12 +66,16 @@ conditioning to use to fit the model:
 \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
 }
 }
+\item{df}{
+ the degree of freedom to use to define the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df may be used. See sm.spline for details.  
+}
+
 }
 
 
 \value{
 	a list with the following components
-  \item{model}{The name of the used process}
+  \item{model}{the name of the used process}
   \item{LH}{the maximum log-likelihood value}
   \item{aicc}{the second order Akaike's Information Criterion}
   \item{lamb_par}{a numeric vector of estimated f.lamb parameters, in the same order as defined in f.lamb}
@@ -79,15 +83,14 @@ conditioning to use to fit the model:
 }
 
 \details{
-In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past.
-The rate models here are function of environmental data fixed by
-env_data.
+In the f.lamb and f.mu functions, time runs from the present to the past.
+%The rate models here are function of environmental data fixed by
+%env_data.
 %Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
 }
 
 \note{
-Spline model is evaluated with default parameters. Thus if data are
-noisy, this might slow down the convergency of the fit.
+	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
 Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
@@ -102,15 +105,17 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 }
 
 \examples{
-# Phylogenetic data
 data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
+df<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
-f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
-f.mu<-function(t,y){0}
+# fits a model with lambda varying as an exponential function of temperature and mu fixed to 0 (no extinction)
+
+f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
+f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
 result_exp <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
-      lamb_par,mu_par,f=87/89, expo.lamb = TRUE, fix.mu=TRUE)
+      lamb_par,mu_par,f=87/89, fix.mu=TRUE)
 }
