@@ -2,7 +2,7 @@
 \alias{likelihood_bd}
 
 \title{
-Compute the likelihood of a phylogeny under the general birth-death model
+Likelihood of a phylogeny under the general birth-death model
 }
 \description{
 Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011.

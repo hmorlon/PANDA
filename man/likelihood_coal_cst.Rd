@@ -2,7 +2,7 @@
 \alias{likelihood_coal_cst}
 
 \title{
-Compute the Likelihood of a phylogeny under the equilibrium diversity model
+Likelihood of a phylogeny under the equilibrium diversity model
 }
 \description{
 Computes the likelihood of a phylogeny under the equilibrium diversity model with potentially time-varying rates and potentially missing extant species.Notations follow Morlon et al. PloSB 2010.
