@@ -26,11 +26,11 @@ the age of the phylogeny (crown age, or stem age if known). If working with crow
 }
   \item{f.lamb}{
 a function specifying the hypothesized functional form of the variation of the speciation rate \eqn{\lambda} with time and the environmental variable. Any functional form may be used.
-This function has two arguments: the first argument is time; the second argument is a numeric vector of the parameters controlling the time and environmental variation (to be estimated).
+This function has three arguments: the first argument is time; the second argument is the environmental variable; the third arguement is a numeric vector of the parameters controlling the time and environmental variation (to be estimated).
 }
   \item{f.mu}{
 a function specifying the hypothesized functional form of the variation of the extinction rate \eqn{\mu} with time and the environmental variable. Any functional form may be used.
-This function has two arguments: the first argument is time; the second argument is a numeric vector of the parameters controlling the time and environmental variation (to be estimated).
+This function has three arguments: the first argument is time; the second argument is the environmental variable; the second argument is a numeric vector of the parameters controlling the time and environmental variation (to be estimated).
 }
   \item{lamb_par}{
 a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm)
