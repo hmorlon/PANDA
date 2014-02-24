@@ -65,7 +65,7 @@ logical: should be set to FALSE only to not enforce positive speciation and exti
 }
 
 \details{
-The function fits models 3 to 6 from the PloSB 2010 paper. 	
+The function fits models 3 to 6 from the PloSB 2010 paper. Likelihoods arising from these models are computed using the coalescent approximation and are directly comparable to likelihoods from the fit_coal_cst function, thus allowing to test support for equilibrium versus expanding diversity scenarios.
 
 %The default parameters allow to fit the most general model where speciation and extinction rates vary over time without a fixed extinction fraction and write as exponential models.
 %Depending on the model, these parameters include a combination of the speciation rate at present (lamb0), the exponential variation in speciation rate (alpha), the extinction rate at present (mu0), the exponential variation in% extinction rate (beta) and the extinction fraction (extinction rate/speciation rate, eps). See notations in the PLoS Biology 2010 paper.
@@ -105,7 +105,7 @@ Morlon, H., Kemps, B., Plotkin, J.B., Brisson, D. (2012) Explosive radiation of 
 }
 
 \seealso{
-\code{\link[PANDA]{likelihood_coal_var}}
+\code{\link[PANDA]{likelihood_coal_var},link[PANDA]{fit_coal_cst}}
 }
 
 \examples{
