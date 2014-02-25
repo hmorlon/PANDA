@@ -37,7 +37,7 @@ likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FAL
   else if (cond=="crown")
   {
     Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu)
-    log_final_lik <- log_data_lik - log(f.lamb(tot_time)) + 2*log(1-Phi)
+    log_final_lik <- log_data_lik + log(f.lamb(tot_time)) - 2*log(1-Phi)
   }
   return(log_final_lik)
 }
