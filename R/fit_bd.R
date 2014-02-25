@@ -20,7 +20,6 @@ fit_bd <-
       f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
       f.mu.par <- function(t){abs(f.mu(t,mu_par))}
       LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,cond=cond)
-      print(c("LH",LH))
       return(-LH)
     }
     temp <- suppressWarnings(optim(init, optimLH, method = meth))
