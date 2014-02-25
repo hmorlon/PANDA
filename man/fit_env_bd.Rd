@@ -38,6 +38,9 @@ a numeric vector of initial values for the parameters of f.lamb to be estimated 
   \item{mu_par}{
 a numeric vector of initial values for the parameters of f.mu to be estimated (these values are used by the optimization algorithm). The length of this vector is used to compute the total number of parameters in the model, so to fit a model without extinction (for example), mu_par should be empty (vector of length 0). Otherwise aic values will be wrong.
 }
+\item{df}{
+ the degree of freedom to use to define the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df is used. See \emph{sm.spline} for details.  
+}
   \item{f}{
 the fraction of extant species included in the phylogeny
 }
@@ -66,10 +69,6 @@ conditioning to use to fit the model:
 \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
 }
 }
-\item{df}{
- the degree of freedom to use to define the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df may be used. See \emph{sm.spline} for details.  
-}
-
 }
 
 
