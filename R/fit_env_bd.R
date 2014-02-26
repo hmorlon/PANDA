@@ -18,14 +18,15 @@ fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_pa
   # Tabulation of the function from lower_bound -10%, upper_bound + 10%
   time_tabulated <- seq(from=lower_bound*(1.0-lower_bound_control),
                         to=upper_bound*(1.0+upper_bound_control),
-                        length.out=1 + 1e6)
+                        length.out=1+1e6)
   env_tabulated <- env_func(time_tabulated)
   # Tabulated function
   env_func_tab <- function(t)
   {
     b <- upper_bound * (1.0 + upper_bound_control)
     a <- lower_bound * (1.0 - lower_bound_control)
-    n <- length(env_tabulated)
+    # number of intervals
+    n <- length(env_tabulated) - 1
     index <- 1 + as.integer( (t - a) * n / (b - a))
     return(env_tabulated[index])
   }
