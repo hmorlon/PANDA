@@ -19,7 +19,7 @@
     beta <- log(f.mu(1)/mu0)
     r.int <- function(x,y){lamb0*(y-x)-mu0/beta*(exp(beta*y)-exp(beta*x))}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
     return(res)
   }
@@ -31,7 +31,7 @@
     mu0 <- f.mu(0)
     r.int <- function(x,y){lamb0/alpha*(exp(alpha*y)-exp(alpha*x))-mu0*(y-x)}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
     return(res)
   }
@@ -44,7 +44,7 @@
     beta <- log(f.mu(1)/mu0)
     r.int <- function(x,y){lamb0/alpha*(exp(alpha*y)-exp(alpha*x))-mu0/beta*(exp(beta*y)-exp(beta*x))}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
     return(res)
   }
@@ -54,9 +54,9 @@
   else
   {
     r <- function(t){f.lamb(t)-f.mu(t)}
-    r.int <- function(x,y){integrate(Vectorize(r),x,y,stop.on.error=FALSE)$value}
+    r.int <- function(x,y){integrate(r,x,y,stop.on.error=FALSE)$value}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
     return(res)
   }
