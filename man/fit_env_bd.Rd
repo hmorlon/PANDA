@@ -106,7 +106,7 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
-df<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
+dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
 # fits a model with lambda varying as an exponential function of temperature and mu fixed to 0 (no extinction)
 
@@ -115,5 +115,5 @@ f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
 result_exp <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
-      lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=df)
+      lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof)
 }
