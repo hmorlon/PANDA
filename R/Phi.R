@@ -6,7 +6,7 @@
     lamb <- f.lamb(0)
     mu <- f.mu(0)
     r <- lamb-mu
-    res <- 1-exp(r*t)/(1/f+lamb/r*(exp(r*t)-1))
+    res <- 1-r*exp(r*t)/(r/f+lamb*(exp(r*t)-1))
     return(res)
   }
 
