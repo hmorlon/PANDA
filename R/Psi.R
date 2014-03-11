@@ -54,7 +54,7 @@
   else
   {
     r <- function(t){f.lamb(t)-f.mu(t)}
-    r.int <- function(x,y){integrate(r,x,y,stop.on.error=FALSE)$value}
+    r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
     r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
