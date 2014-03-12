@@ -50,9 +50,11 @@
   else
   {
     r <- function(t){f.lamb(t)-f.mu(t)}
-    r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
+    rvect <- function(t){mapply(r,t)}
+    r.int <- function(x,y){.Integrate(rvect,x,y,stop.on.error=FALSE)}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    rvect0 <- function(y){mapply(r.int.0,y)}
+    r.int.int <- function(x,y){.Integrate(rvect0,x,y,stop.on.error=FALSE)}
     res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
     res
   }
