@@ -95,7 +95,7 @@ Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phyloge
 	
 Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectives to environmental change, Eco Lett 16: 72-85
 
-Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
+Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett, 17:508-525
 }
 
 \seealso{
@@ -109,6 +109,7 @@ data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
 # fits a model with lambda varying as an exponential function of temperature and mu fixed to 0 (no extinction)
+# here t stands for time and x for temperature
 
 f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(t,x,y){0}
