@@ -50,12 +50,27 @@
   else
   {
     r <- function(t){f.lamb(t)-f.mu(t)}
-    rvect <- function(t){mapply(r,t)}
-    r.int <- function(x,y){.Integrate(rvect,x,y,stop.on.error=FALSE)}
+    r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
     r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    rvect0 <- function(y){mapply(r.int.0,y)}
-    r.int.int <- function(x,y){.Integrate(rvect0,x,y,stop.on.error=FALSE)}
-    res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
-    res
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    rit <- r.int(0,t)
+    ri00 <- r.int.int(0,t)
+    res <- 1.0-exp(rit)/(1/f+ri00)
+    if (is.infinite(rit) || is.infinite(ri00))
+    {
+      rvect <- function(t){mapply(r,t)}
+      r.int <- function(x,y){.Integrate(rvect,x,y,stop.on.error=FALSE)}
+      r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
+      rvect0 <- function(y){mapply(r.int.0,y)}
+      r.int.int <- function(x,y){.Integrate(rvect0,x,y,stop.on.error=FALSE)}
+      rit <- r.int(0,t)
+      ri00 <- r.int.int(0,t)
+      res <- 1.0-exp(rit)/(1/f+ri00)
+      return(res)
+    }
+    else
+    {
+      return(res)
+    }
   }
 }

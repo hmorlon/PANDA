@@ -19,10 +19,6 @@ fit_bd <-
       mu_par <- init[(1+length(lamb_par)):length(init)]
       f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
       f.mu.par <- function(t){abs(f.mu(t,mu_par))}
-# #       f.lamb.abs.scal <- function(t){abs(f.lamb(t,lamb_par))}
-# #       f.lamb.par <- function(t){mapply(f.lamb.abs.scal, t)}
-# #       f.mu.abs.scal <- function(t){abs(f.mu(t,mu_par))}
-# #       f.mu.par <- function(t){mapply(f.mu.abs.scal,t)}
       LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,cond=cond)
       return(-LH)
     }
@@ -39,10 +35,6 @@ fit_bd <-
       lamb_par <- init[1:length(lamb_par)]
       f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
       f.mu.par <- function(t){abs(f.mu(t,mu_par))}
-#       f.lamb.abs.scal <- function(t){abs(f.lamb(t,lamb_par))}
-#       f.lamb.par <- function(t){mapply(f.lamb.abs.scal, t)}
-#       f.mu.abs.scal <- function(t){abs(f.mu(t,mu_par))}
-#       f.mu.par <- function(t){mapply(f.mu.abs.scal,t)}
       LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,cond=cond)
       return(-LH)
     }
