@@ -50,27 +50,30 @@
   else
   {
     r <- function(t){f.lamb(t)-f.mu(t)}
-    r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
-    r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
-    rit <- r.int(0,t)
-    ri00 <- r.int.int(0,t)
-    res <- 1.0-exp(rit)/(1/f+ri00)
-    if (is.infinite(rit) || is.infinite(ri00))
+    test <- c(0,.Machine$double.eps)
+    if ((length(f.lamb(test))!= 2) & (length(f.mu(test))!= 2))
     {
       rvect <- function(t){mapply(r,t)}
       r.int <- function(x,y){.Integrate(rvect,x,y,stop.on.error=FALSE)}
-      r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
-      rvect0 <- function(y){mapply(r.int.0,y)}
-      r.int.int <- function(x,y){.Integrate(rvect0,x,y,stop.on.error=FALSE)}
-      rit <- r.int(0,t)
-      ri00 <- r.int.int(0,t)
-      res <- 1.0-exp(rit)/(1/f+ri00)
-      return(res)
     }
     else
     {
-      return(res)
+      r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
     }
+    g <- function(y){r.int(0,y)}
+    r.int.0 <- function(y){exp(g(y))*f.lamb(y)}
+    if (length(g(test)) != 2)
+    {
+      rint0vect <- function(y){mapply(r.int.0,y)}
+      r.int.int <- function(x,y){.Integrate(rint0vect,x,y,stop.on.error=FALSE)}
+    }
+    else
+    {
+      r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    }
+    rit <- r.int(0,t)
+    ri00 <- r.int.int(0,t)
+    res <- 1.0-exp(rit)/(1/f+ri00)
+    return(res)
   }
 }
