@@ -3,6 +3,7 @@ language: c
 env:
   global:
     - R_LIBS_USER=~/R
+    - R_LIBS=~/R:/usr/local/lib/R/site-library:/usr/lib/R/site-library:/usr/lib/R/library
 before_install:
 #  We want R 3.0 packages, official Travis images only provide 2.14
   - sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/"
