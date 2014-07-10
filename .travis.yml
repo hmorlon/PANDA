@@ -1,0 +1,19 @@
+# There is no R support.  Use a fake language
+language: c
+env:
+  global:
+    - R_LIBS_USER=~/R
+before_install:
+  - sudo apt-get install r-base-dev r-recommended qpdf
+install:
+  - R --version
+  - R -e '.libPaths(); sessionInfo()'
+#  CRAN packages required by PANDA
+  - Rscript -e 'install.packages(c("ape", "picante", "pspline"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
+#  CRAN packages required by PANDA tests
+  - Rscript -e 'install.packages(c("testthat", "vegan", "permute", "lattice", "nlme"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
+script:
+  - R CMD build --no-manual .
+  - R CMD INSTALL *gz
+  - cd tests/testthat && Rscript -e 'library(methods);library(testthat);library(PANDA);source("test-fit-coal.r"); test_file("test-fit-coal.r", "summary")'
+
