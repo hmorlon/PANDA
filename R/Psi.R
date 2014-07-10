@@ -65,16 +65,9 @@
       r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
     }
     g <- function(y){r.int(0,y)}
-    r.int.0 <- function(y){exp(g(y))*f.lamb(y)}
-    if (length(g(test)) != 2)
-    {
-      rint0vect <- function(y){mapply(r.int.0,y)}
-      r.int.int <- function(x,y){.Integrate(rint0vect,x,y,stop.on.error=FALSE)}
-    }
-    else
-    {
-      r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
-    }
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     rst <- r.int(s,t)
     rist <- r.int.int(s,t)
     ri0s <- r.int.int(0,s)
