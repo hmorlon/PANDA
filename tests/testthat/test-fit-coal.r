@@ -16,10 +16,10 @@ reference_tau0 <- 0.106
 reference_gamma <- 0.112
 
 test_that("Non constant rate",{
-  expect_that( abs(res$LH - reference_lh)  , is_less_than(precision_lh) )
-  expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
-  expect_that( abs(res$tau0 - reference_tau0)  , is_less_than(precision_param) )
-  expect_that( abs(res$gamma - reference_gamma)  , is_less_than(precision_param) )
+  expect_that( abs(result$LH - reference_lh)  , is_less_than(precision_lh) )
+  expect_that( abs(result$aicc - reference_aicc)  , is_less_than(precision_aicc) )
+  expect_that( abs(result$tau0 - reference_tau0)  , is_less_than(precision_param) )
+  expect_that( abs(result$gamma - reference_gamma)  , is_less_than(precision_param) )
 })
 
 
@@ -33,10 +33,10 @@ reference_mu0 <- 3.3e-07
 reference_beta <- -0.0514
 
 test_that("Non constant rate",{
-  expect_that( abs(res$LH - reference_lh)  , is_less_than(precision_lh) )
-  expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
-  expect_that( abs(res$lamb0 - reference_lamb0)  , is_less_than(precision_param) )
-  expect_that( abs(res$alpha - reference_alpha)  , is_less_than(precision_param) )
-  expect_that( abs(res$mu0 - reference_mu0)  , is_less_than(precision_param) )
-  expect_that( abs(res$beta - reference_beta)  , is_less_than(precision_param) )
+  expect_that( abs(result$LH - reference_lh)  , is_less_than(precision_lh) )
+  expect_that( abs(result$aicc - reference_aicc)  , is_less_than(precision_aicc) )
+  expect_that( abs(result$lamb0 - reference_lamb0)  , is_less_than(precision_param) )
+  expect_that( abs(result$alpha - reference_alpha)  , is_less_than(precision_param) )
+  expect_that( abs(result$mu0 - reference_mu0)  , is_less_than(precision_param) )
+  expect_that( abs(result$beta - reference_beta)  , is_less_than(precision_param) )
 })
