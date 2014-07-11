@@ -33,10 +33,10 @@ reference_mu0 <- 3.3e-07
 reference_beta <- -0.0514
 
 test_that("Non constant rate",{
-  expect_that( abs(10*result$LH - reference_lh)  , is_less_than(precision_lh) )
+  expect_that( abs(result$LH - reference_lh)  , is_less_than(precision_lh) )
   expect_that( abs(result$aicc - reference_aicc)  , is_less_than(precision_aicc) )
   expect_that( abs(result$lamb0 - reference_lamb0)  , is_less_than(precision_param) )
   expect_that( abs(result$alpha - reference_alpha)  , is_less_than(precision_param) )
   expect_that( abs(result$mu0 - reference_mu0)  , is_less_than(precision_param) )
-  expect_that( abs(10*result$beta - reference_beta)  , is_less_than(precision_param) )
+  expect_that( abs(result$beta - reference_beta)  , is_less_than(precision_param) )
 })
