@@ -53,21 +53,30 @@
 
   else
   {
+    ageMin <- 0
+    ageMax <- tot_time
+    # Constant approximation on steps of size dt
+    dt <- 0.001
+    Nintervals <- 1 + as.integer((ageMax-ageMin)/dt)
+    X <- seq(ageMin, ageMax, length.out = Nintervals + 1)
     r <- function(t){f.lamb(t)-f.mu(t)}
-    test <- c(0,.Machine$double.eps)
-    if ((length(f.lamb(test))!= 2) & (length(f.mu(test))!= 2))
+    r.int.tab <- cumsum(r(X)) * (ageMax - ageMin) / Nintervals
+    r.int <- function(x,y)
     {
-      rvect <- function(t){mapply(r,t)}
-      r.int <- function(x,y){.Integrate(rvect,x,y,stop.on.error=FALSE)}
+      indy <- 1 + as.integer( (y - ageMin) * Nintervals / (ageMax - ageMin))
+      indx <- 1 + as.integer( (x - ageMin) * Nintervals / (ageMax - ageMin))
+      value <- r.int.tab[indy] - r.int.tab[indx]
+      return(value)
     }
-    else
+    r.int.0 <- function(y){exp(r.int.tab[1 + as.integer( (y - ageMin) * Nintervals / (ageMax - ageMin))]) * f.lamb(y)}
+    r.int.int.tab <- cumsum(r.int.0(X)) * (ageMax - ageMin) / Nintervals
+    r.int.int <- function(x,y)
     {
-      r.int <- function(x,y){.Integrate(r,x,y,stop.on.error=FALSE)}
+      indy <- 1 + as.integer( (y - ageMin) * Nintervals / (ageMax - ageMin))
+      indx <- 1 + as.integer( (x - ageMin) * Nintervals / (ageMax - ageMin))
+      value <- r.int.int.tab[indy] - r.int.int.tab[indx]
+      return(value)
     }
-    g <- function(y){r.int(0,y)}
-    gvect <- function(y){mapply(g,y)}
-    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
-    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
     return(list(r.int=r.int, r.int.int=r.int.int))
   }
 }
