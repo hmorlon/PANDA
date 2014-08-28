@@ -20,5 +20,5 @@ install:
 script:
   - R CMD build --no-manual .
   - R CMD INSTALL *gz
-  - cd tests/testthat && Rscript -e 'library(methods);library(testthat);library(PANDA);source("test-fit-coal.r"); test_file("test-fit-coal.r", "summary")'
+  - cd tests/testthat && Rscript -e 'library(methods);library(testthat);library(PANDA); test_file("test-fit-coal.r", "summary");  test_file("test-fit-bd.r", "summary")'
 
