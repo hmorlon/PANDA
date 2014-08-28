@@ -1,4 +1,4 @@
-.computeRintRintint <- function(f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE, tot_time)
+.computeRintRintint <- function(f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt_cst=1e-3,tot_time)
 {
   if ((cst.lamb==TRUE) & (cst.mu==TRUE))
   {
@@ -56,8 +56,7 @@
     ageMin <- 0
     ageMax <- tot_time
     # Constant approximation on steps of size dt
-    dt <- 0.001
-    Nintervals <- 1 + as.integer((ageMax-ageMin)/dt)
+    Nintervals <- 1 + as.integer((ageMax-ageMin)/dt_cst)
     X <- seq(ageMin, ageMax, length.out = Nintervals + 1)
     r <- function(t){f.lamb(t)-f.mu(t)}
     r.int.tab <- cumsum(r(X)) * (ageMax - ageMin) / Nintervals
