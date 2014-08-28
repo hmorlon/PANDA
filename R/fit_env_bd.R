@@ -1,6 +1,6 @@
 fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df=NULL, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
-           expo.mu=FALSE, fix.mu=FALSE, cond="crown")
+           expo.mu=FALSE, fix.mu=FALSE, dt_cst=1e-3, cond="crown")
 {
   # first a spline is used to build the approximation model Env(t)
   if (is.null(df))
@@ -33,7 +33,7 @@ fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_pa
   f.lamb.env <- function(t,y){ f.lamb(t, env_func_tab(t), y)}
   f.mu.env <- function(t,y){ f.mu(t, env_func_tab(t), y)}
   res <- fit_bd(phylo, tot_time, f.lamb.env, f.mu.env, lamb_par, mu_par, f,
-           meth, cst.lamb, cst.mu, expo.lamb, expo.mu, fix.mu, cond)
+           meth, cst.lamb, cst.mu, expo.lamb, expo.mu, fix.mu, dt_cst, cond)
   res$model <- "environmental birth death"
   return(res)
 }
