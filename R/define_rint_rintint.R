@@ -1,4 +1,4 @@
-.computeRintRintint <- function(f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt_cst=1e-3,tot_time)
+.defineRintRintint <- function(f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt_cst=1e-3,tot_time)
 {
   if ((cst.lamb==TRUE) & (cst.mu==TRUE))
   {

@@ -10,7 +10,7 @@ likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FAL
   ages <- ages[order(ages[,1]),]
   age <- max(ages[,2])
   # the objective is to define once the r.int & r.int.int functions
-  psi_phi_elements <- .computeRintRintint(f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt_cst, tot_time)
+  psi_phi_elements <- .defineRintRintint(f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt_cst, tot_time)
   for (j in 1:(nbtips-1))
   {
     node <- (nbtips+j)
