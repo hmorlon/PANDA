@@ -21,12 +21,16 @@ likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FAL
     ri0s <- psi_phi_elements$r.int.int(0,0)
     Psi <- rst - 2*log(abs(1+rist/(1/f+ri0s)))
     log_lik_tj <- log(f.lamb(tj)) + Psi
-    log_indLikelihood <- c(log_indLikelihood,log_lik_tj)
+    log_indLikelihood <- c(log_indLikelihood, log_lik_tj)
   }
-  log_indLikelihood <- c(log_indLikelihood,log(.Psi(0,tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)))
-
+  rst <- psi_phi_elements$r.int(0,tot_time)
+  rist <- psi_phi_elements$r.int.int(0,tot_time)
+  ri0s <- psi_phi_elements$r.int.int(0,0)
+  Psi <- rst - 2*log(abs(1+rist/(1/f+ri0s)))
+  log_lik_tot_time <- log(f.lamb(tj)) + Psi
+  log_indLikelihood <- c(log_indLikelihood, log_lik_tot_time)
+  # Compute total likelihood
   log_data_lik <- sum(log_indLikelihood)+nbtips*log(f)
-
   if (cond==FALSE)
   {
     log_final_lik <- log_data_lik
