@@ -1,4 +1,4 @@
-.Phi <- function(t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt_cst=1e-3)
+.Phi <- function(t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=1e-3)
 {
 
   if ((cst.lamb==TRUE) & (cst.mu==TRUE))
@@ -57,7 +57,7 @@
   {
     ageMin <- 0
     ageMax <- t
-    Nintervals <- 1 + as.integer((ageMax-ageMin)/dt_cst)
+    Nintervals <- 1 + as.integer((ageMax-ageMin)/dt)
     X <- seq(ageMin, ageMax, length.out = Nintervals + 1)
     r <- function(t){f.lamb(t)-f.mu(t)}
     r.int <- cumsum(r(X)) * (ageMax - ageMin) / Nintervals
