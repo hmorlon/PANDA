@@ -23,7 +23,11 @@ fit_bd <-
       return(-LH)
     }
     temp <- suppressWarnings(optim(init, optimLH, method = meth))
-    res <- list(model = "birth death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1) , lamb_par=temp$par[1:length(lamb_par)], mu_par=temp$par[(1+length(lamb_par)):length(init)])
+    lamb.par <- temp$par[1:length(lamb_par)]
+    mu.par <- temp$par[(1+length(lamb_par)):length(init)]
+    f.lamb.par <- function(t){f.lamb(t, lamb.par)}
+    f.mu.par <- function(t){f.mu(t, mu.par)}
+    res <- list(model = "birth death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1) , lamb_par=lamb.par, mu_par=mu.par, f.lamb=f.lamb.par, f.mu=f.mu.par)
   }
 
   else
@@ -39,7 +43,9 @@ fit_bd <-
       return(-LH)
     }
     temp <- suppressWarnings(optim(init, optimLH, method = meth))
-    res <- list(model = "birth.death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=temp$par[1:length(lamb_par)])
+    lamb.par <- temp$par[1:length(lamb_par)]
+    f.lamb.par <- function(t){f.lamb(t, lamb.par)}
+    res <- list(model = "birth.death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=lamb.par, f.lamb=f.lamb.par)
   }
   class(res) <- "fit.bd"
   return(res)
