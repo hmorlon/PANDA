@@ -39,8 +39,8 @@ fit_bd <-
       return(-LH)
     }
     temp <- suppressWarnings(optim(init, optimLH, method = meth))
-    res <- list(model = "birth death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=temp$par[1:length(lamb_par)])
+    res <- list(model = "birth.death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=temp$par[1:length(lamb_par)])
   }
-
+  class(res) <- "fit.bd"
   return(res)
 }
