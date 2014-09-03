@@ -5,7 +5,7 @@
 Plot speciation, extinction & rate functions of a fitted model
 }
 \description{
-Plot speciation, extinction & rate functions of a fitted model
+Plot speciation, extinction & diversification functions of a fitted model
 }
 \usage{
 plot.fit.bd(fit.bd, tot_time)
@@ -23,7 +23,7 @@ the age of the underlying phylogeny (crown age, or stem age if known). If workin
 
 \value{
   One or several graphical windows 
-on which the speciation, extinction & rate functions are represented depending on the fitted model (extinction/no extinction)
+on which the speciation, extinction & diversification functions are represented depending on the fitted model (extinction/no extinction)
 }
 
 
