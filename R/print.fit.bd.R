@@ -1,0 +1,16 @@
+print.fit.bd <- function(fit.bd)
+{
+  if (!inherits(fit.bd, "fit.bd"))
+      stop("object \"fit.bd\" is not of class \"fit.bd\"")
+  cat("\n    Fit Birth Death Model\n")
+  cat("    ---------------------\n\n")
+  cat("    Model validation\n")
+  cat("    ---------------- \n\n")
+  cat("    Log-likelihood:", fit.bd$LH, "\n")
+  cat("    AICC:", fit.bd$aicc, "\n\n")
+  cat("    Parameters estimate \n")
+  cat("    -------------------\n")
+  cat("    Birth:", fit.bd$lamb_par, "\n\n")
+  if(!is.null(fit.bd$mu_par))
+    cat("    Death:", fit.bd$mu_par, "\n\n")
+}
