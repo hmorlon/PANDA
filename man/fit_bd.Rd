@@ -11,7 +11,7 @@ Fits the birth-death model with potentially time-varying rates and potentially m
 fit_bd(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
-       cond = "crown")
+       dt=1e-3, cond = "crown")
 }
 
 \arguments{
@@ -29,7 +29,6 @@ This function has two arguments: the first argument is time; the second argument
 a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the extinction rate \eqn{\mu} with time. Any functional form may be used.
 This function has two arguments: the first argument is time; the second argument is a numeric vector of the parameters of the time-variation (to be estimated).
 }
-
   \item{lamb_par}{
 a numeric vector of initial values for the parameters of f.lamb to be estimated (these values are used by the optimization algorithm). The length of this vector is used to compute the total number of parameters in the model, so to fit a model with constant speciation rate (for example), lamb_par should be a vector of length 1. Otherwise aic values will be wrong.}
   \item{mu_par}{
@@ -55,6 +54,9 @@ logical: should be set to TRUE only if f.mu is exponential to use analytical ins
 }
   \item{fix.mu}{
  logical: if set to TRUE, the extinction rate \eqn{\mu} is fixed and will not be optimized.
+}
+  \item{dt}{
+ Interval time on which functions are supposed to be constant.
 }
   \item{cond}{
 conditioning to use to fit the model:

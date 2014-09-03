@@ -9,7 +9,7 @@ Computes the likelihood of a phylogeny under a birth-death model with potentiall
 }
 \usage{
 likelihood_bd(phylo, tot_time, f.lamb, f.mu, f, cst.lamb = FALSE, cst.mu = FALSE,
-              expo.lamb = FALSE, expo.mu = FALSE, cond = "crown")
+              expo.lamb = FALSE, expo.mu = FALSE, dt = 1e-3, cond = "crown")
 }
 
 \arguments{
@@ -20,14 +20,12 @@ an object of type 'phylo' (see ape documentation)
   \item{tot_time}{
 the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
-
  \item{f.lamb}{
-a function specifying the time-variation of the speciation rate \eqn{\lambda}. This function as a single argument (time). Any function may be used.
+  a function specifying the time-variation of the speciation rate \eqn{\lambda}. This function as a single argument (time). Any function may be used.
 }
   \item{f.mu}{
-  	a function specifying the time-variation of the speciation rate \eqn{\mu}. This function as a single argument (time). Any function may be used.
+  a function specifying the time-variation of the speciation rate \eqn{\mu}. This function as a single argument (time). Any function may be used.
 }
-
  \item{f}{
 the fraction of extant species included in the phylogeny
 }
@@ -43,7 +41,9 @@ logical: should be set to TRUE only if f.lamb is exponential to use analytical i
   \item{expo.mu}{
 logical: should be set to TRUE only if f.mu is exponential to use analytical instead of numerical computation in order to reduce computation time.
 }
- 
+  \item{dt}{
+ Interval time on which functions are supposed to be constant.
+} 
   \item{cond}{
 conditioning to use to fit the model:
 \itemize{ \item FALSE: no conditioning (not recommended);

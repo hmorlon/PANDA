@@ -8,10 +8,10 @@ Maximum likelihood fit of the environmental birth-death model
 Fits the environmental birth-death model with potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011 and Condamine et al. ELE 2013.
 }
 \usage{
-fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
+fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df= NULL, f = 1,
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
-       cond = "crown",df)
+       dt=1e-3, cond = "crown")
 }
 
 \arguments{
@@ -61,6 +61,9 @@ logical: should be set to TRUE only if f.mu is an exponential function of time (
 }
   \item{fix.mu}{
  logical: if set to TRUE, the extinction rate \eqn{\mu} is fixed and will not be optimized.
+}
+  \item{dt}{
+ Interval time on which functions are supposed to be constant.
 }
   \item{cond}{
 conditioning to use to fit the model:
