@@ -1,5 +1,5 @@
-\name{plot.fit.bd}
-\alias{plot.fit.bd}
+\name{plot_fit}
+\alias{plot_fit}
 
 \title{
 Plot speciation, extinction & rate functions of a fitted model
@@ -8,7 +8,7 @@ Plot speciation, extinction & rate functions of a fitted model
 Plot speciation, extinction & diversification functions of a fitted model
 }
 \usage{
-plot.fit.bd(fit.bd, tot_time)
+plot_fit(fit.bd, tot_time)
 }
 
 \arguments{
@@ -47,7 +47,6 @@ lamb_par<-c(0.08, 0.01)
 mu_par<-c()
 result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
                      expo.lamb = TRUE, fix.mu=TRUE)
-# plot ==> no need to use plot.fit.bd
-# as plot is a generic function
-plot(result, tot_time)
+# plot fitted rates
+plot_fit(result, tot_time)
 }
