@@ -50,5 +50,5 @@ result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
                      expo.lamb = TRUE, fix.mu=TRUE)
 # plot ==> no need to use plot_dtt
 # as plot is a generic function
-plot_dtt(result, tot_time, N0=89)
+# plot_dtt(result, tot_time, N0=89)
 }

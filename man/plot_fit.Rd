@@ -48,5 +48,5 @@ mu_par<-c()
 result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
                      expo.lamb = TRUE, fix.mu=TRUE)
 # plot fitted rates
-plot_fit(result, tot_time)
+#plot_fit(result, tot_time)
 }
