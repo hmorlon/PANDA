@@ -2,34 +2,37 @@
 \alias{plot_dtt}
 
 \title{
-Plot diversification function through time
+Plot diversity through time
 }
 \description{
-Plot diversification function through time
+Plot the estimated number of species through time
 }
 \usage{
-plot_dtt(fit.bd, tot_time, N0=1)
+plot_dtt(fit.bd, tot_time, N0)
 }
 
 \arguments{
   \item{fit.bd}{
-an object result of 'fit_bd'.
+an object of class 'fit.bd', output of the 'fit_bd' function
 }
   \item{tot_time}{
 the age of the underlying phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
   \item{N0}{
-Number of extant species..
+number of extant species. If all extant species are represented in the phylogeny, N0 is given by length(phylo$tip.label)
 }
 
 }
 
 
 \value{
-A list that countains:
+Plot representing how the estimated number of species vary through time
+}
 
-  \item{time}{time values from 0 to tot_time on which we evaluate the diversification}
-  \item{value}{Diversification values on previous time}
+\references{
+	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
+	
+	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 17:508-525
 }
 
 \seealso{
@@ -48,7 +51,7 @@ lamb_par<-c(0.08, 0.01)
 mu_par<-c()
 result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
                      expo.lamb = TRUE, fix.mu=TRUE)
-# plot ==> no need to use plot_dtt
-# as plot is a generic function
+
+# plot estimated number of species through time
 # plot_dtt(result, tot_time, N0=89)
 }
