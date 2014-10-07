@@ -2,10 +2,10 @@
 \alias{plot_fit}
 
 \title{
-Plot speciation, extinction & rate functions of a fitted model
+Plot speciation, extinction & net diversification rate functions of a fitted model
 }
 \description{
-Plot speciation, extinction & diversification functions of a fitted model
+Plot estimated speciation, extinction & net diversification rates through time
 }
 \usage{
 plot_fit(fit.bd, tot_time)
@@ -13,23 +13,18 @@ plot_fit(fit.bd, tot_time)
 
 \arguments{
   \item{fit.bd}{
-an object result of 'fit_bd'.
+an object of class 'fit.bd', output of the 'fit_bd' function
 }
   \item{tot_time}{
-the age of the underlying phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
 }
 
 
 \value{
-  One or several graphical windows 
-on which the speciation, extinction & diversification functions are represented depending on the fitted model (extinction/no extinction)
+Plots representing how the estimated speciation, extinction & net diversification rate functions vary through time
 }
 
-
-\details{
-The fitted object countains the informations that are quickly usuable to plot the fitted functions.
-}
 
 \seealso{
 \code{\link[PANDA]{fit_bd}}
