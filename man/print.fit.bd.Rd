@@ -9,12 +9,15 @@ The function prints a compact summary of a fitted object result on the console.
 }
 
 \usage{
-print.fit.bd(fit.bd)
+\method{print}{fit.bd}(x, \dots)
 }
 
 \arguments{
-  \item{fit.bd}{
+  \item{x}{
 an object result of 'fit_bd'.
+}
+  \item{...}{
+further arguments passed to or from other methods.
 }
 }
 
