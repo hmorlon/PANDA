@@ -5,7 +5,7 @@ fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_pa
   # first a spline is used to build the approximation model Env(t)
   if (is.null(df))
   {
-    df <- smooth.spline(x=InfTemp[,1], InfTemp[,2])$df
+    df <- smooth.spline(x=env_data[,1], env_data[,2])$df
   }
   spline_result <- sm.spline(env_data[,1],env_data[,2], df=df)
   env_func <- function(t){predict(spline_result,t)}
