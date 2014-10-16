@@ -10,7 +10,7 @@ f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
-res <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, cond="stem")
+res <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, cond="stem", dt=1e-3)
 
 test_that("B exponential, function of temperature",{
   reference_lh <- -278.839
@@ -31,7 +31,7 @@ f.lamb <-function(t,x,y){y[1] * exp(y[2] * t + y[3] * x)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, -0.01, 0.03)
 mu_par<-c()
-res <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, cond="stem")
+res <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, cond="stem", dt=1e-3)
 
 
 test_that("B exponential, function of temperature & time",{
