@@ -42,8 +42,9 @@ logical: should be set to TRUE only if f.lamb is exponential to use analytical i
 logical: should be set to TRUE only if f.mu is exponential to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{dt}{
- Interval time on which functions are supposed to be constant.
-} 
+ Default value is 0. In that case, we use integrate function for likelihood evaluations. Otherwise, for dt > 0, it represents the interval time on which functions are supposed to be constant.
+ For exponential models, 5e-4 is an accurate trade-off between precision/quick computation.
+}
   \item{cond}{
 conditioning to use to fit the model:
 \itemize{ \item FALSE: no conditioning (not recommended);

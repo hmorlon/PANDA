@@ -1,4 +1,4 @@
-.Phi <- function(t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=1e-3)
+.Phi <- function(t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0)
 {
 
   if ((cst.lamb==TRUE) & (cst.mu==TRUE))
@@ -55,24 +55,38 @@
 
   else
   {
-    ageMin <- 0
-    ageMax <- t
-    Nintervals <- 1 + as.integer((ageMax-ageMin)/dt)
-    X <- seq(ageMin, ageMax, length.out = Nintervals + 1)
-    r <- function(t){f.lamb(t)-f.mu(t)}
-    r.int <- cumsum(r(X)) * (ageMax - ageMin) / Nintervals
-    r.int.0 <- function(y){exp(r.int[1 + as.integer( (y - ageMin) * Nintervals / (ageMax - ageMin))]) * f.lamb(y)}
-    r.int.int.tab <- cumsum(r.int.0(X)) * (ageMax - ageMin) / Nintervals
-    r.int.int <- function(x,y)
+    if (dt==0)
     {
-      indy <- 1 + as.integer( (y - ageMin) * Nintervals / (ageMax - ageMin))
-      indx <- 1 + as.integer( (x - ageMin) * Nintervals / (ageMax - ageMin))
-      value <- r.int.int.tab[indy] - r.int.int.tab[indx]
-      return(value)
+      r <- function(t){f.lamb(t)-f.mu(t)}
+      r.int <- function(x,y){.Integrate(Vectorize(r),x,y,stop.on.error=FALSE)}
+      r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
+      r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+      rit <- r.int(0,t)
+      ri0t <- r.int.int(0,t)
+      res <- 1.0 - exp(rit)/(1/f+ri0t)
+      return(res)
     }
-    rit <- r.int[1 + Nintervals]
-    ri0t <- r.int.int(0,t)
-    res <- 1.0 - exp(rit)/(1/f+ri0t)
-    return(res)
+    else
+    {
+      s <- 0
+      t <- t
+      Nintervals <- 1 + as.integer((t-s)/dt)
+      X <- seq(s, t, length.out = Nintervals + 1)
+      r <- function(t){f.lamb(t)-f.mu(t)}
+      r.int <- cumsum(r(X)) * (t - s) / Nintervals
+      r.int.0 <- function(y){exp(r.int[1 + as.integer( (y - s) * Nintervals / (t - s))]) * f.lamb(y)}
+      r.int.int.tab <- cumsum(r.int.0(X)) * (t - s) / Nintervals
+      r.int.int <- function(x,y)
+      {
+        indy <- 1 + as.integer( (y - s) * Nintervals / (t - s))
+        indx <- 1 + as.integer( (x - s) * Nintervals / (t - s))
+        value <- r.int.int.tab[indy] - r.int.int.tab[indx]
+        return(value)
+      }
+      rit <- r.int[1 + Nintervals]
+      ri0t <- r.int.int(0,t)
+      res <- 1.0 - exp(rit)/(1/f+ri0t)
+      return(res)
+    }
   }
 }

@@ -1,6 +1,6 @@
 fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df=NULL, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
-           expo.mu=FALSE, fix.mu=FALSE, dt=1e-3, cond="crown")
+           expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown")
 {
   # first a spline is used to build the approximation model Env(t)
   if (is.null(df))

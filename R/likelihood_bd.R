@@ -1,4 +1,4 @@
-likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=1e-3,cond="crown")
+likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0,cond="crown")
 {
   if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")

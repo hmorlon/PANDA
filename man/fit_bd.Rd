@@ -56,7 +56,8 @@ logical: should be set to TRUE only if f.mu is exponential to use analytical ins
  logical: if set to TRUE, the extinction rate \eqn{\mu} is fixed and will not be optimized.
 }
   \item{dt}{
- Interval time on which functions are supposed to be constant.
+ Default value is 0. In that case, we use integrate function for likelihood evaluations. Otherwise, for dt > 0, it represents the interval time on which functions are supposed to be constant.
+ For exponential models, 5e-4 is an accurate trade-off between precision/quick computation.
 }
   \item{cond}{
 conditioning to use to fit the model:
