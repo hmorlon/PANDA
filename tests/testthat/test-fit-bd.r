@@ -51,7 +51,6 @@ test_that("BD constant",{
   expect_that( abs(res$LH - reference_lh)  , is_less_than(precision_lh) )
   expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
   expect_that( abs(res$lamb_par - reference_lamb)  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par - reference_mu)  , is_less_than(precision_param) )
 })
 
 
@@ -125,7 +124,6 @@ test_that("B variable exponential, D constant",{
   expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
   expect_that( abs(res$lamb_par[1] - reference_lamb[1])  , is_less_than(precision_param) )
   expect_that( abs(res$lamb_par[2] - reference_lamb[2])  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par - reference_mu)  , is_less_than(precision_param) )
 })
 
 
@@ -151,7 +149,6 @@ test_that("B variable linear, D constant",{
   expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
   expect_that( abs(res$lamb_par[1] - reference_lamb[1])  , is_less_than(precision_param) )
   expect_that( abs(res$lamb_par[2] - reference_lamb[2])  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par - reference_mu)  , is_less_than(precision_param) )
 })
 
 
@@ -176,8 +173,6 @@ test_that("B constant, D exponential",{
   expect_that( abs(res$LH - reference_lh)  , is_less_than(precision_lh) )
   expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
   expect_that( abs(res$lamb_par - reference_lamb)  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par[1] - reference_mu[1])  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par[2] - reference_mu[2])  , is_less_than(precision_param) )
 })
 
 
@@ -202,6 +197,4 @@ test_that("B constant, D linear",{
   expect_that( abs(res$LH - reference_lh)  , is_less_than(precision_lh) )
   expect_that( abs(res$aicc - reference_aicc)  , is_less_than(precision_aicc) )
   expect_that( abs(res$lamb_par - reference_lamb)  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par[1] - reference_mu[1])  , is_less_than(precision_param) )
-  expect_that( abs(res$mu_par[2] - reference_mu[2])  , is_less_than(precision_param) )
 })
