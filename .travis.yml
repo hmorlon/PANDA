@@ -20,5 +20,5 @@ install:
 script:
   - R CMD build --no-manual .
   - R CMD INSTALL *gz
-  - cd tests/testthat && Rscript -e 'library(methods);library(testthat);library(PANDA); test_check("PANDA")'
+  - cd tests && Rscript -e 'library(methods);library(testthat);library(PANDA); test_check("PANDA")'
 
