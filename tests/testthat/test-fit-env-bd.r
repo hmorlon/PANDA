@@ -53,7 +53,7 @@ f.lamb <-function(t,x,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-res <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu, lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof)
+res <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu, lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, dt=1e-3)
 
 
 test_that("B exponential, function of time - no temperature dependency",{
@@ -62,7 +62,7 @@ test_that("B exponential, function of time - no temperature dependency",{
   f.mu<-function(t,y){0}
   lamb_par<-c(0.05, 0.01)
   mu_par<-c()
-  reference_result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu, lamb_par,mu_par,f=87/89, fix.mu=TRUE)
+  reference_result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu, lamb_par,mu_par,f=87/89, fix.mu=TRUE, dt=1e-3)
   reference_lh <- reference_result$LH
   reference_aicc <- reference_result$aicc
   reference_lamb <- reference_result$lamb_par
