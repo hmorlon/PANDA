@@ -11,7 +11,7 @@ Fits the environmental birth-death model with potentially missing extant species
 fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df= NULL, f = 1,
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
-       dt=1e-3, cond = "crown")
+       dt=0, cond = "crown")
 }
 
 \arguments{
@@ -120,5 +120,5 @@ f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
 result_exp <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
-      lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof)
+      lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, dt=1e-3)
 }

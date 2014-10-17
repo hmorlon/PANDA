@@ -9,7 +9,7 @@ Computes the likelihood of a phylogeny under a birth-death model with potentiall
 }
 \usage{
 likelihood_bd(phylo, tot_time, f.lamb, f.mu, f, cst.lamb = FALSE, cst.mu = FALSE,
-              expo.lamb = FALSE, expo.mu = FALSE, dt = 1e-3, cond = "crown")
+              expo.lamb = FALSE, expo.mu = FALSE, dt=0, cond = "crown")
 }
 
 \arguments{
@@ -73,5 +73,5 @@ lamb_par <- c(0.1, 0.01)
 f.lamb <- function(t){lamb_par[1] * exp(lamb_par[2] * t)}
 f.mu <- function(t){0}
 f <- 87/89
-likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE)
+lh <- likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE, dt=1e-3)
 }
