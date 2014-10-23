@@ -42,8 +42,7 @@ logical: should be set to TRUE only if f.lamb is exponential to use analytical i
 logical: should be set to TRUE only if f.mu is exponential to use analytical instead of numerical computation in order to reduce computation time.
 }
   \item{dt}{
- Default value is 0. In that case, we use integrate function for likelihood evaluations. Otherwise, for dt > 0, it represents the interval time on which functions are supposed to be constant.
- For exponential models, 5e-4 is an accurate trade-off between precision/quick computation.
+ the default value is 0. In this case, integrals in the likelihood are computed using R "integrate" function, which can be quite slow. If a positive dt is given as argument, integrals are computed using a piece-wise contant approximation, and dt represents the length of the intervals on which functions are assumed to be constant. For an exponential dependency of the speciation rate with time, we found that dt=5e-4 gives a good trade-off between precision and computation time.
 }
   \item{cond}{
 conditioning to use to fit the model:
