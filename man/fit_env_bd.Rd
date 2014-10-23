@@ -63,8 +63,7 @@ logical: should be set to TRUE only if f.mu is an exponential function of time (
  logical: if set to TRUE, the extinction rate \eqn{\mu} is fixed and will not be optimized.
 }
   \item{dt}{
- Default value is 0. In that case, we use integrate function for likelihood evaluations. Otherwise, for dt > 0, it represents the interval time on which functions are supposed to be constant.
- For some models, 1e-3 has been proved to be an accurate trade-off between precision/quick computation.
+the default value is 0. In this case, integrals in the likelihood are computed using R "integrate" function, which can be quite slow. If a positive dt is given as argument, integrals are computed using a piece-wise contant approximation, and dt represents the length of the intervals on which functions are assumed to be constant. We found that 1e-3 generally provides a good trade-off between precision and computation time.
 }
   \item{cond}{
 conditioning to use to fit the model:
