@@ -6,7 +6,7 @@
 PANDA
 }
 \description{
-Implements fits of diversification models to phylogenetic data
+Implements fits of various diversification models to phylogenetic data
 }
 \details{
 \tabular{ll}{
@@ -19,7 +19,7 @@ License: \tab GPL (>= 2)\cr
 
 }
 \author{
-Hélène Morlon <morlon@ens.biologie.fr>
+Hélène Morlon <morlon@biologie.ens.fr>
 }
 \references{
 Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the dynamics of diversification: a coalescent approach, PLoS B 8(9): e1000493
@@ -30,10 +30,8 @@ Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phyloge
 
 Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectives to environmental change, Eco Lett 16: 72-85
 
-Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
+Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 7: 508-525
 }
 %\keyword{ phylogeny }
-\seealso{
-\code{geiger, laser, DDD, TreePar}
 }
 
