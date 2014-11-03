@@ -42,5 +42,6 @@ fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_pa
   {
     res$f.mu <- f.mu.env
   }
+  class(res) <- "fit.env.bd"
   return(res)
 }
