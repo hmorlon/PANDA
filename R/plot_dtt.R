@@ -8,17 +8,17 @@ plot_dtt <- function(fit.bd,tot_time,N0)
   {
     # Attribute f.mu ==> not fixed extinction
     r <- function(t) {-fit.bd$f.lamb(t) + fit.bd$f.mu(t)}
-    R <- function(s){.Integrate(r,0,s)}
+    R <- function(s){.Integrate(Vectorize(r),0,s)}
     N <- N0 * exp(Vectorize(R)(t))
     dev.new()
-    plot(-t, N, type='l', xlab="time", ylab="Number of species", xlim=c(tot_time,0),main="Diversity Through Time")
+    plot(-t, N, type='l', xlab="time", ylab="Number of species", main="Diversity Through Time")
   }
   else
   {
     r <- function(t) {-fit.bd$f.lamb(t)}
-    R <- function(s){.Integrate(r,0,s)}
+    R <- function(s){.Integrate(Vectorize(r),0,s)}
     N <- N0 * exp(Vectorize(R)(t))
     dev.new()
-    plot(-t, N, type='l', xlab="time", ylab="Number of species", xlim=c(tot_time,0),main="Diversity Through Time")
+    plot(-t, N, type='l', xlab="time", ylab="Number of species", main="Diversity Through Time")
   }
 }
