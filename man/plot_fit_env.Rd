@@ -1,5 +1,5 @@
-\name{plot_env_fit}
-\alias{plot_env_fit}
+\name{plot_fit_env}
+\alias{plot_fit_env}
 
 \title{
 Plot speciation, extinction & net diversification rate functions of a fitted environmental model
@@ -8,7 +8,7 @@ Plot speciation, extinction & net diversification rate functions of a fitted env
 Plot estimated speciation, extinction & net diversification rates through time and environmental data
 }
 \usage{
-plot_env_fit(x, env_data, tot_time)
+plot_fit_env(x, env_data, tot_time)
 }
 
 \arguments{
@@ -49,5 +49,5 @@ result <- fit_env_bd(Balaenopteridae,InfTemp,tot_time,f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, dt=1e-3)
 
 # plot fitted rates
-#plot_env_fit(result, env_data, tot_time)
+#plot_fit_env(result, env_data, tot_time)
 }

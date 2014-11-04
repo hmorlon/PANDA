@@ -1,4 +1,4 @@
-plot_fit <- function(x, env_data, tot_time)
+plot_env_fit <- function(x, env_data, tot_time)
 {
   if (!inherits(x, "fit.env.bd"))
       stop("object is not of class \"fit.env.bd\"")
@@ -22,12 +22,14 @@ plot_fit <- function(x, env_data, tot_time)
     r <- function(t) {x$f.lamb(t) - x$f.mu(t)}
     dev.new()
     plot(-t, r(t), type='l', xlab="time", ylab="net diversification rate", main="Fitted net diversification rate")
+  dev.new()
     plot(env_func(t), r(t), type='l', xlab="Environmental data", ylab="net diversification rate", main="Fitted net diversification rate")
   }
   else
   {
     dev.new()
     plot(-t, x$f.lamb(t), type='l', xlab="time", ylab="net diversification rate", main="Fitted net diversification rate")
+    dev.new()
     plot(env_func(t), x$f.lamb(t), type='l', xlab="Environmental data", ylab="net diversification rate", main="Fitted net diversification rate")
   }
 }
