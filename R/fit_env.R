@@ -1,4 +1,4 @@
-fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df=NULL, f=1,
+fit_env <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df=NULL, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
            expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown")
 {
@@ -42,6 +42,6 @@ fit_env_bd <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_pa
   {
     res$f.mu <- f.mu.env
   }
-  class(res) <- "fit.env.bd"
+  class(res) <- "fit.env"
   return(res)
 }
