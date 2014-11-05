@@ -1,7 +1,7 @@
-plot_fit_env <- function(x, env_data, tot_time)
+plot_fit_env <- function(fit.env, env_data, tot_time)
 {
-  if (!inherits(x, "fit.env.bd"))
-      stop("object is not of class \"fit.env.bd\"")
+  if (!inherits(fit.env, "fit.env"))
+      stop("object is not of class \"fit.env\"")
   t <- seq(0,tot_time, length.out=100)
   dev.new()
   plot(-t, x$f.lamb(t), type='l', xlab="time", ylab="speciation rate", main="Fitted speciation rate")
