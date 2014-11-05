@@ -49,5 +49,5 @@ result <- fit_env(Balaenopteridae,InfTemp,tot_time,f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, dt=1e-3)
 
 # plot fitted rates
-#plot_fit_env(result, env_data, tot_time)
+#plot_fit_env(result, InfTemp, tot_time)
 }
