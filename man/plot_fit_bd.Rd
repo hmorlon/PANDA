@@ -1,5 +1,5 @@
-\name{plot_fit}
-\alias{plot_fit}
+\name{plot_fit_bd}
+\alias{plot_fit_bd}
 
 \title{
 Plot speciation, extinction & net diversification rate functions of a fitted model
@@ -8,7 +8,7 @@ Plot speciation, extinction & net diversification rate functions of a fitted mod
 Plot estimated speciation, extinction & net diversification rates through time
 }
 \usage{
-plot_fit(fit.bd, tot_time)
+plot_fit_bd(fit.bd, tot_time)
 }
 
 \arguments{
@@ -43,5 +43,5 @@ mu_par<-c()
 result <- fit_bd(Balaenopteridae,tot_time,f.lamb,f.mu,lamb_par,mu_par,
                      expo.lamb = TRUE, fix.mu=TRUE)
 # plot fitted rates
-#plot_fit(result, tot_time)
+#plot_fit_bd(result, tot_time)
 }
