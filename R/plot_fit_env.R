@@ -13,13 +13,13 @@ plot_fit_env <- function(fit.env, env_data, tot_time)
   plot(env_func(t), fit.env$f.lamb(t), type='l', xlab="Environmental data", ylab="speciation rate", main="Fitted speciation rate")
 
 
-  if ("f.mu" %in% attributes(x))
+  if ("f.mu" %in% attributes(fit.env))
   {
     # Attribute f.mu ==> not fixed extinction
     dev.new()
     plot(-t, fit.env$f.mu(t), type='l', xlab="time", ylab="extinction rate", main="Fitted extinction rate")
     plot(env_func(t), fit.env$f.mu(t), type='l', xlab="Environmental data", ylab="extinction rate", main="Fitted extinction rate")
-    r <- function(t) {fit.env$f.lamb(t) - x$f.mu(t)}
+    r <- function(t) {fit.env$f.lamb(t) - fit.env$f.mu(t)}
     dev.new()
     plot(-t, r(t), type='l', xlab="time", ylab="net diversification rate", main="Fitted net diversification rate")
   dev.new()
