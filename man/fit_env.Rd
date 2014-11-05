@@ -1,5 +1,5 @@
-\name{fit_env_bd}
-\alias{fit_env_bd}
+\name{fit_env}
+\alias{fit_env}
 
 \title{
 Maximum likelihood fit of the environmental birth-death model
@@ -8,7 +8,7 @@ Maximum likelihood fit of the environmental birth-death model
 Fits the environmental birth-death model with potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011 and Condamine et al. ELE 2013.
 }
 \usage{
-fit_env_bd(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df= NULL, f = 1,
+fit_env(phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df= NULL, f = 1,
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
        dt=0, cond = "crown")
@@ -118,6 +118,6 @@ f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
-result_exp <- fit_env_bd(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
+result_exp <- fit_env(Cetacea,InfTemp,tot_time,f.lamb,f.mu,
       lamb_par,mu_par,f=87/89, fix.mu=TRUE, df=dof, dt=1e-3)
 }
