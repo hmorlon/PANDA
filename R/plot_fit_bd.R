@@ -1,4 +1,4 @@
-plot_fit <- function(fit.bd,tot_time)
+plot_fit_bd <- function(fit.bd,tot_time)
 {
   if (!inherits(fit.bd, "fit.bd"))
       stop("object \"fit.bd\" is not of class \"fit.bd\"")
