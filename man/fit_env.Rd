@@ -102,7 +102,7 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 }
 
 \seealso{
-\code{\link[PANDA]{fit_bd},\link[PANDA]{likelihood_bd}}
+\code{\link[PANDA]{plot_fit_env},\link[PANDA]{fit_bd},\link[PANDA]{likelihood_bd}}
 }
 
 \examples{
