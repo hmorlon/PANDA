@@ -41,17 +41,17 @@ Plot representing how the estimated number of species vary through time
 
 \examples{
 
-data(Cetacea)
-tot_time<-max(node.age(Cetacea)$ages)
+data(Balaenopteridae)
+tot_time<-max(node.age(Balaenopteridae)$ages)
 
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate with time
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.08, 0.01)
 mu_par<-c()
-result <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,
+result <- fit_bd(Balaenopteridae,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=1,
                      expo.lamb = TRUE, fix.mu=TRUE)
 
 # plot estimated number of species through time
-# plot_dtt(result, tot_time, N0=89)
+# plot_dtt(result, tot_time, N0=9)
 }
