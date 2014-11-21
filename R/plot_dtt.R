@@ -4,7 +4,7 @@ plot_dtt <- function(fit.bd,tot_time,N0)
       stop("object \"fit.bd\" is not of class \"fit.bd\"")
   t <- seq(0,tot_time, length.out=100)
 
-  if ("f.mu" %in% attributes(fit.bd))
+  if ("f.mu" %in% attributes(fit.bd)$names)
   {
     # Attribute f.mu ==> not fixed extinction
     r <- function(t) {-fit.bd$f.lamb(t) + fit.bd$f.mu(t)}

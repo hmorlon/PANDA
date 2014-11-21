@@ -13,7 +13,7 @@ plot_fit_env <- function(fit.env, env_data, tot_time)
   plot(env_func(t), fit.env$f.lamb(t), type='l', xlab="Environmental data", ylab="speciation rate", main="Fitted speciation rate")
 
 
-  if ("f.mu" %in% attributes(fit.env))
+  if ("f.mu" %in% attributes(fit.env)$names)
   {
     # Attribute f.mu ==> not fixed extinction
     dev.new()

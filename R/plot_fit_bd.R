@@ -6,7 +6,7 @@ plot_fit_bd <- function(fit.bd,tot_time)
   dev.new()
   plot(-t, fit.bd$f.lamb(t), type='l', xlab="time", ylab="speciation rate", main="Fitted speciation rate")
 
-  if ("f.mu" %in% attributes(fit.bd))
+  if ("f.mu" %in% attributes(fit.bd)$names)
   {
     # Attribute f.mu ==> not fixed extinction
     dev.new()
