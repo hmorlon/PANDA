@@ -128,7 +128,7 @@ f.lamb<-function(t,y){y[1] * exp(y[2] * t)}
 f.mu <-function(t,y){y[1]}
 lamb_par <- c(0.05, 0.01)
 mu_par <-c(0.005)
-result_bexp_dcst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb=TRUE, cst.mu=TRUE, cond="stem", dt=1e-3)
+result_bexp_dcst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb=TRUE, cst.mu=TRUE, dt=1e-3)
 result_bexp_dcst$model <- "birth-death with exponential variation of the speciation rate with time and constant extinction"
 
 # Find the best model
