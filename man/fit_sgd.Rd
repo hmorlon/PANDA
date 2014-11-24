@@ -35,7 +35,7 @@ the fraction of extant species included in the phylogeny
   \item{par}{a numeric vector of estimated values of b (birth), b-d (growth) and nu (mutation)
 }
 \references{
-Manceau M., Lambert A., Morlon H. (submitted)
+Manceau, M., Lambert, A., Morlon, H. (submitted)
 }
 
 \seealso{
@@ -46,5 +46,5 @@ Manceau M., Lambert A., Morlon H. (submitted)
 data(Calomys)
 tot_time <- max(node.age(Calomys)$ages)
 par_init <- c(10, 1, 1)
-fit_sgd(Calomys, tot_time, par_init, f=0.85)
+fit_sgd(Calomys, tot_time, par_init, f=11/13)
 }
