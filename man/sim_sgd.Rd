@@ -43,5 +43,5 @@ b <- 1e6
 d <- b-0.5
 nu <- 0.6
 tree <- sim_sgd(tau,b,d,nu)
-plot(tree)
+#plot(tree)
 }
