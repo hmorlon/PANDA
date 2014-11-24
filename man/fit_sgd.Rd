@@ -42,5 +42,5 @@ Manceau M., Lambert A., Morlon H. , submitted.
 data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)
 par_init <- c(1., 0.9, 0.5)
-result <- fit_sgd(Cetacea, par_init, f=87/89)$par
+result <- fit_sgd(Cetacea, tot_time, par_init, f=87/89)$par
 }
