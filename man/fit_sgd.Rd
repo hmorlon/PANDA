@@ -32,7 +32,7 @@ the fraction of extant species included in the phylogeny
   \item{model}{the name of the fitted model}
   \item{LH}{the maximum log-likelihood value}
   \item{aicc}{the second order Akaike's Information Criterion}
-  \item{par}{a numeric vector of estimated values of b (birth), b-d (growth) and nu (mutation)
+  \item{par}{a numeric vector of estimated values of b (birth), b-d (growth) and nu (mutation)}
 }
 
 \references{
