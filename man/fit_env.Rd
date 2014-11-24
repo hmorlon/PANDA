@@ -101,6 +101,8 @@ Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectiv
 Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett, 17:508-525
 }
 
+\author{H Morlon and F Condamine}
+
 \seealso{
 \code{\link[PANDA]{plot_fit_env},\link[PANDA]{fit_bd},\link[PANDA]{likelihood_bd}}
 }

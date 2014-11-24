@@ -63,6 +63,8 @@ conditioning to use to fit the model:
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
 }
 
+\author{H Morlon}
+
 \examples{
 data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)

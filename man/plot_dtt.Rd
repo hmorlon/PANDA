@@ -35,6 +35,8 @@ Plot representing how the estimated number of species vary through time
 	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 17:508-525
 }
 
+\author{H Morlon}
+
 \seealso{
 \code{\link[PANDA]{fit_bd}}
 }

@@ -55,6 +55,8 @@ the number of extant species
 Morlon, H., Potts, M.D., Plotkin, J.B. (2010) Inferring the dynamics of diversification: a coalescent approach, PLoS B 8(9): e1000493
 }
 
+\author{H Morlon}
+
 \examples{
 data(Cetacea)
 Vtimes <- sort(branching.times(Cetacea))

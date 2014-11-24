@@ -34,8 +34,13 @@ the fraction of extant species included in the phylogeny
   \item{aicc}{the second order Akaike's Information Criterion}
   \item{par}{a numeric vector of estimated values of b (birth), b-d (growth) and nu (mutation)
 }
+
 \references{
 Manceau, M., Lambert, A., Morlon, H. (submitted)
+}
+
+\author{
+M Manceau
 }
 
 \seealso{

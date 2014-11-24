@@ -68,6 +68,8 @@ Morlon, H., Kemps, B., Plotkin, J.B., Brisson, D. (2012) Explosive radiation of 
 Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett, 17:508-525
 }
 
+\author{H Morlon}
+
 \seealso{
 \code{\link[PANDA]{likelihood_coal_cst},\link[PANDA]{fit_coal_var}}
 }

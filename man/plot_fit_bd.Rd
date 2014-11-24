@@ -25,6 +25,7 @@ the age of the phylogeny (crown age, or stem age if known). If working with crow
 Plots representing how the estimated speciation, extinction & net diversification rate functions vary through time
 }
 
+\author{H Morlon}
 
 \seealso{
 \code{\link[PANDA]{fit_bd}}

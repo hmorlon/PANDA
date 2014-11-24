@@ -33,6 +33,10 @@ a phylogenetic tree of class "phylo" (see ape documentation)
 Manceau M., Lambert A., Morlon H. (submitted)
 }
 
+\author{
+M Manceau
+}
+
 \examples{
 t <-10
 b <- 1e6

@@ -87,6 +87,8 @@ The lengths of lamb_par and mu_par are used to compute the total number of param
 	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 17:508-525
 }
 
+\author{H Morlon}
+
 \seealso{
 \code{\link[PANDA]{plot_fit_bd},\link[PANDA]{plot_dtt},\link[PANDA]{likelihood_bd}}
 }

@@ -40,6 +40,10 @@ the likelihood value of the phylogeny, given the model and the parameter values 
 Manceau M., Lambert A., Morlon H. , submitted.
 }
 
+\author{
+M Manceau
+}
+
 \examples{
 data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)
