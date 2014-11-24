@@ -28,12 +28,7 @@ the fraction of extant species included in the phylogeny
 }
 
 \value{
-a list with the following components
-\item{par}{the vector with estimated values of (b,d,nu)}
-\item{value}{the maximum -log-likelihood value}
-\item{counts}{the number of time the likelihood was computed}
-\item{convergence}{an integer code indicating if convergence is obtained. See the documentation for optim for more information.}
-\item{message}{a character string giving any additional information. See the documentation for the function optim for more information.}
+the vector with estimated values of b (birth), b-d (growth) and nu (mutation).
 }
 \references{
 Manceau M., Lambert A., Morlon H. , submitted.
@@ -47,5 +42,5 @@ Manceau M., Lambert A., Morlon H. , submitted.
 data(Cetacea)
 tot_time <- max(node.age(Cetacea)$ages)
 par_init <- c(1., 0.9, 0.5)
-result <- fit_sgd(Cetacea, tot_time, par_init, f=87/89)$par
+result <- fit_sgd(Cetacea, par_init, f=87/89)$par
 }
