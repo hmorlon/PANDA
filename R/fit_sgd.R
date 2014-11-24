@@ -1,16 +1,21 @@
-fit_sgd <- function(phylo, tot_time, par_init, f=1)
+fit_sgd <- function(phylo, tot_time, par, f=1, meth="Nelder-Mead")
 {
-	#par_init contains the initial values of parameters (b, d, nu), phylo is an object of class phylo
-	lambert = Phylo2Lambert(phylo)
+	nobs <- Ntip(phylo)
+	p<-length(par)
+	
+	lambert <- Phylo2Lambert(phylo)
 	lambert[1] <- tot_time
+	
+	init<-par
 
-	optim_LikelihoodSGD <- function(par)
+	optim_LH <- function(init)
 	{
-		likeli = LikelihoodSGDFromLambert(lambert, abs(par[1]), abs(par[2]), abs(par[3]), f)
-		L = likeli[3]+likeli[4]
-		return(-log(L))
+		likel <- LikelihoodSGDFromLambert(lambert, abs(init[1]), abs(init[2]), abs(init[3]), f)
+		LH <- likel[3]+likel[4]
+		return(-log(LH))
 	}
 	
-	inference <- optim(par_init, optim_LikelihoodSGD)$par
-	return( c(birth = abs(inference[1]), growth = abs(inference[1])-abs(inference[2]), mutation = abs(inference[3])) )
+	temp <- optim(init, optim_LH)
+	res<-list(model="sgd", LH=-temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1), par=c(birth = abs(temp$par[1]), growth = abs(temp$par[1])-abs(temp$par[2]), mutation = abs(temp$par[3])))
+	return(res)
 }
