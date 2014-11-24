@@ -1,5 +1,5 @@
 ##########
-# Mathematical functions
+# Mathematical functions used in SGD fit and simulations
 # same notations as those used in the paper
 ##########
 
