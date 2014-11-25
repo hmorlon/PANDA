@@ -20,7 +20,9 @@ License: \tab GPL (>= 2)\cr
 }
 \author{
 Hélène Morlon <morlon@biologie.ens.fr>
+
 Fabien Condamine <fabien.condamine@gmail.com>
+
 Marc Manceau <manceau@biologie.ens.fr>
 }
 \references{
