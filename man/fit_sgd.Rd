@@ -25,6 +25,9 @@ a numeric vector of initial values for the parameters (b,d,nu) to be estimated (
 \item{f}{
 the fraction of extant species included in the phylogeny
 }
+\item{meth}{
+optimization to use to maximize the likelihood function, see \emph{optim} for more details.
+}
 }
 
 \value{
@@ -46,6 +49,7 @@ M Manceau
 \seealso{
 \code{\link[PANDA]{likelihood_sgd}}
 }
+
 \examples{
 # Some examples may take a little bit of time. Be patient!
 data(Calomys)
