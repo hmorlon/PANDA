@@ -3,7 +3,7 @@
 \docType{data}
 \title{Calomys phylogeny}
 \description{
-Ultrametric phylogenetic tree of 11 of the 13 extant Balaenopteridae species
+Ultrametric phylogenetic tree of 11 of the 13 extant Calomys species
 }
 \usage{data(Calomys)}
 \details{This phylogeny is from Pigot et al. PloS Biol 2012}
