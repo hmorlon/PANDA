@@ -135,8 +135,7 @@ mu_par <-c(0.005)
 #result_bexp_dcst$model <- paste("birth-death with exponential variation of the","speciation rate with time and constant extinction")
 
 # Find the best model
-#index <- which.min(c(result_cst$aicc, result_exp$aicc, result_lin$aicc,
-                     result_bexp_dcst$aicc))
+#index <- which.min(c(result_cst$aicc, result_exp$aicc, result_lin$aicc,result_bexp_dcst$aicc))
 #rbind(result_exp, result_lin, result_cst, result_bexp_dcst)[index,]
 
 }
