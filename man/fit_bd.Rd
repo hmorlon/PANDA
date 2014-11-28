@@ -104,7 +104,7 @@ f.lamb <-function(t,y){y[1]}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09)
 mu_par<-c()
-#result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,cst.lamb = TRUE,fix.mu=TRUE,dt=1e-3)
+#result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,cst.lamb=TRUE,fix.mu=TRUE,dt=1e-3)
 #result_cst$model <- "pure birth with constant speciation rate"
 
 # Fit the pure birth model (no extinction) with exponential variation
