@@ -36,7 +36,8 @@ Plots representing how the estimated speciation, extinction & net diversificatio
 data(Balaenopteridae)
 tot_time<-max(node.age(Balaenopteridae)$ages)
 
-# Fit the pure birth model (no extinction) with exponential variation of the speciation rate with time
+# Fit the pure birth model (no extinction) with exponential variation of the speciation rate
+# with time
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.08, 0.01)

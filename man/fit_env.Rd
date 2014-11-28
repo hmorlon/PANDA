@@ -113,9 +113,8 @@ tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
-# fits a model with lambda varying as an exponential function of temperature and mu fixed to 0 (no extinction)
-# here t stands for time and x for temperature
-
+# Fits a model with lambda varying as an exponential function of temperature
+# and mu fixed to 0 (no extinction).  Here t stands for time and x for temperature.
 f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
