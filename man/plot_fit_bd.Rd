@@ -28,7 +28,7 @@ Plots representing how the estimated speciation, extinction & net diversificatio
 \author{H Morlon}
 
 \seealso{
-\code{\link[PANDA]{fit_bd}}
+\code{\link{fit_bd}}
 }
 
 \examples{

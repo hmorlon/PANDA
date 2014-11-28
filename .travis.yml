@@ -13,12 +13,12 @@ before_install:
 install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-#  CRAN packages required by PANDA
+#  CRAN packages required by RPANDA
   - Rscript -e 'install.packages(c("ape", "picante", "pspline", "deSolve"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
-#  CRAN packages required by PANDA tests
+#  CRAN packages required by RPANDA tests
   - Rscript -e 'install.packages(c("testthat", "vegan", "permute", "lattice", "nlme"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
 script:
   - R CMD build --no-manual .
   - R CMD INSTALL *gz
-  - cd tests && Rscript -e 'library(methods);library(testthat);library(PANDA); test_check("PANDA")'
+  - cd tests && Rscript -e 'library(methods);library(testthat);library(RPANDA); test_check("RPANDA")'
 

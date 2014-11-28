@@ -1,4 +1,4 @@
 library(testthat)
-library(PANDA)
+library(RPANDA)
 # Comment test_check in order to not run tests with R CMD check
-# test_check("PANDA")
+# test_check("RPANDA")

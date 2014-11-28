@@ -31,7 +31,7 @@ Plots representing how the estimated speciation, extinction & net diversificatio
 \author{H Morlon and FL Condamine}
 
 \seealso{
-\code{\link[PANDA]{fit_env}}
+\code{\link{fit_env}}
 }
 
 \examples{

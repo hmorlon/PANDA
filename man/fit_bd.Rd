@@ -90,7 +90,7 @@ The lengths of lamb_par and mu_par are used to compute the total number of param
 \author{H Morlon}
 
 \seealso{
-\code{\link[PANDA]{plot_fit_bd},\link[PANDA]{plot_dtt},\link[PANDA]{likelihood_bd}}
+\code{\link{plot_fit_bd}}, \code{\link{plot_dtt}}, \code{\link{likelihood_bd}}
 }
 
 \examples{

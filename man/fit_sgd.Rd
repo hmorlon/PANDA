@@ -47,7 +47,7 @@ M Manceau
 }
 
 \seealso{
-\code{\link[PANDA]{likelihood_sgd}}
+\code{\link{likelihood_sgd}}
 }
 
 \examples{

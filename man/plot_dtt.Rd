@@ -38,7 +38,7 @@ Plot representing how the estimated number of species vary through time
 \author{H Morlon}
 
 \seealso{
-\code{\link[PANDA]{fit_bd}}
+\code{\link{fit_bd}}
 }
 
 \examples{

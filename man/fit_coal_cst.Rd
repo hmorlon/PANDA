@@ -71,7 +71,7 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 \author{H Morlon}
 
 \seealso{
-\code{\link[PANDA]{likelihood_coal_cst},\link[PANDA]{fit_coal_var}}
+\code{\link{likelihood_coal_cst}}, \code{\link{fit_coal_var}}
 }
 
 \examples{

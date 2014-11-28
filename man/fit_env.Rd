@@ -104,7 +104,7 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 \author{H Morlon and F Condamine}
 
 \seealso{
-\code{\link[PANDA]{plot_fit_env},\link[PANDA]{fit_bd},\link[PANDA]{likelihood_bd}}
+\code{\link{plot_fit_env}}, \code{\link{fit_bd}}, \code{\link{likelihood_bd}}
 }
 
 \examples{

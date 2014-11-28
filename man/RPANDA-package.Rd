@@ -1,16 +1,16 @@
-\name{PANDA-package}
-\alias{PANDA-package}
-\alias{PANDA}
+\name{RPANDA-package}
+\alias{RPANDA-package}
+\alias{RPANDA}
 \docType{package}
 \title{
-PANDA
+RPANDA
 }
 \description{
 Implements fits of various diversification models to phylogenetic data
 }
 \details{
 \tabular{ll}{
-Package: \tab PANDA\cr
+Package: \tab RPANDA\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2013-12-27\cr
