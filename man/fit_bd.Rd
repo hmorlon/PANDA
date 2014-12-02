@@ -135,8 +135,8 @@ lamb_par <- c(0.05, 0.01)
 mu_par <-c(0.005)
 #result_bexp_dcst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,
 #                           f=87/89,expo.lamb=TRUE,cst.mu=TRUE,dt=1e-3)
-#result_bexp_dcst$model <- paste("birth-death with exponential variation",
-#                                "in speciation rate and constant extinction")
+#result_bexp_dcst$model <- "birth-death with exponential variation in speciation rate
+#                           and constant extinction"
 
 # Find the best model
 #index <- which.min(c(result_cst$aicc, result_exp$aicc, result_lin$aicc,result_bexp_dcst$aicc))
