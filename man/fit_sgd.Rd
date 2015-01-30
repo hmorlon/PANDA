@@ -55,5 +55,7 @@ M Manceau
 data(Calomys)
 tot_time <- max(node.age(Calomys)$ages)
 par_init <- c(10, 1, 1)
-#fit_sgd(Calomys, tot_time, par_init, f=11/13)
+\dontrun{
+fit_sgd(Calomys, tot_time, par_init, f=11/13)
+}
 }
