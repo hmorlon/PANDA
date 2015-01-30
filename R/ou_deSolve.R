@@ -72,6 +72,10 @@ for(i in 2:length(nodeDiff)){			##THIS LOOP checks for an error
 output<-list() ##initialize storage of results from ODEs 
 env.results<-new.env(size = 1, parent = emptyenv())
 
+require(Rcpp)
+sourceCpp( "../src/fillIndices.cpp" )
+
+
 for(i in 1:phylo$Nnode){ ##for each interval between branches...
 
 ##var.list is the list of terms for which there is a variance term at each step in time
@@ -85,50 +89,19 @@ cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="_")
 	##then call each term in var.list (i.e., in var.list) to see what the ODE for that term is
 	len <- length(var.list)
 	dim <- len * (len + 1) / 2
-	indI <- vector(mode = "integer", length = dim)
-	indJ <- vector(mode = "integer", length = dim)
-	for(k in 1:len) {
-	    indI[[k]] <- k
-	    indJ[[k]] <- k
-	}
-	counter <- len
-	for(l in 1:(len-1)) {
-	    for(k in (l+1):len) {
-	        counter <- counter + 1
-	        indI[[counter]] <- k
-	        indJ[[counter]] <- l
-	    }
-	}
 	coefAlpha <- (2*(len-1)/len * parameters['s'] + 2 * parameters['a'])
 	coefBeta <- parameters['s'] / len
 	rhs <- vector(mode = "numeric", length = dim)
 	for(m in 1:len) {
 	    rhs[m] <- parameters['b']
 	}
-	csrJ <- integer(len*len*(len-1))
 	csrX <- numeric(len*len*(len-1))
-	counter <- 0
-	for(ind_ij in 1:dim) {
-	    #  if ind_ij <= len: (len-1) values which are set to 2
-	    #       otherwise, 2*(len-1) values which are set to 1
-	    csrX[(counter+1):(counter+(2-(ind_ij <= len))*(len-1))] <- 1 + ind_ij <= len
-	    i0 <- indI[[ind_ij]]
-	    j0 <- indJ[[ind_ij]]
-	    for(ind_kl in 1:dim) {
-	        k0 <- indI[[ind_kl]]
-	        l0 <- indJ[[ind_kl]]
-	        if ((ind_ij != ind_kl) && (k0 == i0 || k0 == j0 || l0 == i0 || l0 == j0)) {
-	            counter <- counter + 1
-	            csrJ[[counter]] <- ind_kl
-	        }
-	    }
-	}
+	csrJ <- integer(len*len*(len-1))
+	csrP <- integer(dim + 1)
+	fillIndices(csrJ, csrP, csrX, len)
 
-	csrP <- c(c(0:len)*(len-1),c(1:(dim-len))*(2*(len-1))+len*(len-1))
-
-	if (i > 1 && counter != length(csrX)) stop(paste("Error when creatring sparse matrix: ",counter," != ", length(csrX)))
 	spA <- sparseMatrix(j=csrJ, p=csrP, x=csrX)
-	rm(csrJ, csrP, csrX, indI, indJ)
+	rm(csrJ, csrP, csrX)
 
 	 
  # return the rate of change
