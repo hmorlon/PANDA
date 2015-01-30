@@ -77,9 +77,6 @@ for(i in 1:phylo$Nnode){ ##for each interval between branches...
 ##cov.list is the list of covariance terms
 var.list<-unlist(nat[[i]])
 cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="_")
-Cmat<-matrix(nrow=length(var.list),ncol=length(var.list)) ##"Cmat" is a lower triangle matrix with each of the variance and covariance terms, used to define equations below
-diag(Cmat)<-var.list
-Cmat[lower.tri(Cmat)]<-cov.list
 
 ##define ODEs for deSOLVE
 	##this loop defines the set of ODEs for the variance terms (stored in "var.list"), one for each "extant branch" of the phylo
