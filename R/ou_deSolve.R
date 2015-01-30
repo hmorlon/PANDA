@@ -1,3 +1,4 @@
+require(Matrix)
 require(geiger)
 require(phytools)
 require(deSolve)
@@ -84,11 +85,9 @@ cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="_")
 	##then call each term in var.list (i.e., in var.list) to see what the ODE for that term is
 	len <- length(var.list)
 	dim <- len * (len + 1) / 2
-	ind <- matrix(0, nrow = len, ncol=len, byrow=TRUE)
 	indI <- vector(mode = "integer", length = dim)
 	indJ <- vector(mode = "integer", length = dim)
 	for(k in 1:len) {
-	    ind[[k,k]] <- k
 	    indI[[k]] <- k
 	    indJ[[k]] <- k
 	}
@@ -96,8 +95,6 @@ cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="_")
 	for(l in 1:(len-1)) {
 	    for(k in (l+1):len) {
 	        counter <- counter + 1
-	        ind[[k,l]] <- counter
-	        ind[[l,k]] <- counter
 	        indI[[counter]] <- k
 	        indJ[[counter]] <- l
 	    }
@@ -108,18 +105,30 @@ cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="_")
 	for(m in 1:len) {
 	    rhs[m] <- parameters['b']
 	}
-	A <- diag(x = -coefAlpha, nrow = dim, ncol=dim)
-	coefBetaV <- rep(coefBeta, times = len)
-	for(ind_jk in 1:dim) {
-	    j <- indI[[ind_jk]]
-	    k <- indJ[[ind_jk]]
-	    coefBetaV[[k]] <- 0
-	    A[ind_jk, ind[j, ] ] <- A[ind_jk, ind[j, ] ] + coefBetaV
-	    coefBetaV[[k]] <- coefBeta
-	    coefBetaV[[j]] <- 0
-	    A[ind_jk, ind[k, ] ] <- A[ind_jk, ind[k, ] ] + coefBetaV
-	    coefBetaV[[j]] <- coefBeta
+	csrJ <- integer(len*len*(len-1))
+	csrX <- numeric(len*len*(len-1))
+	counter <- 0
+	for(ind_ij in 1:dim) {
+	    #  if ind_ij <= len: (len-1) values which are set to 2
+	    #       otherwise, 2*(len-1) values which are set to 1
+	    csrX[(counter+1):(counter+(2-(ind_ij <= len))*(len-1))] <- 1 + ind_ij <= len
+	    i0 <- indI[[ind_ij]]
+	    j0 <- indJ[[ind_ij]]
+	    for(ind_kl in 1:dim) {
+	        k0 <- indI[[ind_kl]]
+	        l0 <- indJ[[ind_kl]]
+	        if ((ind_ij != ind_kl) && (k0 == i0 || k0 == j0 || l0 == i0 || l0 == j0)) {
+	            counter <- counter + 1
+	            csrJ[[counter]] <- ind_kl
+	        }
+	    }
 	}
+
+	csrP <- c(c(0:len)*(len-1),c(1:(dim-len))*(2*(len-1))+len*(len-1))
+
+	if (i > 1 && counter != length(csrX)) stop(paste("Error when creatring sparse matrix: ",counter," != ", length(csrX)))
+	spA <- sparseMatrix(j=csrJ, p=csrP, x=csrX)
+	rm(csrJ, csrP, csrX, indI, indJ)
 
 	 
  # return the rate of change
@@ -138,7 +147,7 @@ start=c(paste(c(var.list,cov.list),"=0",sep="",collapse=","))
 state.new<-paste("c(",start,")",sep="")
 state<-eval(parse(text=state.new))
 termlist<-c(var.list,cov.list)
-for(l in 1:length(termlist)){
+for(l in seq_along(termlist)){
 term<-termlist[l]
 if(exists(term, envir=env.results)){ #if the term to be numerically integrated was present in the previous generation(branch) of the tree
        state[l]<-get(term, envir=env.results)
@@ -176,12 +185,12 @@ else { #if term is not present in previous generation/branch of the tree, lookup
 	}
 
 ou <- function(t, state, parameters) {
-  dX <- A %*% state + rhs
+  dX <- coefBeta * ((spA %*% state)@x) - coefAlpha * state + rhs
   return (list(c(dX)))
 }
 
 ##NOW, run numerical integration for given time step and append to a list
-output<-ode(y=state,times=c(0,nodeDiff[i]),func=ou,parms=NULL)
+output<-ode(y=state,times=c(0,nodeDiff[i]),func=ou,parms=NULL, method="adams")
 colN <- colnames(output)
 env.results<-new.env(size = length(colN), parent = emptyenv())
 for (k in 2:length(colN)){
