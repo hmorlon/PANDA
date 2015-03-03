@@ -65,8 +65,8 @@ integr <- function(x, f)
 		#get eigengap
 		abs(diff(m))->gaps
 			as.matrix(gaps)->gapMat
-				c(1:length(gapMat))->extraCol
-			cbind(extraCol,gapMat)->gapMatCol
+				c(1:length(gapMat))->modalities
+			cbind(modalities,gapMat)->gapMatCol
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
 		
 		#get spectral density
