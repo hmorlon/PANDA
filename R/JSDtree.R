@@ -1,3 +1,5 @@
+require(geiger)
+require(igraph)
 #get Jensen-Shannon divergence	
 JSDtree <- function(trees,method=c("standard","normal")){
 	dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
