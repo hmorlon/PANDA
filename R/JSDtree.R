@@ -80,5 +80,5 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	write.table(JSD,"JSDMatrix.txt")
 
 #print heatmap	
-heatmap(JSD)	
+heatmap(JSD,symm=T)	
 }
