@@ -28,8 +28,6 @@ whether the spectral density plot will be normalized or not
 
 
 \examples{
-require(geiger)
-require(igraph)	
 data(Cetacea)
 spectR(Cetacea)
 }
