@@ -2,15 +2,15 @@
 \alias{JSDtree}
 
 \title{
-The Jensen-Shannon divergence metric between phylogenies
+The Jensen-Shannon distance metric between phylogenies
 }
 
 \description{
-Compute the square-root of the Jensen-Shannon divergence metric between spectral density profiles of phylogenies.
+Computes the Jensen-Shannon distance metric between spectral density profiles of phylogenies.
 }
 
 \usage{
-spectR(phylo)
+JSDtree(c(phylo1,phylo2,...))
 }
 
 \arguments{
@@ -22,7 +22,7 @@ whether the spectral density will be normalized or not
 
 
 \value{
-	Writes the square-root of Jensen-Shannon divergence metrics between phylogeny pairs to a text file and plots a hierarchical cluster and heatmap based on the divergence metrics calculated between trees.
+	Writes the Jensen-Shannon distance metrics between phylogeny pairs to a text file and plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
 }
 
 \author{E Lewitus}
