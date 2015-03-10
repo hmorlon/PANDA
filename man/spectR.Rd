@@ -19,6 +19,8 @@ an object of type 'phylo' (see ape documentation)
 whether the spectral density plot will be normalized or not
 }
 
+\options{
+the "normal" method normalizes the graph Laplacian by the diagonal matrix.	
 
 \value{
 	Density plot of the spectra of eigenvalues computed for a phylogeny.
@@ -28,6 +30,8 @@ whether the spectral density plot will be normalized or not
 
 
 \examples{
+require(geiger)
+require(igraph)	
 data(Cetacea)
-spectR(Cetacea)
+spectR(Cetacea,method="standard")
 }
