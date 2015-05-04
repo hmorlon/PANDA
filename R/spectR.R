@@ -1,15 +1,6 @@
-require(geiger)
-require(igraph)
-
-
 #plot spectral density
 spectR <- function(phylo,method=c("standard","normal")){
 		
-		if(!is.phylo(phylo))
-		{
-			stop('object is not phylo.')
-		}
-
 #gaussian kernel convolution		
 dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
                 from = min(x) - 3*sd, to = max(x) + 3*sd, adjust = 1,
