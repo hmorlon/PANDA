@@ -32,5 +32,5 @@ whether the control matrix will be drawn from a poisson or gaussian distribution
 
 \examples{
 data(Cetacea)
-BICompare(Cetacea,10,method="gaussian")
+BICompare(Cetacea,5,method="gaussian")
 }
