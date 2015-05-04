@@ -10,7 +10,7 @@ Computes the BIC values for different numbers of modalities in the distance matr
 }
 
 \usage{
-BICompare(phylo)
+BICompare(phylo, t, method=c("gaussian","poisson"))
 }
 
 \arguments{

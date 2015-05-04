@@ -9,7 +9,7 @@ Spectral density plot of a phylogeny
 Computes the spectra of eigenvalues for the modified graph Laplacian of a phylogenetic tree, identifies the spectral gap, then convolves the eigenvalues with a Gaussian kernel, and plots them alongside all eigenvalues ranked in descending order.}
 
 \usage{
-spectR(phylo)
+spectR(phylo, method=c("standard","normal"))
 }
 
 \arguments{
