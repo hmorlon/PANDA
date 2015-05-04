@@ -15,9 +15,9 @@ JSDtree(trees,method=c("standard","normal"))
 
 \arguments{
   \item{phylo}{
-a list of objects of type 'phylo' (see ape documentation)
+a list of objects of type 'phylo' (see ape documentation)}
    \item{method}{
-whether the spectral density will be normalized or not
+whether the spectral density will be normalized or not}
 }
 
 

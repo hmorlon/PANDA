@@ -15,11 +15,11 @@ BICompare(phylo, t, method=c("gaussian","poisson"))
 
 \arguments{
   \item{phylo}{
-an object of type 'phylo' (see ape documentation)
+an object of type 'phylo' (see ape documentation)}
   \item{t}{
-the number of modalities to be tested
+the number of modalities to be tested}
   \item{method}{
-whether the control matrix will be drawn from a poisson or gaussian distribution	
+whether the control matrix will be drawn from a poisson or gaussian distribution}	
 }
 
 

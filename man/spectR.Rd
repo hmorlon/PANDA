@@ -14,9 +14,9 @@ spectR(phylo, method=c("standard","normal"))
 
 \arguments{
   \item{phylo}{
-an object of type 'phylo' (see ape documentation)
+an object of type 'phylo' (see ape documentation)}
   \item{method}{
-whether the spectral density plot will be normalized or not
+whether the spectral density plot will be normalized or not}
 }
 
 \options{
