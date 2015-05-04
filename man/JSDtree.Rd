@@ -10,7 +10,7 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDtree(trees,method=c("standard","normal"))
+JSDtree(phylo,method=c("standard","normal"))
 }
 
 \arguments{
