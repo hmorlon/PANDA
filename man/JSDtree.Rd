@@ -10,14 +10,14 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDtree(phylo,method=c("standard","normal"))
+JSDtree(phylo,method=c("standard"))
 }
 
 \arguments{
   \item{phylo}{
 a list of objects of type 'phylo' (see ape documentation)}
    \item{method}{
-whether the spectral density will be normalized or not}
+the method to be used. either "standard" or "normal". if set to "normal", compute the normalized version of the spectral density (see the paper for an explanation)}
 }
 
 
