@@ -1,5 +1,4 @@
-#get Jensen-Shannon divergence	
-JSDtree <- function(phylo,method=c("standard","normal")){
+JSDtree <- function(trees,method=c("standard")){
 	dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
 	KLD <- function(x,y) sum(x*log(x/y))
 	JSD <- function(x,y) sqrt(0.5*KLD(x,(x+y)/2)+0.5*KLD(y,(x+y)/2))
@@ -69,14 +68,12 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	}	
 	Ds<-c()
 		for(i in 1:length(d)){
-			Ds<-cbind(Ds,d[[i]]$x)
-		}
-#write divergence metrics to file			
-	write.table(Ds,"JSDMatrix.txt")
-	DS<-read.table("JSDMatrix.txt",header=T)
-	JSD<-as.matrix(JSDist(DS))
-	write.table(JSD,"JSDMatrix.txt")
+			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
+			}
+		colnames(Ds) <- seq(1,length(d),1)		
+	JSD<-as.matrix(JSDist(Ds))
 
 #print heatmap	
 heatmap(JSD,symm=T)	
+return(JSD)
 }
