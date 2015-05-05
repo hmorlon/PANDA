@@ -10,7 +10,7 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDtree(phylo,method=c("standard","normal"))
+JSDtree(trees,method=c("standard"))
 }
 
 \arguments{
@@ -20,6 +20,9 @@ a list of objects of type 'phylo' (see ape documentation)}
 whether the spectral density will be normalized or not}
 }
 
+\details{
+	It is possible to specify whether a standard profile is returned, a profile normalized to the degree matrix ("normal1"), or a profile normalized to the number of eigenvalues ("normal2").
+}
 
 \value{
 	Writes the Jensen-Shannon distance metrics between phylogeny pairs to a text file and plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
