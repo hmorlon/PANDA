@@ -52,6 +52,7 @@ integr <- function(x, f)
 				,normalized=F)
 			,symmetric=T,only.values=F)
 		m=subset(e$values,e$values>=1)
+	
 	#get eigengap
 		abs(diff(m))->gaps
 			as.matrix(gaps)->gapMat
@@ -118,10 +119,11 @@ integr <- function(x, f)
 					data.matrix(
 						dist.nodes(phylo))
 					,weighted=T)
-				,normalized=T)
+				,normalized=F)
 			,symmetric=T,only.values=F)
-		m=subset(e$values,e$values>=1)
-	#get eigengap
+		m=subset(e$values,e$values>=0)
+
+		#get eigengap
 		abs(diff(m))->gaps
 			as.matrix(gaps)->gapMat
 				c(1:length(gapMat))->modalities
@@ -129,7 +131,7 @@ integr <- function(x, f)
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
 		
 		#get spectral density
-		dens(m)->d
+		dens(m/length(m))->d
 			integr(d$x,d$y)->dint
 				(d$y/dint)->dsc
 
@@ -141,8 +143,9 @@ integr <- function(x, f)
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
 					mtext("ln eigenvalue",2,3)	
-			return(d$x)
-		return(eigenGap[,1])			
-	}						
+		return(d$x)
+	return(eigenGap[,1])
+	}
+						
 }
 
