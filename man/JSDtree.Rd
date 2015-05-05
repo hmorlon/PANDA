@@ -29,8 +29,6 @@ whether the spectral density will be normalized or not}
 
 
 \examples{
-require(TESS)
-require(igraph)	
 sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE) -> trees
 JSDtree(trees)
 }

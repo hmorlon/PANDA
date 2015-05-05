@@ -30,7 +30,6 @@ the "normal" method normalizes the graph Laplacian by the diagonal matrix.}
 
 
 \examples{
-require(igraph)	
 data(Cetacea)
 spectR(Cetacea,method="standard")
 }
