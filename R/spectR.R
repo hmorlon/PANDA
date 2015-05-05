@@ -143,9 +143,8 @@ integr <- function(x, f)
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
 					mtext("ln eigenvalue",2,3)	
-		return(d$x)
-	return(eigenGap[,1])
+	return(d$x)
 	}
-						
+return(eigenGap[,1])						
 }
 
