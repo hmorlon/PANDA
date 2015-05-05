@@ -12,10 +12,11 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
   }
   	kernelG<-function(x, mean=0, sd=1) 
 		dnorm(x, mean = mean, sd = sd)
-	x <- log(x)	
-	sd <- (if(is.numeric(bw)) bw[1] else bw(x)) * adjust
-	X <- seq(from, to, len = n)
-	M <- outer(X, x, kernel, sd = sd, ...)
+x <- log(x)
+ } 	
+  sd <- (if(is.numeric(bw)) bw[1] else bw(x)) * adjust
+  X <- seq(from, to, len = n)
+  M <- outer(X, x, kernel, sd = sd, ...)
   structure(list(x = X, y = rowMeans(M), bw = sd,
                  call = match.call(), n = length(x),
                  data.name = deparse(substitute(x)),
