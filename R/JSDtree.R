@@ -1,5 +1,5 @@
 #get Jensen-Shannon divergence	
-JSDtree <- function(phylo,method=c("standard","normal")){
+JSDtree <- function(phylo,meth=c("standard")){
 	dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
 	KLD <- function(x,y) sum(x*log(x/y))
 	JSD <- function(x,y) sqrt(0.5*KLD(x,(x+y)/2)+0.5*KLD(y,(x+y)/2))
