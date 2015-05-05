@@ -37,7 +37,7 @@ the likelihood value of the phylogeny, given the model and the parameter values 
 }
 
 \references{
-Manceau M., Lambert A., Morlon H. , submitted.
+Manceau M., Lambert A., Morlon H. (2015) Phylogenies support out-of-equilibrium models of biodiversity Ecology Letters 18: 347-356
 }
 
 \author{

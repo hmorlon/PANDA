@@ -30,7 +30,7 @@ a phylogenetic tree of class "phylo" (see ape documentation)
 }
 
 \references{
-Manceau M., Lambert A., Morlon H. (submitted)
+Manceau M., Lambert A., Morlon H. (2015) Phylogenies support out-of-equilibrium models of biodiversity Ecology Letters 18: 347-356
 }
 
 \author{
