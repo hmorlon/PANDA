@@ -1,5 +1,5 @@
 #plot spectral density
-spectR <- function(phylo,method=c("standard","normal")){
+spectR <- function(phylo,method=c("standard","normal1","normal2")){
 		
 #gaussian kernel convolution		
 dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
@@ -76,7 +76,7 @@ integr <- function(x, f)
 		return(eigenGap[,1])			
 	}
 	
-	if(method=="normal"){
+	if(method=="normal1"){
 		e=eigen(
 			graph.laplacian(
 				graph.adjacency(
@@ -104,11 +104,45 @@ integr <- function(x, f)
 			plot(d$x,dsc,type="l",ann=F)
 				mtext(expression(f*(x)/integral(f(y)*dy)),2,2)
 					mtext("ln eigenvalue",1,2)
-			plot(sort(m,decreasing=T),ann=F)
+			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
-					mtext("eigenvalue",2,3)	
+					mtext("ln eigenvalue",2,3)	
 		return(d$x)
 	return(eigenGap[,1])
-	}					
+	}
+
+	if(method=="normal2"){
+		e=eigen(
+			graph.laplacian(
+				graph.adjacency(
+					data.matrix(
+						dist.nodes(phylo))
+					,weighted=T)
+				,normalized=T)
+			,symmetric=T,only.values=F)
+		m=subset(e$values,e$values>=1)
+	#get eigengap
+		abs(diff(m))->gaps
+			as.matrix(gaps)->gapMat
+				c(1:length(gapMat))->modalities
+			cbind(modalities,gapMat)->gapMatCol
+		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
+		
+		#get spectral density
+		dens(m)->d
+			integr(d$x,d$y)->dint
+				(d$y/dint)->dsc
+
+		#plot eigengap,spectral density
+		par(mfrow=c(1,2))
+			plot(d$x,dsc,type="l",ann=F)
+				mtext(expression(f*(x)/integral(f(y)*dy)),2,2)
+					mtext("ln eigenvalue",1,2)
+			plot(sort(log(m),decreasing=T),ann=F)
+				mtext("rank",1,2)
+					mtext("ln eigenvalue",2,3)	
+			return(d$x)
+		return(eigenGap[,1])			
+	}						
 }
 
