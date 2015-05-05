@@ -1,5 +1,4 @@
-#plot spectral density
-spectR <- function(phylo,method=c("standard","normal")){
+spectR <- function(phylo,method=c("standard")){
 		
 #gaussian kernel convolution		
 dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
@@ -26,26 +25,6 @@ if(method=="normal"){
                  has.na = has.na), class =  "density")
 }
 
-#integration
-integr <- function(x, f)
-{
-       if (!is.numeric(x))
-       {
-              stop('"x" is not numeric.')
-       }
-       if (!is.numeric(f))
-       {
-              stop('"f" is not numeric.')
-       }
-       if (length(x) != length(f))
-       {
-              stop('integration variable and integrand are wrong for each other.')
-       }
-
-       length(x)->n
-       integral=0.5*sum((x[2:n]-x[1:(n-1)])*(f[2:n]+f[1:(n-1)]))
-       return(integral)
-}
 	if(method=="standard"){
 		e=eigen(
 			graph.laplacian(
@@ -108,4 +87,26 @@ integr <- function(x, f)
 					mtext("ln eigenvalue",1,2)
 		}					
 }
+
+#integration
+integr <- function(x, f)
+{
+       if (!is.numeric(x))
+       {
+              stop('"x" is not numeric.')
+       }
+       if (!is.numeric(f))
+       {
+              stop('"f" is not numeric.')
+       }
+       if (length(x) != length(f))
+       {
+              stop('integration variable and integrand are wrong for each other.')
+       }
+
+       length(x)->n
+       integral=0.5*sum((x[2:n]-x[1:(n-1)])*(f[2:n]+f[1:(n-1)]))
+       return(integral)
+}
+
 
