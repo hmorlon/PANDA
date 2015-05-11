@@ -44,39 +44,74 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	
 #compute eigenvalues for phylogenies and convolve with Gaussian kernel	
-	treeNodes <- lapply(trees,dist.nodes)	 
-	treeMats <- lapply(treeNodes,data.matrix)
-	treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
-	treeLaplacian <- lapply(treeGraphs,graph.laplacian,
+	if(method=="standard"){
+		treeNodes <- lapply(trees,dist.nodes)	 
+		treeMats <- lapply(treeNodes,data.matrix)
+		treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
+		treeLaplacian <- lapply(treeGraphs,graph.laplacian,
 					normalized=F)			
-	treeEigen <- lapply(treeLaplacian,eigen,
+		treeEigen <- lapply(treeLaplacian,eigen,
 				symmetric=TRUE,only.values=TRUE)	
 	m<-c()
 	d<-c()
-		if(method=="standard"){
 		for(i in 1:length(treeEigen)){
 			m[[i]]<-subset(treeEigen[[i]]$values,
 				treeEigen[[i]]$values>=1)
 			d[[i]]<-dens(m[[i]])	
 		}
-	}	
-		if(method=="normal"){
-		for(i in 1:length(treeEigen)){
-			m[[i]]<-subset(treeEigen[[i]]$values,
-				treeEigen[[i]]$values>=1)
-			d[[i]]<-dens(m[[i]]/length(m[[i]]))	
-		}
-	}	
 	Ds<-c()
 		for(i in 1:length(d)){
-			Ds<-cbind(Ds,d[[i]]$x)
+			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
+			}
+		colnames(Ds) <- seq(1,length(d),1)		
+	JSD<-as.matrix(JSDist(Ds))	
+	}	
+	
+		if(method=="normal1"){
+	treeNodes <- lapply(trees,dist.nodes)	 
+	treeMats <- lapply(treeNodes,data.matrix)
+	treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
+	treeLaplacian <- lapply(treeGraphs,graph.laplacian,
+					normalized=T)			
+	treeEigen <- lapply(treeLaplacian,eigen,
+				symmetric=TRUE,only.values=TRUE)	
+	m<-c()
+	d<-c()
+		for(i in 1:length(treeEigen)){
+			m[[i]]<-subset(treeEigen[[i]]$values,
+				treeEigen[[i]]$values>=0)
+			d[[i]]<-dens(m[[i]])	
 		}
-#write divergence metrics to file			
-	write.table(Ds,"JSDMatrix.txt")
-	DS<-read.table("JSDMatrix.txt",header=T)
-	JSD<-as.matrix(JSDist(DS))
-	write.table(JSD,"JSDMatrix.txt")
-
-#print heatmap	
-heatmap(JSD,symm=T)	
+	Ds<-c()
+		for(i in 1:length(d)){
+			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
+			}
+		colnames(Ds) <- seq(1,length(d),1)		
+	JSD<-as.matrix(JSDist(abs(Ds)))
+	}
+	
+	if(method=="normal2"){
+		treeNodes <- lapply(trees,dist.nodes)	 
+		treeMats <- lapply(treeNodes,data.matrix)
+		treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
+		treeLaplacian <- lapply(treeGraphs,graph.laplacian,
+					normalized=F)			
+		treeEigen <- lapply(treeLaplacian,eigen,
+				symmetric=TRUE,only.values=TRUE)	
+		for(i in 1:length(treeEigen)){
+			m[[i]]<-subset(treeEigen[[i]]$values,
+				treeEigen[[i]]$values>=0)
+			d[[i]]<-dens(m[[i]]/length(m[[i]]))	
+		}
+	Ds<-c()
+		for(i in 1:length(d)){
+			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
+			}
+		colnames(Ds) <- seq(1,length(d),1)		
+	JSD<-as.matrix(JSDist(abs(Ds)))	
 }
+
+#print heatmap, matrix		
+heatmap(JSD,symm=T)
+return(JSD)
+}	
