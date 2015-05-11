@@ -44,7 +44,7 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	
 #compute eigenvalues for phylogenies and convolve with Gaussian kernel	
-	if(method=="standard"){
+	if(meth=="standard"){
 		treeNodes <- lapply(trees,dist.nodes)	 
 		treeMats <- lapply(treeNodes,data.matrix)
 		treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
@@ -67,7 +67,7 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	JSD<-as.matrix(JSDist(Ds))	
 	}	
 	
-		if(method=="normal1"){
+		if(meth=="normal1"){
 	treeNodes <- lapply(trees,dist.nodes)	 
 	treeMats <- lapply(treeNodes,data.matrix)
 	treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
@@ -90,7 +90,7 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	JSD<-as.matrix(JSDist(abs(Ds)))
 	}
 	
-	if(method=="normal2"){
+	if(meth=="normal2"){
 		treeNodes <- lapply(trees,dist.nodes)	 
 		treeMats <- lapply(treeNodes,data.matrix)
 		treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
