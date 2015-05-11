@@ -10,28 +10,30 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDtree(trees,method=c("standard"))
+JSDtree(phylo,meth=c("standard"))
 }
 
 \arguments{
   \item{phylo}{
 a list of objects of type 'phylo' (see ape documentation)}
-   \item{method}{
-the method to be used. either "standard" or "normal". if set to "normal", compute the normalized version of the spectral density (see the paper for an explanation)}
+   \item{meth}{
+the method to be used. either "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density. (see the associated paper for an explanation)}
 }
 
-\details{
-	It is possible to specify whether a standard profile is returned, a profile normalized to the degree matrix ("normal1"), or a profile normalized to the number of eigenvalues ("normal2").
-}
 
 \value{
-	Writes the Jensen-Shannon distance metrics between phylogeny pairs to a text file and plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
+	Matrix providing the Jensen-Shannon distance metrics between phylogeny pairs. The function also plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
+}
+
+
+\references{
+Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising and comparing phylogenies
 }
 
 \author{E Lewitus}
 
 
 \examples{
-sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE) -> trees
+trees<-sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
 JSDtree(trees)
 }
