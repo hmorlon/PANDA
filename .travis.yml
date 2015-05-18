@@ -14,7 +14,7 @@ install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
 #  CRAN packages required by RPANDA
-  - Rscript -e 'install.packages(c("ape", "picante", "pspline", "deSolve"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
+  - Rscript -e 'install.packages(c("ape", "picante", "pspline", "deSolve", "igraph", "TESS"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
 #  CRAN packages required by RPANDA tests
   - Rscript -e 'install.packages(c("testthat", "vegan", "permute", "lattice", "nlme"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
 script:
