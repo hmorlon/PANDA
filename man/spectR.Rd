@@ -26,6 +26,9 @@ the method used to compute the spectral density, which can either be "standard",
 	\item{eigengap} {the position of the largest difference between eigenvalues, giving the number of modalities in the tree} 
 	The function also returns a plot of the spectral density and a plot of all eigenvalues ranked in descending order.
 	}
+	
+\details{
+	Note that the eigengap should in principle be computed with the "standard" option}
 
 
 \author{E Lewitus}
