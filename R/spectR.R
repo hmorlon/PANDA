@@ -1,5 +1,5 @@
 #plot spectral density
-spectR <- function(phylo,method=c("standard","normal1","normal2")){
+spectR <- function(phylo,method=c("standard")){
 		
 #gaussian kernel convolution		
 dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
@@ -44,17 +44,17 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 		dens(m)->d
 			integr(d$x,d$y)->dint
 				(d$y/dint)->dsc
+				
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1])
 
-		#plot eigengap,spectral density
+		#plot spectral density
 		par(mfrow=c(1,2))
 			plot(d$x,dsc,type="l",ann=F)
 				mtext(expression(f*(x)/integral(f(y)*dy)),2,2)
 					mtext("ln eigenvalue",1,2)
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
-					mtext("ln eigenvalue",2,3)	
-			return(d$x)
-		return(eigenGap[,1])			
+					mtext("ln eigenvalue",2,3)			
 	}
 	
 	if(method=="normal1"){
@@ -79,6 +79,8 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 		dens(m)->d
 			integr(d$x,d$y)->dint
 				(d$y/dint)->dsc
+				
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1])
 
 		#plot eigengap,spectral density
 		par(mfrow=c(1,2))
@@ -88,9 +90,7 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
 					mtext("ln eigenvalue",2,3)	
-		return(d$x)
-	return(eigenGap[,1])
-	}
+			}
 
 	if(method=="normal2"){
 		e=eigen(
@@ -115,6 +115,8 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 			integr(d$x,d$y)->dint
 				(d$y/dint)->dsc
 
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1])
+
 		#plot eigengap,spectral density
 		par(mfrow=c(1,2))
 			plot(d$x,dsc,type="l",ann=F)
@@ -123,9 +125,8 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
 					mtext("ln eigenvalue",2,3)	
-	return(d$x)
-	}
-return(eigenGap[,1])						
+	}	
+	return(res)					
 }
 
 #integration

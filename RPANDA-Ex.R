@@ -108,9 +108,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-require(TESS)
-require(igraph)	
-sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE) -> trees
+trees<-sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
 JSDtree(trees)
 
 
@@ -499,7 +497,6 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-require(igraph)	
 data(Cetacea)
 spectR(Cetacea,method="standard")
 
