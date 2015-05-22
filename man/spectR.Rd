@@ -23,7 +23,7 @@ the method used to compute the spectral density. "standard" corresponds to the s
 \value{
 	a list with the following components
 	\item{eigenvalues} {the vector of eigenvalues} 
-	\item{eigengap} {the position of the largest difference between eigenvalues} 
+	\item{eigengap} {the position of the largest difference between eigenvalues, giving the number of modalities in the tree} 
 	}
 
 \details{
