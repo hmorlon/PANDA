@@ -17,12 +17,13 @@ JSDtree(phylo,meth=c("standard"))
   \item{phylo}{
 a list of objects of type 'phylo' (see ape documentation)}
    \item{meth}{
-the method to be used. either "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density. (see the associated paper for an explanation)}
+the method used to compute the spectral density, which can either be "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density (see the associated paper for an explanation)}
 }
 
 
 \value{
-	Matrix providing the Jensen-Shannon distance metrics between phylogeny pairs. The function also plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
+	A matrix providing the Jensen-Shannon distance values between phylogeny pairs. 
+	The function also plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
 }
 
 
