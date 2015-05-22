@@ -17,7 +17,7 @@ spectR(phylo, method=c("standard"))
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)}
   \item{method}{
-the method used to compute the spectral density. "standard" corresponds to the spectral density with no normalization. "normal1" corresponds to a normalization by the degree matrix. "normal2" corresponds to a normalization by the number of eigenvalues.}
+the method used to compute the spectral density, which can either be "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density (see the associated paper for an explanation)}
 }
 
 \value{
