@@ -20,7 +20,7 @@ BICompare <- function(phylo,t,method=c("gaussian","poisson")){
 			kmeansBIC(kmeans(phyloM,t,algorithm="Hartigan-Wong"))->p[i]
 			}
 
-		if(method=="gaussian"){
+		if(method=="poisson"){
 			rDP = matrix(rpois(length(phyloM),median(phyloM)))#poisson
 				}
 		for(i in c(1:t)){	
