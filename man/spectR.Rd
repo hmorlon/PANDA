@@ -10,23 +10,20 @@ Computes the spectra of eigenvalues for the modified graph Laplacian of a phylog
 }
 
 \usage{
-spectR(phylo, method=c("standard","normal1","normal2"))
+spectR(phylo, method=c("standard"))
 }
 
 \arguments{
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)}
   \item{method}{
-whether the spectral density plot will be normalized or not}
-}
-
-\details{
-	It is possible to specify whether a standard profile is returned, a profile normalized to the degree matrix ("normal1"), or a profile normalized to the number of eigenvalues ("normal2").
+the method used to compute the spectral density. "standard" corresponds to the spectral density with no normalization. "normal1" corresponds to a normalization by the degree matrix. "normal2" corresponds to a normalization by the number of eigenvalues.}
 }
 
 \value{
-	List of eigenvalues
-	Eigengap
+	a list with the following components
+	\item{eigenvalues} the vector of eigenvalues
+	\item{eigengap} the position of the largest difference between eigenvalues
 	Density plot of the spectra of eigenvalues computed for a phylogeny.
 }
 
