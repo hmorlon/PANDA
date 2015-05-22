@@ -22,12 +22,18 @@ the method used to compute the spectral density. "standard" corresponds to the s
 
 \value{
 	a list with the following components
-	\item{eigenvalues} the vector of eigenvalues
-	\item{eigengap} the position of the largest difference between eigenvalues
-	Density plot of the spectra of eigenvalues computed for a phylogeny.
+	\item{eigenvalues} {the vector of eigenvalues} 
+	\item{eigengap} {the position of the largest difference between eigenvalues} 
+	}
+
+\details{
+The function also returns a plot of the spectral density and a plot of all eigenvalues ranked in descending order.
 }
 
 \author{E Lewitus}
+
+\references{
+	Lewitus, E., Morlon, H., A graph-theoretical approach to characterising and comparing phylogenies (submitted) }
 
 
 \examples{
