@@ -21,7 +21,7 @@ the number of modalities to be tested}
  }
 
 \value{
-	BIC values for finding t modalities in the distance matrix of a tree and a control matrix.
+	BIC values for finding t modalities in the distance matrix of a tree and a control matrix, and a list of which nodes in the tree belong to each of t modalities.
 }
 
 

@@ -12,12 +12,15 @@ BICompare <- function(phylo,t){
 		phyloM <- as.matrix(dist.nodes(phylo))	
 		rDP <- c()
 		c()->r
-		c()->p	
-			rDP = matrix(rnorm(length(phyloM),median(phyloM),							3*sd(phyloM)))	
+		c()->p
+		c()->q	
+			rDP = matrix(rnorm(length(phyloM),median(phyloM),							3*sd(phyloM)))
 			kmeansBIC(kmeans(rDP,t,algorithm="Hartigan-Wong"))->r
-			kmeansBIC(kmeans(phyloM,t,algorithm="Hartigan-Wong"))->p
+				kmeans(phyloM,t,algorithm="Hartigan-Wong")->q
+			kmeansBIC(q)->p
 rp<-cbind(p,r)
 colnames(rp)<-c("tree BIC","control BIC")
-return(rp)
+res<-list(rp,q$cluster)
+return(res)
 
 }
