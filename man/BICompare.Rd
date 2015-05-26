@@ -30,5 +30,5 @@ the number of modalities to be tested}
 
 \examples{
 data(Cetacea)
-BICompare(Cetacea,5,method="gaussian")
+BICompare(Cetacea,5)
 }
