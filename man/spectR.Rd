@@ -21,9 +21,11 @@ the method used to compute the spectral density, which can either be "standard",
 }
 
 \value{
-	a list with the following components
-	\item{eigenvalues} {the vector of eigenvalues} 
-	\item{eigengap} {the position of the largest difference between eigenvalues, giving the number of modalities in the tree} 
+	a list with the following components:
+	\item{eigenvalues} {
+the vector of eigenvalues} 
+	\item{eigengap} {
+the position of the largest difference between eigenvalues, giving the number of modalities in the tree} 
 	The function also returns a plot of the spectral density and a plot of all eigenvalues ranked in descending order.
 	}
 	
