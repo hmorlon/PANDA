@@ -4,7 +4,7 @@
 Likelihood of a phylogeny under the SGD model
 }
 \description{
-Computes the likelihood of a phylogeny under the SGD model with exponential increasing of the metacommunity, and potentially missing extant species. Notations follow Manceau et al. (in press).
+Computes the likelihood of a phylogeny under the SGD model with exponential increasing of the metacommunity, and potentially missing extant species. Notations follow Manceau et al. (2015).
 }
 \usage{
 likelihood_sgd(phylo, tot_time, b, d, nu, f)

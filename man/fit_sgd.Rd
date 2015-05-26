@@ -5,7 +5,7 @@ Maximum likelihood fit of the SGD model
 }
 
 \description{
-Fits the SGD model with exponential growth of the metacommunity, by maximum likelihood. Notations follow Manceau et al. (submitted)
+Fits the SGD model with exponential growth of the metacommunity, by maximum likelihood. Notations follow Manceau et al. (2015)
 }
 
 \usage{
