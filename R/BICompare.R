@@ -11,23 +11,19 @@ BICompare <- function(phylo,t,method=c("gaussian","poisson")){
 	}
 		phyloM <- as.matrix(dist.nodes(phylo))	
 		rDP <- c()
-		matrix()->r
-		matrix()->p	
+		c()->r
+		c()->p	
 		if(method=="gaussian"){
-			rDP = matrix(rnorm(length(phyloM),median(phyloM),							3*sd(phyloM)))
-							
-		for(i in c(1:t)){	
-			kmeansBIC(kmeans(rDP,t,algorithm="Hartigan-Wong"))->r[i]
-			kmeansBIC(kmeans(phyloM,t,algorithm="Hartigan-Wong"))->p[i]
-			}
-		}
+			rDP = matrix(rnorm(length(phyloM),median(phyloM),							3*sd(phyloM)))	
+
+			kmeansBIC(kmeans(rDP,t,algorithm="Hartigan-Wong"))->r
+			kmeansBIC(kmeans(phyloM,t,algorithm="Hartigan-Wong"))->p
+	}
 		if(method=="poisson"){
 			rDP = matrix(rpois(length(phyloM),median(phyloM)))
-				
-		for(i in c(1:t)){	
-			kmeansBIC(kmeans(rDP,t,algorithm="Lloyd"))->r[i]
-			kmeansBIC(kmeans(phyloM,t,algorithm="Lloyd"))->p[i]
-			}
+
+			kmeansBIC(kmeans(rDP,t,algorithm="Lloyd"))->r
+			kmeansBIC(kmeans(phyloM,t,algorithm="Lloyd"))->p
 	}			
 rp<-cbind(p,r)
 colnames(rp)<-c("tree BIC","control BIC")

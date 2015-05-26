@@ -2,11 +2,11 @@
 \alias{BICompare}
 
 \title{
-Compute the confidence of modalities in a phylogeny
+Compute the confidence of a modality in a phylogeny
 }
 
 \description{
-Computes the BIC values for different numbers of modalities in the distance matrix of a tree and a control matrix. 
+Computes the BIC values for a specified number of modalities in the distance matrix of a tree and a control matrix. 
 }
 
 \usage{
