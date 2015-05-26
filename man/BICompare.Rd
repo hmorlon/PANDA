@@ -10,7 +10,7 @@ Computes the BIC values for a specified number of modalities in the distance mat
 }
 
 \usage{
-BICompare(phylo, t, method=c("gaussian","poisson"))
+BICompare(phylo, t)
 }
 
 \arguments{
@@ -18,17 +18,11 @@ BICompare(phylo, t, method=c("gaussian","poisson"))
 an object of type 'phylo' (see ape documentation)}
   \item{t}{
 the number of modalities to be tested}
-  \item{method}{
-whether the control matrix will be drawn from a poisson or gaussian distribution}	
-}
-
+ }
 
 \value{
 	BIC values for finding t modalities in the distance matrix of a tree and a control matrix.
 }
-
-\details{
-	Note that the "poisson" option should only be used in certain cases (e.g., when the tree is extremely imbalanced)}
 
 
 \author{E Lewitus}
