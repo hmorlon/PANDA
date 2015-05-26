@@ -27,6 +27,10 @@ whether the control matrix will be drawn from a poisson or gaussian distribution
 	BIC values for finding t modalities in the distance matrix of a tree and a control matrix.
 }
 
+\details{
+	Note that the "poisson" option should only be used in certain cases (e.g., when the tree is extremely imbalanced)}
+
+
 \author{E Lewitus}
 
 
