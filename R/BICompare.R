@@ -1,4 +1,7 @@
-#get BIC values for tree matrix and random matrix for 1:t modalities
+#get BIC values for tree matrix and random matrix for t modalities
+#returns assignation of nodes to the t clusters
+#plot tree with t clusters
+
 BICompare <- function(phylo,t){
 	options(warn=-1)
 	#get lLk, BIC
@@ -14,13 +17,17 @@ BICompare <- function(phylo,t){
 		c()->r
 		c()->p
 		c()->q	
-			rDP = matrix(rnorm(length(phyloM),median(phyloM),							3*sd(phyloM)))
+			rDP = matrix(rnorm(length(phyloM),median(phyloM),3*sd(phyloM)))
 			kmeansBIC(kmeans(rDP,t,algorithm="Hartigan-Wong"))->r
-				kmeans(phyloM,t,algorithm="Hartigan-Wong")->q
+			kmeans(phyloM,t,algorithm="Hartigan-Wong")->q
 			kmeansBIC(q)->p
 rp<-cbind(p,r)
 colnames(rp)<-c("tree BIC","control BIC")
-res<-list(rp,q$cluster)
+res<-list("BIC_test"=rp,"clusters"=q$cluster)
 return(res)
+
+col_edge<-rainbow(t)[res[[2]][phylo$edge[,2]]]
+col_tip<-rainbow(t)[res[[2]][1:length(phylo$tip.label)]]
+plot(phylo,edge.color=col_edge,tip.color=col_tip,type="fan")
 
 }
