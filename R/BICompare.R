@@ -24,10 +24,12 @@ BICompare <- function(phylo,t){
 rp<-cbind(p,r)
 colnames(rp)<-c("tree BIC","control BIC")
 res<-list("BIC_test"=rp,"clusters"=q$cluster)
-return(res)
 
 col_edge<-rainbow(t)[res[[2]][phylo$edge[,2]]]
 col_tip<-rainbow(t)[res[[2]][1:length(phylo$tip.label)]]
 plot(phylo,edge.color=col_edge,tip.color=col_tip,type="fan")
+
+return(res)
+
 
 }

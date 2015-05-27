@@ -26,7 +26,7 @@ the number of modalities to be tested}
 	BIC values for finding t modalities in the distance matrix of a tree and a control matrix}
 	\item{clusters}{
 	 a vector specifying which nodes in the tree belong to each of t modalities}
-	 The function also returns a plot of the phylogeny with branches colored according to which modality it belongs to.
+	 The function also returns a plot of the phylogeny with branches colored according to which modality they belongs to.
 	 
 }
 
