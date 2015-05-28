@@ -27,6 +27,7 @@ res<-list("BIC_test"=rp,"clusters"=q$cluster)
 
 col_edge<-rainbow(t)[res[[2]][phylo$edge[,2]]]
 col_tip<-rainbow(t)[res[[2]][1:length(phylo$tip.label)]]
+dev.new()
 plot(phylo,edge.color=col_edge,tip.color=col_tip,type="fan")
 
 return(res)
