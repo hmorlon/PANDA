@@ -10,7 +10,7 @@ Computes the BIC values for a specified number of modalities in the distance mat
 }
 
 \usage{
-BICompare(phylo, t)
+BICompare(phylo, t, plot=FALSE)
 }
 
 \arguments{
@@ -18,6 +18,8 @@ BICompare(phylo, t)
 an object of type 'phylo' (see ape documentation)}
   \item{t}{
 the number of modalities to be tested}
+\item{plot}{logical: if set to TRUE, returns a plot of the phylogeny with branches colored according to which modalities they belong to.
+	}
  }
 
 \value{
@@ -26,7 +28,6 @@ the number of modalities to be tested}
 	BIC values for finding t modalities in the distance matrix of a tree and a control matrix}
 	\item{clusters}{
 	 a vector specifying which nodes in the tree belong to each of t modalities}
-	 The function also returns a plot of the phylogeny with branches colored according to which modality they belong to.
 	 
 }
 
@@ -36,5 +37,5 @@ the number of modalities to be tested}
 
 \examples{
 data(Cetacea)
-BICompare(Cetacea,5)
+BICompare(Cetacea,5,plot=TRUE)
 }
