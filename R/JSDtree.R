@@ -40,6 +40,8 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
                  data.name = deparse(substitute(x)),
                  has.na = has.na), class =  "density")
 }
+
+
 #take square-root of Jensen-Shannon divergence
 JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	
@@ -63,7 +65,10 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 		for(i in 1:length(d)){
 			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
 			}
-		colnames(Ds) <- seq(1,length(d),1)		
+			if (is.null(names(phylo))) {colnames(Ds) <- seq(1,length(d),1)}
+			else {colnames(Ds) <- names(phylo)}
+
+			
 	JSD<-as.matrix(JSDist(Ds))	
 	}	
 	
@@ -86,7 +91,10 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 		for(i in 1:length(d)){
 			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
 			}
-		colnames(Ds) <- seq(1,length(d),1)		
+			
+			if (is.null(names(phylo))) {colnames(Ds) <- seq(1,length(d),1)}
+			else {colnames(Ds) <- names(phylo)}
+	
 	JSD<-as.matrix(JSDist(abs(Ds)))
 	}
 	
@@ -107,7 +115,10 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 		for(i in 1:length(d)){
 			Ds<-as.data.frame(cbind(Ds,d[[i]]$x))
 			}
-		colnames(Ds) <- seq(1,length(d),1)		
+			
+			if (is.null(names(phylo))) {colnames(Ds) <- seq(1,length(d),1)}
+			else {colnames(Ds) <- names(phylo)}
+	
 	JSD<-as.matrix(JSDist(abs(Ds)))	
 }
 
