@@ -124,7 +124,8 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
 					mtext("ln eigenvalue",1,2)
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
-					mtext("ln eigenvalue",2,3)	
+					mtext("ln eigenvalue",2,3)
+		dev.off()	
 	}	
 	return(res)					
 }
