@@ -28,6 +28,8 @@ the number of modalities to be tested}
 	BIC values for finding t modalities in the distance matrix of a tree and a control matrix}
 	\item{clusters}{
 	 a vector specifying which nodes in the tree belong to each of t modalities}
+	 \item{BSS/TSS}{
+	 the ratio of between-cluster sum of squares over total sum of squares}
 	 
 }
 
