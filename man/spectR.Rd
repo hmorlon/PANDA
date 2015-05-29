@@ -33,10 +33,14 @@ The function also returns a plot of the spectral density and a plot of all eigen
 	Note that the eigengap should in principle be computed with the "standard" option}
 
 
-\author{E Lewitus}
-
 \references{
 	Lewitus, E., Morlon, H., A graph-theoretical approach to characterising and comparing phylogenies (submitted) }
+
+\author{E Lewitus}
+
+\seealso{
+\code{\link{JSDtree}}, \code{\link{BICompare}}
+}
 
 
 \examples{

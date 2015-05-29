@@ -33,6 +33,10 @@ Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising
 
 \author{E Lewitus}
 
+\seealso{
+\code{\link{spectR}},\code{\link{BICompare}}
+}
+
 
 \examples{
 trees<-TESS::sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)

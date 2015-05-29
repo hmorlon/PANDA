@@ -33,8 +33,14 @@ the number of modalities to be tested}
 	 
 }
 
+\references{
+	Lewitus, E., Morlon, H., A graph-theoretical approach to characterising and comparing phylogenies (submitted) }
 
 \author{E Lewitus}
+
+\seealso{
+\code{\link{spectR}}, \code{\link{JSDtree}}}
+}
 
 
 \examples{
