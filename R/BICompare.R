@@ -23,13 +23,13 @@ BICompare <- function(phylo,t,plot=FALSE){
 			kmeansBIC(q)->p
 rp<-cbind(p,r)
 colnames(rp)<-c("tree BIC","control BIC")
-res<-list("BIC_test"=rp,"clusters"=q$cluster)
+res<-list("BIC_test"=rp,"clusters"=q$cluster,"BSS/TSS"=q$betweenss/q$totss)
 
 if (plot==TRUE)
 {col_edge<-rainbow(t)[res[[2]][phylo$edge[,2]]]
 col_tip<-rainbow(t)[res[[2]][1:length(phylo$tip.label)]]
 dev.new()
-plot(phylo,edge.color=col_edge,tip.color=col_tip,type="fan")}
+plot(phylo,edge.color=col_edge,tip.color=col_tip,type="fan",cex=0.4)}
 
 return(res)
 
