@@ -39,7 +39,7 @@ the number of modalities to be tested}
 \author{E Lewitus}
 
 \seealso{
-\code{\link{spectR}}, \code{\link{JSDtree}}}
+\code{\link{spectR}}, \code{\link{JSDtree}}
 }
 
 
