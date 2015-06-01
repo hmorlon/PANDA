@@ -10,7 +10,6 @@ plot_spectR <- function(spectR)
 				(d$y/dint)->dsc
 
 			
-		dev.new()
 		par(mfrow=c(1,2))
 			plot(d$x,dsc,type="l",ann=F)
 				mtext(expression(f*(x)/integral(f(y)*dy)),2,2)
