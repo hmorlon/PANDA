@@ -25,8 +25,11 @@ the method used to compute the spectral density, which can either be "standard",
 	\item{eigenvalues}{
 the vector of eigenvalues} 
 	\item{eigengap}{
-the position of the largest difference between eigenvalues, giving the number of modalities in the tree} 
-The function also returns a plot of the spectral density and a plot of all eigenvalues ranked in descending order.
+the position of the largest difference between eigenvalues, giving the number of modalities in the tree}
+	\item{height}{
+the peak height of the spectral density profile}
+	\item{eigengap}{
+the skewness of the spectral density profile} 
 	}
 	
 \details{
