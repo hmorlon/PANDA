@@ -26,9 +26,11 @@ the method used to compute the spectral density, which can either be "standard",
 the vector of eigenvalues} 
 	\item{eigengap}{
 the position of the largest difference between eigenvalues, giving the number of modalities in the tree}
-	\item{height}{
-the peak height of the spectral density profile}
-	\item{eigengap}{
+	\item{principal_eigenvalue}{
+the largest (or principal) eigenvalue of the spectral density profile}
+	\item{peakedness}{
+the kurtosis of the spectral density profile}
+	\item{asymmetry}{
 the skewness of the spectral density profile} 
 	}
 	

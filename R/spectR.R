@@ -115,15 +115,18 @@ skewness <- function (x, na.rm = FALSE)
 				c(1:length(gapMat))->modalities
 			cbind(modalities,gapMat)->gapMatCol
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
+		
+		#get principal eigenvalue
+		max(m) -> principal_eigenvalue
 					
 		#get kurtosis
 		kurtosis.sub(m) -> kurtosis
 		
 		#get skewness
-		skewness(m) -> skew
+		skewness(m) -> skewness
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], kurtosis=kurtosis, skewness=skew)
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], principal_eigenvalue=principal_eigenvalue,peakedness=kurtosis, asymmetry=skewness)
 	}
 	
 	if(method=="normal1"){
@@ -147,15 +150,17 @@ skewness <- function (x, na.rm = FALSE)
 			cbind(modalities,gapMat)->gapMatCol
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
 				
+		#get principal eigenvalue
+		max(m) -> principal_eigenvalue
+					
 		#get kurtosis
 		kurtosis.sub(m) -> kurtosis
 		
 		#get skewness
-		skewness(m) -> skew
+		skewness(m) -> skewness
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], kurtosis=kurtosis, skewness=skew)
-			
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], principal_eigenvalue=principal_eigenvalue,peakedness=kurtosis, asymmetry=skewness)			
 			}
 
 	if(method=="normal2"){
@@ -172,13 +177,9 @@ skewness <- function (x, na.rm = FALSE)
 			integr(d$x,d$y)->dint
 				(d$y/dint)->dsc
 
-		#get eigengap
-		abs(diff(m))->gaps
-			as.matrix(gaps)->gapMat
-				c(1:length(gapMat))->modalities
-			cbind(modalities,gapMat)->gapMatCol
-		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
-		
+		#get principal eigenvalue
+		max(m) -> principal_eigenvalue
+					
 		#get kurtosis
 		kurtosis.sub(m) -> kurtosis
 		
@@ -186,7 +187,7 @@ skewness <- function (x, na.rm = FALSE)
 		skewness(m) -> skewness
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], kurtosis=kurtosis, skewness=skew)
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], principal_eigenvalue=principal_eigenvalue,peakedness=kurtosis, asymmetry=skewness)
 
 	}
 	class(res)	<- "spectR"
