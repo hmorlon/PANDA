@@ -2,7 +2,7 @@
 #returns assignation of nodes to the t clusters
 #plot tree with t clusters
 
-BICompare <- function(phylo,t,plot=FALSE){
+BICompare <- function(phylo,t){
 	options(warn=-1)
 	#get lLk, BIC
 	kmeansBIC <- function(fit){
@@ -25,13 +25,7 @@ rp<-cbind(p,r)
 colnames(rp)<-c("tree BIC","control BIC")
 res<-list("BIC_test"=rp,"clusters"=q$cluster,"BSS/TSS"=q$betweenss/q$totss)
 
-if (plot==TRUE)
-{col_edge<-rainbow(t)[res[[2]][phylo$edge[,2]]]
-col_tip<-rainbow(t)[res[[2]][1:length(phylo$tip.label)]]
-dev.new()
-plot(phylo,edge.color=col_edge,tip.color=col_tip,type="fan",cex=0.4)}
-
+class(res)	<- "BICompare"
 return(res)
-
 
 }

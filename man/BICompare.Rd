@@ -10,7 +10,7 @@ Computes the BIC values for a specified number of modalities in the distance mat
 }
 
 \usage{
-BICompare(phylo, t, plot=FALSE)
+BICompare(phylo, t)
 }
 
 \arguments{
@@ -18,9 +18,7 @@ BICompare(phylo, t, plot=FALSE)
 an object of type 'phylo' (see ape documentation)}
   \item{t}{
 the number of modalities to be tested}
-\item{plot}{logical: if set to TRUE, returns a plot of the phylogeny with branches colored according to which modalities they belong to.
 	}
- }
 
 \value{
 	a list with the following components:
@@ -39,11 +37,11 @@ the number of modalities to be tested}
 \author{E Lewitus}
 
 \seealso{
-\code{\link{spectR}}, \code{\link{JSDtree}}
+\code{\link{plot_BICompare}}, \code{\link{spectR}}, \code{\link{JSDtree}}
 }
 
 
 \examples{
 data(Cetacea)
-BICompare(Cetacea,5,plot=TRUE)
+BICompare(Cetacea,5)
 }
