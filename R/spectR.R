@@ -1,27 +1,6 @@
 #plot spectral density
 spectR <- function(phylo,method=c("standard")){
 
-#gaussian kernel convolution		
-dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
-                from = min(x) - 3*sd, to = max(x) + 3*sd, adjust = 1,
-                ...) {
-  if(has.na <- any(is.na(x))) {
-    na.omit(x)->x
-    if(length(x) == 0)
-        stop('too infinite.')
-  }
-  	kernelG<-function(x, mean=0, sd=1) 
-		dnorm(x, mean = mean, sd = sd)
-	x <- log(x)	
-	sd <- (if(is.numeric(bw)) bw[1] else bw(x)) * adjust
-	X <- seq(from, to, len = n)
-	M <- outer(X, x, kernel, sd = sd, ...)
-  structure(list(x = X, y = rowMeans(M), bw = sd,
-                 call = match.call(), n = length(x),
-                 data.name = deparse(substitute(x)),
-                 has.na = has.na), class =  "density")
-}
-
 ##kurtosis
 kurtosis.sub <-
     function (x, na.rm = FALSE, method = c("moment"), ...)
@@ -102,7 +81,7 @@ skewness <- function (x, na.rm = FALSE)
 		skewness(m) -> skewness
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], principal_eigenvalue=principal_eigenvalue,peakedness=kurtosis, asymmetry=skewness)
+		res<-list(eigenvalues=e$values, principal_eigenvalue=principal_eigenvalue,asymmetry=skewness,peakedness=kurtosis, eigengap=eigenGap[,1])
 	}
 	
 	if(method=="normal1"){
@@ -134,7 +113,7 @@ skewness <- function (x, na.rm = FALSE)
 		skewness(m) -> skewness
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], principal_eigenvalue=principal_eigenvalue,peakedness=kurtosis, asymmetry=skewness)			
+		res<-list(eigenvalues=e$values, principal_eigenvalue=principal_eigenvalue,asymmetry=skewness,peakedness=kurtosis,eigengap=eigenGap[,1])			
 			}
 
 	if(method=="normal2"){
@@ -150,15 +129,15 @@ skewness <- function (x, na.rm = FALSE)
 
 		#get principal eigenvalue
 		max(m) -> principal_eigenvalue
+		
+		#get skewness
+		skewness(m) -> skewness
 					
 		#get kurtosis
 		kurtosis.sub(m) -> kurtosis
 		
-		#get skewness
-		skewness(m) -> skewness
-		
-		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], principal_eigenvalue=principal_eigenvalue,peakedness=kurtosis, asymmetry=skewness)
+				#output
+		res<-list(eigenvalues=e$values,principal_eigenvalue=principal_eigenvalue,asymmetry=skewness,peakedness=kurtosis,eigengap=eigenGap[,1])
 
 	}
 	class(res)	<- "spectR"
