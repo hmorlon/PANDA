@@ -122,7 +122,8 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	JSD<-as.matrix(JSDist(abs(Ds)))	
 }
 
-#print heatmap, matrix		
-heatmap(JSD,symm=T)
+#print matrix		
+class(JSD) <- "JSDtree"
 return(JSD)
+
 }	
