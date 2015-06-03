@@ -22,27 +22,6 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
                  has.na = has.na), class =  "density")
 }
 
-#integration
-integr <- function(x, f)
-{
-       if (!is.numeric(x))
-       {
-              stop('"x" is not numeric.')
-       }
-       if (!is.numeric(f))
-       {
-              stop('"f" is not numeric.')
-       }
-       if (length(x) != length(f))
-       {
-              stop('integration variable and integrand are wrong for each other.')
-       }
-
-       length(x)->n
-       integral=0.5*sum((x[2:n]-x[1:(n-1)])*(f[2:n]+f[1:(n-1)]))
-       return(integral)
-}
-
 ##kurtosis
 kurtosis.sub <-
     function (x, na.rm = FALSE, method = c("moment"), ...)
@@ -105,9 +84,6 @@ skewness <- function (x, na.rm = FALSE)
 				,normalized=F)
 			,symmetric=T,only.values=F)
 		m=subset(e$values,e$values>=1)
-	dens(m)->d
-			integr(d$x,d$y)->dint
-				(d$y/dint)->dsc
 
 	#get eigengap
 		abs(diff(m))->gaps
@@ -139,9 +115,7 @@ skewness <- function (x, na.rm = FALSE)
 				,normalized=T)
 			,symmetric=T,only.values=F)
 		m=subset(e$values,e$values>=0)
-	dens(m)->d
-			integr(d$x,d$y)->dint
-				(d$y/dint)->dsc
+	
 
 		#get eigengap
 		abs(diff(m))->gaps
@@ -173,9 +147,6 @@ skewness <- function (x, na.rm = FALSE)
 				,normalized=F)
 			,symmetric=T,only.values=F)
 		m=subset(e$values,e$values>=0)
-	dens(m)->d
-			integr(d$x,d$y)->dint
-				(d$y/dint)->dsc
 
 		#get principal eigenvalue
 		max(m) -> principal_eigenvalue
