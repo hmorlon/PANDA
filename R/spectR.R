@@ -43,6 +43,43 @@ integr <- function(x, f)
        return(integral)
 }
 
+##kurtosis
+kurtosis.sub <-
+    function (x, na.rm = FALSE, method = c("moment"), ...)
+{
+    
+    method = match.arg(method)
+
+    stopifnot(NCOL(x) == 1)
+
+    # Warnings:
+    if (!is.numeric(x) && !is.complex(x) && !is.logical(x)) {
+        warning("argument is not numeric or logical: returning NA")
+        return(as.numeric(NA))}
+
+    # Remove NAs:
+    if (na.rm) x = x[!is.na(x)]
+
+    # Kurtosis:
+    n = length(x)
+    if (is.integer(x)) x = as.numeric(x)
+    if (method == "moment") {
+        kurtosis = sum((x-mean(x))^4/as.numeric(var(x))^2)/length(x)
+    }
+     if (method == "excess") {
+        kurtosis = sum((x-mean(x))^4/var(x)^2)/length(x) - 3
+    }
+
+    if (method == "fisher") {
+        kurtosis = ((n+1)*(n-1)*((sum(x^4)/n)/(sum(x^2)/n)^2 -
+            (3*(n-1))/(n+1)))/((n-2)*(n-3))
+    }
+
+    # Return Value:
+    kurtosis
+}
+
+
 #skewness
 skewness <- function (x, na.rm = FALSE) 
 {
@@ -79,14 +116,14 @@ skewness <- function (x, na.rm = FALSE)
 			cbind(modalities,gapMat)->gapMatCol
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
 					
-		#get peak height
-		max(dsc) -> height
+		#get kurtosis
+		kurtosis.sub(m) -> kurtosis
 		
 		#get skewness
 		skewness(m) -> skew
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], height=height, skewness=skew)
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], kurtosis=kurtosis, skewness=skew)
 	}
 	
 	if(method=="normal1"){
@@ -110,14 +147,14 @@ skewness <- function (x, na.rm = FALSE)
 			cbind(modalities,gapMat)->gapMatCol
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
 				
-		#get peak height
-		max(dsc) -> height
+		#get kurtosis
+		kurtosis.sub(m) -> kurtosis
 		
 		#get skewness
 		skewness(m) -> skew
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], height=height, skewness=skew)
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], kurtosis=kurtosis, skewness=skew)
 			
 			}
 
@@ -142,14 +179,14 @@ skewness <- function (x, na.rm = FALSE)
 			cbind(modalities,gapMat)->gapMatCol
 		subset(gapMatCol,gapMatCol[,2]==max(gapMatCol[,2]))->eigenGap
 		
-		#get peak height
-		max(dsc) -> height
+		#get kurtosis
+		kurtosis.sub(m) -> kurtosis
 		
 		#get skewness
 		skewness(m) -> skewness
 		
 		#output
-		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], height=height, skewness=skew)
+		res<-list(eigenvalues=e$values, eigengap=eigenGap[,1], kurtosis=kurtosis, skewness=skew)
 
 	}
 	class(res)	<- "spectR"
