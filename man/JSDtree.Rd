@@ -23,8 +23,7 @@ the method used to compute the spectral density, which can either be "standard",
 
 \value{
 	A matrix providing the Jensen-Shannon distance values between phylogeny pairs. 
-	The function also plots a hierarchical cluster and heatmap based on the distance metrics calculated between trees.
-}
+	}
 
 
 \references{
@@ -34,7 +33,7 @@ Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising
 \author{E Lewitus}
 
 \seealso{
-\code{\link{spectR}},\code{\link{BICompare}}
+\code{\link{plot_JSDtree}},\code{\link{spectR}},\code{\link{BICompare}}
 }
 
 
