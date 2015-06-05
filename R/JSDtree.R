@@ -126,7 +126,7 @@ clusters <- pamk(JSD)
 
 #print matrix		
 class(JSD) <- "JSDtree"
-res <- list(JSD, clusters$nc, clusters[[1]][3])
+res <- list(JSD, clusters=clusters$nc, cluster_assignments=clusters[[1]][3])
 return(res)
 
 }	
