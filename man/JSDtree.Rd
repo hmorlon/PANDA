@@ -22,7 +22,11 @@ the method used to compute the spectral density, which can either be "standard",
 
 
 \value{
-	A matrix providing the Jensen-Shannon distance values between phylogeny pairs. 
+	the following components:
+	\item{
+	A matrix providing the Jensen-Shannon distance values between phylogeny pairs}
+	\item{the optimal number of clusters around medoids}
+	\item{assignments of trees to clusters} 
 	}
 
 
@@ -38,6 +42,6 @@ Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising
 
 
 \examples{
-trees<-TESS::sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
+trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
 JSDtree(trees)
 }

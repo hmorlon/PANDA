@@ -122,11 +122,11 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 }
 
 #cluster JSD matrix on medoids
-clusts <- pamk(JSD)
+clusters <- pamk(JSD)
 
 #print matrix		
 class(JSD) <- "JSDtree"
-res <- list(JSD,clusts$nc,clusts[[1]][3])
+res <- list(JSD, clusters$nc, clusters[[1]][3])
 return(res)
 
 }	
