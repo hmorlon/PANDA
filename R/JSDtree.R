@@ -41,7 +41,6 @@ dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
                  has.na = has.na), class =  "density")
 }
 
-
 #take square-root of Jensen-Shannon divergence
 JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	
@@ -122,8 +121,12 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	JSD<-as.matrix(JSDist(abs(Ds)))	
 }
 
+#cluster JSD matrix
+clusts <- medoidCluster(JSD)
+
 #print matrix		
 class(JSD) <- "JSDtree"
-return(JSD)
+res <- list(JSD,clusts$nc,clusts[[1]][3])
+return(res)
 
 }	
