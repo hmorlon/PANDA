@@ -125,8 +125,8 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 clusters <- pamk(JSD)
 
 #print matrix		
-class(JSD) <- "JSDtree"
-res <- list(JSD, clusters=clusters$nc, cluster_assignments=clusters[[1]][3])
+res <- list(JSD=JSD, clusters=clusters$nc, cluster_assignments=clusters[[1]][[3]])
+class(res) <- "JSDtree"
 return(res)
 
 }	

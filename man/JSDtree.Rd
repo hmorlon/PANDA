@@ -22,11 +22,10 @@ the method used to compute the spectral density, which can either be "standard",
 
 
 \value{
-	the following components:
-	\item{
-	A matrix providing the Jensen-Shannon distance values between phylogeny pairs}
-	\item{the optimal number of clusters around medoids}
-	\item{assignments of trees to clusters} 
+	a list with the following components:
+	\item{JSD}{a matrix providing the Jensen-Shannon distance values between phylogeny pairs}
+	\item{clusters}{the optimal number of clusters around medoids (see pamk documentation)}
+	\item{cluster_assignments}{assignments of trees to clusters} 
 	}
 
 
@@ -37,7 +36,7 @@ Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising
 \author{E Lewitus}
 
 \seealso{
-\code{\link{plot_JSDtree}},\code{\link{spectR}},\code{\link{BICompare}}
+\code{\link{plot_JSDtree}}, \code{\link{spectR}}, \code{\link{BICompare}}
 }
 
 
