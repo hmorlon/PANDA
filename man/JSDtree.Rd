@@ -10,7 +10,7 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDtree(phylo,meth=c("standard"))
+JSDtree(phylo,meth=c("standard"),alpha)
 }
 
 \arguments{
@@ -18,6 +18,9 @@ JSDtree(phylo,meth=c("standard"))
 a list of objects of type 'phylo' (see ape documentation)}
    \item{meth}{
 the method used to compute the spectral density, which can either be "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density (see the associated paper for an explanation)}
+   \item{alpha}{
+   	the confidence value for demarcating clusters in the hierarchical clustering plot
+   }
 }
 
 
