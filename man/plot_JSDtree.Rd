@@ -5,7 +5,7 @@
 Heatmap comparison of phylogenies
 }
 \description{
-Plots a hierarchical cluster and heatmap based on the Jensen-Shannon distance between trees.
+Plots a hierarchical cluster and heatmap based on the Jensen-Shannon distance between more than 10 trees.
 }
 \usage{
 plot_JSDtree(JSDtree)
@@ -29,7 +29,7 @@ a plot of heatmap with hierarchical cluster
 }
 
 \examples{
-trees<-TESS::sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
-res<-JSDtree(trees)
+trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
+res<-JSDtree(trees,alpha=0.8)
 #plot_JSDtree(res)
 }
