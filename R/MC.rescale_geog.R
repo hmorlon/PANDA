@@ -91,7 +91,7 @@ for(i in 1:phylo$Nnode){ ##for each interval between branches...
 ##var.list is the list of terms for which there is a variance term at each step in time
 ##cov.list is the list of covariance terms
 var.list<-unlist(nat[[i]])
-cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="_")
+cov.list<-apply(t(combn(var.list,2)),1,paste,collapse="___")
 Cmat<-matrix(nrow=length(var.list),ncol=length(var.list)) ##"Cmat" is a lower triangle matrix with each of the variance and covariance terms, used to define equations below
 diag(Cmat)<-var.list
 Cmat[lower.tri(Cmat)]<-cov.list
