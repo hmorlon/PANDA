@@ -35,6 +35,7 @@ a value specifying the total number of time segments to simulate across for the 
   \item{model}{
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
+}
 
 \value{
 	a named vector with simulated trait values for \eqn{\n} species in the phylogeny

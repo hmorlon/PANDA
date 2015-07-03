@@ -20,7 +20,7 @@ CreateGeoObject(phylo)
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)
 }
-
+}
 \value{
 	a list with the following components:
   \item{node.descendants}{a data frame listing node numbers, their descendants 

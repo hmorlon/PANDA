@@ -82,18 +82,18 @@ In current version, S parameter is restricted to take on negative values in MC +
 data(Calomys)
 data(Calomys.geo)
 
-# First, simulate data under the matching competition model\n
+# First, simulate data under the matching competition model
 \code{MC.data<-simCompModel(Calomys,pars=list(sig2=0.05,S=-1),root.value=0,Nsegments=1000,model="MC")}
 
 #Now fit three models to these data
-\code{MC.fit<-fitCompModel(Calomys,MC.data,model="MC")}\n
-\code{DDlin.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}\n
+\code{MC.fit<-fitCompModel(Calomys,MC.data,model="MC")}
+\code{DDlin.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}
 \code{DDexp.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}
 
-#Now fit models that incorporate biogeography (to see form of geography.object, examine Calomys.geo)\n
-##NOTE: Calomys.geo is purely illustrative and not based on actual data\n
-\code{MC.geo.fit<-fitCompModel(Calomys,MC.data,model="MC",geography.object=Calomys.geo)}\n
-\code{DDlin.geo.fit<-fitCompModel(Calomys,MC.data,model="DDlin",geography.object=Calomys.geo)}\n
-\code{DDexp.geo.fit<-fitCompModel(Calomys,MC.data,model="DDexp",geography.object=Calomys.geo)}\n
+#Now fit models that incorporate biogeography (to see form of geography.object, examine Calomys.geo)
+##NOTE: Calomys.geo is purely illustrative and not based on actual data
+\code{MC.geo.fit<-fitCompModel(Calomys,MC.data,model="MC",geography.object=Calomys.geo)}
+\code{DDlin.geo.fit<-fitCompModel(Calomys,MC.data,model="DDlin",geography.object=Calomys.geo)}
+\code{DDexp.geo.fit<-fitCompModel(Calomys,MC.data,model="DDexp",geography.object=Calomys.geo)}
 
 }
