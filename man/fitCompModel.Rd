@@ -18,15 +18,14 @@ fitCompModel(phylo,data,model="MC,DDexp,DDlin",geography.object=NULL,method="Nel
 an object of type 'phylo' (see ape documentation)
 }
   \item{data}{
-a named vector of trait values with names matching phylo$tip.label
+a named vector of trait values with names matching \code{phylo$tip.label}
 }
   \item{model}{
-model chosen to fit trait data 
+model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
   \item{geography.object}{
 a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages
 at each internode interval (see details)
-
 }
   \item{method}{
 method to use for ML optimization (default is Nelder-Mead)
@@ -39,17 +38,21 @@ method to use for ML optimization (default is Nelder-Mead)
 }
 
 \details{
-Adjusting eqn{\Nsegments} will impact the length of time the simulations take. 
+Adjusting \code{\Nsegments} will impact the length of time the simulations take. 
 The length of each segment (max(nodeHeights(phylo))/Nsegments) 
 should be much smaller than the smallest branch (min(phylo$edge.length)).
 
-eqn{\geography.object} should be a list of matrices with row and column
+\code{\geography.object} should be a list of matrices with row and column
 names that match the "nat" object created within the VCV.rescale() function.
 
 }
 
 \references{
 	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
+
+	Nuismer & Harmon
+	
+	Weir & Mursleen
 }
 
 \author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
