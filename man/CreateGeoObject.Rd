@@ -22,7 +22,7 @@ an object of type 'phylo' (see ape documentation)
 }
 
 \value{
-	a list with the following components
+	a list with the following components:
   \item{node.descendants}{a data frame listing node numbers, their descendants 
   (i.e., branch name), and the next node}
   \item{extant.lineages.through.time}{a named list of extant branches that descend

@@ -30,10 +30,10 @@ a list of parameters for the chosen model; all models require
 a number specifying the trait value for the ancestor
 }
   \item{Nsegments}{
-a value specifying the total number of time segments to simulate across for the phylogeny (see Detals)
+a value specifying the total number of time segments to simulate across for the phylogeny (see Details)
 }
   \item{model}{
-model chosen to generate trait data 
+model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
 
 \value{
@@ -41,13 +41,17 @@ model chosen to generate trait data
 }
 
 \details{
-Adjusting eqn{\Nsegments} will impact the length of time the simulations take. 
-The length of each segment (max(nodeHeights(phylo))/Nsegments) 
-should be much smaller than the smallest branch (min(phylo$edge.length)).
+Adjusting \code{\Nsegments} will impact the length of time the simulations take. 
+The length of each segment (\code{max(nodeHeights(phylo))/Nsegments}) 
+should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 }
 
 \references{
 	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
+
+	Nuismer, S. & Harmon, L. 2015. Predicting rates of interspecific interaction from phylogenetic trees. \emph{Ecology Letters} 18:17-27.
+	
+	Weir, J. & Mursleen, S. 2012. Diversity-dependent cladogenesis and trait evolution in the adaptive radiation of the auks (Aves: Alcidae). \emph{Evolution} 67:403-416.
 }
 
 \author{J Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}}

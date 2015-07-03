@@ -34,7 +34,16 @@ method to use for ML optimization (default is Nelder-Mead)
 
 \value{
 	a list with the following elements:
-	
+  \item{lnL}{log-likelihood of maximum-likelihood fit}
+  \item{sig2}{maximum-likelihood estimate of sig2 parameter}
+  \item{S}{maximum-likelihood estimate of S parameter of matching competition model (see Note)}
+  \item{b}{maximum-likelihood estimate of b parameter of linear diversity dependence model}
+  \item{r}{maximum-likelihood estimate of r parameter of exponential diversity dependence model}
+  \item{aic}{Akaike Information Criterion value}
+  \item{aicc}{AIC value corrected for small sample size}
+  \item{free.parameter}{number of free parameters from the model}
+  \item{convergence}{convergence diagnostics from \code{optim()} function (see optim documentation)}
+
 }
 
 \details{
@@ -50,9 +59,9 @@ names that match the "nat" object created within the VCV.rescale() function.
 \references{
 	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
 
-	Nuismer & Harmon
+	Nuismer, S. & Harmon, L. 2015. Predicting rates of interspecific interaction from phylogenetic trees. \emph{Ecology Letters} 18:17-27.
 	
-	Weir & Mursleen
+	Weir, J. & Mursleen, S. 2012. Diversity-dependent cladogenesis and trait evolution in the adaptive radiation of the auks (Aves: Alcidae). \emph{Evolution} 67:403-416.
 }
 
 \author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
