@@ -1,5 +1,5 @@
-\name{simCompModel}
-\alias{simCompModel}
+\name{fitCompModel}
+\alias{fitCompModel}
 
 \title{
 Recursive simulation (root-to-tip) of competition models 
@@ -30,7 +30,7 @@ at each internode interval (see details)
   \item{method}{
 method to use for ML optimization (default is Nelder-Mead)
 }
-
+}
 
 \value{
 	a list with the following elements:
@@ -47,12 +47,12 @@ method to use for ML optimization (default is Nelder-Mead)
 }
 
 \details{
-Adjusting \code{\Nsegments} will impact the length of time the simulations take. 
-The length of each segment (max(nodeHeights(phylo))/Nsegments) 
-should be much smaller than the smallest branch (min(phylo$edge.length)).
+Adjusting \code{Nsegments} will impact the length of time the simulations take. 
+The length of each segment (\code{max(nodeHeights(phylo))/Nsegments}) 
+should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 
-\code{\geography.object} should be a list of matrices with row and column
-names that match the "nat" object created within the VCV.rescale() function.
+\code{geography.object} should be a list of matrices with row and column
+names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.
 
 }
 
@@ -65,6 +65,7 @@ names that match the "nat" object created within the VCV.rescale() function.
 }
 
 \author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
+
 		Julien Clavel
 }
 
@@ -81,19 +82,18 @@ In current version, S parameter is restricted to take on negative values in MC +
 data(Calomys)
 data(Calomys.geo)
 
-# First, simulate data under the matching competition model
-MC.data<-simCompModel(Calomys,pars=list(sig2=0.05,S=-1),root.value=0,Nsegments=1000,model="MC")
+# First, simulate data under the matching competition model\n
+\code{MC.data<-simCompModel(Calomys,pars=list(sig2=0.05,S=-1),root.value=0,Nsegments=1000,model="MC")}
 
 #Now fit three models to these data
-MC.fit<-fitCompModel(Calomys,MC.data,model="MC")
-DDlin.fit<-fitCompModel(Calomys,MC.data,model="DDlin")
-DDexp.fit<-fitCompModel(Calomys,MC.data,model="DDlin")
+\code{MC.fit<-fitCompModel(Calomys,MC.data,model="MC")}\n
+\code{DDlin.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}\n
+\code{DDexp.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}
 
-#Now fit models that incorporate biogeography (to see form of geography.object, examine Calomys.geo)
-##NOTE: Calomys.geo is purely illustrative and not based on actual data
-MC.geo.fit<-fitCompModel(Calomys,MC.data,model="MC",geography.object=Calomys.geo)
-DDlin.geo.fit<-fitCompModel(Calomys,MC.data,model="DDlin",geography.object=Calomys.geo)
-DDexp.geo.fit<-fitCompModel(Calomys,MC.data,model="DDexp",geography.object=Calomys.geo)
-
+#Now fit models that incorporate biogeography (to see form of geography.object, examine Calomys.geo)\n
+##NOTE: Calomys.geo is purely illustrative and not based on actual data\n
+\code{MC.geo.fit<-fitCompModel(Calomys,MC.data,model="MC",geography.object=Calomys.geo)}\n
+\code{DDlin.geo.fit<-fitCompModel(Calomys,MC.data,model="DDlin",geography.object=Calomys.geo)}\n
+\code{DDexp.geo.fit<-fitCompModel(Calomys,MC.data,model="DDexp",geography.object=Calomys.geo)}\n
 
 }
