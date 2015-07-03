@@ -19,10 +19,10 @@ an object of type 'phylo' (see ape documentation)
 }
   \item{pars}{
 a list of parameters for the chosen model; all models require 
-\eqn{\sig2}, and additionally, the MC model requires \eqn{\S},
+\code{sig2}, and additionally, the MC model requires \code{S},
  specifying the level of competition (larger negative values 
  correspond to higher levels of competition), the DDlin model 
- requires \eqn{\b} and DDexp require \eqn{\r}, the slope 
+ requires \code{b} and DDexp require \code{r}, the slope 
  parameters (negative in cases of decline in evolutionary 
  rates with increasing diversity).
 }
@@ -42,7 +42,7 @@ model chosen to fit trait data, \code{"MC"} is the matching competition model of
 }
 
 \details{
-Adjusting \code{\Nsegments} will impact the length of time the simulations take. 
+Adjusting \code{Nsegments} will impact the length of time the simulations take. 
 The length of each segment (\code{max(nodeHeights(phylo))/Nsegments}) 
 should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 }

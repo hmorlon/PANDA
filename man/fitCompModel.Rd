@@ -2,10 +2,10 @@
 \alias{fitCompModel}
 
 \title{
-Recursive simulation (root-to-tip) of competition models 
+Fit models of trait evolution incorporating interspecific interactions
 }
 \description{
-Simulates datasets for a given phylogeny under matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution. Simulations are carried out from the root to the tip of the tree.
+Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
 
@@ -47,9 +47,6 @@ method to use for ML optimization (default is Nelder-Mead)
 }
 
 \details{
-Adjusting \code{Nsegments} will impact the length of time the simulations take. 
-The length of each segment (\code{max(nodeHeights(phylo))/Nsegments}) 
-should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 
 \code{geography.object} should be a list of matrices with row and column
 names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.

@@ -34,7 +34,7 @@ an object of type 'phylo' (see ape documentation)
 This function should be used to format the geography object so that it can be correctly
 passed to the numerical integration performed in \code{\link{fitCompModel}}. 
 
-The blank $geography.object should be filled in in a block symmetrical fashion with 1s
+The blank \code{$geography.object} should be filled in in a block symmetrical fashion with 1s
 (for sympatric species) and 0s (for allopatric species). The diagonal of each matrix
 should be filled with 1s.
 }
