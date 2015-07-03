@@ -35,14 +35,14 @@ method to use for ML optimization (default is Nelder-Mead)
 \value{
 	a list with the following elements:
   \item{lnL}{log-likelihood of maximum-likelihood fit}
-  \item{sig2}{maximum-likelihood estimate of sig2 parameter}
-  \item{S}{maximum-likelihood estimate of S parameter of matching competition model (see Note)}
-  \item{b}{maximum-likelihood estimate of b parameter of linear diversity dependence model}
-  \item{r}{maximum-likelihood estimate of r parameter of exponential diversity dependence model}
+  \item{sig2}{maximum-likelihood estimate of \code{sig2} parameter}
+  \item{S}{maximum-likelihood estimate of \code{S} parameter of matching competition model (see Note)}
+  \item{b}{maximum-likelihood estimate of \code{b} parameter of linear diversity dependence model}
+  \item{r}{maximum-likelihood estimate of \code{r} parameter of exponential diversity dependence model}
   \item{aic}{Akaike Information Criterion value}
   \item{aicc}{AIC value corrected for small sample size}
   \item{free.parameter}{number of free parameters from the model}
-  \item{convergence}{convergence diagnostics from \code{optim()} function (see optim documentation)}
+  \item{convergence}{convergence diagnostics from \code{\link{optim}} function (see optim documentation)}
 
 }
 
@@ -72,7 +72,7 @@ names that match the \code{$geography.object} object created within the \code{\l
 }
 
 \note{
-In current version, S parameter is restricted to take on negative values in MC + geography ML optimization.
+In current version, the \code{S} parameter is restricted to take on negative values in MC + geography ML optimization.
 }
 \examples{
 

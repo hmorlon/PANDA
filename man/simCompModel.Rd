@@ -38,7 +38,7 @@ model chosen to fit trait data, \code{"MC"} is the matching competition model of
 }
 
 \value{
-	a named vector with simulated trait values for \eqn{\n} species in the phylogeny
+	a named vector with simulated trait values for \eqn{n} species in the phylogeny
 }
 
 \details{
