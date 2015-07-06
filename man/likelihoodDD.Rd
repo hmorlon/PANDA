@@ -32,7 +32,7 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\{b} or \{r}).
+	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\code{b} or \code{r}).
 }
 
 \value{

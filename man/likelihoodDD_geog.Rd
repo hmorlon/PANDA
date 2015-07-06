@@ -37,7 +37,7 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\{b} or \{r}).
+	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\code{b} or \code{r}).
 
 	The \code{geography.object} should be a list of matrices with row and column
 names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.
@@ -46,11 +46,12 @@ names that match the \code{$geography.object} object created within the \code{\l
 
 \note{
 	To stabilize optimization, this function exponentiates the input \code{sig2} value, thus the user must input the log(sig2) value to compute the correct log likelihood (see example).
-	
+}	
 
 \value{
   the negative log-likelihood value of the dataset (accordingly, the negative of the output should be recorded as the likelihood), given the phylogeny,  \code{sig2} and slope values, and \code{geography.object}.
 }
+
 \references{
 	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
 

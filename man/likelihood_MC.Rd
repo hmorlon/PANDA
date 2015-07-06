@@ -25,7 +25,7 @@ a vector listing a value for \code{sig2} and \code{S} (parameters of the matchin
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before \{S}.
+	When specifying \code{par}, \code{sig2} must be listed before \code{S}.
 }
 
 \value{
