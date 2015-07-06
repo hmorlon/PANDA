@@ -14,10 +14,6 @@ data(Anolis.data)
 
 \details{
 	Phylogeny trimmed from the maximum clade credibility tree of Mahler et al. 2013, phylogenetic principal component data are from Mahler et al. 2013, and biogeography data are from Mahler & Ingram 2014. 
-\item{$phylo}{Phylogeny of a subclade of Anolis lizards from the Greater Antilles.}
-\item{$data}{1st phylogenetic principal component of morphological dataset}
-\item{$geography.object}{/code{geography.object} formatted for incorporating biogeography into models available in \code{\link{fitCompModel}}}
-
 }
 
 \references{

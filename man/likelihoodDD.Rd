@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihoodDD(phylo, data, par=c(sig2,slope),model="DDlin","DDexp")
+likelihoodDD(phylo, data, par=c(sig2,slope),model=c("DDlin","DDexp"))
 }
 
 \arguments{
