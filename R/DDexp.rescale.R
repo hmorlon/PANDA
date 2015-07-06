@@ -1,4 +1,4 @@
-vcv.rescale.DDexp<-function(phylo,sig2,rate){
+.vcv.rescale.DDexp<-function(phylo,sig2,rate){
 
 bt=as.numeric(branching.times(phylo))
 nodeDist<-c(bt[1]-sort(bt,decreasing=TRUE),bt[1])

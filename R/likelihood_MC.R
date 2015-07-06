@@ -2,7 +2,7 @@ likelihood_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
 {
   	sig2<-abs(par[1]) #%*%t(par[1])
 	sterm<-par[2]
-	V<-try(VCV.rescale(phylo,sig2,0,sterm))
+	V<-try(.VCV.rescale(phylo,sig2,0,sterm))
 	if(class(V)=="try-error"){return(Inf)}
 	if(any(is.na(V))){
 		return(Inf)

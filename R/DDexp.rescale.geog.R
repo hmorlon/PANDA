@@ -1,4 +1,4 @@
-vcv.rescale.DDexp_geog<-function(phylo,sig2,rate,geography.matrix,check=TRUE){
+.vcv.rescale.DDexp_geog<-function(phylo,sig2,rate,geography.matrix,check=TRUE){
 
 
 paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS

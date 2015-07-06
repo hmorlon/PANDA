@@ -2,7 +2,7 @@ likelihood_MC_geog<-function(phylo,data,par,geography.matrix) #par[1]=sig2,par[2
 {
   	sig2<-abs(par[1]) 
   	sterm<-ifelse(sign(par[2])==-1,par[2],-par[2])
-	V<-try(VCV.rescale.geog(phylo,sig2,0,sterm,geography.matrix))
+	V<-try(.VCV.rescale.geog(phylo,sig2,0,sterm,geography.matrix))
 	if(class(V)=="try-error"){return(Inf)}
 	if(any(is.na(V))){
 		return(Inf)

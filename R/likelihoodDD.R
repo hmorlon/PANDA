@@ -4,10 +4,10 @@ likelihoodDD<-function(phylo,par,data,model=c("DDlin","DDexp")){
 	if(model=="DDlin"){
 	test=sig2+(rate*length(phylo$tip.label))
 	if(test<=0){return(Inf)}
-	try(V<-vcv.rescale.DDlin(phylo,sig2,rate))
+	try(V<-.vcv.rescale.DDlin(phylo,sig2,rate))
 	} 
 	else if(model=="DDexp"){
-		try(V<-vcv.rescale.DDexp(phylo,sig2,rate))
+		try(V<-.vcv.rescale.DDexp(phylo,sig2,rate))
 	}
 	if(class(V)=="try-error"){return(Inf)}
 	if(any(is.na(V))){

@@ -4,10 +4,10 @@ likelihoodDD_geog<-function(phylo,par,data,geography.matrix,model=c("DDlin","DDe
 	if(model=="DDlin"){
 	test=sig2+(rate*length(phylo$tip.label))
 	if(test<=0){return(Inf)}	
-	try(V<-vcv.rescale.DDlin_geog(phylo,sig2,rate,geography.matrix,check=FALSE))
+	try(V<-.vcv.rescale.DDlin_geog(phylo,sig2,rate,geography.matrix,check=FALSE))
 	} 
 	else if(model=="DDexp"){
-		try(V<-vcv.rescale.DDexp_geog(phylo,sig2,rate,geography.matrix,check=FALSE))
+		try(V<-.vcv.rescale.DDexp_geog(phylo,sig2,rate,geography.matrix,check=FALSE))
 	}
 	if(class(V)=="try-error"){return(Inf)}
 	if(any(is.na(V))){
