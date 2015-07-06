@@ -1,5 +1,5 @@
-\name{likelihoodDD}
-\alias{likelihoodDD}
+\name{likelihoodDD_geog}
+\alias{likelihoodDD_geog}
 
 \title{
 Likelihood of a dataset under diversity-dependent models with biogeography.

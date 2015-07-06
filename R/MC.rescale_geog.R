@@ -45,7 +45,7 @@ if(sum(nodeDiff<0)>0){  ##this loop renumbers the nodes if trees nodes are not p
 }
 if(any(nodeDiff==0)){stop("VCV.rescale cannot handle trees with two or more nodes occurring at exactly the same time")}
 if(any(nodeDiff<9e-6)){stop("The current tree has very small branch lengths (< 9e-6), consider multiplying all branch lengths to increase reliability of numerical integration")}
-if(length(geography.matrix)!=phylo$Nnode){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
+if(length(geography.object)!=phylo$Nnode){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
 
 mat<-matrix(nrow=0, ncol=3)
 counter_three_letters <- 0
@@ -128,14 +128,14 @@ Cmat[lower.tri(Cmat)]<-cov.list
 	updated.alpha<-vector()	
 	for(term in 1:length(indJ)){
 		j<-indJ[term]
-		int<-(((sum(geography.matrix[[i]][,j])-1)/sum(geography.matrix[[i]][,j]))/((len-1)/len)*(coefAlpha-2* parameters['a']))+2* parameters['a']
+		int<-(((sum(geography.object[[i]][,j])-1)/sum(geography.object[[i]][,j]))/((len-1)/len)*(coefAlpha-2* parameters['a']))+2* parameters['a']
 		updated.alpha<-c(updated.alpha, int)
 		}	
 	diag(A)<--updated.alpha
 	}
 	coefBetaV <- rep(coefBeta, times = len)
 	for(term in 1:len){
-		int<-coefBeta*(len/sum(geography.matrix[[i]][,term]))
+		int<-coefBeta*(len/sum(geography.object[[i]][,term]))
 		coefBetaV[term]<-int
 		}	
 	for(ind_jk in 1:dim) {
@@ -143,19 +143,19 @@ Cmat[lower.tri(Cmat)]<-cov.list
 	    k <- indJ[[ind_jk]]
 	    coefBetaV[[k]] <- 0
 	    #term<-ifelse(ind_jk%%len==0,len,ind_jk%%len)
-	    if(geography.matrix[[i]][match(ind_jk,ind)]==0){A[ind_jk, ind[j, ] ] <- 0} else{ 
+	    if(geography.object[[i]][match(ind_jk,ind)]==0){A[ind_jk, ind[j, ] ] <- 0} else{ 
 	    	##first make a list of match terms
-	    	geog<-geography.matrix[[i]][match(ind[j,],ind)]
+	    	geog<-geography.object[[i]][match(ind[j,],ind)]
 	    	A[ind_jk, ind[j, ] ] <- (A[ind_jk, ind[j, ] ] + coefBetaV)*geog
 	    	} #should diagonal be preserved? does it matter?
-	    coefBetaV[[k]] <- coefBeta*(len/sum(geography.matrix[[i]][,k]))
+	    coefBetaV[[k]] <- coefBeta*(len/sum(geography.object[[i]][,k]))
 	    coefBetaV[[j]] <- 0
-	    if(geography.matrix[[i]][match(ind_jk,ind)]==0){A[ind_jk, ind[k, ] ] <- 0} else{ 
-	    	geog<-geography.matrix[[i]][match(ind[k,],ind)]
+	    if(geography.object[[i]][match(ind_jk,ind)]==0){A[ind_jk, ind[k, ] ] <- 0} else{ 
+	    	geog<-geography.object[[i]][match(ind[k,],ind)]
 	    	A[ind_jk, ind[k, ] ] <- (A[ind_jk, ind[k, ] ] + coefBetaV)*geog
 	    	} #should diagonal be preserved? does it matter?
  
-	    coefBetaV[[j]] <- coefBeta*(len/sum(geography.matrix[[i]][,j]))
+	    coefBetaV[[j]] <- coefBeta*(len/sum(geography.object[[i]][,j]))
 	}
 	#diag(A)<-updated.alpha #whether this is included does affect result, but not sure how yet, should in theory contain the OU part of the model
 	diag(A)<-sapply(diag(A),function(x) {if(x==0){x<--(2* parameters['a'])}else{x<-x}})

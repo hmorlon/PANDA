@@ -428,6 +428,30 @@ lh <- -likelihoodDD(phylo,pPC1,par,model="DDlin")
 
 
 cleanEx()
+nameEx("likelihoodDD_geog")
+### * likelihoodDD_geog
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihoodDD
+### Title: Likelihood of a dataset under diversity-dependent models with
+###   biogeography.
+### Aliases: likelihoodDD
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+geography.object <- Anolis.data$geography.object
+
+# Compute the likelihood with geography using ML parameters for fit without geography
+par <- c(log(0.01153294),-0.0006692378)
+lh <- -likelihoodDD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+
+
+
+cleanEx()
 nameEx("likelihood_MC")
 ### * likelihood_MC
 

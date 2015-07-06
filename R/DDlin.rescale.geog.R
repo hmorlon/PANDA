@@ -66,11 +66,11 @@ for(i in 2:length(nodeDiff)){			##THIS LOOP checks for an error
 		}	
 	}
 
-if(length(geography.matrix)>0){
+if(length(geography.object)>0){
 count=1
 while(count<=length(nat)){
-	if(any(is.na(match(rownames(geography.matrix[[i]]),unlist(nat[[i]]))))){
-		stop("ERROR: Names of geography.matrix do not match nat list")}
+	if(any(is.na(match(rownames(geography.object[[i]]),unlist(nat[[i]]))))){
+		stop("ERROR: Names of geography.object do not match nat list")}
 		count=count+1
 		}}
 
@@ -86,7 +86,7 @@ for(i in 1:length(phylo$tip.label)){
 		int<-vector()
 		for(m in 1:length(N)){
 			if(rownames(V)[i]%in%unlist(nat[[m]])){ #this means that the lineage is present
-				geog.int<-sum(geography.matrix[[m]][match(rownames(V)[i],rownames(geography.matrix[[m]])),])			
+				geog.int<-sum(geography.object[[m]][match(rownames(V)[i],rownames(geography.object[[m]])),])			
 				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
 				int<-c(int,inta)
 			} else{
@@ -94,7 +94,7 @@ for(i in 1:length(phylo$tip.label)){
 				while(prev.branch%in%unlist(nat[[m]])==FALSE){
 					prev.branch<-mat[mat[,3]==mat[mat[,2]==prev.branch,1],2]
 					}
-				geog.int<-sum(geography.matrix[[m]][match(prev.branch,rownames(geography.matrix[[m]])),])			
+				geog.int<-sum(geography.object[[m]][match(prev.branch,rownames(geography.object[[m]])),])			
 				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
 				int<-c(int,inta)
 			}			
@@ -120,7 +120,7 @@ for(i in 1:length(phylo$tip.label)){
 		int<-vector()
 		for(m in 1:length(N)){
 			if(rownames(V)[i]%in%unlist(nat[[m]])){ #this means that the lineage is present
-				geog.int<-sum(geography.matrix[[m]][match(rownames(V)[i],rownames(geography.matrix[[m]])),])			
+				geog.int<-sum(geography.object[[m]][match(rownames(V)[i],rownames(geography.object[[m]])),])			
 				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
 				int<-c(int,inta)
 			} else{
@@ -128,7 +128,7 @@ for(i in 1:length(phylo$tip.label)){
 				while(prev.branch%in%unlist(nat[[m]])==FALSE){
 					prev.branch<-mat[mat[,3]==mat[mat[,2]==prev.branch,1],2]
 					}
-				geog.int<-sum(geography.matrix[[m]][match(prev.branch,rownames(geography.matrix[[m]])),])			
+				geog.int<-sum(geography.object[[m]][match(prev.branch,rownames(geography.object[[m]])),])			
 				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
 				int<-c(int,inta)
 			}			
