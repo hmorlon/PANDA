@@ -5,6 +5,29 @@ library('RPANDA')
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
+nameEx("Anolis.data")
+### * Anolis.data
+
+flush(stderr()); flush(stdout())
+
+### Name: Anolis.data
+### Title: Anolis dataset
+### Aliases: Anolis.data
+
+### ** Examples
+
+data(Anolis.data)
+plot(Anolis.data$phylo)
+print(Anolis.data$data)
+print(Anolis.data$geography.object[[16]])
+
+# Compute the likelihood that the S value is twice the ML estimate
+par <- c(0.0003139751, (2*-0.06387258))
+lh <- -likelihood_MC(phylo,pPC1,par)
+
+
+
+cleanEx()
 nameEx("BICompare")
 ### * BICompare
 
@@ -379,6 +402,74 @@ data(Calomys)
 tot_time <- max(node.age(Calomys)$ages)
 par_init <- c(10, 1, 1)
 #fit_sgd(Calomys, tot_time, par_init, f=11/13)
+
+
+
+cleanEx()
+nameEx("likelihoodDD")
+### * likelihoodDD
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihoodDD
+### Title: Likelihood of a dataset under diversity-dependent models.
+### Aliases: likelihoodDD
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+
+# Compute the likelihood that the r value is twice the ML estimate for the DDexp model
+par <- c(0.08148371, (2*-0.3223835))
+lh <- -likelihoodDD(phylo,pPC1,par,model="DDlin")
+
+
+
+cleanEx()
+nameEx("likelihood_MC")
+### * likelihood_MC
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_MC
+### Title: Likelihood of a dataset under the matching competition model.
+### Aliases: likelihood_MC
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+
+# Compute the likelihood that the S value is twice the ML estimate
+par <- c(0.0003139751, (2*-0.06387258))
+lh <- -likelihood_MC(phylo,pPC1,par)
+
+
+
+cleanEx()
+nameEx("likelihood_MC_geog")
+### * likelihood_MC_geog
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_MC_geog
+### Title: Likelihood of a dataset under the matching competition model
+###   with biogeography.
+### Aliases: likelihood_MC_geog
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+geography.object <-  Anolis.data$geography.object
+
+# Compute the likelihood with geography using ML parameters for fit without geography
+par <- c(0.0003139751, -0.06387258)
+lh <- -likelihood_MC_geog(phylo,pPC1,par,geography.object)
 
 
 

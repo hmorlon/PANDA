@@ -1,4 +1,5 @@
 likelihoodDD_geog<-function(phylo,data,par,geography.object,model=c("DDlin","DDexp")){
+  	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for S")}
 	sig2<-exp(par[1])
 	rate<-par[2]
 	if(model=="DDlin"){
