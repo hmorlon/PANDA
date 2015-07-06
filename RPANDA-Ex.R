@@ -433,10 +433,10 @@ nameEx("likelihoodDD_geog")
 
 flush(stderr()); flush(stdout())
 
-### Name: likelihoodDD
+### Name: likelihoodDD_geog
 ### Title: Likelihood of a dataset under diversity-dependent models with
 ###   biogeography.
-### Aliases: likelihoodDD
+### Aliases: likelihoodDD_geog
 
 ### ** Examples
 
