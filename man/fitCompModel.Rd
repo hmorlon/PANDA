@@ -76,21 +76,19 @@ In current version, the \code{S} parameter is restricted to take on negative val
 }
 \examples{
 
-data(Calomys)
-data(Calomys.geo)
+data(Anolis.data)
+geography.object<-Anolis.data$geography.object
+pPC1<-Anolis.data$data
+phylo<-Anolis.data$phylo
 
-# First, simulate data under the matching competition model
-\code{MC.data<-simCompModel(Calomys,pars=list(sig2=0.05,S=-1),root.value=0,Nsegments=1000,model="MC")}
+#Fit three models without biogeography to pPC1 data
+\code{MC.fit<-fitCompModel(phylo,pPC1,model="MC")}
+\code{DDlin.fit<-fitCompModel(phylo,pPC1,model="DDlin")}
+\code{DDexp.fit<-fitCompModel(phylo,pPC1,model="DDexp")}
 
-#Now fit three models to these data
-\code{MC.fit<-fitCompModel(Calomys,MC.data,model="MC")}
-\code{DDlin.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}
-\code{DDexp.fit<-fitCompModel(Calomys,MC.data,model="DDlin")}
-
-#Now fit models that incorporate biogeography (to see form of geography.object, examine Calomys.geo)
-##NOTE: Calomys.geo is purely illustrative and not based on actual data
-\code{MC.geo.fit<-fitCompModel(Calomys,MC.data,model="MC",geography.object=Calomys.geo)}
-\code{DDlin.geo.fit<-fitCompModel(Calomys,MC.data,model="DDlin",geography.object=Calomys.geo)}
-\code{DDexp.geo.fit<-fitCompModel(Calomys,MC.data,model="DDexp",geography.object=Calomys.geo)}
+#Now fit models that incorporate biogeography, NOTE these models take longer to fit
+\code{MC.geo.fit<-fitCompModel(phylo,pPC1,model="MC",geography.object=geography.object)}
+\code{DDlin.geo.fit<-fitCompModel(phylo,pPC1,model="DDlin",geography.object=geography.object)}
+\code{DDexp.geo.fit<-fitCompModel(phylo,pPC1,model="DDexp",geography.object=geography.object)}
 
 }
