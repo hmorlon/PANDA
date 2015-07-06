@@ -40,7 +40,7 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\code{b} or \code{r}).
 
 	The \code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.
+names that match the \code{$geography.object} object created with the \code{\link{CreateGeoObject}} function.
 
 }
 

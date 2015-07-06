@@ -31,7 +31,7 @@ a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages at
 	When specifying \code{par}, \code{sig2} must be listed before \code{S}.
 	
 	The \code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.
+names that match the \code{$geography.object} object created with the \code{\link{CreateGeoObject}} function.
 
 }
 
