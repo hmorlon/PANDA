@@ -2,7 +2,7 @@ require(geiger)
 require(phytools)
 require(deSolve)
 
-.VCV.rescale<-function(phylo,sigma,alpha,sterm){
+.VCV.rescale<-function(phylo,sigma,sterm){
 	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
 	parameters<-c(a=alpha,b=sigma,s=sterm) 
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS

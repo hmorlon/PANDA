@@ -1,4 +1,4 @@
-likelihood_MC_geog<-function(phylo,data,par,geography.matrix) #par[1]=sig2,par[2]=sterm
+likelihood_MC_geog<-function(phylo,data,par=c(sig2,S),geography.object) #par[1]=sig2,par[2]=sterm
 {
   	sig2<-abs(par[1]) 
   	sterm<-ifelse(sign(par[2])==-1,par[2],-par[2])

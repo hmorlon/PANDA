@@ -11,12 +11,12 @@ if(is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDexp"){
-		opt<-optim(c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD,phylo=phylo,data=data,model="DDexp",method=method)
+		opt<-optim(par=c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD,phylo=phylo,data=data,model="DDexp",method=method)
 		results<-list(lnL = -opt$value, sig2 = abs(opt$par[1]), r = opt$par[2], aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDlin"){
-		opt<-optim(c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD,phylo=phylo,data=data,model="DDlin",method=method)
+		opt<-optim(par=c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD,phylo=phylo,data=data,model="DDlin",method=method)
 		results<-list(lnL = -opt$value, sig2 = abs(opt$par[1]), b = opt$par[2], aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, convergence = opt$convergence)
 		return(results)
 		}
@@ -26,17 +26,17 @@ if(!is.null(geography.object)){
 #check to make sure length matches length of nodeDiff
 	if(length(geography.object)!=phylo$Nnode){stop("geography object cannot have more or fewer components than internode intervals in phylo")}
 	if(model=="MC"){
-		opt<-optim(par=c(0.5,-0.45),likelihood_MC_geog,phylo=phylo,geography.matrix=geography.object,data=data,method=method)
+		opt<-optim(par=c(0.5,-0.45),likelihood_MC_geog,phylo=phylo,geography.object=geography.object,data=data,method=method)
 		results<-list(lnL = -opt$value, sig2 = abs(opt$par[1]), S = opt$par[2], aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDexp"){
-		opt<-optim(c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD_geog,phylo=phylo,geography.matrix=geography.object,data=data,model="DDexp",method=method)
+		opt<-optim(par=c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDexp",method=method)
 		results<-list(lnL = -opt$value, sig2 = exp(opt$par[1]), r = opt$par[2], aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDlin"){
-		opt<-optim(c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD_geog,phylo=phylo,geography.matrix=geography.object,data=data,model="DDlin",method=method)
+		opt<-optim(par=c(var(data)/max(nodeHeights(phylo)),0),likelihoodDD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDlin",method=method)
 		results<-list(lnL = -opt$value, sig2 = exp(opt$par[1]), b = opt$par[2], aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, convergence = opt$convergence)
 		return(results)
 		}

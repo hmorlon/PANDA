@@ -1,4 +1,4 @@
-likelihoodDD_geog<-function(phylo,par,data,geography.matrix,model=c("DDlin","DDexp")){
+likelihoodDD_geog<-function(phylo,data,par,geography.object,model=c("DDlin","DDexp")){
 	sig2<-exp(par[1])
 	rate<-par[2]
 	if(model=="DDlin"){

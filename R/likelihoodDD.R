@@ -1,4 +1,4 @@
-likelihoodDD<-function(phylo,par,data,model=c("DDlin","DDexp")){
+likelihoodDD<-function(phylo,data,par,model=c("DDlin","DDexp")){
 	sig2<-abs(par[1])
 	rate<-par[2]
 	if(model=="DDlin"){
