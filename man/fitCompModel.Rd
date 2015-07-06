@@ -82,13 +82,13 @@ pPC1<-Anolis.data$data
 phylo<-Anolis.data$phylo
 
 #Fit three models without biogeography to pPC1 data
-\code{MC.fit<-fitCompModel(phylo,pPC1,model="MC")}
-\code{DDlin.fit<-fitCompModel(phylo,pPC1,model="DDlin")}
-\code{DDexp.fit<-fitCompModel(phylo,pPC1,model="DDexp")}
+MC.fit<-fitCompModel(phylo,pPC1,model="MC")
+DDlin.fit<-fitCompModel(phylo,pPC1,model="DDlin")
+DDexp.fit<-fitCompModel(phylo,pPC1,model="DDexp")
 
 #Now fit models that incorporate biogeography, NOTE these models take longer to fit
-\code{MC.geo.fit<-fitCompModel(phylo,pPC1,model="MC",geography.object=geography.object)}
-\code{DDlin.geo.fit<-fitCompModel(phylo,pPC1,model="DDlin",geography.object=geography.object)}
-\code{DDexp.geo.fit<-fitCompModel(phylo,pPC1,model="DDexp",geography.object=geography.object)}
+MC.geo.fit<-fitCompModel(phylo,pPC1,model="MC",geography.object=geography.object)
+DDlin.geo.fit<-fitCompModel(phylo,pPC1,model="DDlin",geography.object=geography.object)
+DDexp.geo.fit<-fitCompModel(phylo,pPC1,model="DDexp",geography.object=geography.object)
 
 }

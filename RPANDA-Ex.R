@@ -79,6 +79,46 @@ plot(Cetacea)
 
 
 cleanEx()
+nameEx("CreateGeoObject")
+### * CreateGeoObject
+
+flush(stderr()); flush(stdout())
+
+### Name: CreateGeoObject
+### Title: Create blank geography object
+### Aliases: CreateGeoObject
+
+### ** Examples
+
+
+#To create a geography.object
+tree<-rcoal(5)
+tree_internal.nodes<-CreateGeoObject(tree)
+geography.matrix<-tree_internal.nodes$geography.object
+geography.matrix[[1]][,1]<-c(1,0)
+geography.matrix[[1]][,2]<-c(0,1)
+geography.matrix[[2]][,1]<-c(1,1,0)
+geography.matrix[[2]][,2]<-c(1,1,0)
+geography.matrix[[2]][,3]<-c(0,0,1)
+geography.matrix[[3]][,1]<-c(1,1,0,0)
+geography.matrix[[3]][,2]<-c(1,1,0,0)
+geography.matrix[[3]][,3]<-c(0,0,1,1)
+geography.matrix[[3]][,4]<-c(0,0,1,1)
+geography.matrix[[4]][,1]<-c(1,1,1,0,0)
+geography.matrix[[4]][,2]<-c(1,1,1,0,0)
+geography.matrix[[4]][,3]<-c(1,1,1,0,0)
+geography.matrix[[4]][,4]<-c(0,0,0,1,1)
+geography.matrix[[4]][,5]<-c(0,0,0,1,1)
+geography.matrix[[5]][,1]<-c(1,1,1,0,0,0)
+geography.matrix[[5]][,2]<-c(1,1,1,0,0,0)
+geography.matrix[[5]][,3]<-c(1,1,1,0,0,0)
+geography.matrix[[5]][,4]<-c(0,0,0,1,1,1)
+geography.matrix[[5]][,5]<-c(0,0,0,1,1,1)
+geography.matrix[[5]][,6]<-c(0,0,0,1,1,1)
+
+
+
+cleanEx()
 nameEx("InfTemp")
 ### * InfTemp
 
@@ -166,6 +206,38 @@ flush(stderr()); flush(stdout())
 
 data(Phyllostomidae_genera)
 print(Phyllostomidae_genera)
+
+
+
+cleanEx()
+nameEx("fitCompModel")
+### * fitCompModel
+
+flush(stderr()); flush(stdout())
+
+### Name: fitCompModel
+### Title: Fit models of trait evolution incorporating interspecific
+###   interactions
+### Aliases: fitCompModel
+
+### ** Examples
+
+
+data(Anolis.data)
+geography.object<-Anolis.data$geography.object
+pPC1<-Anolis.data$data
+phylo<-Anolis.data$phylo
+
+#Fit three models without biogeography to pPC1 data
+MC.fit<-fitCompModel(phylo,pPC1,model="MC")
+DDlin.fit<-fitCompModel(phylo,pPC1,model="DDlin")
+DDexp.fit<-fitCompModel(phylo,pPC1,model="DDexp")
+
+#Now fit models that incorporate biogeography, NOTE these models take longer to fit
+MC.geo.fit<-fitCompModel(phylo,pPC1,model="MC",geography.object=geography.object)
+DDlin.geo.fit<-fitCompModel(phylo,pPC1,model="DDlin",geography.object=geography.object)
+DDexp.geo.fit<-fitCompModel(phylo,pPC1,model="DDexp",geography.object=geography.object)
+
 
 
 
@@ -439,8 +511,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-trees<-TESS::sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
-res<-JSDtree(trees)
+trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
+res<-JSDtree(trees,alpha=0.8)
 #plot_JSDtree(res)
 
 
@@ -554,6 +626,34 @@ flush(stderr()); flush(stdout())
 data(Cetacea)
 result <- spectR(Cetacea)
 #plot_spectR(result)
+
+
+
+cleanEx()
+nameEx("simCompModel")
+### * simCompModel
+
+flush(stderr()); flush(stdout())
+
+### Name: simCompModel
+### Title: Recursive simulation (root-to-tip) of competition models
+### Aliases: simCompModel
+
+### ** Examples
+
+
+data(Cetacea)
+
+# Simulate data under the matching competition model
+MC.data<-simCompModel(Cetacea,pars=list(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
+
+# Simulate data under the diversity dependent linear model
+DDlin.data<-simCompModel(Cetacea,pars=list(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
+
+# Simulate data under the diversity dependent linear model
+DDexp.data<-simCompModel(Cetacea,pars=list(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
+
+
 
 
 
