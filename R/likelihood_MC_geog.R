@@ -1,4 +1,4 @@
-likelihood_MC_geog<-function(phylo,data,par=c(sig2,S),geography.object) #par[1]=sig2,par[2]=sterm
+likelihood_MC_geog<-function(phylo,data,par,geography.object) #par[1]=sig2,par[2]=sterm
 {
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for S")}
   	sig2<-abs(par[1]) 

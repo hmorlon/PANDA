@@ -1,17 +1,11 @@
-simCompModel<-function(phylo,pars=list(sig2,S,b,r),root.value,Nsegments=1000,model="MC,DDexp,DDlin"){
+simCompModel<-function(phylo,pars,root.value,Nsegments=1000,model="MC,DDexp,DDlin"){
 #return error if non-ultrametric tree
 if(phylo$Nnode!=(length(phylo$tip.label)-1)){stop("phylo object must be ultrametric")}
-
-if(is.null(pars$sig2)){stop("specify sig2 value for model")}
-if(is.null(pars$S)&&is.null(pars$r)&&is.null(pars$b)){stop("parameter value for specified model must be supplied")}
-if(model=="MC" && is.null(pars$S)){stop("S must be specified for matching competition model")}
-if(model=="DDlin" && is.null(pars$b)){stop("b must be specified for linear diversity dependent model")}
-if(model=="DDexp" && is.null(pars$r)){stop("r must be specified for exponential diversity dependent model")}
-sig2=pars$sig2
-sterm=pars$S
-slope=pars$b
-r=pars$r
-
+if(length(par)!=2){stop("pars must be a vector with a value for sig2 and either S for MC model, r for DDexp model, or b for DDlin model")}
+if(model=="MC"){sterm=pars[2]}
+if(model=="DDlin"){slope=pars[2]}
+if(model=="DDexp"){r=pars[2]}
+sig2=pars[1]
 
 paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
 paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS
@@ -94,7 +88,7 @@ if(is.na(match(model,c("MC","DDexp","DDlin")))){stop("model not specified correc
 	
 if(model=="DDexp"){
 	if((sig2/(sig2*exp(r*length(phylo$tip.label))))>=1e3){warning("r parameter leads to sig2 at tips that is 1000x smaller than root value, consider changing")}
-simvalue<-function(sig2,start.value,seglen,r,branches){
+simvalueDDexp<-function(sig2,start.value,seglen,r,branches){
 	x<-start.value+rnorm(1,0,sqrt(sig2*exp(r*branches)*seglen))
 	return(x)
 	}
@@ -102,14 +96,14 @@ simvalue<-function(sig2,start.value,seglen,r,branches){
 		
 if(model=="DDlin"){
 	if(sig2+(slope*length(phylo$tip.label))<=0){warning("b parameter leads to sig2=0 by the tips, consider changing")}
-simvalue<-function(sig2,start.value,seglen,slope,branches){
+simvalueDDlin<-function(sig2,start.value,seglen,slope,branches){
 	x<-start.value+rnorm(1,0,sqrt(max((sig2+(slope*branches)),0)*seglen))
 	return(x)
 	}
 	}
 	
 if(model=="MC"){
-simvalue<-function(sig2,sterm,mu,start.value,seglen){
+simvalueMC<-function(sig2,sterm,mu,start.value,seglen){
 	x<-start.value+sterm*(mu-start.value)*seglen+rnorm(1,0,sqrt(sig2*seglen))
 	return(x)
 	}
@@ -162,13 +156,13 @@ for(i in 1:phylo$Nnode){ ##for each node interval
 			segsize<-diff(masterseg[[i]][[1]])[k]
 			mu.value<-tail(mu,n=1)
 			if(model=="DDexp" ){
-			sv<-simvalue(sig2,start.value,segsize,r,branchespresent)
+			sv<-simvalueDDexp(sig2,start.value,segsize,r,branchespresent)
 			}
 			if(model=="DDlin" ){
-			sv<-simvalue(sig2,start.value,segsize,slope,branchespresent)
+			sv<-simvalueDDlin(sig2,start.value,segsize,slope,branchespresent)
 			}
 			if(model=="MC"){
-			sv<-simvalue(sig2,sterm,mu.value,start.value,segsize)}
+			sv<-simvalueMC(sig2,sterm,mu.value,start.value,segsize)}
 			masterbranch[[i]][[j]]<-c(masterbranch[[i]][[j]],sv)				
 			}
 		}
