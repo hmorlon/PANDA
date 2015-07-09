@@ -8,7 +8,7 @@ Likelihood of a dataset under the matching competition model.
 Computes the likelihood of a dataset under the matching competition model with specified \code{sigma2} and \code{S} values. 
 }
 \usage{
-likelihood_MC(phylo, data, par=c(sig2,S))
+likelihood_MC(phylo, data, par)
 }
 
 \arguments{
@@ -20,7 +20,7 @@ an object of type 'phylo' (see ape documentation)
 a named vector of continuous data with names corresponding to \code{phylo$tip.label}
 }
  \item{par}{
-a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model)
+a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model), in that order
 }
 }
 

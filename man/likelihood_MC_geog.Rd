@@ -8,7 +8,7 @@ Likelihood of a dataset under the matching competition model with biogeography.
 Computes the likelihood of a dataset under the matching competition model with specified \code{sigma2} and \code{S} values and with a \code{geography.object} formed using \code{\link{CreateGeoObject}}. 
 }
 \usage{
-likelihood_MC_geog(phylo, data, par=c(sig2,S),geography.object)
+likelihood_MC_geog(phylo, data, par,geography.object)
 }
 
 \arguments{
@@ -20,7 +20,7 @@ an object of type 'phylo' (see ape documentation)
 a named vector of continuous data with names corresponding to \code{phylo$tip.label}
 }
  \item{par}{
-a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model)
+a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model), in that order
 }
   \item{geography.object}{
 a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages at each internode interval (see details)}

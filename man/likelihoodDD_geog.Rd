@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihoodDD_geog(phylo, data, par=c(sig2,slope),geography.object,model=c("DDlin","DDexp"))
+likelihoodDD_geog(phylo, data, par,geography.object,model=c("DDlin","DDexp"))
 }
 
 \arguments{
@@ -22,7 +22,7 @@ a named vector of continuous data with names corresponding to \code{phylo$tip.la
 }
 
  \item{par}{
-a vector listing a value for \code{sig2} and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model).
+a vector listing a value for \code{log(sig2)} (see Note) and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model), in that order.
 }
 
   \item{geography.object}{
@@ -37,7 +37,7 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\code{b} or \code{r}).
+	When specifying \code{par}, \code{log(sig2)} (see Note) must be listed before the slope parameter (\code{b} or \code{r}).
 
 	The \code{geography.object} should be a list of matrices with row and column
 names that match the \code{$geography.object} object created with the \code{\link{CreateGeoObject}} function.

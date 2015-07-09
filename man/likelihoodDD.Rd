@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihoodDD(phylo, data, par=c(sig2,slope),model=c("DDlin","DDexp"))
+likelihoodDD(phylo, data, par,model=c("DDlin","DDexp"))
 }
 
 \arguments{
@@ -22,7 +22,7 @@ a named vector of continuous data with names corresponding to \code{phylo$tip.la
 }
 
  \item{par}{
-a vector listing a value for \code{sig2} and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model).
+a vector listing a value for \code{sig2} and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model), in that order.
 }
 
  \item{model}{
