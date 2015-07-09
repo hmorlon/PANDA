@@ -9,7 +9,7 @@ Simulates datasets for a given phylogeny under matching competition (MC), divers
 }
 \usage{
 
-simCompModel(phylo,pars=list(sig2,S,b,r),root.value,Nsegments=1000,model="MC,DDexp,DDlin")
+simCompModel(phylo,pars,root.value,Nsegments=1000,model="MC,DDexp,DDlin")
 
 }
 
@@ -63,13 +63,13 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 data(Cetacea)
 
 # Simulate data under the matching competition model
-MC.data<-simCompModel(Cetacea,pars=list(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
+MC.data<-simCompModel(Cetacea,pars=c(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
 
 # Simulate data under the diversity dependent linear model
-DDlin.data<-simCompModel(Cetacea,pars=list(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
+DDlin.data<-simCompModel(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
 
 # Simulate data under the diversity dependent linear model
-DDexp.data<-simCompModel(Cetacea,pars=list(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
+DDexp.data<-simCompModel(Cetacea,pars=c(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
 
 
 }
