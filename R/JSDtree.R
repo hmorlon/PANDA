@@ -124,10 +124,6 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 #cluster JSD matrix on medoids
 clustersMedoid <- pamk(JSD)
 
-#cluster JSD matrix hierarchically
-clustersHierarchy <- pvclust(JSD)
-	plot(clustersHierarchy,cex=0.5)
-		pvrect(clustersHierarchy,alpha=alpha)
 
 #print matrix		
 res <- list(JSD=JSD, clustersMedoid=clustersMedoid$nc, cluster_assignments=clustersMedoid[[1]][[3]])
