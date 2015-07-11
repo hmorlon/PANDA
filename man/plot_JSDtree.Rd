@@ -5,10 +5,10 @@
 Heatmap comparison of phylogenies
 }
 \description{
-Plots a hierarchical cluster and heatmap based on the Jensen-Shannon distance between more than 10 trees.
+Plots a hierarchical cluster with bootstrap support and heatmap based on the Jensen-Shannon distance between more than 10 trees.
 }
 \usage{
-plot_JSDtree(JSDtree)
+plot_JSDtree(JSDtree,alpha)
 }
 
 \arguments{
@@ -19,7 +19,7 @@ an object of class 'JSDtree', output of the 'JSDtree' function
 
 
 \value{
-a plot of heatmap with hierarchical cluster
+a plot of heatmap with hierarchical cluster and plot of hierarchical cluster with approximately unbiased (AU) and boostrap probability (BP) percentage support.
 }
 
 \author{E Lewitus}
