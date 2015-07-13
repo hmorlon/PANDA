@@ -1,5 +1,5 @@
 #get Jensen-Shannon divergence	
-JSDtree <- function(phylo,meth=c("standard"),alpha){
+JSDtree <- function(phylo,meth=c("standard")){
 	dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
 	KLD <- function(x,y) sum(x*log(x/y))
 	JSD <- function(x,y) sqrt(0.5*KLD(x,(x+y)/2)+0.5*KLD(y,(x+y)/2))
@@ -126,7 +126,7 @@ clustersMedoid <- pamk(JSD)
 
 
 #print matrix		
-res <- list(JSD=JSD, clustersMedoid=clustersMedoid$nc, cluster_assignments=clustersMedoid[[1]][[3]])
+res <- list(JSD=JSD, clusters=clustersMedoid$nc, cluster_assignments=clustersMedoid[[1]][[3]])
 class(res) <- "JSDtree"
 return(res)
 

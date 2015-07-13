@@ -15,6 +15,9 @@ plot_JSDtree(JSDtree,alpha)
   \item{JSDtree}{
 an object of class 'JSDtree', output of the 'JSDtree' function
 }
+ \item{alpha}{
+   	the confidence value for demarcating clusters in the hierarchical clustering plot
+	}
 	}
 
 
@@ -30,6 +33,6 @@ a plot of heatmap with hierarchical cluster and plot of hierarchical cluster wit
 
 \examples{
 trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
-res<-JSDtree(trees,alpha=0.8)
-#plot_JSDtree(res)
+res<-JSDtree(trees)
+#plot_JSDtree(res,alpha=0.8)
 }
