@@ -26,7 +26,7 @@ the method used to compute the spectral density, which can either be "standard",
 	\item{JSD}{a matrix providing the Jensen-Shannon distance values between phylogeny pairs}
 	\item{clusters}{the optimal number of clusters around medoids (see pamk documentation)}
 	\item{cluster_assignments}{assignments of trees to clusters} 
-	\item{cluster_support}{cluster to which each tree belongs, the most similar cluster, and the silhouette width of the observation (see silhouette documentation)}
+	\item{cluster_support}{cluster to which each tree belongs, the most similar cluster, and the silhouette width of the observation; average silhouette width for each cluster; average silhouette width across all clusters (see silhouette documentation)}
 	}
 
 
