@@ -6,7 +6,7 @@ The Jensen-Shannon distance metric between phylogenies
 }
 
 \description{
-Computes the Jensen-Shannon distance metric between spectral density profiles of phylogenies, and clusters phylogenies using k-means clustering. 
+Computes the Jensen-Shannon distance metric between spectral density profiles of phylogenies, and clusters phylogenies using k-medoids clustering. 
 }
 
 \usage{
@@ -26,6 +26,7 @@ the method used to compute the spectral density, which can either be "standard",
 	\item{JSD}{a matrix providing the Jensen-Shannon distance values between phylogeny pairs}
 	\item{clusters}{the optimal number of clusters around medoids (see pamk documentation)}
 	\item{cluster_assignments}{assignments of trees to clusters} 
+	\item{cluster_support}{cluster to which each tree belongs, the most similar cluster, and the silhouette width of the observation (see silhouette documentation)}
 	}
 
 
