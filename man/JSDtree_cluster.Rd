@@ -27,7 +27,6 @@ an object of class 'JSDtree', output of the 'JSDtree' function
 	\item{clusters}{the optimal number of clusters around medoids (see pamk documentation)}
 	\item{cluster_assignments}{assignments of trees to clusters} 
 	\item{cluster_support}{cluster to which each tree belongs, the most similar cluster, and the silhouette width of the observation; average silhouette width for each cluster; average silhouette width across all clusters (see silhouette documentation)}
-
 }
 
 \author{E Lewitus}
