@@ -22,7 +22,7 @@ an object of class 'JSDtree', output of the 'JSDtree' function
 
 
 \value{
-	\item{hierarchical plot}a plot of hierarchical cluster with approximately unbiased (AU) and boostrap probability (BP) percentage support.
+	\item{hierarchical plot}{a plot of hierarchical cluster with approximately unbiased (AU) and boostrap probability (BP) percentage support}
 	\item{heatmap}{a heatmap plot of Jensen-Shannon distances}
 	\item{clusters}{the optimal number of clusters around medoids (see pamk documentation)}
 	\item{cluster_assignments}{assignments of trees to clusters} 
