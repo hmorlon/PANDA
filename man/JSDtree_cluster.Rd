@@ -22,7 +22,12 @@ an object of class 'JSDtree', output of the 'JSDtree' function
 
 
 \value{
-a plot of heatmap with hierarchical cluster and plot of hierarchical cluster with approximately unbiased (AU) and boostrap probability (BP) percentage support.
+	\item{hierarchical plot}a plot of hierarchical cluster with approximately unbiased (AU) and boostrap probability (BP) percentage support.
+	\item{heatmap}{a heatmap plot of Jensen-Shannon distances}
+	\item{clusters}{the optimal number of clusters around medoids (see pamk documentation)}
+	\item{cluster_assignments}{assignments of trees to clusters} 
+	\item{cluster_support}{cluster to which each tree belongs, the most similar cluster, and the silhouette width of the observation; average silhouette width for each cluster; average silhouette width across all clusters (see silhouette documentation)}
+
 }
 
 \author{E Lewitus}
@@ -34,5 +39,5 @@ a plot of heatmap with hierarchical cluster and plot of hierarchical cluster wit
 \examples{
 trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
 res<-JSDtree(trees)
-#plot_JSDtree(res,alpha=0.8)
+#plot_JSDtree(res,alpha=0.9)
 }
