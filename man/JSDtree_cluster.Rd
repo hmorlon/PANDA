@@ -5,7 +5,7 @@
 Heatmap comparison, hierarchical clustering, and k-medoid clustering of phylogenies
 }
 \description{
-Plots a hierarchical cluster with bootstrap support and heatmap, and prints k-medoid cluster assignments and support, based on the Jensen-Shannon distance between more than 10 trees.
+Plots a hierarchical cluster with bootstrap support, plots a heatmap, and prints k-medoid cluster assignments and support based on the Jensen-Shannon distance between more than 10 trees.
 }
 \usage{
 JSDtree_cluster(JSDtree,alpha)
