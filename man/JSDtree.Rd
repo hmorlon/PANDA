@@ -6,7 +6,7 @@ The Jensen-Shannon distance metric between phylogenies
 }
 
 \description{
-Computes the Jensen-Shannon distance metric between spectral density profiles of phylogenies, and clusters phylogenies using k-medoids clustering. 
+Computes the Jensen-Shannon distance metric between spectral density profiles of phylogenies. 
 }
 
 \usage{
@@ -34,7 +34,7 @@ Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising
 \author{E Lewitus}
 
 \seealso{
-\code{\link{plot_JSDtree}}, \code{\link{spectR}}, \code{\link{BICompare}}
+\code{\link{JSDtree_cluster}}, \code{\link{spectR}}, \code{\link{BICompare}}
 }
 
 
