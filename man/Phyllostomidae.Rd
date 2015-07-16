@@ -20,6 +20,6 @@ Rolland, J., Condamine, F. L., Jiguet, F., & Morlon, H. (2014) Faster speciation
 \examples{
 data(Phyllostomidae)
 print(Phyllostomidae)
-plot(Phyllostomidae)
+#plot(Phyllostomidae)
 }
 \keyword{datasets}

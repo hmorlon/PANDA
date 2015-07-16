@@ -2,7 +2,7 @@
 \alias{JSDtree}
 
 \title{
-The Jensen-Shannon distance metric between phylogenies
+Jensen-Shannon distance between phylogenies
 }
 
 \description{
@@ -17,21 +17,19 @@ JSDtree(phylo,meth=c("standard"))
   \item{phylo}{
 a list of objects of type 'phylo' (see ape documentation)}
    \item{meth}{
-the method used to compute the spectral density, which can either be "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density (see the associated paper for an explanation)}
+the method used to compute the spectral density, which can either be "standard", "normal1", or "normal2". if set to "normal1", computes the spectral density normalized to the degree matrix. if set to "normal2", computes the spectral density normalized to the number of eigenvalues. if set to "standard", computes the unnormalized version of the spectral density (see the associated paper for an explanation)}
    }
 
 
 \value{
-	a list with the following components:
-	\item{JSD}{a matrix providing the Jensen-Shannon distance values between phylogeny pairs}
+	a matrix providing the Jensen-Shannon distance values between phylogeny pairs
 		}
 
+\author{E Lewitus}
 
 \references{
-Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising and comparing phylogenies
+Lewitus E., Morlon H. A graph-theoretical approach to characterising and comparing phylogenies (submitted)
 }
-
-\author{E Lewitus}
 
 \seealso{
 \code{\link{JSDtree_cluster}}, \code{\link{spectR}}, \code{\link{BICompare}}
@@ -39,6 +37,6 @@ Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising
 
 
 \examples{
-trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
+trees<-TESS::sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
 JSDtree(trees)
 }

@@ -122,8 +122,7 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 }
 
 #print matrix		
-res <- list(JSD=JSD)
-class(res) <- "JSDtree"
-return(res)
+
+return(JSD)
 
 }	

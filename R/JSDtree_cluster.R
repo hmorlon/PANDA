@@ -1,23 +1,22 @@
-JSDtree_cluster <- function(JSDtree,alpha)
+JSDtree_cluster <- function(JSDtree,alpha=0.8)
 {
-  if (!inherits(JSDtree, "JSDtree"))
-      stop("object \"JSDtree\" is not of class \"JSDtree\"")
-
-#cluster JSD matrix on medoids
-clustersMedoid <- pamk(JSDtree$JSD)
-	clustersMedoidSupport <- pam(JSDtree$JSD,clustersMedoid$nc)
 
 #plot heatmap
-heatmap(JSDtree$JSD,symm=T)
+heatmap(JSDtree,symm=T)
 
 #plot hierarchical clustering with bootstrap support
 quartz()
-	clustersHierarchy <- pvclust(JSDtree$JSD)
+	clustersHierarchy <- pvclust(JSDtree)
 	plot(clustersHierarchy,cex=0.3)
-		pvrect(clustersHierarchy,alpha=alpha)
+	pvrect(clustersHierarchy,alpha=alpha)
+	
+#cluster JSD matrix on medoids
+clustersMedoid <- pamk(JSDtree)
+clustersMedoidSupport <- pam(JSDtree,clustersMedoid$nc)
+
 
 #print clustersMedoid
-res	<- list(clusters=clustersMedoid$nc, cluster_assignments=clustersMedoid[[1]][[3]],cluster_support=clustersMedoidSupport[7])
+res	<- list(clusters=clustersMedoid$nc, cluster_assignments=clustersMedoid[[1]][[3]],cluster_support=clustersMedoidSupport[[7]])
 return(res)
 
   }
