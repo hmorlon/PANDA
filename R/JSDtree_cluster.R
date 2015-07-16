@@ -13,7 +13,7 @@ heatmap(JSDtree$JSD,symm=T)
 #plot hierarchical clustering with bootstrap support
 quartz()
 	clustersHierarchy <- pvclust(JSDtree$JSD)
-	plot(clustersHierarchy,cex=0.5)
+	plot(clustersHierarchy,cex=0.3)
 		pvrect(clustersHierarchy,alpha=alpha)
 
 #print clustersMedoid
