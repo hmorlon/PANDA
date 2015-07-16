@@ -38,7 +38,7 @@ optimization to use to maximize the likelihood function, see \emph{optim} for mo
   \item{par}{a numeric vector of estimated values of b (birth), b-d (growth) and nu (mutation)}
 }
 
-\details{While b-d and nu can in general be well estimated, the likelihood surface is quite flat whith respect to b, such that the estimated b can vary a lot depending on the choice of the initial parameter values. Estimates of b should not be trusted.
+\note{While b-d and nu can in general be well estimated, the likelihood surface is quite flat whith respect to b, such that the estimated b can vary a lot depending on the choice of the initial parameter values. Estimates of b should not be trusted.
 	}
 
 \author{

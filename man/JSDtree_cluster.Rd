@@ -25,7 +25,7 @@ a matrix of distances between phylogenie pairs, typically the output of the JSDt
 	\item{cluster_support}{a list with the following components: widths: a table specifying the cluster to which each tree belongs, the neighbor (i.e. most similar) cluster, and the silhouette width of the observation (see silhouette documentation); clus.avg.widths: average silhouette width for each cluster; vg.width: average silhouette width across all clusters} 
 		}
 
-\details{
+\note{
 	The k-medoids clustering may not work with less than 10 trees}
 
 \author{E Lewitus}
