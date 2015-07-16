@@ -1,14 +1,14 @@
-\name{plot_JSDtree}
-\alias{plot_JSDtree}
+\name{JSDtree_cluster}
+\alias{JSDtree_cluster}
 
 \title{
-Heatmap comparison of phylogenies
+Heatmap comparison, hierarchical clustering, and k-medoid clustering of phylogenies
 }
 \description{
 Plots a hierarchical cluster with bootstrap support and heatmap based on the Jensen-Shannon distance between more than 10 trees.
 }
 \usage{
-plot_JSDtree(JSDtree,alpha)
+JSDtree_cluster(JSDtree,alpha)
 }
 
 \arguments{
@@ -38,5 +38,5 @@ an object of class 'JSDtree', output of the 'JSDtree' function
 \examples{
 trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
 res<-JSDtree(trees)
-#plot_JSDtree(res,alpha=0.9)
+#JSDtree_cluster(res,alpha=0.9)
 }

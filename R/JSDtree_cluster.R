@@ -1,4 +1,4 @@
-plot_JSDtree <- function(JSDtree,alpha)
+JSDtree_cluster <- function(JSDtree,alpha)
 {
   if (!inherits(JSDtree, "JSDtree"))
       stop("object \"JSDtree\" is not of class \"JSDtree\"")
