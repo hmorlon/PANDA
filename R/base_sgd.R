@@ -3,6 +3,8 @@
 # same notations as those used in the paper
 ##########
 
+essais pour Marc
+
 
 g <- function(t,b,d)
 {
