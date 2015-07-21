@@ -1,4 +1,4 @@
-JSDtree_cluster <- function(JSDtree,alpha=0.8)
+JSDtree_cluster <- function(JSDtree,alpha=0.9)
 {
 
 #plot heatmap

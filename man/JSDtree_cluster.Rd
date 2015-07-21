@@ -6,7 +6,7 @@ Clustering of phylogenies
 }
 \description{Clusters phylogenies using hierarchical and k-medoids clustering}
 \usage{
-JSDtree_cluster(JSDtree,alpha)
+JSDtree_cluster(JSDtree,alpha=0.9)
 }
 
 \arguments{
@@ -14,7 +14,7 @@ JSDtree_cluster(JSDtree,alpha)
 a matrix of distances between phylogenie pairs, typically the output of the JSDtree function when the distance is measured as the Jensen-Shannon distance 
 }
  \item{alpha}{
-   	the confidence value for demarcating clusters in the hierarchical clustering plot
+   	the confidence value for demarcating clusters in the hierarchical clustering plot; the default is 0.9
 	}
 	}
 
