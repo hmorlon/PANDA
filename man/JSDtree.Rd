@@ -37,6 +37,6 @@ Lewitus E., Morlon H. A graph-theoretical approach to characterising and compari
 
 
 \examples{
-trees<-TESS::sim.globalBiDe.age(n=10,age=10,0.15,0.05,MRCA=TRUE)
+trees<-TESS::tess.sim.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
 JSDtree(trees)
 }

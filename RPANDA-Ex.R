@@ -165,8 +165,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
-JSDtree(trees,alpha=0.8)
+trees<-TESS::tess.sim.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
+JSDtree(trees,alpha=0.9)
 
 
 
@@ -620,8 +620,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-trees<-TESS::sim.globalBiDe.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
-res<-JSDtree(trees,alpha=0.8)
+trees<-TESS::tess.sim.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
+res<-JSDtree(trees,alpha=0.9)
 #plot_JSDtree(res)
 
 
