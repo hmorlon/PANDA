@@ -38,7 +38,7 @@ a matrix of distances between phylogenie pairs, typically the output of the JSDt
 }
 
 \examples{
-trees<-TESS::tess.sime.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
+trees<-TESS::tess.sim.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
 res<-JSDtree(trees)
 #JSDtree_cluster(res,alpha=0.9)
 }
