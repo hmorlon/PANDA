@@ -1,7 +1,7 @@
 \name{sim_sgd}
 \alias{sim_sgd}
 \title{
-Algorithm for simulating a phylogenetic tree under the SGD model. Test ?
+Algorithm for simulating a phylogenetic tree under the SGD model
 }
 \description{
 Simulates a phylogeny arising from the SGD model with exponentially increasing metapopulation size. Notations follow Manceau et al. (2015).

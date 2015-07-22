@@ -1,7 +1,7 @@
 \name{likelihood_sgd}
 \alias{likelihood_sgd}
 \title{
-Likelihood of a phylogeny under the SGD model. Test ?
+Likelihood of a phylogeny under the SGD model
 }
 \description{
 Computes the likelihood of a phylogeny under the SGD model with exponential increasing of the metacommunity, and potentially missing extant species. Notations follow Manceau et al. (2015).
