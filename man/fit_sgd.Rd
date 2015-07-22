@@ -1,7 +1,7 @@
 \name{fit_sgd}
 \alias{fit_sgd}
 \title{
-Maximum likelihood fit of the SGD model
+Maximum likelihood fit of the SGD model. Test ?
 }
 
 \description{
