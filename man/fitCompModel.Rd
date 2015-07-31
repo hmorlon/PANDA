@@ -63,7 +63,7 @@ names that match the \code{$geography.object} object created within the \code{\l
 
 \author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
 
-		Julien Clavel \href{mailto:clavel@biologie.ens.fr}{clavel@biologie.ens.fr}
+		Julien Clavel 
 }
 
 \seealso{
