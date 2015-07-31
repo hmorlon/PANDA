@@ -6,7 +6,7 @@
 RPANDA
 }
 \description{
-Implements eco-evolutionary analyses on phylogenetic trees
+Implements macroevolutionary analyses on phylogenetic trees
 }
 \details{
 \tabular{ll}{
