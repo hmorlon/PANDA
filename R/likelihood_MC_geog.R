@@ -2,7 +2,7 @@ likelihood_MC_geog<-function(phylo,data,par,geography.object) #par[1]=sig2,par[2
 {
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for S")}
   	sig2<-abs(par[1]) 
-  	sterm<-ifelse(sign(par[2])==-1,par[2],-par[2])
+  	sterm<--abs(par[2])
 	V<-try(.VCV.rescale.geog(phylo,sig2,0,sterm,geography.object))
 	if(class(V)=="try-error"){return(Inf)}
 	if(any(is.na(V))){
