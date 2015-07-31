@@ -9,7 +9,7 @@ Fits matching competition (MC), diversity dependent linear (DDlin), or diversity
 }
 \usage{
 
-fitCompModel(phylo,data,model="MC,DDexp,DDlin",geography.object=NULL,method="Nelder-Mead")
+fitCompModel(phylo,data,model=c("MC","DDexp","DDlin"),geography.object=NULL,method="Nelder-Mead")
 
 }
 
@@ -63,12 +63,16 @@ names that match the \code{$geography.object} object created within the \code{\l
 
 \author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
 
-		Julien Clavel
+		Julien Clavel \href{mailto:clavel@biologie.ens.fr}{clavel@biologie.ens.fr}
 }
 
 \seealso{
 \code{\link{simCompModel}}
 \code{\link{CreateGeoObject}}
+\code{\link{likelihood_MC}}
+\code{\link{likelihood_MC_geog}}
+\code{\link{likelihood_DD}}
+\code{\link{likelihood_DD_geog}}
 }
 
 \note{

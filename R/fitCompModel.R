@@ -1,4 +1,4 @@
-fitCompModel<-function(phylo,data,model="MC,DDexp,DDlin",geography.object=NULL,method="Nelder-Mead"){
+fitCompModel<-function(phylo,data,model=c("MC","DDexp","DDlin"),geography.object=NULL,method="Nelder-Mead"){
 
 #check to make sure data are univariate, with names matching phylo object
 if(length(data)!=length(phylo$tip.label)){stop("length of data does not match length of tree")}
