@@ -119,7 +119,7 @@ CreateGeoObject(Anolis.data$phylo,maps.object=Anolis.map)
 
 #Create a geography.object with a make.simmap object
 #First, specify which region each branch belonged to:
-geo<-rep("cuba",7),rep("hispaniola",9),"puerto_rico")
+geo<-c(rep("cuba",7),rep("hispaniola",9),"puerto_rico")
 names(geo)<-Anolis.data$phylo$tip.label
 stochastic.map<-make.simmap(Anolis.data$phylo,geo, model="ER", nsim=1)
 CreateGeoObject(Anolis.data$phylo,maps.object=stochastic.map$maps)
