@@ -39,8 +39,8 @@ If a \code{maps.object} is not provided, the blank \code{$geography.object} shou
 (for sympatric species) and 0s (for allopatric species). The diagonal of each matrix
 should be filled with 1s.
 
-A \code{maps.object} can either be a matrix formed by specifying the region in which each branch specified by \code{phylo$edge} existed, or a stochastic map stored as a list in \code{$maps} from \code{\link{make.simmap} (see Examples).
-If an object from \code{\link{make.simmap} is provided, \code{CreateGeoObject} will choose for each branch the region that was inhabited for the longest period of time along that branch.
+A \code{maps.object} can either be a matrix formed by specifying the region in which each branch specified by \code{phylo$edge} existed, or a stochastic map stored as a list in \code{$maps} from \code{\link{make.simmap}} (see Examples).
+If an object from \code{\link{make.simmap}} is provided, \code{CreateGeoObject} will choose for each branch the region that was inhabited for the longest period of time along that branch.
 }
 
 \note{
