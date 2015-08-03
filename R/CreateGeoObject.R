@@ -1,4 +1,4 @@
-CreateGeoObject<-function(phylo){
+CreateGeoObject<-function(phylo,maps.object=NULL){
 	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
 	paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS
@@ -10,10 +10,12 @@ CreateGeoObject<-function(phylo){
 	}
 	nodeDist<-c(nodeDist,max(heights))
 	nodeDiff<-diff(nodeDist)
+	flag=0
 	if(sum(nodeDiff<0)>0){  ##this loop renumbers the nodes if trees nodes are not placed in sequential order
 		node.order<-match(rank(heights[,1],ties.method="min"),seq(1, by = 2, len = phylo$Nnode))
 		node.order<-node.order+length(phylo$tip.label)
 		old.edge<-phylo$edge
+		old.phylo<-phylo
 		phylo$edge[,1]<-node.order
 		for(j in 1:length(phylo$edge[,2])){
 			if(phylo$edge[j,2]>length(phylo$tip.label)){
@@ -29,6 +31,7 @@ CreateGeoObject<-function(phylo){
 			}
 		nodeDist<-c(nodeDist,max(heights))
 		nodeDiff<-diff(nodeDist)
+		flag=1
 	}
 	mat<-matrix(nrow=0, ncol=3)
 	counter_three_letters <- 0
@@ -43,7 +46,7 @@ CreateGeoObject<-function(phylo){
 				int[3]<-b
 				} else {
 				int[2]<-phylo$tip.label[[b]]
-				int[3]<-0 ##NOTE :I am considering tips to be "0" here and use this below
+				int[3]<-0 
 				}
 			mat<-rbind(mat,int)
 			}
@@ -63,20 +66,69 @@ CreateGeoObject<-function(phylo){
 			print(paste("ERROR at node",i+length(phylo$tip.label)))
 			}	
 		}
-	geography.matrix<-list()
-	for(i in 1:phylo$Nnode){ 
-		var.list<-unlist(nat[[i]])
-		len=length(var.list)
-		int.mat<-matrix(nrow=len,ncol=len)
-		rownames(int.mat)<-var.list
-		colnames(int.mat)<-var.list
-		geography.matrix[[i]]<-int.mat
-	}
+	#now replace 0s in mat with numbers
+		for(i in 1:length(mat[,1])){
+		if(mat[i,3]==0){
+		mat[i,3]<-as.character(match(mat[i,2],phylo$tip.label))
+	}}	
 	mat<-as.data.frame(mat)
-	colnames(mat)<-c("node.number","descendant.branch","next.node")
-	for(i in 1:length(nat)){
-		names(nat[[i]])<-paste("node.",(i+length(phylo$tip.label)),sep="")	
+	if(is.null(maps.object)){
+		colnames(mat)<-c("node.number","descendant.branch","next.node")
+			geography.matrix<-list()
+			for(i in 1:phylo$Nnode){ 
+				var.list<-unlist(nat[[i]])
+				len=length(var.list)
+				int.mat<-matrix(nrow=len,ncol=len)
+				rownames(int.mat)<-var.list
+				colnames(int.mat)<-var.list
+				geography.matrix[[i]]<-int.mat
+			}
 		}
-	return(list(node.descendants=mat,extant.lineages.through.time=nat,geography.object=geography.matrix))
+		
+	if(!is.null(maps.object)){
+		if(is.list(maps.object)){
+			if(flag==0){
+				map<-.edge.mapped(phylo,maps.object)
+				map.v<-map[match(mat[,3],map[,2]),3]
+			}
+			if(flag==1){  ##this loop renumbers the nodes if trees nodes are not placed in sequential order
+				map<-.edge.mapped(old.phylo,maps.object) 
+				map<-cbind(phylo$edge,map[,3])
+				map.v<-map[match(mat[,3],map[,2]),3]
+			}		
+			mat<-data.frame(mat,map.v)
+		}
+		if(is.matrix(maps.object)){
+			if(flag==0){
+				map<-maps.object
+				map.v<-map[match(mat[,3],map[,2]),3]
+				}
+			if(flag==1){  ##this loop renumbers the nodes if trees nodes are not placed in sequential order
+				map<-cbind(phylo$edge,maps.object[,3])
+				map.v<-map[match(mat[,3],map[,2]),3]
+			}
+			mat<-data.frame(mat,map.v)
+		}
+		colnames(mat)<-c("node.number","descendant.branch","next.node","region")
+		geography.matrix<-list()
+		for(i in 1:phylo$Nnode){ 
+			var.list<-unlist(nat[[i]])
+			len=length(var.list)
+			int.mat<-matrix(nrow=len,ncol=len)
+			rownames(int.mat)<-var.list
+			colnames(int.mat)<-var.list
+			diag(int.mat)<-1
+			for(j in 1:length(var.list)){
+				for(k in 1:length(var.list)){
+					if((lower.tri(int.mat,diag=TRUE)[j,k]==TRUE)){
+						int.mat[j,k]<-ifelse(mat[match(var.list[j],mat[,2]),4]==mat[match(var.list[k],mat[,2]),4],1,0)
+					}
+				}
+			}
+			int.mat[upper.tri(int.mat)==TRUE]<-t(int.mat)[upper.tri(t(int.mat))==TRUE]
+			geography.matrix[[i]]<-int.mat
+		}
+	}						
+		return(list(node.descendants=mat,geography.object=geography.matrix))
 	}
 	

@@ -6,13 +6,13 @@ Create blank geography object
 }
 \description{
 This function returns names of internode intervals, named descendants of each node,
-and an unformatted geography object that are formatted in a way that can be
+and a geography object formatted in a way that can be
 passed to \code{\link{fitCompModel}}
 
 }
 \usage{
 
-CreateGeoObject(phylo)
+CreateGeoObject(phylo,maps.object=NULL)
 
 }
 
@@ -20,28 +20,31 @@ CreateGeoObject(phylo)
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)
 }
+  \item{maps.object}{
+either a matrix modified from \code{phylo$edge} or a list provided from the \code{$maps} output of \code{\link{make.simmap}} (see Details and Examples)
+}
 }
 \value{
 	a list with the following components:
   \item{node.descendants}{a data frame listing node numbers, their descendants 
-  (i.e., branch name), and the next node}
-  \item{extant.lineages.through.time}{a named list of extant branches that descend
-  from each node (see Note)}
-  \item{geography.object}{a list of empty matrices for each internode interval (see Details)}
+  (i.e., branch name), the next node, and the biogeographical region in which a node exists (if maps.object is provided)}
+  \item{geography.object}{a list of matrices specifying sympatry (1) or allopatry (0) for each species pair for each internode interval (see Details)}
 }
 
 \details{
 This function should be used to format the geography object so that it can be correctly
 passed to the numerical integration performed in \code{\link{fitCompModel}}. 
 
-The blank \code{$geography.object} should be filled in in a block symmetrical fashion with 1s
+If a \code{maps.object} is not provided, the blank \code{$geography.object} should be filled in in a block symmetrical fashion with 1s
 (for sympatric species) and 0s (for allopatric species). The diagonal of each matrix
 should be filled with 1s.
+
+A \code{maps.object} can either be a matrix formed by specifying the region in which each branch specified by \code{phylo$edge} existed, or a stochastic map stored as a list in \code{$maps} from \code{\link{make.simmap} (see Examples).
+If an object from \code{\link{make.simmap} is provided, \code{CreateGeoObject} will choose for each branch the region that was inhabited for the longest period of time along that branch.
 }
 
 \note{
-The node numbers returned in \code{object$node.descendants} and \code{object$extant.lineages.through.time}
-may not reflect those plotted using \code{nodelabels()}. The node numbers returned from
+The node numbers returned in \code{object$node.descendants} may not reflect those plotted using \code{nodelabels()}. The node numbers returned from
 this function start at \code{length(phylo$tip.label)+1} and increase chronologically.
 }
 
@@ -57,22 +60,19 @@ this function start at \code{length(phylo$tip.label)+1} and increase chronologic
 
 \examples{
 
-#To create a geography.object
-tree<-rcoal(5)
-tree_internal.nodes<-CreateGeoObject(tree)
-geography.matrix<-tree_internal.nodes$geography.object
-geography.matrix[[1]][,1]<-c(1,0)
-geography.matrix[[1]][,2]<-c(0,1)
-geography.matrix[[2]][,1]<-c(1,1,0)
-geography.matrix[[2]][,2]<-c(1,1,0)
-geography.matrix[[2]][,3]<-c(0,0,1)
-geography.matrix[[3]][,1]<-c(1,1,0,0)
-geography.matrix[[3]][,2]<-c(1,1,0,0)
-geography.matrix[[3]][,3]<-c(0,0,1,1)
-geography.matrix[[3]][,4]<-c(0,0,1,1)
-geography.matrix[[4]][,1]<-c(1,1,1,0,0)
-geography.matrix[[4]][,2]<-c(1,1,1,0,0)
-geography.matrix[[4]][,3]<-c(1,1,1,0,0)
-geography.matrix[[4]][,4]<-c(0,0,0,1,1)
-geography.matrix[[4]][,5]<-c(0,0,0,1,1)
+#Create a geography.object with a modified edge matrix
+#First, specify which region each branch belonged to:
+Anolis.regions<-c(rep("cuba",14),rep("hispaniola",17),"puerto_rico")
+Anolis.map<-cbind(Anolis.data$phylo$edge,Anolis.regions)
+CreateGeoObject(Anolis.data$phylo,maps.object=Anolis.map)
+
+#Create a geography.object with a make.simmap object
+#First, specify which region each branch belonged to:
+geo<-rep("cuba",7),rep("hispaniola",9),"puerto_rico")
+names(geo)<-Anolis.data$phylo$tip.label
+stochastic.map<-make.simmap(Anolis.data$phylo,geo, model="ER", nsim=1)
+CreateGeoObject(Anolis.data$phylo,maps.object=stochastic.map$maps)
+
+#To create an empty geography.object:
+CreateGeoObject(Anolis.data$phylo)
 }
