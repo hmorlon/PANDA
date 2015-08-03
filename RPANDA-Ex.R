@@ -110,6 +110,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
+data(Anolis.data)
 #Create a geography.object with a modified edge matrix
 #First, specify which region each branch belonged to:
 Anolis.regions<-c(rep("cuba",14),rep("hispaniola",17),"puerto_rico")
