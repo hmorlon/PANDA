@@ -19,11 +19,7 @@ flush(stderr()); flush(stdout())
 data(Anolis.data)
 plot(Anolis.data$phylo)
 print(Anolis.data$data)
-print(Anolis.data$geography.object[[16]])
-
-# Compute the likelihood that the S value is twice the ML estimate
-par <- c(0.0003139751, (2*-0.06387258))
-lh <- -likelihood_MC(phylo,pPC1,par)
+print(Anolis.data$geography.object)
 
 
 
@@ -114,24 +110,21 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-#To create a geography.object
-tree<-rcoal(5)
-tree_internal.nodes<-CreateGeoObject(tree)
-geography.matrix<-tree_internal.nodes$geography.object
-geography.matrix[[1]][,1]<-c(1,0)
-geography.matrix[[1]][,2]<-c(0,1)
-geography.matrix[[2]][,1]<-c(1,1,0)
-geography.matrix[[2]][,2]<-c(1,1,0)
-geography.matrix[[2]][,3]<-c(0,0,1)
-geography.matrix[[3]][,1]<-c(1,1,0,0)
-geography.matrix[[3]][,2]<-c(1,1,0,0)
-geography.matrix[[3]][,3]<-c(0,0,1,1)
-geography.matrix[[3]][,4]<-c(0,0,1,1)
-geography.matrix[[4]][,1]<-c(1,1,1,0,0)
-geography.matrix[[4]][,2]<-c(1,1,1,0,0)
-geography.matrix[[4]][,3]<-c(1,1,1,0,0)
-geography.matrix[[4]][,4]<-c(0,0,0,1,1)
-geography.matrix[[4]][,5]<-c(0,0,0,1,1)
+#Create a geography.object with a modified edge matrix
+#First, specify which region each branch belonged to:
+Anolis.regions<-c(rep("cuba",14),rep("hispaniola",17),"puerto_rico")
+Anolis.map<-cbind(Anolis.data$phylo$edge,Anolis.regions)
+CreateGeoObject(Anolis.data$phylo,maps.object=Anolis.map)
+
+#Create a geography.object with a make.simmap object
+#First, specify which region each branch belonged to:
+geo<-rep("cuba",7),rep("hispaniola",9),"puerto_rico")
+names(geo)<-Anolis.data$phylo$tip.label
+stochastic.map<-make.simmap(Anolis.data$phylo,geo, model="ER", nsim=1)
+CreateGeoObject(Anolis.data$phylo,maps.object=stochastic.map$maps)
+
+#To create an empty geography.object:
+CreateGeoObject(Anolis.data$phylo)
 
 
 
@@ -424,14 +417,14 @@ par_init <- c(1e7, 1e7-0.5, 1)
 
 
 cleanEx()
-nameEx("likelihoodDD")
-### * likelihoodDD
+nameEx("likelihood_DD")
+### * likelihood_DD
 
 flush(stderr()); flush(stdout())
 
-### Name: likelihoodDD
+### Name: likelihood_DD
 ### Title: Likelihood of a dataset under diversity-dependent models.
-### Aliases: likelihoodDD
+### Aliases: likelihood_DD
 
 ### ** Examples
 
@@ -441,20 +434,20 @@ pPC1 <- Anolis.data$data
 
 # Compute the likelihood that the r value is twice the ML estimate for the DDexp model
 par <- c(0.08148371, (2*-0.3223835))
-lh <- -likelihoodDD(phylo,pPC1,par,model="DDexp")
+lh <- -likelihood_DD(phylo,pPC1,par,model="DDexp")
 
 
 
 cleanEx()
-nameEx("likelihoodDD_geog")
-### * likelihoodDD_geog
+nameEx("likelihood_DD_geog")
+### * likelihood_DD_geog
 
 flush(stderr()); flush(stdout())
 
-### Name: likelihoodDD_geog
+### Name: likelihood_DD_geog
 ### Title: Likelihood of a dataset under diversity-dependent models with
 ###   biogeography.
-### Aliases: likelihoodDD_geog
+### Aliases: likelihood_DD_geog
 
 ### ** Examples
 
@@ -465,7 +458,7 @@ geography.object <- Anolis.data$geography.object
 
 # Compute the likelihood with geography using ML parameters for fit without geography
 par <- c(log(0.01153294),-0.0006692378)
-lh <- -likelihoodDD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+lh <- -likelihood_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
 
 
 

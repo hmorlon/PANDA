@@ -60,6 +60,7 @@ this function start at \code{length(phylo$tip.label)+1} and increase chronologic
 
 \examples{
 
+data(Anolis.data)
 #Create a geography.object with a modified edge matrix
 #First, specify which region each branch belonged to:
 Anolis.regions<-c(rep("cuba",14),rep("hispaniola",17),"puerto_rico")
