@@ -1,5 +1,5 @@
-\name{likelihood_DD}
-\alias{likelihood_DD}
+\name{likelihood_t_DD}
+\alias{likelihood_t_DD}
 
 \title{
 Likelihood of a dataset under diversity-dependent models.
@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihood_DD(phylo, data, par,model=c("DDlin","DDexp"))
+likelihood_t_DD(phylo, data, par,model=c("DDlin","DDexp"))
 }
 
 \arguments{
@@ -50,8 +50,8 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 }
 
 \seealso{
-\code{\link{fitCompModel}}
-\code{\link{likelihood_DD_geog}}
+\code{\link{fit_t_comp}}
+\code{\link{likelihood_t_DD_geog}}
 
 }
 
@@ -63,5 +63,5 @@ pPC1 <- Anolis.data$data
 
 # Compute the likelihood that the r value is twice the ML estimate for the DDexp model
 par <- c(0.08148371, (2*-0.3223835))
-lh <- -likelihood_DD(phylo,pPC1,par,model="DDexp")
+lh <- -likelihood_t_DD(phylo,pPC1,par,model="DDexp")
 }

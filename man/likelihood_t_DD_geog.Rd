@@ -1,5 +1,5 @@
-\name{likelihood_DD_geog}
-\alias{likelihood_DD_geog}
+\name{likelihood_t_DD_geog}
+\alias{likelihood_t_DD_geog}
 
 \title{
 Likelihood of a dataset under diversity-dependent models with biogeography.
@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihood_DD_geog(phylo, data, par,geography.object,model=c("DDlin","DDexp"))
+likelihood_t_DD_geog(phylo, data, par,geography.object,model=c("DDlin","DDexp"))
 }
 
 \arguments{
@@ -64,9 +64,9 @@ names that match the \code{$geography.object} object created with the \code{\lin
 }
 
 \seealso{
-\code{\link{fitCompModel}}
+\code{\link{fit_t_comp}}
 \code{\link{CreateGeoObject}}
-\code{\link{likelihood_DD}}
+\code{\link{likelihood_t_DD}}
 
 }
 
@@ -79,5 +79,5 @@ geography.object <- Anolis.data$geography.object
 
 # Compute the likelihood with geography using ML parameters for fit without geography
 par <- c(log(0.01153294),-0.0006692378)
-lh <- -likelihood_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+lh <- -likelihood_t_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
 }

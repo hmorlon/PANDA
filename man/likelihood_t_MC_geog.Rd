@@ -1,5 +1,5 @@
-\name{likelihood_MC_geog}
-\alias{likelihood_MC_geog}
+\name{likelihood_t_MC_geog}
+\alias{likelihood_t_MC_geog}
 
 \title{
 Likelihood of a dataset under the matching competition model with biogeography.
@@ -8,7 +8,7 @@ Likelihood of a dataset under the matching competition model with biogeography.
 Computes the likelihood of a dataset under the matching competition model with specified \code{sigma2} and \code{S} values and with a \code{geography.object} formed using \code{\link{CreateGeoObject}}. 
 }
 \usage{
-likelihood_MC_geog(phylo, data, par,geography.object)
+likelihood_t_MC_geog(phylo, data, par,geography.object)
 }
 
 \arguments{
@@ -54,9 +54,9 @@ names that match the \code{$geography.object} object created with the \code{\lin
 }
 
 \seealso{
-\code{\link{fitCompModel}}
+\code{\link{fit_t_comp}}
 \code{\link{CreateGeoObject}}
-\code{\link{likelihood_MC}}
+\code{\link{likelihood_t_MC}}
 
 }
 
@@ -69,5 +69,5 @@ geography.object <-  Anolis.data$geography.object
 
 # Compute the likelihood with geography using ML parameters for fit without geography
 par <- c(0.0003139751, -0.06387258)
-lh <- -likelihood_MC_geog(phylo,pPC1,par,geography.object)
+lh <- -likelihood_t_MC_geog(phylo,pPC1,par,geography.object)
 }

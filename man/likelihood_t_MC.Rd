@@ -1,5 +1,5 @@
-\name{likelihood_MC}
-\alias{likelihood_MC}
+\name{likelihood_t_MC}
+\alias{likelihood_t_MC}
 
 \title{
 Likelihood of a dataset under the matching competition model.
@@ -8,7 +8,7 @@ Likelihood of a dataset under the matching competition model.
 Computes the likelihood of a dataset under the matching competition model with specified \code{sigma2} and \code{S} values. 
 }
 \usage{
-likelihood_MC(phylo, data, par)
+likelihood_t_MC(phylo, data, par)
 }
 
 \arguments{
@@ -43,8 +43,8 @@ a vector listing a value for \code{sig2} and \code{S} (parameters of the matchin
 }
 
 \seealso{
-\code{\link{fitCompModel}}
-\code{\link{likelihood_MC_geog}}
+\code{\link{fit_t_comp}}
+\code{\link{likelihood_t_MC_geog}}
 
 }
 
@@ -56,5 +56,5 @@ pPC1 <- Anolis.data$data
 
 # Compute the likelihood that the S value is twice the ML estimate
 par <- c(0.0003139751, (2*-0.06387258))
-lh <- -likelihood_MC(phylo,pPC1,par)
+lh <- -likelihood_t_MC(phylo,pPC1,par)
 }

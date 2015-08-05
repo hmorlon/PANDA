@@ -7,7 +7,7 @@ Create blank geography object
 \description{
 This function returns names of internode intervals, named descendants of each node,
 and a geography object formatted in a way that can be
-passed to \code{\link{fitCompModel}}
+passed to \code{\link{fit_t_comp}}
 
 }
 \usage{
@@ -33,7 +33,7 @@ either a matrix modified from \code{phylo$edge} or a list provided from the \cod
 
 \details{
 This function should be used to format the geography object so that it can be correctly
-passed to the numerical integration performed in \code{\link{fitCompModel}}. 
+passed to the numerical integration performed in \code{\link{fit_t_comp}}. 
 
 If a \code{maps.object} is not provided, the blank \code{$geography.object} should be filled in in a block symmetrical fashion with 1s
 (for sympatric species) and 0s (for allopatric species). The diagonal of each matrix
@@ -55,7 +55,7 @@ this function start at \code{length(phylo$tip.label)+1} and increase chronologic
 \author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}}
 
 \seealso{
-\code{\link{fitCompModel}}
+\code{\link{fit_t_comp}}
 }
 
 \examples{

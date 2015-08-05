@@ -1,15 +1,15 @@
-\name{fitCompModel}
-\alias{fitCompModel}
+\name{fit_t_comp}
+\alias{fit_t_comp}
 
 \title{
-Fit models of trait evolution incorporating interspecific interactions
+Fits models of trait evolution incorporating competitive interactions
 }
 \description{
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
 
-fitCompModel(phylo,data,model=c("MC","DDexp","DDlin"),geography.object=NULL,method="Nelder-Mead")
+fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),geography.object=NULL,method="Nelder-Mead")
 
 }
 
@@ -67,12 +67,12 @@ names that match the \code{$geography.object} object created within the \code{\l
 }
 
 \seealso{
-\code{\link{simCompModel}}
+\code{\link{sim_t_comp}}
 \code{\link{CreateGeoObject}}
-\code{\link{likelihood_MC}}
-\code{\link{likelihood_MC_geog}}
-\code{\link{likelihood_DD}}
-\code{\link{likelihood_DD_geog}}
+\code{\link{likelihood_t_MC}}
+\code{\link{likelihood_t_MC_geog}}
+\code{\link{likelihood_t_DD}}
+\code{\link{likelihood_t_DD_geog}}
 }
 
 \note{
@@ -86,13 +86,13 @@ pPC1<-Anolis.data$data
 phylo<-Anolis.data$phylo
 
 #Fit three models without biogeography to pPC1 data
-MC.fit<-fitCompModel(phylo,pPC1,model="MC")
-DDlin.fit<-fitCompModel(phylo,pPC1,model="DDlin")
-DDexp.fit<-fitCompModel(phylo,pPC1,model="DDexp")
+MC.fit<-fit_t_comp(phylo,pPC1,model="MC")
+DDlin.fit<-fit_t_comp(phylo,pPC1,model="DDlin")
+DDexp.fit<-fit_t_comp(phylo,pPC1,model="DDexp")
 
 #Now fit models that incorporate biogeography, NOTE these models take longer to fit
-MC.geo.fit<-fitCompModel(phylo,pPC1,model="MC",geography.object=geography.object)
-DDlin.geo.fit<-fitCompModel(phylo,pPC1,model="DDlin",geography.object=geography.object)
-DDexp.geo.fit<-fitCompModel(phylo,pPC1,model="DDexp",geography.object=geography.object)
+MC.geo.fit<-fit_t_comp(phylo,pPC1,model="MC",geography.object=geography.object)
+DDlin.geo.fit<-fit_t_comp(phylo,pPC1,model="DDlin",geography.object=geography.object)
+DDexp.geo.fit<-fit_t_comp(phylo,pPC1,model="DDexp",geography.object=geography.object)
 
 }

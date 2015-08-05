@@ -1,5 +1,5 @@
-\name{simCompModel}
-\alias{simCompModel}
+\name{sim_t_comp}
+\alias{sim_t_comp}
 
 \title{
 Recursive simulation (root-to-tip) of competition models 
@@ -9,7 +9,7 @@ Simulates datasets for a given phylogeny under matching competition (MC), divers
 }
 \usage{
 
-simCompModel(phylo,pars,root.value,Nsegments=1000,model="MC,DDexp,DDlin")
+sim_t_comp(phylo,pars,root.value,Nsegments=1000,model="MC,DDexp,DDlin")
 
 }
 
@@ -55,7 +55,7 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 \author{J Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}}
 
 \seealso{
-\code{\link{fitCompModel}}
+\code{\link{fit_t_comp}}
 }
 
 \examples{
@@ -63,13 +63,13 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 data(Cetacea)
 
 # Simulate data under the matching competition model
-MC.data<-simCompModel(Cetacea,pars=c(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
+MC.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
 
 # Simulate data under the diversity dependent linear model
-DDlin.data<-simCompModel(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
+DDlin.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
 
 # Simulate data under the diversity dependent linear model
-DDexp.data<-simCompModel(Cetacea,pars=c(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
+DDexp.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
 
 
 }
