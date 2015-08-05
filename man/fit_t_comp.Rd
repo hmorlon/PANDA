@@ -8,9 +8,7 @@ Fits models of trait evolution incorporating competitive interactions
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-
 fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,method="Nelder-Mead")
-
 }
 
 \arguments{
@@ -30,7 +28,6 @@ at each internode interval (see Details)
   \item{par}{
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
 }
-
   \item{method}{
 method to use for ML optimization (default is Nelder-Mead)
 }
@@ -38,16 +35,15 @@ method to use for ML optimization (default is Nelder-Mead)
 
 \value{
 	a list with the following elements:
-  \item{lnL}{log-likelihood of maximum-likelihood fit}
+  \item{LH}{maximum log-likelihood value}
+  \item{aic}{Akaike Information Criterion value}
+  \item{aicc}{AIC value corrected for small sample size}
+  \item{free.parameters}{number of free parameters from the model}
   \item{sig2}{maximum-likelihood estimate of \code{sig2} parameter}
   \item{S}{maximum-likelihood estimate of \code{S} parameter of matching competition model (see Note)}
   \item{b}{maximum-likelihood estimate of \code{b} parameter of linear diversity dependence model}
   \item{r}{maximum-likelihood estimate of \code{r} parameter of exponential diversity dependence model}
-  \item{aic}{Akaike Information Criterion value}
-  \item{aicc}{AIC value corrected for small sample size}
-  \item{free.parameter}{number of free parameters from the model}
   \item{convergence}{convergence diagnostics from \code{\link{optim}} function (see optim documentation)}
-
 }
 
 \details{
