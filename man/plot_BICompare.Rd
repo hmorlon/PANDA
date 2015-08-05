@@ -26,6 +26,10 @@ a plot of the phylogeny with branches colored according to which modalities they
 
 \author{E Lewitus}
 
+\references{
+	Lewitus, E., Morlon, H., A graph-theoretical approach to characterising and comparing phylogenies (submitted) }
+
+
 \seealso{
 \code{\link{BICompare}}
 }
