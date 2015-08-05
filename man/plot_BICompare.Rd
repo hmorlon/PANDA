@@ -15,7 +15,7 @@ plot_BICompare(phylo,BICompare)
 	 \item{phylo}{
 an object of type 'phylo' (see ape documentation)}
   \item{BICompare}{
-an object of class 'BICompare', output of the 'BICompare' function
+an object of class 'BICompare', output of the 'BICompare' function}
 }
 	}
 
@@ -34,5 +34,5 @@ a plot of the phylogeny with branches colored according to which modalities they
 
 data(Cetacea)
 result <- BICompare(Cetacea,5)
-#plot_BICompare(Cetacea,result)
+#plot_BICompare(Cetacea,5)
 }

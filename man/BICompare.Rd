@@ -6,11 +6,11 @@ Identify modalities in a phylogeny
 }
 
 \description{
-Computes the BIC values for a specified number of modalities in the distance matrix of a phylogenetic tree and a control matrix and identifies these modalities using k-means clustering.
+Computes the BIC values for a specified number of modalities in the distance matrix of a phylogenetic tree and a randomly bifurcating tree and identifies these modalities using k-means clustering.
 }
 
 \usage{
-BICompare(phylo, t)
+BICompare(phylo, t, meth=c("ultrametric","non-ultrametric"))
 }
 
 \arguments{
@@ -18,6 +18,9 @@ BICompare(phylo, t)
 an object of type 'phylo' (see ape documentation)}
   \item{t}{
 the number of modalities to be tested}
+  \item{meth}{
+whether the random tree should be ultrametric or non-ultrametric  	
+  }	
 	}
 
 \value{
