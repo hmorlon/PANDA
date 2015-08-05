@@ -16,7 +16,6 @@ plot_BICompare(phylo,BICompare)
 an object of type 'phylo' (see ape documentation)}
   \item{BICompare}{
 an object of class 'BICompare', output of the 'BICompare' function}
-}
 	}
 
 
