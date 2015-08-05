@@ -10,7 +10,7 @@ Computes the BIC values for a specified number of modalities in the distance mat
 }
 
 \usage{
-BICompare(phylo, t, meth=c("ultrametric","non-ultrametric"))
+BICompare(phylo, t, meth=c("ultrametric"))
 }
 
 \arguments{
