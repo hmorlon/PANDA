@@ -66,8 +66,8 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 	##get BICs for tree and control
 			kmeans(phyloM,t,algorithm="Hartigan-Wong")->q
 				kmeansBIC(q)->p
-rp<-cbind(p,r(low_p[,2]))
-colnames(rp)<-c("tree BIC","random BIC (p-value)")
+rp<-cbind(p,r)
+colnames(rp)<-c("tree BIC","random BIC")
 res<-list("BIC_test"=rp,"clusters"=q$cluster,"BSS/TSS"=q$betweenss/q$totss)
 
 class(res)	<- "BICompare"
