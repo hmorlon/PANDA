@@ -18,6 +18,9 @@ BICompare(phylo,t,meth=c("ultrametric"))
 an object of type 'phylo' (see ape documentation)}
   \item{t}{
 the number of modalities to be tested}
+  \item{meth}{
+whether the randomly bifurcating "control" tree should be ultrametric or non-ultrametric  	
+  }
 	}
 
 \value{
