@@ -6,7 +6,7 @@ Identify modalities in a phylogeny
 }
 
 \description{
-Computes the BIC values for a specified number of modalities in the distance matrix of a phylogenetic tree and that of a random tree; identifies these modalities using k-means clustering.
+Computes the BIC values for a specified number of modalities in the distance matrix of a phylogenetic tree and that of a randomly bifurcating tree; identifies these modalities using k-means clustering.
 }
 
 \usage{
