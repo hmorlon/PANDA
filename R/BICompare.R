@@ -18,7 +18,7 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 		if(meth=="non-ultrametric"){	
 			c() -> rDP
 			c() -> r
-			for(i in c(1:50)){
+			for(i in c(1:100)){
 				rDP[[i]] <- as.matrix(
 					dist.nodes(
 						rtree(n=length(phylo$tip.label),
@@ -43,7 +43,7 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 		if(meth=="ultrametric"){
 			c() -> rDP
 			c() -> r
-			for(i in c(1:50)){
+			for(i in c(1:100)){
 				rDP[[i]] <- as.matrix(
 					dist.nodes(
 						rcoal(n=length(phylo$tip.label),
