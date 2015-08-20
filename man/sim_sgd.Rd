@@ -4,7 +4,7 @@
 Algorithm for simulating a phylogenetic tree under the SGD model
 }
 \description{
-Simulates a phylogeny arising from the SGD model with exponentially increasing metapopulation size. Notations follow Manceau et al. (submitted).
+Simulates a phylogeny arising from the SGD model with exponentially increasing metapopulation size. Notations follow Manceau et al. (2015).
 }
 \usage{
 sim_sgd(tau, b, d, nu)
@@ -30,7 +30,7 @@ a phylogenetic tree of class "phylo" (see ape documentation)
 }
 
 \references{
-Manceau M., Lambert A., Morlon H. (submitted)
+Manceau M., Lambert A., Morlon H. (2015) Phylogenies support out-of-equilibrium models of biodiversity Ecology Letters 18: 347-356
 }
 
 \author{
