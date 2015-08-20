@@ -9,7 +9,7 @@
 
 
 
-likelihood_t_env<-function(phylo, data, par=NULL, model=c("ClimExp", "ClimLin")){
+likelihood_t_env<-function(phylo, data, par=NULL, model=c("EnvExp", "EnvLin")){
 
 # Use mvMORPH for computing the log-likelihood
 require(mvMORPH)
@@ -22,12 +22,12 @@ require(mvMORPH)
         maxdiff<-0
         res <- phy
         
-        if(model=="ClimExp"){
+        if(model=="EnvExp"){
             
         # because the curve start from the present to the past and provided values go from the past to the present
             f<-function(x){sigma*exp(beta*funEnv((mtot+maxdiff)-x))}
             
-        }else if(model=="ClimLin"){
+        }else if(model=="EnvLin"){
             # sigma is explicitely introduced here
             f<-function(x){sigma+(beta-sigma)*funEnv((mtot+maxdiff)-x)}
         }
@@ -121,7 +121,7 @@ require(mvMORPH)
 
 ## Transform the tree and return the log-likelihood
 
-if(model=="ClimExp"){
+if(model=="EnvExp"){
     
     # Check the parameters
     if(is.null(par[["sig2"]]) | is.null(par[["beta"]]))  {
@@ -143,7 +143,7 @@ if(model=="ClimExp"){
    
    
 
-}else if(model=="ClimLin"){
+}else if(model=="EnvLin"){
     
     # Check the parameters
     if(is.null(par[["sig2"]]) | is.null(par[["beta"]])) {

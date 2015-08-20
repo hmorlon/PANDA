@@ -7,7 +7,7 @@
 ##                                                                            ##
 ################################################################################
 
-fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("ClimExp", "ClimLin"), par=NULL, method="Nelder-Mead"){
+fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), par=NULL, method="Nelder-Mead"){
     
     ## Parameterization
     model<-model[1]
@@ -105,7 +105,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("ClimExp", "ClimL
         # Check if beta is provided by the user
         if(is.null(par[["beta"]])){
             # Use default values
-            if(model=="ClimExp"){
+            if(model=="EnvExp"){
                 # Set beta = 0; i.e. no effect of the climate
                 beta_guess<-0
             }else{
@@ -122,9 +122,9 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("ClimExp", "ClimL
     startval<-c(sigma_guess,beta_guess)
    
     # Optimization
-    if(model=="ClimExp"){
+    if(model=="EnvExp"){
         estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(sig2=exp(x[1]), beta=x[2], fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error), model)},control=par$control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
-    }else if(model=="ClimLin"){
+    }else if(model=="EnvLin"){
         estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(sig2=exp(x[1]), beta=exp(x[2]), fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error), model)},control=par$control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
     }
     
@@ -153,9 +153,9 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("ClimExp", "ClimL
         sig2 = exp(estim$par[1])
         
         # beta
-        if(model=="ClimExp"){
+        if(model=="EnvExp"){
         beta = estim$par[2]
-        }else if(model=="ClimLin"){
+        }else if(model=="EnvLin"){
         beta = exp(estim$par[2])
         }
     

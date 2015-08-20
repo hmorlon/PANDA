@@ -10,7 +10,7 @@
 plot.fit_t.env<-function(x,...){
     
     # Rates through time function
-    if(x$model=="ClimExp"){
+    if(x$model=="EnvExp"){
         fun_temp<-function(x,temp,agetot,beta,sig){
             rate<-(sig*exp(beta*temp(x)))
             return(rate)
@@ -36,7 +36,7 @@ plot.fit_t.env<-function(x,...){
 lines.fit_t.env<-function(x,...){
     
     # Rates through time function
-    if(x$model=="ClimExp"){
+    if(x$model=="EnvExp"){
         fun_temp<-function(x,temp,agetot,beta,sig){
             rate<-(sig*exp(beta*temp(x)))
             return(rate)
