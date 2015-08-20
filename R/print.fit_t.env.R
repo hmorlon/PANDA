@@ -7,7 +7,7 @@
 ##                                                                            ##
 ################################################################################
 
-
+# we can change to summary instead of print if we want to keep the same output between functions
 print.fit_t.env<-function(x,...){
     cat("\n")
     message("-- Summary results for the ",x$model," model --","\n")
