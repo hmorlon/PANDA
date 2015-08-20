@@ -28,7 +28,7 @@ plot.fit_t.env<-function(x,...){
     # Rates through time
     rates<-fun_temp( x=t, temp=x$env_func, agetot=x$tot_time, beta=x$b, sig=x$sig2)
     
-    plot(t, rates, type='l', xlab="Times", ylab="Evolutionary rates", main="Evolutionary rate through time", ...)
+    plot(-t, rates, type='l', xlab="Times", ylab="Evolutionary rates", main="Evolutionary rate through time", ...)
 }
 
 # Allows drawing lines and superposing various results
@@ -54,5 +54,5 @@ lines.fit_t.env<-function(x,...){
     # Rates through time
     rates<-fun_temp( x=t, temp=x$env_func, agetot=x$tot_time, beta=x$b, sig=x$sig2)
     
-    lines(t, rates, type='l', ...)
+    lines(-t, rates, type='l', ...)
 }
