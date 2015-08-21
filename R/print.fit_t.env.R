@@ -35,9 +35,8 @@ print.fit_t.env<-function(x,...){
     cat("______________________","\n")
     cat(x$sig2,"\n")
     cat("\n")
-    # Should we return the ancestral state?
-    #cat("Estimated root states","\n")
-    #cat("______________________","\n")
-    # print(x$theta)
-    #cat("\n")
+    cat("Estimated root states:","\n")
+    cat("______________________","\n")
+    cat(x$root)
+    cat("\n")
 }

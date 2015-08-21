@@ -13,36 +13,6 @@ likelihood_t_env<-function(phylo, data, par=NULL, model=c("EnvExp", "EnvLin")){
 
 # Use mvMORPH for computing the log-likelihood
 require(mvMORPH)
-##---------------------Functions_used_internally--------------------------------##
-
-    ## Function to scale the tree to parameters of the climatic model
-    CLIMtransform<-function(phy, beta, mtot, times, funEnv, sigma=NULL, model, tips){
-        
-        # Not yet used (fixed at 0), depends on wether the tree have extant species
-        maxdiff<-0
-        res <- phy
-        
-        if(model=="EnvExp"){
-            
-        # because the curve start from the present to the past and provided values go from the past to the present
-            f<-function(x){sigma*exp(beta*funEnv((mtot+maxdiff)-x))}
-            
-        }else if(model=="EnvLin"){
-            # sigma is explicitely introduced here
-            f<-function(x){sigma+(beta-sigma)*funEnv((mtot+maxdiff)-x)}
-        }
-        
-        # Transforms the branch-lengths of the tree
-        for (i in 1:length(phy$edge.length)) {
-            bl <- phy$edge.length[i]
-            age <- times[phy$edge[i, 1] - tips]
-            res$edge.length[i] <- integrate(f,lower=age, upper=(age + bl), subdivisions=200,rel.tol = .Machine$double.eps^0.05)$value
-        }
-        phy<-res
-        return(phy)
-    }
-
-##------------------------------------------------------------------------------##
 
 ## Parameterization
 
@@ -120,8 +90,6 @@ require(mvMORPH)
 
 
 ## Transform the tree and return the log-likelihood
-
-if(model=="EnvExp"){
     
     # Check the parameters
     if(is.null(par[["sig2"]]) | is.null(par[["beta"]]))  {
@@ -129,7 +97,7 @@ if(model=="EnvExp"){
     }
      
     # Sigma is not provided but analytically computed instead
-    phylo <- CLIMtransform(phylo, beta=par$beta, mtot=mtot, times=par$times, funEnv=par$fun, sigma=par$sig2, model=model, tips=tips)
+    phylo <- .CLIMtransform(phylo, beta=par$beta, mtot=mtot, times=par$times, funEnv=par$fun, sigma=par$sig2, model=model, tips=tips)
    
     # Add measurement error
     if(is_error){
@@ -139,28 +107,7 @@ if(model=="EnvExp"){
  
     # Compute the log-likelihood
     LL<-mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=par$check, mu=par$mu, sigma=1))$logl
-   
-   
-   
 
-}else if(model=="EnvLin"){
-    
-    # Check the parameters
-    if(is.null(par[["sig2"]]) | is.null(par[["beta"]])) {
-        stop("Please provide parameters values for \"sig2\" and \"beta\" ")
-    }
-    
-    # Transform the tree
-    phylo <- CLIMtransform(phylo, beta=par$beta, mtot=mtot, times=par$times, funEnv=par$fun, sigma=par$sig2, model=model, tips=tips)
-    
-    # Add measurement error
-    if(is_error){
-        phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$error^2 # assume the "se" are provided in the error vector
-    }
-    
-    # Compute the log-likelihood
-    LL<-mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=par$check, mu=par$mu, sigma=1))$logl
-}
 
 if(is.na(LL) | is.infinite(LL)){
 return(-1000000)
@@ -168,3 +115,36 @@ return(-1000000)
 return(LL)
     
 }
+
+
+##---------------------Functions_used_internally--------------------------------##
+## Need to remove it from the export list in the NAMESPACE
+## Should I get a general wrapper when neither EnvExp or EnvLin are provided?
+
+## Function to scale the tree to parameters of the climatic model
+.CLIMtransform<-function(phy, beta, mtot, times, funEnv, sigma=NULL, model, tips){
+    
+    # Not yet used (fixed at 0), depends on wether the tree have extant species
+    maxdiff<-0
+    res <- phy
+    
+    if(model=="EnvExp"){
+        # because the curve start from the present to the past and provided values go from the past to the present
+        f<-function(x){sigma*exp(beta*funEnv((mtot+maxdiff)-x))}
+        
+    }else if(model=="EnvLin"){
+        # sigma is explicitely introduced here
+        f<-function(x){sigma+(beta-sigma)*funEnv((mtot+maxdiff)-x)}
+    }
+    
+    # Transforms the branch-lengths of the tree
+    for (i in 1:length(phy$edge.length)) {
+        bl <- phy$edge.length[i]
+        age <- times[phy$edge[i, 1] - tips]
+        res$edge.length[i] <- integrate(f,lower=age, upper=(age + bl), subdivisions=200,rel.tol = .Machine$double.eps^0.05)$value
+    }
+    phy<-res
+    return(phy)
+}
+
+##------------------------------------------------------------------------------##

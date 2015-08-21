@@ -52,10 +52,11 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     # Index of terminal branches for measurement error
     if(!is.null(error)){
       index_error<-sapply(1:n, function(x){ which(phylo$edge[,2]==x)})
+      is_error<-TRUE
     }else{
       index_error<-NULL
+      is_error<-FALSE
     }
-    
     
     ## Transform a time-serie dataset in a function
     
@@ -158,8 +159,20 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         }else if(model=="EnvLin"){
         beta = exp(estim$par[2])
         }
+        
+        # Root value
+        return_root<-function(beta, mtot, times, fun, sigma, model, tips, is_error){
+            phylo <- .CLIMtransform(phylo, beta=beta, mtot=mtot, times=times, funEnv=fun, sigma=sigma, model=model, tips=tips)
+            # Add measurement error
+            if(is_error){
+                phylo$edge.length[index_error]<-phylo$edge.length[index_error]+error^2 # assume the "se" are provided in the error vector
+            }
+            root<-mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=FALSE, mu=NULL, sigma=1))$theta
+            return(root)
+        }
+        root<-return_root(beta,tot_time,times,env_data,sig2,model,n,is_error)
     
-    results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = 3, sig2 = sig2, b = beta, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model)
+    results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = 3, sig2 = sig2, b = beta, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model)
     
     class(results)<-c("fit_t.env")
     
