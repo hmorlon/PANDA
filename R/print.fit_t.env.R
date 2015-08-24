@@ -10,7 +10,11 @@
 # we can change to summary instead of print if we want to keep the same output between functions
 print.fit_t.env<-function(x,...){
     cat("\n")
+    if(is.function(x$model)){
+    message("-- Summary results for user defined model --","\n")
+    }else{
     message("-- Summary results for the ",x$model," model --","\n")
+    }
     if(x$convergence==0){
         cat("successful convergence of the optimizer","\n")
     }else{
@@ -27,13 +31,19 @@ print.fit_t.env<-function(x,...){
     cat("AICc:","\t",x$aicc,"\n")
     cat(x$free.parameters,"parameters","\n")
     cat("\n")
+    if(!is.function(x$model)){
     cat("Beta:","\n")
     cat("______________________","\n")
-    cat(x$b,"\n")
+    cat(x$param[2],"\n")
     cat("\n")
     cat("Brownian rate (sigma):","\n")
     cat("______________________","\n")
-    cat(x$sig2,"\n")
+    cat(x$param[1],"\n")
+    }else{
+    cat("Parameters estimates:","\n")
+    cat("______________________","\n")
+    cat(x$param,"\n")
+    }
     cat("\n")
     cat("Estimated root states:","\n")
     cat("______________________","\n")
