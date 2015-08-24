@@ -7,10 +7,12 @@
 ##                                                                            ##
 ################################################################################
 
-fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), par=NULL, method="Nelder-Mead"){
+fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), par=NULL, method="Nelder-Mead", control=list(maxit=20000)){
     
     ## Parameterization
-    model<-model[1]
+    if(!is.function(model)){
+        model<-model[1]
+    }
     
     # reorder the trait vector according to the tree
     if(is.null(names(data))){
@@ -20,7 +22,11 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     }
     
     # Number of parameters (fixed up to now)
-    nparam = 3 # 3 parameters: sig2, beta, mu
+    if(!is.function(model)){
+        nparam = 3 # 3 parameters: sig2, beta, mu
+    }else{
+        nparam = length(par$param)+1 # number of parameters + mu
+    }
     
     # Number of taxa
     n = length(phylo$tip.label)
@@ -31,12 +37,9 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         par$upper = Inf
     }
     
-    # Check for control options for the optimizer
-    if(is.null(par[["control"]])){
-        par$control<-list()
-    }
+    # Control options for the optimizer
     # set it to maximize the log-likelihood (allows using the likelihood function in mcmc without inverting the sign)
-    par$control$fnscale=-1
+    control$fnscale=-1
     
     # Reorder the tree
     phylo<-reorder.phylo(phylo,"postorder")
@@ -59,6 +62,12 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     # Index of terminal branches for measurement error
     if(!is.null(error)){
       index_error<-sapply(1:n, function(x){ which(phylo$edge[,2]==x)})
+      # reorder the trait vector according to the tree
+      if(is.null(names(error))){
+          stop("You should provide a named vector for \"error\" ")
+      }else{
+          error<-error[phylo$tip.label]
+      }
       is_error<-TRUE
     }else{
       index_error<-NULL
@@ -100,41 +109,49 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     
     ## Optimization of the log-likelihood
     
-    # Starting values
-    
+    # Starting values for the default models
+    if(!is.function(model)){
         # Check if sigma is provided by the user
-        if(is.null(par[["sig2"]])){
+        if(is.null(par[["sig2"]]) & is.null(par[["param"]])){
             # Use default values
             sigma_guess<-var(data)/tot_time
-        }else{
+        }else if(!is.null(par[["sig2"]])){
             sigma_guess<-par$sig2
+        }else{
+            sigma_guess<-par$param[1]
         }
         
         # Check if beta is provided by the user
-        if(is.null(par[["beta"]])){
+        if(is.null(par[["beta"]]) & is.null(par[["param"]])){
             # Use default values
             if(model=="EnvExp"){
                 # Set beta = 0; i.e. no effect of the climate
                 beta_guess<-0
-            }else{
+            }else if(model=="EnvLin"){
                 # For the linear-climatic model, the climatic effect vanish when beta=sigma
                 beta_guess<-sigma_guess
             }
             
-        }else{
+        }else if(!is.null(par[["beta"]])){
             beta_guess<-par$beta
+        }else{
+            beta_guess<-par$param[2]
         }
-    
     
     # Vector of starting values
     startval<-c(sigma_guess,beta_guess)
+    
+    }else{
+        if(is.null(par[["param"]])){
+            stop("Please provide starting values for the parameter search of your model through the \"param\" argument in the \"par\" list. See ?fit_t_env")
+        }
+    # Vector of starting values is provided by the user
+    startval<-par$param
+    }
    
     # Optimization
-    if(model=="EnvExp"){
-        estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(sig2=exp(x[1]), beta=x[2], fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error), model)},control=par$control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
-    }else if(model=="EnvLin"){
-        estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(sig2=exp(x[1]), beta=exp(x[2]), fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error), model)},control=par$control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
-    }
+    estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, mtot=tot_time), model)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
+    
     
     ## Results
     
@@ -157,19 +174,11 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         # AICc
         AICc = AIC+((2*nparam*(nparam+1))/(n-nparam-1))
         
-        # sig2
-        sig2 = exp(estim$par[1])
+  
         
-        # beta
-        if(model=="EnvExp"){
-        beta = estim$par[2]
-        }else if(model=="EnvLin"){
-        beta = exp(estim$par[2])
-        }
-        
-        # Root value
-        return_root<-function(beta, mtot, times, fun, sigma, model, tips, is_error){
-            phylo <- .CLIMtransform(phylo, beta=beta, mtot=mtot, times=times, funEnv=fun, sigma=sigma, model=model, tips=tips)
+        # Root value function
+        return_root<-function(param, mtot, times, fun, model, tips, is_error){
+            phylo <- .CLIMtransform(phylo, param=param, mtot=mtot, times=times, funEnv=fun, model=model, tips=tips)
             # Add measurement error
             if(is_error){
                 phylo$edge.length[index_error]<-phylo$edge.length[index_error]+error^2 # assume the "se" are provided in the error vector
@@ -177,9 +186,36 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
             root<-mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=FALSE, mu=NULL, sigma=1))$theta
             return(root)
         }
-        root<-return_root(beta,tot_time,times,env_data,sig2,model,n,is_error)
+        
+        # Root
+        root<-return_root(estim$par,tot_time,times,env_data,model,n,is_error)
     
-    results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = 3, sig2 = sig2, b = beta, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model)
+    if(is.function(model)){
+        # If the model is defined by the user we return a customized result
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = estim$par, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model)
+        
+    }else if(model=="EnvExp"){
+        
+        # sig2
+        sig2 = exp(estim$par[1])
+        
+        # beta
+        beta = estim$par[2]
+        
+        # results
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = c(sig2, beta), root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model)
+        
+    }else if(model=="EnvLin"){
+        # sig2
+        sig2 = exp(estim$par[1])
+        
+        # beta
+        beta = exp(estim$par[2])
+        
+        # results
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = c(sig2, beta), root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model)
+    
+    }
     
     class(results)<-c("fit_t.env")
     

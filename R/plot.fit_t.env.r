@@ -10,13 +10,23 @@
 plot.fit_t.env<-function(x,...){
     
     # Rates through time function
-    if(x$model=="EnvExp"){
-        fun_temp<-function(x,temp,agetot,beta,sig){
+    if(is.function(x$model)){
+        fun_temp<-function(x,temp,model,param){
+            rate_fun<-function(x){ model(x, temp, param) }
+            rate<-rate_fun(x)
+            return(rate)
+        }
+    }else if(x$model=="EnvExp"){
+        fun_temp<-function(x,temp,model,param){
+            sig<-param[1]
+            beta<-param[2]
             rate<-(sig*exp(beta*temp(x)))
             return(rate)
         }
-    }else{
-        fun_temp<-function(x,temp,agetot,beta,sig){
+    }else if(x$model=="EnvLin"){
+        fun_temp<-function(x,temp,model,param){
+            sig<-param[1]
+            beta<-param[2]
             rate<-sig+(beta-sig)*temp(x)
             return(rate)
         }
@@ -26,9 +36,13 @@ plot.fit_t.env<-function(x,...){
     t <- seq(0,x$tot_time, length.out=100)
     
     # Rates through time
-    rates<-fun_temp( x=t, temp=x$env_func, agetot=x$tot_time, beta=x$b, sig=x$sig2)
+    if(!is.function(x$model)){
+    rates<-fun_temp( x=t, temp=x$env_func, model=x$model, param=x$param)
+    }else{
+    rates<-fun_temp( x=t, temp=x$env_func, model=x$model, param=x$param)
+    }
     
-    plot(-t, rates, type='l', xlab="Times", ylab="Evolutionary rates", main="Evolutionary rate through time", ...)
+    plot(-t, rates, type='l', xlab="Times", ylab=bquote(paste("Evolutionary rates ", sigma)), main="Evolutionary rate through time", ...)
 }
 
 # Allows drawing lines and superposing various results
@@ -36,13 +50,23 @@ plot.fit_t.env<-function(x,...){
 lines.fit_t.env<-function(x,...){
     
     # Rates through time function
-    if(x$model=="EnvExp"){
-        fun_temp<-function(x,temp,agetot,beta,sig){
+    if(is.function(x$model)){
+        fun_temp<-function(x,temp,model,param){
+            rate_fun<-function(x){ model(x, temp, param) }
+            rate<-rate_fun(x)
+            return(rate)
+        }
+    }else if(x$model=="EnvExp"){
+        fun_temp<-function(x,temp,model,param){
+            sig<-param[1]
+            beta<-param[2]
             rate<-(sig*exp(beta*temp(x)))
             return(rate)
         }
-    }else{
-        fun_temp<-function(x,temp,agetot,beta,sig){
+    }else if(x$model=="EnvLin"){
+        fun_temp<-function(x,temp,model,param){
+            sig<-param[1]
+            beta<-param[2]
             rate<-sig+(beta-sig)*temp(x)
             return(rate)
         }
@@ -52,7 +76,11 @@ lines.fit_t.env<-function(x,...){
     t <- seq(0,x$tot_time, length.out=100)
     
     # Rates through time
-    rates<-fun_temp( x=t, temp=x$env_func, agetot=x$tot_time, beta=x$b, sig=x$sig2)
+    if(!is.function(x$model)){
+        rates<-fun_temp( x=t, temp=x$env_func, model=x$model, param=x$param)
+    }else{
+        rates<-fun_temp( x=t, temp=x$env_func, model=x$model, param=x$param)
+    }
     
     lines(-t, rates, type='l', ...)
 }

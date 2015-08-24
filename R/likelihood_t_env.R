@@ -17,8 +17,10 @@ require(mvMORPH)
 ## Parameterization
 
 # Default model
-    model<-model[1]
-    
+    if(!is.function(model)){
+        model<-model[1]
+    }
+
 # Number of tips
     tips <- length(phylo$tip.label)
     
@@ -56,9 +58,13 @@ require(mvMORPH)
     if(is.null(par[["times"]])){
         warning("The branching time for the \"phylo\" object was not provided by the user")
         par$times<-branching.times(phylo)
-        
+        # root age
+        mtot<-max(par$times)
         # Set the root to zero
         par$times<-max(par$times)-par$times
+    }else{
+# root age
+    mtot<-par$mtot
     }
 
 # Check if the root value is provided (could be used with an mcmc setting)
@@ -83,21 +89,16 @@ require(mvMORPH)
         is_error<-TRUE
     }
 
-# root age
-    mtot<-max(par$times)
-
-
-
 
 ## Transform the tree and return the log-likelihood
     
     # Check the parameters
-    if(is.null(par[["sig2"]]) | is.null(par[["beta"]]))  {
+    if(is.null(par[["param"]]))  {
          stop("Please provide parameters values for \"sig2\" and \"beta\" ")
     }
      
     # Sigma is not provided but analytically computed instead
-    phylo <- .CLIMtransform(phylo, beta=par$beta, mtot=mtot, times=par$times, funEnv=par$fun, sigma=par$sig2, model=model, tips=tips)
+    phylo <- .CLIMtransform(phylo, param=par$param, mtot=mtot, times=par$times, funEnv=par$fun, model=model, tips=tips)
    
     # Add measurement error
     if(is_error){
@@ -122,18 +123,28 @@ return(LL)
 ## Should I get a general wrapper when neither EnvExp or EnvLin are provided?
 
 ## Function to scale the tree to parameters of the climatic model
-.CLIMtransform<-function(phy, beta, mtot, times, funEnv, sigma=NULL, model, tips){
+.CLIMtransform<-function(phy, param, mtot, times, funEnv, model, tips){
     
     # Not yet used (fixed at 0), depends on wether the tree have extant species
     maxdiff<-0
     res <- phy
     
-    if(model=="EnvExp"){
-        # because the curve start from the present to the past and provided values go from the past to the present
+    if(is.function(model)){
+        # user defined function
+        f<-function(x){ model(mtot-x, funEnv, param) }
+        
+    }else if(model=="EnvExp"){
+        # define sigma and beta
+        sigma<-exp(param[1])
+        beta<-param[2]
+        # because "times" assume that the root state is at 0 and funEnv is from the past to the present.
         f<-function(x){sigma*exp(beta*funEnv((mtot+maxdiff)-x))}
         
     }else if(model=="EnvLin"){
-        # sigma is explicitely introduced here
+        # define sigma and beta
+        sigma<-exp(param[1])
+        beta<-exp(param[2])
+        # Clim-lin function
         f<-function(x){sigma+(beta-sigma)*funEnv((mtot+maxdiff)-x)}
     }
     
