@@ -12,6 +12,13 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     ## Parameterization
     model<-model[1]
     
+    # reorder the trait vector according to the tree
+    if(is.null(names(data))){
+        stop("You should provide a named vector for \"data\" ")
+    }else{
+        data<-data[phylo$tip.label]
+    }
+    
     # Number of parameters (fixed up to now)
     nparam = 3 # 3 parameters: sig2, beta, mu
     
@@ -32,7 +39,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     par$control$fnscale=-1
     
     # Reorder the tree
-    phylo<-reorder(phylo,"postorder")
+    phylo<-reorder.phylo(phylo,"postorder")
     
     # Compute the branching times
     if(is.ultrametric(phylo)){
