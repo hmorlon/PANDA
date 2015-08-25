@@ -43,6 +43,7 @@ method to use for ML optimization (default is Nelder-Mead)
   \item{S}{maximum-likelihood estimate of \code{S} parameter of matching competition model (see Note)}
   \item{b}{maximum-likelihood estimate of \code{b} parameter of linear diversity dependence model}
   \item{r}{maximum-likelihood estimate of \code{r} parameter of exponential diversity dependence model}
+  \item{r}{maximum-likelihood estimate of \code{z0}, the value at the root of the tree}
   \item{convergence}{convergence diagnostics from \code{\link{optim}} function (see optim documentation)}
 }
 
