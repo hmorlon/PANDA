@@ -7,7 +7,7 @@
 ##                                                                            ##
 ################################################################################
 
-plot.fit_t.env<-function(x,...){
+plot.fit_t.env<-function(x,steps=100,...){
     
     # Rates through time function
     if(is.function(x$model)){
@@ -33,7 +33,7 @@ plot.fit_t.env<-function(x,...){
     }
     
     # Times steps
-    t <- seq(0,x$tot_time, length.out=100)
+    t <- seq(0,x$tot_time, length.out=steps)
     
     # Rates through time
     if(!is.function(x$model)){
@@ -43,11 +43,13 @@ plot.fit_t.env<-function(x,...){
     }
     
     plot(-t, rates, type='l', xlab="Times", ylab=bquote(paste("Evolutionary rates ", sigma)), main="Evolutionary rate through time", ...)
+    results<-list(time_steps=t, rates=rates)
+    invisible(results)
 }
 
 # Allows drawing lines and superposing various results
 
-lines.fit_t.env<-function(x,...){
+lines.fit_t.env<-function(x,steps=100,...){
     
     # Rates through time function
     if(is.function(x$model)){
@@ -73,7 +75,7 @@ lines.fit_t.env<-function(x,...){
     }
     
     # Times steps
-    t <- seq(0,x$tot_time, length.out=100)
+    t <- seq(0,x$tot_time, length.out=steps)
     
     # Rates through time
     if(!is.function(x$model)){
@@ -83,4 +85,6 @@ lines.fit_t.env<-function(x,...){
     }
     
     lines(-t, rates, type='l', ...)
+    results<-list(time_steps=t, rates=rates)
+    invisible(results)
 }

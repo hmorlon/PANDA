@@ -72,9 +72,6 @@ Max. bound for the number of iteration of the optimizer; other options can be fi
 -sig2: can be used instead of param to define the starting sigma value only
 
 -beta: can be used instead of param to define the beta starting value only
-%The rate models here are function of environmental data fixed by
-%env_data.
-%Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
 }
 
 \note{
