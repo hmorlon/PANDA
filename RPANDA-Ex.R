@@ -240,38 +240,6 @@ print(Phyllostomidae_genera)
 
 
 cleanEx()
-nameEx("fitCompModel")
-### * fitCompModel
-
-flush(stderr()); flush(stdout())
-
-### Name: fitCompModel
-### Title: Fit models of trait evolution incorporating interspecific
-###   interactions
-### Aliases: fitCompModel
-
-### ** Examples
-
-
-data(Anolis.data)
-geography.object<-Anolis.data$geography.object
-pPC1<-Anolis.data$data
-phylo<-Anolis.data$phylo
-
-#Fit three models without biogeography to pPC1 data
-MC.fit<-fitCompModel(phylo,pPC1,model="MC")
-DDlin.fit<-fitCompModel(phylo,pPC1,model="DDlin")
-DDexp.fit<-fitCompModel(phylo,pPC1,model="DDexp")
-
-#Now fit models that incorporate biogeography, NOTE these models take longer to fit
-MC.geo.fit<-fitCompModel(phylo,pPC1,model="MC",geography.object=geography.object)
-DDlin.geo.fit<-fitCompModel(phylo,pPC1,model="DDlin",geography.object=geography.object)
-DDexp.geo.fit<-fitCompModel(phylo,pPC1,model="DDexp",geography.object=geography.object)
-
-
-
-
-cleanEx()
 nameEx("fit_bd")
 ### * fit_bd
 
@@ -419,94 +387,34 @@ par_init <- c(1e7, 1e7-0.5, 1)
 
 
 cleanEx()
-nameEx("likelihood_DD")
-### * likelihood_DD
+nameEx("fit_t_comp")
+### * fit_t_comp
 
 flush(stderr()); flush(stdout())
 
-### Name: likelihood_DD
-### Title: Likelihood of a dataset under diversity-dependent models.
-### Aliases: likelihood_DD
+### Name: fit_t_comp
+### Title: Fits models of trait evolution incorporating competitive
+###   interactions
+### Aliases: fit_t_comp
 
 ### ** Examples
 
-data(Anolis.data)
-phylo <- Anolis.data$phylo
-pPC1 <- Anolis.data$data
-
-# Compute the likelihood that the r value is twice the ML estimate for the DDexp model
-par <- c(0.08148371, (2*-0.3223835))
-lh <- -likelihood_DD(phylo,pPC1,par,model="DDexp")
-
-
-
-cleanEx()
-nameEx("likelihood_DD_geog")
-### * likelihood_DD_geog
-
-flush(stderr()); flush(stdout())
-
-### Name: likelihood_DD_geog
-### Title: Likelihood of a dataset under diversity-dependent models with
-###   biogeography.
-### Aliases: likelihood_DD_geog
-
-### ** Examples
 
 data(Anolis.data)
-phylo <- Anolis.data$phylo
-pPC1 <- Anolis.data$data
-geography.object <- Anolis.data$geography.object
+geography.object<-Anolis.data$geography.object
+pPC1<-Anolis.data$data
+phylo<-Anolis.data$phylo
 
-# Compute the likelihood with geography using ML parameters for fit without geography
-par <- c(log(0.01153294),-0.0006692378)
-lh <- -likelihood_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+#Fit three models without biogeography to pPC1 data
+MC.fit<-fit_t_comp(phylo,pPC1,model="MC")
+DDlin.fit<-fit_t_comp(phylo,pPC1,model="DDlin")
+DDexp.fit<-fit_t_comp(phylo,pPC1,model="DDexp")
 
+#Now fit models that incorporate biogeography, NOTE these models take longer to fit
+MC.geo.fit<-fit_t_comp(phylo,pPC1,model="MC",geography.object=geography.object)
+DDlin.geo.fit<-fit_t_comp(phylo,pPC1,model="DDlin",geography.object=geography.object)
+DDexp.geo.fit<-fit_t_comp(phylo,pPC1,model="DDexp",geography.object=geography.object)
 
-
-cleanEx()
-nameEx("likelihood_MC")
-### * likelihood_MC
-
-flush(stderr()); flush(stdout())
-
-### Name: likelihood_MC
-### Title: Likelihood of a dataset under the matching competition model.
-### Aliases: likelihood_MC
-
-### ** Examples
-
-data(Anolis.data)
-phylo <- Anolis.data$phylo
-pPC1 <- Anolis.data$data
-
-# Compute the likelihood that the S value is twice the ML estimate
-par <- c(0.0003139751, (2*-0.06387258))
-lh <- -likelihood_MC(phylo,pPC1,par)
-
-
-
-cleanEx()
-nameEx("likelihood_MC_geog")
-### * likelihood_MC_geog
-
-flush(stderr()); flush(stdout())
-
-### Name: likelihood_MC_geog
-### Title: Likelihood of a dataset under the matching competition model
-###   with biogeography.
-### Aliases: likelihood_MC_geog
-
-### ** Examples
-
-data(Anolis.data)
-phylo <- Anolis.data$phylo
-pPC1 <- Anolis.data$data
-geography.object <-  Anolis.data$geography.object
-
-# Compute the likelihood with geography using ML parameters for fit without geography
-par <- c(0.0003139751, -0.06387258)
-lh <- -likelihood_MC_geog(phylo,pPC1,par,geography.object)
 
 
 
@@ -599,6 +507,98 @@ d <- 1e6-0.5
 nu <- 0.6
 f <- 87/89
 #lh <- likelihood_sgd(Cetacea, tot_time, b, d, nu, f)
+
+
+
+cleanEx()
+nameEx("likelihood_t_DD")
+### * likelihood_t_DD
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_t_DD
+### Title: Likelihood of a dataset under diversity-dependent models.
+### Aliases: likelihood_t_DD
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+
+# Compute the likelihood that the r value is twice the ML estimate for the DDexp model
+par <- c(0.08148371, (2*-0.3223835))
+lh <- -likelihood_t_DD(phylo,pPC1,par,model="DDexp")
+
+
+
+cleanEx()
+nameEx("likelihood_t_DD_geog")
+### * likelihood_t_DD_geog
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_t_DD_geog
+### Title: Likelihood of a dataset under diversity-dependent models with
+###   biogeography.
+### Aliases: likelihood_t_DD_geog
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+geography.object <- Anolis.data$geography.object
+
+# Compute the likelihood with geography using ML parameters for fit without geography
+par <- c(log(0.01153294),-0.0006692378)
+lh <- -likelihood_t_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+
+
+
+cleanEx()
+nameEx("likelihood_t_MC")
+### * likelihood_t_MC
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_t_MC
+### Title: Likelihood of a dataset under the matching competition model.
+### Aliases: likelihood_t_MC
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+
+# Compute the likelihood that the S value is twice the ML estimate
+par <- c(0.0003139751, (2*-0.06387258))
+lh <- -likelihood_t_MC(phylo,pPC1,par)
+
+
+
+cleanEx()
+nameEx("likelihood_t_MC_geog")
+### * likelihood_t_MC_geog
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_t_MC_geog
+### Title: Likelihood of a dataset under the matching competition model
+###   with biogeography.
+### Aliases: likelihood_t_MC_geog
+
+### ** Examples
+
+data(Anolis.data)
+phylo <- Anolis.data$phylo
+pPC1 <- Anolis.data$data
+geography.object <-  Anolis.data$geography.object
+
+# Compute the likelihood with geography using ML parameters for fit without geography
+par <- c(0.0003139751, -0.06387258)
+lh <- -likelihood_t_MC_geog(phylo,pPC1,par,geography.object)
 
 
 
@@ -734,34 +734,6 @@ result <- spectR(Cetacea)
 
 
 cleanEx()
-nameEx("simCompModel")
-### * simCompModel
-
-flush(stderr()); flush(stdout())
-
-### Name: simCompModel
-### Title: Recursive simulation (root-to-tip) of competition models
-### Aliases: simCompModel
-
-### ** Examples
-
-
-data(Cetacea)
-
-# Simulate data under the matching competition model
-MC.data<-simCompModel(Cetacea,pars=c(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
-
-# Simulate data under the diversity dependent linear model
-DDlin.data<-simCompModel(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
-
-# Simulate data under the diversity dependent linear model
-DDexp.data<-simCompModel(Cetacea,pars=c(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
-
-
-
-
-
-cleanEx()
 nameEx("sim_sgd")
 ### * sim_sgd
 
@@ -779,6 +751,34 @@ d <- b-0.5
 nu <- 0.6
 tree <- sim_sgd(tau,b,d,nu)
 plot(tree)
+
+
+
+cleanEx()
+nameEx("sim_t_comp")
+### * sim_t_comp
+
+flush(stderr()); flush(stdout())
+
+### Name: sim_t_comp
+### Title: Recursive simulation (root-to-tip) of competition models
+### Aliases: sim_t_comp
+
+### ** Examples
+
+
+data(Cetacea)
+
+# Simulate data under the matching competition model
+MC.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
+
+# Simulate data under the diversity dependent linear model
+DDlin.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
+
+# Simulate data under the diversity dependent linear model
+DDexp.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
+
+
 
 
 
