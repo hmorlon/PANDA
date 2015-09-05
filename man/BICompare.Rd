@@ -6,7 +6,7 @@ Identify modalities in a phylogeny
 }
 
 \description{
-Computes the BIC values for a specified number of modalities in the distance matrix of a phylogenetic tree and that of a randomly bifurcating tree; identifies these modalities using k-means clustering.
+Computes the BIC values for a specified number of modalities in the distance matrix of a phylogenetic tree and that of randomly bifurcating trees; identifies these modalities using k-means clustering.
 }
 
 \usage{
@@ -26,7 +26,7 @@ whether the randomly bifurcating "control" tree should be ultrametric or non-ult
 \value{
 	a list with the following components:
 	\item{BIC_test}{
-	BIC values for finding t modalities in the distance matrix of a tree and that of a random ("control") tree}
+	BIC values for finding t modalities in the distance matrix of a tree and that of 100 random ("control") trees}
 	\item{clusters}{
 	 a vector specifying which nodes in the tree belong to each of t modalities}
 	 \item{BSS/TSS}{
