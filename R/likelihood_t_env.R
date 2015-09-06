@@ -89,7 +89,13 @@ require(mvMORPH)
         is_error<-TRUE
     }
 
-
+# Control for the integrate function: number of subdivisions
+    if(is.null(par[["subdivisions"]])){
+        subdivisions<-200
+    }else{
+        subdivisions<-par$subdivisions
+    }
+    
 ## Transform the tree and return the log-likelihood
     
     # Check the parameters
@@ -98,7 +104,7 @@ require(mvMORPH)
     }
      
     # Sigma is not provided but analytically computed instead
-    phylo <- .CLIMtransform(phylo, param=par$param, mtot=mtot, times=par$times, funEnv=par$fun, model=model, tips=tips)
+    phylo <- .CLIMtransform(phylo, param=par$param, mtot=mtot, times=par$times, funEnv=par$fun, model=model, tips=tips, subdivisions=subdivisions)
    
     # Add measurement error
     if(is_error){
@@ -123,7 +129,7 @@ return(LL)
 ## Should I get a general wrapper when neither EnvExp or EnvLin are provided?
 
 ## Function to scale the tree to parameters of the climatic model
-.CLIMtransform<-function(phy, param, mtot, times, funEnv, model, tips){
+.CLIMtransform<-function(phy, param, mtot, times, funEnv, model, tips, subdivisions){
     
     # Not yet used (fixed at 0), depends on wether the tree have extant species
     maxdiff<-0
@@ -152,7 +158,15 @@ return(LL)
     for (i in 1:length(phy$edge.length)) {
         bl <- phy$edge.length[i]
         age <- times[phy$edge[i, 1] - tips]
-        res$edge.length[i] <- integrate(f,lower=age, upper=(age + bl), subdivisions=200,rel.tol = .Machine$double.eps^0.05)$value
+        int <- try(integrate(f,lower=age, upper=age+bl, subdivisions=subdivisions,rel.tol = .Machine$double.eps^0.05), silent = TRUE)
+        # Try catch if the integrand is divergent
+        if(inherits(int ,'try-error')){
+            warning("An error occured during numerical integration. The integral is probably divergent or your function is maybe undefined for some values")
+            integ <- NA_real_
+        } else {
+            integ <- int$value
+        }
+        res$edge.length[i] <- integ
     }
     phy<-res
     return(phy)
