@@ -57,7 +57,44 @@ Max. bound for the number of iteration of the optimizer; other options can be fi
   \item{model}{the fitted model (default models or user specified)}
 }
 
-\details{The various options are provided through the "par" list. 
+\details{
+\code{fit_t_env} allows fitting environmental models of trait evolution. The default models \emph{EnvExp} and \emph{EnvLin} represents models for which the evolutionary rates are changing as a function of environmental changes though times as defined below.
+
+\code{EnvExp}:
+\deqn{\sigma2 (t)  =  \sigma2 * e^(\betaT(t))}
+\code{EnvLin}:
+\deqn{\sigma2 (t)  =  \sigma2 + \betaT(t)}
+
+Users defined models should have the following form:
+
+\code{fun <- function(t, env, param){ param*env(t)}}
+
+\emph{t}: is the time parameter.
+
+\emph{env}: is a time function of an environmental variable. See for instance object created by \code{splinefun} when interpolating coordinate of points.
+
+\emph{param}: is a vector of parameters to estimates.
+
+For instance, the \code{EnvExp} function can be coded as: 
+\code{fun <- function(t, env, param){ param[1]*exp(param[2]*env(t))}} 
+where \code{param[1]} is the \eqn{\sigma} parameter and \code{param[2]} is the \eqn{\beta} parameter. 
+Note that in this later case, two starting values should be provided in the \code{param} argument through the \code{par} list.
+
+e.g.:
+
+\code{sigma=0.1}
+
+\code{beta=0}
+
+\code{fit_t_env(tree, data, env_data=InfTemp, model=fun, par=list(param=c(sigma,beta)))}
+
+
+
+
+
+
+
+The various options are passed through the "par" list. 
 
 -param: The starting values used for the model. The lengths of the "param" argument in the par list is used to compute the total number of parameters for user specified models.
 
