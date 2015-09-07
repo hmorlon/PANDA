@@ -18,11 +18,11 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 		if(meth=="non-ultrametric"){	
 			c() -> rDP
 			c() -> r
-			for(i in c(1:100)){
+			for(i in c(1:1000)){
 				rDP[[i]] <- as.matrix(
 					dist.nodes(
 						rtree(n=length(phylo$tip.label),
-							br=runif(100,min=min(phylo$edge.length),
+							br=runif(1000,min=min(phylo$edge.length),
 						max=max(phylo$edge.length)))))
 					r[i] <- kmeansBIC(kmeans(rDP[[i]],t,algorithm="Hartigan-Wong"))
 				}
@@ -34,20 +34,20 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 				for(j in 1:length(r)){
 					pDP[[j]] <- 1-pnorm(as.numeric(r[j]),m,s)
 				}
-			col_r <- cbind(as.numeric(r),pDP)
-		low_p <- subset(col_r,col_r[,2] == min(col_r[,2]))	
-	r = low_p[,1]			
+			low_z <- cbind(as.numeric(r),pDP)
+			low_z <- sort(low_z[,1])
+	r = low_z[5]			
 	}		
 
 	##if tree is ultrametric	
 		if(meth=="ultrametric"){
 			c() -> rDP
 			c() -> r
-			for(i in c(1:100)){
+			for(i in c(1:1000)){
 				rDP[[i]] <- as.matrix(
 					dist.nodes(
 						rcoal(n=length(phylo$tip.label),
-							br=runif(100,0,max(branching.times(phylo)/20)))))
+							br=runif(1000,0,max(branching.times(phylo)/20)))))
 			r[i] <- kmeansBIC(kmeans(rDP[[i]],t,algorithm="Hartigan-Wong"))
 				}
 			##get z-score for BICs
@@ -58,9 +58,9 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 				for(j in 1:length(r)){
 					pDP[[j]] <- 1-pnorm(as.numeric(r[j]),m,s)
 				}
-			col_r <- cbind(as.numeric(r),pDP)
-		low_p <- subset(col_r,col_r[,2] == min(col_r[,2]))	
-	r = low_p[,1]			
+			low_z <- cbind(as.numeric(r),pDP)
+			low_z <- sort(low_z[,1])
+	r = low_z[5]			
 	}	
 	
 	##get BICs for tree and control

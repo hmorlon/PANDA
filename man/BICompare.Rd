@@ -26,7 +26,7 @@ whether the randomly bifurcating "control" tree should be ultrametric or non-ult
 \value{
 	a list with the following components:
 	\item{BIC_test}{
-	BIC values for finding t modalities in the distance matrix of a tree and that of 100 random ("control") trees}
+	BIC values for finding t modalities in the distance matrix of a tree and the lowest five percent of 1000 random ("control") trees}
 	\item{clusters}{
 	 a vector specifying which nodes in the tree belong to each of t modalities}
 	 \item{BSS/TSS}{
