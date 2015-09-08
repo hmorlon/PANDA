@@ -4,40 +4,25 @@ require(deSolve)
 
 .VCV.rescale<-function(phylo,sigma,alpha,sterm){
 	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
+	if(!is.binary.tree(phylo)){stop("tree must not contain any polytomies")}
+	if(sum(phylo$edge.length<0)>0){stop("tree cannot have negative branch lengths")}
+	if(!is.ultrametric(phylo)){stop("tree must be ultrametric; current verson cannot handle fossil taxa (in development)")}
 	parameters<-c(a=alpha,b=sigma,s=sterm) 
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
 	paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS
 	nodeDist<-vector(mode = "numeric", length = phylo$Nnode)
+
 	root <- length(phylo$tip.label) + 1
 	heights<-nodeHeights(phylo)
-	for (i in 1:dim(phylo$edge)[1]){
-		nodeDist[[phylo$edge[i, 1] - length(phylo$tip.label)]] <- heights[i]
-	}
-	nodeDist<-c(nodeDist,max(heights))
+	totlen<-max(heights)
+	nodeDist<-c(as.numeric(sort(max(branching.times(phylo))-branching.times(phylo))),totlen)	
 	nodeDiff<-diff(nodeDist)
-	###label the branches for each segment of tree to be integrated and identify the node at which the branch terminates
-	
-	if(sum(nodeDiff<0)>0){  ##this loop renumbers the nodes if trees nodes are not placed in sequential order
-		node.order<-match(rank(heights[,1],ties.method="min"),seq(1, by = 2, len = phylo$Nnode))
-		node.order<-node.order+length(phylo$tip.label)
+	old.labels<-as.numeric(names(sort(branching.times(phylo),decreasing=TRUE)))
+	if(any(diff(old.labels)!=1)){ #if nodes are not in sequential order, this renames them so that they are
+		checkmat<-cbind(old.labels,seq(root,length(phylo$tip.label)+phylo$Nnode))
 		old.edge<-phylo$edge
-		phylo$edge[,1]<-node.order
-		for(j in 1:length(phylo$edge[,2])){
-			if(phylo$edge[j,2]>length(phylo$tip.label)){
-				#match number order in old edge
-				#lookup value in new edge
-				#replace with value
-				phylo$edge[j,2]<-phylo$edge[,1][match(phylo$edge[j,2],old.edge[,1])]
-				}
-			}
-		nodeDist<-vector()
-		for (i in 1:dim(phylo$edge)[1]){
-			nodeDist[[phylo$edge[i, 1] - length(phylo$tip.label)]] <- heights[i]
-			}
-		nodeDist<-c(nodeDist,max(heights))
-		nodeDiff<-diff(nodeDist)
-	}
-	
+		for(j in 1:phylo$Nnode){phylo$edge[which(old.edge==checkmat[j,1])]<-checkmat[j,2]}
+		}	
 	mat<-matrix(nrow=0, ncol=3)
 	counter_three_letters <- 0
 	for(i in 1:phylo$Nnode){
