@@ -60,7 +60,7 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 				}
 			low_z <- cbind(as.numeric(r),pDP)
 			low_z <- sort(low_z[,1])
-	r = low_z[5]			
+	r = low_z[50]			
 	}	
 	
 	##get BICs for tree and control
