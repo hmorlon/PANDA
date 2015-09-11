@@ -24,6 +24,9 @@ A 2-panel plot with the spectral density profile on the first panel and the eige
 
 \author{E Lewitus}
 
+\references{
+	Lewitus, E., Morlon, H., Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476}
+
 \seealso{
 \code{\link{spectR}}
 }
