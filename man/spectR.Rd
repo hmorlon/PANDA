@@ -17,7 +17,7 @@ spectR(phylo, method=c("standard"))
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)}
   \item{method}{
-the method used to compute the spectral density, which can either be "standard" or "normal". If set to "standard", compute the unnormalized version of the spectral density. If set to "normal", compute the spectral density normalized to the degree matrix (see the associated paper for an explanation)}
+the method used to compute the spectral density, which can either be "standard" or "normal". If set to "standard", computes the unnormalized version of the spectral density. If set to "normal", computes the spectral density normalized to the degree matrix (see the associated paper for an explanation)}
 }
 
 \value{
@@ -31,7 +31,7 @@ the skewness of the spectral density profile}
 	\item{peakedness1}{
 the kurtosis of the spectral density profile}
 	\item{peakedness2}{
-the large y-axis value of the spectral density profile}
+the largest y-axis value of the spectral density profile}
 	\item{eigengap}{
 the position of the largest difference between eigenvalues, giving the number of modalities in the tree}
 	}
