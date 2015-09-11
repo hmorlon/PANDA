@@ -56,18 +56,19 @@ skewness <- function (x, na.rm = FALSE)
 #peak height
 peak_height <- function(x)
 {
-dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
+	kernelG <- function(x, mean=0, sd=1) dnorm(x, mean = mean, sd = sd)
+	dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
                 from = min(x) - 3*sd, to = max(x) + 3*sd, adjust = 1,
                 ...) {
-  if(has.na <- any(is.na(x))) {
-    x <- na.omit(x)
+ 	if(has.na <- any(is.na(x))) {
+    	x <- na.omit(x)
     if(length(x) == 0)
         stop("no finite or non-missing data!")
   }
-  sd <- (if(is.numeric(bw)) bw[1] else bw(x)) * adjust
-  X <- seq(from, to, len = n)
-  M <- outer(X, x, kernel, sd = sd, ...)
-  structure(list(x = X, y = rowMeans(M), bw = sd,
+  	sd <- (if(is.numeric(bw)) bw[1] else bw(x)) * adjust
+		X <- seq(from, to, len = n)
+			M <- outer(X, x, kernel, sd = sd, ...)
+		structure(list(x = X, y = rowMeans(M), bw = sd,
                  call = match.call(), n = length(x),
                  data.name = deparse(substitute(x)),
                  has.na = has.na), class =  "density")
