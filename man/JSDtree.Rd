@@ -27,7 +27,8 @@ the method used to compute the spectral density, which can either be "standard",
 
 \author{E Lewitus}
 
-Lewitus, E., Morlon, H., Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476}
+\references{
+	Lewitus, E., Morlon, H., Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476}
 
 
 \seealso{
