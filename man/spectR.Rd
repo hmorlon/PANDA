@@ -17,7 +17,7 @@ spectR(phylo, method=c("standard"))
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)}
   \item{method}{
-the method used to compute the spectral density, which can either be "standard", "normal1", or "normal2". if set to "normal1", compute the spectral density normalized to the degree matrix. if set to "normal2", compute the spectral density normalized to the number of eigenvalues. if set to "standard", compute the unnormalized version of the spectral density (see the associated paper for an explanation)}
+the method used to compute the spectral density, which can either be "standard" or "normal". If set to "standard", compute the unnormalized version of the spectral density. If set to "normal", compute the spectral density normalized to the degree matrix (see the associated paper for an explanation)}
 }
 
 \value{
@@ -28,8 +28,10 @@ the vector of eigenvalues}
 the largest (or principal) eigenvalue of the spectral density profile}
 \item{asymmetry}{
 the skewness of the spectral density profile} 
-	\item{peakedness}{
+	\item{peakedness1}{
 the kurtosis of the spectral density profile}
+	\item{peakedness2}{
+the large y-axis value of the spectral density profile}
 	\item{eigengap}{
 the position of the largest difference between eigenvalues, giving the number of modalities in the tree}
 	}
@@ -39,7 +41,7 @@ the position of the largest difference between eigenvalues, giving the number of
 
 
 \references{
-	Lewitus, E., Morlon, H., A graph-theoretical approach to characterising and comparing phylogenies (submitted) }
+	Lewitus, E., Morlon, H., Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476}
 
 \author{E Lewitus}
 
