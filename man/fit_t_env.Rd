@@ -26,7 +26,7 @@ Environmental data, given as a time continuous function (see, e.g. splinefun) or
 A named vector with standard error for each species.
 }
   \item{model}{
-The model describing the functional form of variation of the evolutionary rate \eqn{\sigma} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used.
+The model describing the functional form of variation of the evolutionary rate \eqn{\sigma} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used (forward in time).
 This function has three arguments: the first argument is time; the second argument is the environmental variable; the third arguement is a numeric vector of the parameters controlling the time and environmental variation (to be estimated). See the example below.
 }
   \item{par}{
@@ -112,6 +112,7 @@ The various options are passed through the "par" list.
 }
 
 \note{
+	The users defined function is evaluated forward in time i.e.: from the root to the tips.
 	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
