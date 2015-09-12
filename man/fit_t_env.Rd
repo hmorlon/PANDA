@@ -58,12 +58,15 @@ Max. bound for the number of iteration of the optimizer; other options can be fi
 }
 
 \details{
-\code{fit_t_env} allows fitting environmental models of trait evolution. The default models \emph{EnvExp} and \emph{EnvLin} represents models for which the evolutionary rates are changing as a function of environmental changes though times as defined below.
+\code{fit_t_env} allows fitting environmental models of trait evolution. 
+The default models \emph{EnvExp} and \emph{EnvLin} represents models for which the 
+evolutionary rates are changing as a function of environmental changes though times as 
+defined below.
 
 \code{EnvExp}:
-\deqn{\sigma2 (t)  =  \sigma2 * e^(\betaT(t))}
+\deqn{\sigma^2 (t)  =  \sigma_0^2  e^{(\beta T(t))}}{sigma^2(t) = sigma^2 * e^(beta * T(t))}
 \code{EnvLin}:
-\deqn{\sigma2 (t)  =  \sigma2 + \betaT(t)}
+\deqn{\sigma^2 (t)  =  \sigma_0^2 + \beta T(t)}{sigma^2(t) = sigma^2 + beta * T(t)}
 
 Users defined models should have the following form:
 
@@ -71,14 +74,19 @@ Users defined models should have the following form:
 
 \emph{t}: is the time parameter.
 
-\emph{env}: is a time function of an environmental variable. See for instance object created by \code{splinefun} when interpolating coordinate of points.
+\emph{env}: is a time function of an environmental variable. 
+See for instance object created by \code{splinefun} when interpolating coordinate of points.
 
 \emph{param}: is a vector of parameters to estimates.
 
 For instance, the \code{EnvExp} function can be coded as: 
+
 \code{fun <- function(t, env, param){ param[1]*exp(param[2]*env(t))}} 
-where \code{param[1]} is the \eqn{\sigma} parameter and \code{param[2]} is the \eqn{\beta} parameter. 
-Note that in this later case, two starting values should be provided in the \code{param} argument through the \code{par} list.
+
+where \code{param[1]} is the \eqn{\sigma^2} parameter and \code{param[2]} is 
+the \eqn{\beta} parameter. 
+Note that in this later case, two starting values should be provided in the \code{param} 
+argument through the \code{par} list.
 
 e.g.:
 
@@ -122,7 +130,9 @@ Clavel, J. & Morlon, H. (in prep)
 \author{J. Clavel}
 
 \seealso{
-\code{\link{plot.fit_t.env}}, \code{\link{simulate_t_env}}, \code{\link{likelihood_t_env}}
+%% add later  \code{\link{simulate_t_env}}  
+\code{\link{plot.fit_t.env}}, 
+\code{\link{likelihood_t_env}}
 }
 
 \examples{
@@ -137,7 +147,7 @@ trait<-rTraitCont(Cetacea)
   # Fit the environmental model
   result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
   plot(result1)
-
+\dontrun{
   # Add to the plot the results from different smoothing of the temperature curve
   result2=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(df=10, scale=TRUE))
   lines(result2, col="red")
@@ -162,15 +172,19 @@ trait<-rTraitCont(Cetacea)
 
 ## Fit user defined environmental function
 
-  spline_result <- sm.spline(InfTemp[,1],InfTemp[,2], df=50)
-  env_func <- function(t){predict(spline_result,t)}
-  t<-unique(InfTemp[,1])
+require(pspline)
+  	 spline_result <- sm.spline(x=InfTemp[,1],y=InfTemp[,2], df=50)
+  	 env_func <- function(t){predict(spline_result,t)}
+  	 t<-unique(InfTemp[,1])
+  	
   # We build the interpolated smoothing spline function
-  env_data<-splinefun(t,env_func(t))
+  	 env_data<-splinefun(t,env_func(t))
   
   # We then fit the model
-  fit_t_env(Cetacea, trait, env_data=env_data)
+  	 fit_t_env(Cetacea, trait, env_data=env_data)
   
 ## Various parameterization (box constraints, df, scaling of the curve...) example
-# fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", par=list(scale=TRUE, lower=-30, upper=20, df=10))
+ fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", 
+ par=list(scale=TRUE, lower=-30, upper=20, df=10))
+ }
 }
