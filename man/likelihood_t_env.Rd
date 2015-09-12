@@ -86,6 +86,7 @@ parameters <- list(param=c(0.1, 0), fun=InfTemp, times=times, mtot=mtot)
 likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
 
 # Provide the environmental function rather than the dataset (faster if used recursively)
+\dontrun{
 spline_result <- sm.spline(InfTemp[,1],InfTemp[,2], df=50)
 env_func <- function(t){predict(spline_result,t)}
 t<-unique(InfTemp[,1])
@@ -94,5 +95,5 @@ env_data<-splinefun(t,env_func(t))
   
 parameters <- list(param=c(0.1, 0), fun=env_data, times=times, mtot=mtot)
 likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
-  
+	}  
 }

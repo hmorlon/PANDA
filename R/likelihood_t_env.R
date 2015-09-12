@@ -12,7 +12,7 @@
 likelihood_t_env<-function(phylo, data, par=NULL, model=c("EnvExp", "EnvLin")){
 
 # Use mvMORPH for computing the log-likelihood
-require(mvMORPH)
+#require(mvMORPH)
 
 ## Parameterization
 
@@ -91,7 +91,7 @@ require(mvMORPH)
 
 # Control for the integrate function: number of subdivisions
     if(is.null(par[["subdivisions"]])){
-        subdivisions<-200
+        subdivisions<-200L
     }else{
         subdivisions<-par$subdivisions
     }

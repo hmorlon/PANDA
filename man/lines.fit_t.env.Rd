@@ -1,5 +1,4 @@
 \name{lines.fit_t.env}
-\alias{lines}
 \alias{lines.fit_t.env}
 
 \title{
@@ -10,7 +9,7 @@ Fits model of trait evolution for which evolutionary rates depends on an environ
 }
 \usage{
 ## S3 method for class 'fit_t.env'
-lines(x, steps = 100, ...)
+\method{lines}{fit_t.env}(x, steps = 100, ...)
 
 }
 \arguments{
@@ -46,7 +45,8 @@ Clavel, J. & Morlon, H. (in prep)
 \author{J. Clavel}
 
 \seealso{
-\code{\link{plot.fit_t.env}}, \code{\link{simulate_t_env}}, \code{\link{likelihood_t_env}}
+%% add later  \code{\link{simulate_t_env}}  
+\code{\link{plot.fit_t.env}}, \code{\link{likelihood_t_env}}
 }
 
 \examples{
