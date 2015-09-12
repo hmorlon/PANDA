@@ -27,7 +27,7 @@ a plot of the phylogeny with branches colored according to which modalities they
 \author{E Lewitus}
 
 \references{
-	Lewitus, E., Morlon, H., A graph-theoretical approach to characterising and comparing phylogenies (submitted) }
+	Lewitus, E., Morlon, H., Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476}
 
 
 \seealso{

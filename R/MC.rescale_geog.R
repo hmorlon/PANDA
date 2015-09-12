@@ -7,46 +7,33 @@ require(deSolve)
 .VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geography.object){
 ##these are the three parameters that the equations use to produce the variance-covariance matrix, and will ultimately be estimated with ML
 parameters<-c(a=alpha,b=sigma,s=sterm) 
-if(any(grepl("___",phylo$tip.label))){stop("VCV.rescale cannot handle trees with '___' in the tip labels")}
+if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
+if(!is.binary.tree(phylo)){stop("tree must not contain any polytomies")}
+if(sum(phylo$edge.length<0)>0){stop("tree cannot have negative branch lengths")}
+if(!is.ultrametric(phylo)){stop("tree must be ultrametric; current verson cannot handle fossil taxa (in development)")}
 
 paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
 paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS
 
-
-nodeDist<-vector(mode = "numeric", length = phylo$Nnode)
 root <- length(phylo$tip.label) + 1
 heights<-nodeHeights(phylo)
-for (i in 1:dim(phylo$edge)[1]){
-	nodeDist[[phylo$edge[i, 1] - length(phylo$tip.label)]] <- heights[i]
-}
-nodeDist<-c(nodeDist,max(heights))
+totlen<-max(heights)
+nodeDist<-c(as.numeric(sort(max(branching.times(phylo))-branching.times(phylo))),totlen)	
 nodeDiff<-diff(nodeDist)
-##label the branches for each segment of tree to be integrated and identify the node at which the branch terminates
-
-if(sum(nodeDiff<0)>0){  ##this loop renumbers the nodes if trees nodes are not placed in sequential order
-	node.order<-match(rank(heights[,1],ties.method="min"),seq(1, by = 2, len = phylo$Nnode))
-	node.order<-node.order+length(phylo$tip.label)
+old.labels<-as.numeric(names(sort(branching.times(phylo),decreasing=TRUE)))
+if(any(diff(old.labels)!=1)){ #if nodes are not in sequential order, this renames them so that they are
+	checkmat<-cbind(old.labels,seq(root,length(phylo$tip.label)+phylo$Nnode))
 	old.edge<-phylo$edge
-	phylo$edge[,1]<-node.order
-	for(j in 1:length(phylo$edge[,2])){
-		if(phylo$edge[j,2]>length(phylo$tip.label)){
-			#match number order in old edge
-			#lookup value in new edge
-			#replace with value
-			phylo$edge[j,2]<-phylo$edge[,1][match(phylo$edge[j,2],old.edge[,1])]
-			}
-		}
-	nodeDist<-vector()
-	for (i in 1:dim(phylo$edge)[1]){
-		nodeDist[[phylo$edge[i, 1] - length(phylo$tip.label)]] <- heights[i]
-		}
-	nodeDist<-c(nodeDist,max(heights))
-	nodeDiff<-diff(nodeDist)
-}
+	for(j in 1:phylo$Nnode){phylo$edge[which(old.edge==checkmat[j,1])]<-checkmat[j,2]}
+	}
 if(any(nodeDiff==0)){stop("VCV.rescale cannot handle trees with two or more nodes occurring at exactly the same time")}
-if(any(nodeDiff<9e-6)){stop("The current tree has very small branch lengths (< 9e-6), consider multiplying all branch lengths to increase reliability of numerical integration")}
 if(length(geography.object)!=phylo$Nnode){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
-
+det.v<-vector()
+for(i in 1:length(geography.object)){
+	det.v<-c(det.v,det(geography.object[[i]]))
+	}
+if(any(det.v!=0 & det.v!=1)){stop("geography.object must be a block diagonal matrix (see 'Details') in help function")}
+	
 mat<-matrix(nrow=0, ncol=3)
 counter_three_letters <- 0
 for(i in 1:phylo$Nnode){
