@@ -8,7 +8,7 @@ Plot the phenotypic evolutionary rate through time estimated by the \emph{fit_t_
 Fits model of trait evolution for which evolutionary rates depends on an environmental function.
 }
 \usage{
-## S3 method for class 'fit_t.env'
+
 \method{plot}{fit_t.env}(x, steps = 100, ...)
 
 }

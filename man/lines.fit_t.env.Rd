@@ -8,7 +8,7 @@ Add to a plot line segments joining the phenotypic evolutionary rate through tim
 Fits model of trait evolution for which evolutionary rates depends on an environmental function.
 }
 \usage{
-## S3 method for class 'fit_t.env'
+
 \method{lines}{fit_t.env}(x, steps = 100, ...)
 
 }

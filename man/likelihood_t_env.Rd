@@ -28,7 +28,8 @@ a list with "param", "fun", "times", "mtot" and "error" arguments.
 
 -fun: a time contnuous function of an environmental variable (see e.g. ?fit_t_env)
 
--times: a vector of branching times starting at zero (e.g. max(branching.times(phylo))-branching.times(phylo))
+-times: a vector of branching times starting at zero 
+(e.g. max(branching.times(phylo))-branching.times(phylo))
 
 -mtot: root age of the tree (e.g. max(branching.times(phylo)))
 
