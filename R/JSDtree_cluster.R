@@ -5,6 +5,7 @@ JSDtree_cluster <- function(JSDtree,alpha=0.9)
 heatmap(JSDtree,symm=T)
 
 #plot hierarchical clustering with bootstrap support
+	dev.new()
 	clustersHierarchy <- pvclust(JSDtree)
 	plot(clustersHierarchy,cex=0.3)
 	pvrect(clustersHierarchy,alpha=alpha)
