@@ -48,7 +48,7 @@ f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
 #result <- fit_env(Balaenopteridae,InfTemp,tot_time,f.lamb,f.mu,
-      lamb_par,mu_par,f=1, fix.mu=TRUE, df=dof, dt=1e-3)
+#      lamb_par,mu_par,f=1, fix.mu=TRUE, df=dof, dt=1e-3)
 
 # plot fitted rates
 #plot_fit_env(result, InfTemp, tot_time)
