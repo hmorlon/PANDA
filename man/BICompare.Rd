@@ -47,5 +47,5 @@ whether the randomly bifurcating "control" tree should be ultrametric or non-ult
 
 \examples{
 data(Cetacea)
-BICompare(Cetacea,5)
+#BICompare(Cetacea,5)
 }
