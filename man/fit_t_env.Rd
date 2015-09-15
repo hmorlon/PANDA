@@ -147,7 +147,7 @@ trait<-rTraitCont(Cetacea)
   # Fit the environmental model
   result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
   plot(result1)
-\dontrun{
+\donttest{
   # Add to the plot the results from different smoothing of the temperature curve
   result2=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(df=10, scale=TRUE))
   lines(result2, col="red")
@@ -165,10 +165,13 @@ trait<-rTraitCont(Cetacea)
   my_fun<-function(t, env_cont, param){ 
       exp(param[1])*exp(param[2]*env_cont(t))
   }
-
-  res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun, par=list(param=c(0.1,0)))
+  
+  res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun, par=list(param=c(0.1,0)
+  			    , scale=TRUE))
+  # Retrieve the parameters and compare to 'result1'
   res
   plot(res, col="red")
+	
 
 ## Fit user defined environmental function
 
@@ -185,6 +188,6 @@ require(pspline)
   
 ## Various parameterization (box constraints, df, scaling of the curve...) example
  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", 
- par=list(scale=TRUE, lower=-30, upper=20, df=10))
+ 			par=list(scale=TRUE, lower=-30, upper=20, df=10))
  }
 }
