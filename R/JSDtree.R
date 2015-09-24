@@ -72,7 +72,7 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	}	
 	
 		if(meth=="normal1"){
-	treeNodes <- lapply(phylo),dist.nodes)	 
+	treeNodes <- lapply(phylo,dist.nodes)	 
 	treeMats <- lapply(treeNodes,data.matrix)
 	treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
 	treeLaplacian <- lapply(treeGraphs,graph.laplacian,
