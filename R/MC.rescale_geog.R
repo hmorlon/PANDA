@@ -6,7 +6,7 @@ require(geiger)
 require(phytools)
 require(deSolve)
 
-VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geography.object){
+.VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geography.object){
 ##these are the three parameters that the equations use to produce the variance-covariance matrix, and will ultimately be estimated with ML
 parameters<-c(a=alpha,b=sigma,s=sterm) 
 if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
