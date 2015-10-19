@@ -60,8 +60,8 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDexp"){
-		opt<-optim(par,likelihood_t_DD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDexp",method=method)
-		sig2 = abs(opt$par[1])
+		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDexp",method=method)
+		sig2 = exp(opt$par[1])
 		r = opt$par[2]
 		V = .vcv.rescale.DDexp_geog(phylo,sig2,r,geography.object,check=FALSE)
 		data<-as.matrix(data[rownames(V)])
@@ -72,8 +72,8 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDlin"){
-		opt<-optim(par,likelihood_t_DD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDlin",method=method)
-		sig2 = abs(opt$par[1])
+		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDlin",method=method)
+		sig2 = exp(opt$par[1])
 		b = opt$par[2]
 		V = .vcv.rescale.DDlin_geog(phylo,sig2,b,geography.object,check=FALSE)
 		data<-as.matrix(data[rownames(V)])
