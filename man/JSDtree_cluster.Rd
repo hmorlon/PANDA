@@ -6,7 +6,7 @@ Clustering of phylogenies
 }
 \description{Clusters phylogenies using hierarchical and k-medoids clustering}
 \usage{
-JSDtree_cluster(JSDtree,alpha=0.9)
+JSDtree_cluster(JSDtree,alpha=0.9,draw=T)
 }
 
 \arguments{
@@ -16,6 +16,9 @@ a matrix of distances between phylogenie pairs, typically the output of the JSDt
  \item{alpha}{
    	the confidence value for demarcating clusters in the hierarchical clustering plot; the default is 0.9
 	}
+\item{draw}{
+	plot heatmap and hierarchical cluster in new windows
+}	
 	}
 
 \value{
@@ -40,5 +43,5 @@ a matrix of distances between phylogenie pairs, typically the output of the JSDt
 \examples{
 trees<-TESS::tess.sim.age(n=20,age=10,0.15,0.05,MRCA=TRUE)
 res<-JSDtree(trees)
-#JSDtree_cluster(res,alpha=0.9)
+#JSDtree_cluster(res,alpha=0.9,draw=T)
 }
