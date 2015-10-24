@@ -29,7 +29,7 @@ a matrix of distances between phylogenie pairs, typically the output of the JSDt
 		}
 
 \note{
-	The k-medoids clustering may not work with less than 10 trees}
+	The k-medoids clustering may not work with fewer than 10 trees}
 
 \author{E Lewitus}
 
