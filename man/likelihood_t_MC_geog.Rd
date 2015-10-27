@@ -8,7 +8,7 @@ Likelihood of a dataset under the matching competition model with biogeography.
 Computes the likelihood of a dataset under the matching competition model with specified \code{sigma2} and \code{S} values and with a \code{geography.object} formed using \code{\link{CreateGeoObject}}. 
 }
 \usage{
-likelihood_t_MC_geog(phylo, data, par,geography.object)
+likelihood_t_MC_geog(phylo, data, par,geo.object)
 }
 
 \arguments{
@@ -22,17 +22,14 @@ a named vector of continuous data with names corresponding to \code{phylo$tip.la
  \item{par}{
 a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model), in that order
 }
-  \item{geography.object}{
-a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages at each internode interval (see details)}
-
+  \item{geo.object}{
+a geography object indicating sympatry through time, created using \code{\link{CreateGeoObject}}
+}
 }
 
 \details{
 	When specifying \code{par}, \code{sig2} must be listed before \code{S}.
 	
-	The \code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created with the \code{\link{CreateGeoObject}} function.
-
 }
 
 \note{

@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihood_t_DD_geog(phylo, data, par,geography.object,model=c("DDlin","DDexp"))
+likelihood_t_DD_geog(phylo, data, par,geo.object,model=c("DDlin","DDexp"),maxN=NA)
 }
 
 \arguments{
@@ -25,13 +25,16 @@ a named vector of continuous data with names corresponding to \code{phylo$tip.la
 a vector listing a value for \code{log(sig2)} (see Note) and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model), in that order.
 }
 
-  \item{geography.object}{
-a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages at each internode interval (see details)}
+  \item{geo.object}{
+a list of sympatry through time created using \code{\link{CreateGeoObject}}
+}
 
  \item{model}{
 model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
+}
 
-
+ \item{maxN}{
+when fitting \code{DDlin} model, it is necessary to specify the maximum number of sympatric lineages to ensure that the rate returned does not correspond to negative sig2 values at any point in time (see Details).
 }
 
 }
@@ -39,8 +42,7 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 \details{
 	When specifying \code{par}, \code{log(sig2)} (see Note) must be listed before the slope parameter (\code{b} or \code{r}).
 
-	The \code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created with the \code{\link{CreateGeoObject}} function.
+	maxN can be calculated using \code{maxN=max(vapply(geo.object$geography.object,function(x)max(rowSums(x)),1))}, where geo.object is the output of \code{\link{CreateGeoObject}}
 
 }
 
@@ -79,5 +81,6 @@ geography.object <- Anolis.data$geography.object
 
 # Compute the likelihood with geography using ML parameters for fit without geography
 par <- c(log(0.01153294),-0.0006692378)
-lh <- -likelihood_t_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+maxN<-max(vapply(geography.object$geography.object,function(x)max(rowSums(x)),1))
+lh <- -likelihood_t_DD_geog(phylo,pPC1,par,geography.object,model="DDlin",maxN=maxN)
 }

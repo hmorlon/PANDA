@@ -36,7 +36,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(Cetacea)
-BICompare(Cetacea,5)
+#BICompare(Cetacea,5)
 
 
 
@@ -115,7 +115,7 @@ data(Anolis.data)
 #First, specify which region each branch belonged to:
 Anolis.regions<-c(rep("cuba",14),rep("hispaniola",17),"puerto_rico")
 Anolis.map<-cbind(Anolis.data$phylo$edge,Anolis.regions)
-CreateGeoObject(Anolis.data$phylo,maps.object=Anolis.map)
+CreateGeoObject(Anolis.data$phylo,map=Anolis.map)
 
 #Create a geography.object with a make.simmap object
 #First, specify which region each branch belonged to:
@@ -123,10 +123,8 @@ require(phytools)
 geo<-c(rep("cuba",7),rep("hispaniola",9),"puerto_rico")
 names(geo)<-Anolis.data$phylo$tip.label
 stochastic.map<-make.simmap(Anolis.data$phylo,geo, model="ER", nsim=1)
-CreateGeoObject(Anolis.data$phylo,maps.object=stochastic.map$maps)
+CreateGeoObject(Anolis.data$phylo,map=stochastic.map)
 
-#To create an empty geography.object:
-CreateGeoObject(Anolis.data$phylo)
 
 
 
@@ -419,6 +417,33 @@ DDexp.geo.fit<-fit_t_comp(phylo,pPC1,model="DDexp",geography.object=geography.ob
 
 
 cleanEx()
+nameEx("fit_t_env")
+### * fit_t_env
+
+flush(stderr()); flush(stdout())
+
+### Name: fit_t_env
+### Title: Maximum likelihood fit of the environmental model of trait
+###   evolution
+### Aliases: fit_t_env
+
+### ** Examples
+
+data(Cetacea)
+data(InfTemp)
+
+# Simulate trait on the Cetacean tree
+set.seed(123)
+trait<-rTraitCont(Cetacea)
+
+## Fit the Environmental-exponential model
+  # Fit the environmental model
+  result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
+  plot(result1)
+
+
+
+cleanEx()
 nameEx("likelihood_bd")
 ### * likelihood_bd
 
@@ -552,7 +577,8 @@ geography.object <- Anolis.data$geography.object
 
 # Compute the likelihood with geography using ML parameters for fit without geography
 par <- c(log(0.01153294),-0.0006692378)
-lh <- -likelihood_t_DD_geog(phylo,pPC1,par,geography.object,model="DDlin")
+maxN<-max(vapply(geography.object$geography.object,function(x)max(rowSums(x)),1))
+lh <- -likelihood_t_DD_geog(phylo,pPC1,par,geography.object,model="DDlin",maxN=maxN)
 
 
 
@@ -603,6 +629,109 @@ lh <- -likelihood_t_MC_geog(phylo,pPC1,par,geography.object)
 
 
 cleanEx()
+nameEx("likelihood_t_env")
+### * likelihood_t_env
+
+flush(stderr()); flush(stdout())
+
+### Name: likelihood_t_env
+### Title: Likelihood of a dataset under environmental models of trait
+###   evolution.
+### Aliases: likelihood_t_env
+
+### ** Examples
+
+data(Cetacea)
+data(InfTemp)
+
+# Simulate trait on the Cetacean tree
+set.seed(123)
+trait<-rTraitCont(Cetacea)
+
+# Compute the likelihood 
+parameters <- list(param=c(0.1, 0), fun=InfTemp)
+likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
+
+# Provide the times
+brtime<-branching.times(Cetacea)
+mtot<-max(brtime)
+times<-mtot-brtime
+
+parameters <- list(param=c(0.1, 0), fun=InfTemp, times=times, mtot=mtot)
+likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
+
+# Provide the environmental function rather than the dataset (faster if used recursively)
+
+
+
+cleanEx()
+nameEx("lines.fit_t.env")
+### * lines.fit_t.env
+
+flush(stderr()); flush(stdout())
+
+### Name: lines.fit_t.env
+### Title: Add to a plot line segments joining the phenotypic evolutionary
+###   rate through time estimated by the _fit_t_env_ function
+### Aliases: lines.fit_t.env
+
+### ** Examples
+
+data(Cetacea)
+data(InfTemp)
+
+# Simulate trait on the Cetacean tree
+set.seed(123)
+trait<-rTraitCont(Cetacea)
+
+## Fit the Environmental-exponential model with different smoothing parameters
+
+result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
+result2=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE, df=10))
+
+# first plot result1
+plot(result1, lwd=3)
+
+# add result2 to the current plot
+lines(result2, lty=2, lwd=3, col="red")
+
+
+
+
+
+cleanEx()
+nameEx("plot.fit_t.env")
+### * plot.fit_t.env
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.fit_t.env
+### Title: Plot the phenotypic evolutionary rate through time estimated by
+###   the _fit_t_env_ function
+### Aliases: plot.fit_t.env
+
+### ** Examples
+
+data(Cetacea)
+data(InfTemp)
+
+# Simulate trait on the Cetacean tree
+set.seed(123)
+trait<-rTraitCont(Cetacea)
+
+## Fit the Environmental-exponential model
+
+result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
+plot(result1)
+
+# further options
+plot(result1, lty=2, lwd=2, col="red")
+
+
+
+
+
+cleanEx()
 nameEx("plot_BICompare")
 ### * plot_BICompare
 
@@ -616,7 +745,7 @@ flush(stderr()); flush(stdout())
 
 
 data(Cetacea)
-result <- BICompare(Cetacea,5)
+#result <- BICompare(Cetacea,5)
 #plot_BICompare(Cetacea,result)
 
 
@@ -706,8 +835,8 @@ f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
 mu_par<-c()
-result <- fit_env(Balaenopteridae,InfTemp,tot_time,f.lamb,f.mu,
-      lamb_par,mu_par,f=1, fix.mu=TRUE, df=dof, dt=1e-3)
+#result <- fit_env(Balaenopteridae,InfTemp,tot_time,f.lamb,f.mu,
+#      lamb_par,mu_par,f=1, fix.mu=TRUE, df=dof, dt=1e-3)
 
 # plot fitted rates
 #plot_fit_env(result, InfTemp, tot_time)

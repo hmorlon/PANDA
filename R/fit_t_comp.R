@@ -46,9 +46,9 @@ if(is.null(geography.object)){
 
 if(!is.null(geography.object)){
 #check to make sure length matches length of nodeDiff
-	if(length(geography.object)!=phylo$Nnode){stop("geography object cannot have more or fewer components than internode intervals in phylo")}
+	if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have more or fewer components than internode intervals in phylo")}
 	if(model=="MC"){
-		opt<-optim(par,likelihood_t_MC_geog,phylo=phylo,geography.object=geography.object,data=data,method=method)
+		opt<-optim(par,likelihood_t_MC_geog,phylo=phylo,geo.object=geography.object,data=data,method=method)
 		sig2 = abs(opt$par[1])
 		S = opt$par[2]
 		V = .VCV.rescale.geog(phylo,sig2,0,S,geography.object)
@@ -60,10 +60,10 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDexp"){
-		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDexp",method=method)
+		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geo.object=geography.object,data=data,model="DDexp",method=method)
 		sig2 = exp(opt$par[1])
 		r = opt$par[2]
-		V = .vcv.rescale.DDexp_geog(phylo,sig2,r,geography.object,check=FALSE)
+		V = .VCV.rescale.DDexp_geog(phylo,sig2,r,geography.object,check=FALSE)
 		data<-as.matrix(data[rownames(V)])
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
@@ -72,10 +72,12 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDlin"){
-		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geography.object=geography.object,data=data,model="DDlin",method=method)
+		geography.matrix<-geography.object$geography.object
+		maxN<-max(vapply(geography.matrix,function(x)max(rowSums(x)),1))
+		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geo.object=geography.object,data=data,model="DDlin",maxN=maxN,method=method)
 		sig2 = exp(opt$par[1])
 		b = opt$par[2]
-		V = .vcv.rescale.DDlin_geog(phylo,sig2,b,geography.object,check=FALSE)
+		V = .VCV.rescale.DDlin_geog(phylo,sig2,b,geography.object,check=FALSE)
 		data<-as.matrix(data[rownames(V)])
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))

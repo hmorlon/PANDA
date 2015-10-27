@@ -1,14 +1,15 @@
-likelihood_t_DD_geog<-function(phylo,data,par,geography.object,model=c("DDlin","DDexp")){
+likelihood_t_DD_geog<-function(phylo,data,par,geo.object,model=c("DDlin","DDexp"),maxN=NA){
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for the slope")}
 	sig2<-exp(par[1])
 	rate<-par[2]
 	if(model=="DDlin"){
-	test=sig2+(rate*length(phylo$tip.label))
+	if(is.na(maxN)){stop("provide maxN value (see help file)")}
+	test=sig2+(rate*maxN)
 	if(test<=0){return(Inf)}	
-	try(V<-.vcv.rescale.DDlin_geog(phylo,sig2,rate,geography.object,check=FALSE))
+	try(V<-.VCV.rescale.DDlin_geog(phylo,sig2,rate,geo.object,check=FALSE))
 	} 
 	else if(model=="DDexp"){
-		try(V<-.vcv.rescale.DDexp_geog(phylo,sig2,rate,geography.object,check=FALSE))
+		try(V<-.VCV.rescale.DDexp_geog(phylo,sig2,rate,geo.object,check=FALSE))
 	}
 	if(class(V)=="try-error"){return(Inf)}
 	if(any(is.na(V))){
@@ -19,7 +20,7 @@ likelihood_t_DD_geog<-function(phylo,data,par,geography.object,model=c("DDlin","
 	IV=try(solve(V))
   	options(show.error.messages=op)
   if(class(IV)=="try-error"){
-    IV=pseudoinverse(V) ## It's slower to use the pseudoinverse but safer if the matrix is singular...
+    IV=pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
   
@@ -31,7 +32,7 @@ likelihood_t_DD_geog<-function(phylo,data,par,geography.object,model=c("DDlin","
 	T<-t(D)
 	    log_final_lik<- -0.5*(T%*%IV%*%D)-0.5*determinant(V)$modulus-0.5*(length(phylo$tip.label)*log(2*pi))
     
-    if(is.na(log_final_lik) | is.infinite(log_final_lik)){log_final_lik=-1000000} #minus here because after we change the sign for minimizing the loglik
+    if(is.na(log_final_lik) | is.infinite(log_final_lik)){log_final_lik=-1000000} 
     return(as.numeric(-log_final_lik)) 
 	}
 }

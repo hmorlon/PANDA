@@ -22,8 +22,7 @@ a named vector of trait values with names matching \code{phylo$tip.label}
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
   \item{geography.object}{
-a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages
-at each internode interval (see Details)
+a list of sympatry through time created using \code{\link{CreateGeoObject}}
 }
   \item{par}{
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
@@ -50,10 +49,8 @@ method to use for ML optimization (default is Nelder-Mead)
 \details{
 If unspecified, \code{par} takes the default values of \code{var(data)/max(nodeHeights(phylo))} for sig2 and 0 for either \code{S} for the matching competition model, 
 \code{b} for the linear diversity dependence model, or \code{r} for the exponential diversity dependence model. Values can be manually entered as a vector with the first element
-equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}.
-
-\code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.
+equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}. Note that, since the starting value for
+sig2 is exponentiated to stabilize the likelihood search, if you input a \code{par} value, the first value specifying sig2 should be the log of the desired starting value.
 
 }
 

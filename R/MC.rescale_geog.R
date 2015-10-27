@@ -6,7 +6,7 @@ require(geiger)
 require(phytools)
 require(deSolve)
 
-.VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geography.object){
+.VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geo.object){
 ##these are the three parameters that the equations use to produce the variance-covariance matrix, and will ultimately be estimated with ML
 parameters<-c(a=alpha,b=sigma,s=sterm) 
 if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
@@ -28,8 +28,13 @@ if(any(diff(old.labels)!=1)){ #if nodes are not in sequential order, this rename
 	old.edge<-phylo$edge
 	for(j in 1:phylo$Nnode){phylo$edge[which(old.edge==checkmat[j,1])]<-checkmat[j,2]}
 	}
+
+newDist<-geo.object$times
+newDiff<-geo.object$spans
+geography.object<-geo.object$geography.object
 if(any(nodeDiff==0)){stop("VCV.rescale cannot handle trees with two or more nodes occurring at exactly the same time")}
-if(length(geography.object)!=phylo$Nnode){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
+if(length(geography.object)!=length(newDiff)){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
+
 	
 mat<-matrix(nrow=0, ncol=3)
 counter_three_letters <- 0
@@ -50,27 +55,15 @@ for(i in 1:phylo$Nnode){
 		}
 	}		
 nat<-list()
-for(i in 1:length(nodeDiff)){
-	if(i==1){
-	nat[[i]]<-list(mat[mat[,1]==(length(phylo$tip.label)+i),2])} else {
-	IN<-vector()
-	P<-mat[as.numeric(mat[,1])<=(length(phylo$tip.label)+i),c(2,3)]
-	IN<-c(IN, P[P[,2]=="0",1],P[as.numeric(P[,2])>(length(phylo$tip.label)+i),1])
-	nat[[i]]<-list(IN)
+for(i in 1:length(newDiff)){
+	nat[[i]]<-rownames(geography.object[[i]])
 	}
-	}	
-for(i in 2:length(nodeDiff)){			##THIS LOOP checks for an error
-	if(length(unlist(nat[[i]]))!=(length(unlist(nat[[i-1]]))+1)){
-		print(paste("ERROR at node",i+length(phylo$tip.label)))
-		}	
-	}
-
-
+	
 #### NOW DEFINE ODEs for each interval and numerically integrate from root to tip, one interval at at a time ###
 output<-list() ##initialize storage of results from ODEs 
 env.results<-new.env(size = 1, parent = emptyenv())
 
-for(i in 1:phylo$Nnode){ ##for each interval between branches...
+for(i in 1:length(newDiff)){ ##for each interval between branches...
 
 ##var.list is the list of terms for which there is a variance term at each step in time
 ##cov.list is the list of covariance terms
@@ -198,7 +191,7 @@ ou <- function(t, state, parameters) {
 }
 
 ##NOW, run numerical integration for given time step and append to a list
-output<-ode(y=state,times=c(0,nodeDiff[i]),func=ou,parms=NULL)
+output<-ode(y=state,times=c(0,newDiff[i]),func=ou,parms=NULL)
 colN <- colnames(output)
 env.results<-new.env(size = length(colN), parent = emptyenv())
 for (k in 2:length(colN)){
@@ -207,8 +200,8 @@ for (k in 2:length(colN)){
 }
 
 Vou<-matrix(nrow=length(phylo$tip.label),ncol=length(phylo$tip.label))
-rownames(Vou)<-unlist(nat[[phylo$Nnode]])
-colnames(Vou)<-unlist(nat[[phylo$Nnode]])
+rownames(Vou)<-unlist(nat[[length(newDiff)]])
+colnames(Vou)<-unlist(nat[[length(newDiff)]])
 diag(Vou)<-output[2,][2:(length(phylo$tip.label)+1)]
 for(j in (length(phylo$tip.label)+2):length(output[2,])){
 
