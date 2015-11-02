@@ -161,6 +161,10 @@ else { #if term is not present in previous generation/branch of the tree, lookup
 	else{ ##for covariance terms that weren't present in previous generation/branch, it is necessary to decompose covariance term, look up terms appropriately, and re-assemble them in the correct order so they match the lower triangle format used in definition of terms
 		firstterm<-strsplit(term,"___")[[1]][1]
 		scondterm<-strsplit(term,"___")[[1]][2]
+		rearr<-paste(text=scondterm,"___",firstterm,sep="")
+		if(exists(rearr,envir=env.results)){
+			state[l]<-get(rearr, envir=env.results)
+		}else{
 		if(exists(firstterm, envir=env.results) || exists(scondterm, envir=env.results)){
 			if(exists(firstterm, envir=env.results)){
 				prev.branch<-mat[mat[,3]==mat[mat[,2]==scondterm,1],2]
@@ -179,6 +183,7 @@ else { #if term is not present in previous generation/branch of the tree, lookup
 		##neither first nor second term was present in the previous generation/branch, so the starting value is a variance term from t-1
 		prev.branch<-mat[mat[,3]==mat[mat[,2]==firstterm,1],2]
 		state[l]<-get(prev.branch, envir=env.results)
+	}
 	}
 	}
 	}
