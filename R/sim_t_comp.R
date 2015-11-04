@@ -169,7 +169,6 @@ for(i in 1:phylo$Nnode){ ##for each node interval
 		#update mu, add to VECTOR (ie mu=c(mu,UPDATE))
 		mu=c(mu,mean(sapply(masterbranch[[i]],tail,n=1)))# the last element in each element of branchlist/branches present ##this assumes that the first element is updated for each i
 		}
-if(model=="MC" && (var(sapply(masterbranch[[phylo$Nnode]],tail,n=1))>1e8)){ warning("S value used yields trait data with a variance > 1e8")}
 return(sapply(masterbranch[[phylo$Nnode]],tail,n=1))
 }
 
