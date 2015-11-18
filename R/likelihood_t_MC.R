@@ -1,7 +1,7 @@
 likelihood_t_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
 {
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for S")}
-  	sig2<-abs(par[1]) #%*%t(par[1])
+  	sig2<-exp(par[1]) 
 	sterm<-par[2]
 	V<-try(.VCV.rescale(phylo,sig2,0,sterm))
 	if(class(V)=="try-error"){return(Inf)}
@@ -13,7 +13,7 @@ likelihood_t_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
 	IV=try(solve(V))
   	options(show.error.messages=op)
   if(class(IV)=="try-error"){
-    IV=pseudoinverse(V) ## It's slower to use the pseudoinverse but safer if the matrix is singular...
+    IV=corpcor::pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
 	data<-as.matrix(data[rownames(V)])

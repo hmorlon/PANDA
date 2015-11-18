@@ -3,12 +3,12 @@ fit_t_comp<-function(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography
 #check to make sure data are univariate, with names matching phylo object
 if(length(data)!=length(phylo$tip.label)){stop("length of data does not match length of tree")}
 if(!is.null(dim(data))){stop("data needs to be a single trait")}
-if(is.null(par)){par<-c(var(data)/max(nodeHeights(phylo)),0)}
+if(is.null(par)){par<-c(log(var(data)/max(nodeHeights(phylo))),0)}
 
 if(is.null(geography.object)){
 	if(model=="MC"){
 		opt<-optim(par,likelihood_t_MC,phylo=phylo,data=data,method=method)
-		sig2 = abs(opt$par[1])
+		sig2 = exp(opt$par[1])
 		S = opt$par[2]
 		V = .VCV.rescale(phylo,sig2,0,S)
 		data<-as.matrix(data[rownames(V)])
@@ -20,7 +20,7 @@ if(is.null(geography.object)){
 		}
 	if(model=="DDexp"){
 		opt<-optim(par,likelihood_t_DD,phylo=phylo,data=data,model="DDexp",method=method)
-		sig2 = abs(opt$par[1])
+		sig2 = exp(opt$par[1])
 		r = opt$par[2]
 		V = .vcv.rescale.DDexp(phylo,sig2,r)
 		data<-as.matrix(data[rownames(V)])
@@ -32,7 +32,7 @@ if(is.null(geography.object)){
 		}
 	if(model=="DDlin"){
 		opt<-optim(par,likelihood_t_DD,phylo=phylo,data=data,model="DDlin",method=method)
-		sig2 = abs(opt$par[1])
+		sig2 = exp(opt$par[1])
 		b = opt$par[2]
 		V = .vcv.rescale.DDlin(phylo,sig2,b)
 		data<-as.matrix(data[rownames(V)])
@@ -60,7 +60,7 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDexp"){
-		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geo.object=geography.object,data=data,model="DDexp",method=method)
+		opt<-optim(par,likelihood_t_DD_geog,phylo=phylo,geo.object=geography.object,data=data,model="DDexp",method=method)
 		sig2 = exp(opt$par[1])
 		r = opt$par[2]
 		V = .VCV.rescale.DDexp_geog(phylo,sig2,r,geography.object,check=FALSE)
@@ -74,7 +74,7 @@ if(!is.null(geography.object)){
 	if(model=="DDlin"){
 		geography.matrix<-geography.object$geography.object
 		maxN<-max(vapply(geography.matrix,function(x)max(rowSums(x)),1))
-		opt<-optim(c(log(par[1]),par[2]),likelihood_t_DD_geog,phylo=phylo,geo.object=geography.object,data=data,model="DDlin",maxN=maxN,method=method)
+		opt<-optim(par,likelihood_t_DD_geog,phylo=phylo,geo.object=geography.object,data=data,model="DDlin",maxN=maxN,method=method)
 		sig2 = exp(opt$par[1])
 		b = opt$par[2]
 		V = .VCV.rescale.DDlin_geog(phylo,sig2,b,geography.object,check=FALSE)

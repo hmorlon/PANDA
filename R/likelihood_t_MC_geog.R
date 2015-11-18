@@ -1,7 +1,7 @@
 likelihood_t_MC_geog<-function(phylo,data,par,geo.object) #par[1]=sig2,par[2]=sterm
 {
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for S")}
-  	sig2<-abs(par[1]) 
+  	sig2<-exp(par[1]) 
   	sterm<--abs(par[2])
 	V<-try(.VCV.rescale.geog(phylo,sig2,0,sterm,geo.object))
 	if(class(V)=="try-error"){return(Inf)}
@@ -13,7 +13,7 @@ likelihood_t_MC_geog<-function(phylo,data,par,geo.object) #par[1]=sig2,par[2]=st
 	IV=try(solve(V))
   	options(show.error.messages=op)
   if(class(IV)=="try-error"){
-    IV=pseudoinverse(V) 
+    IV=corpcor::pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
  	data<-as.matrix(data[rownames(V)])
