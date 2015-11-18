@@ -2,7 +2,7 @@ fit_bd <-
  function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE,
            expo.lamb=FALSE, expo.mu=FALSE, fix.mu=FALSE,
-           dt=0, cond="crown")
+           dt=0)
 {
   if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")
@@ -19,7 +19,7 @@ fit_bd <-
       mu_par <- init[(1+length(lamb_par)):length(init)]
       f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
       f.mu.par <- function(t){abs(f.mu(t,mu_par))}
-      LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt,cond=cond)
+      LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
       return(-LH)
     }
     temp <- suppressWarnings(optim(init, optimLH, method = meth))
@@ -39,7 +39,7 @@ fit_bd <-
       lamb_par <- init[1:length(lamb_par)]
       f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
       f.mu.par <- function(t){abs(f.mu(t,mu_par))}
-      LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,dt=dt,cond=cond)
+      LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,dt=dt)
       return(-LH)
     }
     temp <- suppressWarnings(optim(init, optimLH, method = meth))

@@ -1,4 +1,4 @@
-likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0,cond="crown")
+likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0)
 {
   if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")
@@ -23,18 +23,14 @@ likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FAL
 
   log_data_lik <- sum(log_indLikelihood)+nbtips*log(f)
 
-  if (cond==FALSE)
-  {
-    log_final_lik <- log_data_lik
-  }
-
-  else if (cond=="stem")
+  
+  if (tot_time > max(node.age(phylo)$ages))
   {
     Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_final_lik <- log_data_lik - log(1-Phi)
   }
 
-  else if (cond=="crown")
+  else
   {
     Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_final_lik <- log_data_lik - log(f.lamb(tot_time)) - 2*log(1-Phi)

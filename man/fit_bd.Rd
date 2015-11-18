@@ -11,7 +11,7 @@ Fits the birth-death model with potentially time-varying rates and potentially m
 fit_bd(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
-       dt=0, cond = "crown")
+       dt=0)
 }
 
 \arguments{
@@ -19,7 +19,7 @@ fit_bd(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
 an object of type 'phylo' (see ape documentation)
 }
   \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages). In this case, the process is conditioned on a speciation event at the crown age and survival of the 2 daugther lineages. If working with stem ages (tot_time > max(node.age(phylo)$ages)), the process will be simply conditioned on survival.
 }
   \item{f.lamb}{
 a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the speciation rate \eqn{\lambda} with time. Any functional form may be used.
@@ -57,13 +57,6 @@ logical: should be set to TRUE only if f.mu is exponential to use analytical ins
 }
   \item{dt}{
 the default value is 0. In this case, integrals in the likelihood are computed using R "integrate" function, which can be quite slow. If a positive dt is given as argument, integrals are computed using a piece-wise contant approximation, and dt represents the length of the intervals on which functions are assumed to be constant. For an exponential dependency of the speciation rate with time, we found that dt=1e-3 gives a good trade-off between precision and computation time.
-}
-  \item{cond}{
-conditioning to use to fit the model:
-\itemize{ \item FALSE: no conditioning (not recommended);
-\item "stem": conditioning on the survival of the stem lineage (use when the stem age is known, in this case tot_time should be the stem age);
-\item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
-}
 }
 }
 
