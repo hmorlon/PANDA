@@ -14,7 +14,7 @@ f.lamb <-function(t,y){y[1]}
 f.mu<-function(t,y){0}
 lamb_par <- c(0.09)
 mu_par <- c()
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb=TRUE,fix.mu=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb=TRUE,fix.mu=TRUE, dt=1e-3)
 
 test_that("B constant",{
   # Reference values
@@ -36,7 +36,7 @@ f.lamb <-function(t,y){y[1]}
 f.mu<-function(t,y){y[1]}
 lamb_par <- c(0.09)
 mu_par <- c(0.3)
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,cst.lamb=TRUE,cst.mu=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,cst.lamb=TRUE,cst.mu=TRUE, dt=1e-3)
 
 test_that("BD constant",{
   # Reference values
@@ -60,7 +60,7 @@ f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb=TRUE, fix.mu=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb=TRUE, fix.mu=TRUE, dt=1e-3)
 
 test_that("B variable exponential",{
   # Reference values
@@ -83,7 +83,7 @@ f.lamb <-function(t,y){y[1] + y[2] * t}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, fix.mu=TRUE, dt=1e-3)
 
 test_that("B variable linear",{
   # Reference values
@@ -108,7 +108,7 @@ mu_par <- c(0.5)
 f.mu<-function(t,y){y[1]}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c(0.1)
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb=TRUE, cst.mu=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, expo.lamb=TRUE, cst.mu=TRUE, dt=1e-3)
 
 test_that("B variable exponential, D constant",{
   # Reference values
@@ -133,7 +133,7 @@ f.lamb <-function(t,y){y[1] + y[2] * t}
 f.mu<-function(t,y){y[1]}
 lamb_par<-c(0.05, 0.01)
 mu_par <- c(0.5)
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.mu= TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.mu= TRUE, dt=1e-3)
 
 test_that("B variable linear, D constant",{
   # Reference values
@@ -158,7 +158,7 @@ f.lamb<-function(t,y){y[1]}
 f.mu <-function(t,y){y[1] * exp(y[2] * t)}
 lamb_par <- c(0.05)
 mu_par <-c(0.005, 0.01)
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb=TRUE, expo.mu=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb=TRUE, expo.mu=TRUE, dt=1e-3)
 
 test_that("B constant, D exponential",{
   # Reference values
@@ -182,7 +182,7 @@ f.lamb<-function(t,y){y[1]}
 f.mu <-function(t,y){y[1] + y[2] * t}
 lamb_par <- c(0.05)
 mu_par <-c(0.005, 0.001)
-res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb=TRUE, cond="stem", dt=1e-3)
+res <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89, cst.lamb=TRUE, dt=1e-3)
 
 test_that("B constant, D linear",{
   # Reference values
