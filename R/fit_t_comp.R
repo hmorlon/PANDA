@@ -46,7 +46,7 @@ if(is.null(geography.object)){
 
 if(!is.null(geography.object)){
 #check to make sure length matches length of nodeDiff
-	if(length(geography.object$geo.object)<phylo$Nnode){stop("geography object cannot have more or fewer components than internode intervals in phylo")}
+	if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have more or fewer components than internode intervals in phylo")}
 	if(model=="MC"){
 		opt<-optim(par,likelihood_t_MC_geog,phylo=phylo,geo.object=geography.object,data=data,method=method)
 		sig2 = abs(opt$par[1])
