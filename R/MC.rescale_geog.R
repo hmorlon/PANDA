@@ -22,6 +22,7 @@ heights<-nodeHeights(phylo)
 totlen<-max(heights)
 nodeDist<-c(as.numeric(sort(max(branching.times(phylo))-branching.times(phylo))),totlen)	
 nodeDiff<-diff(nodeDist)
+if(!is.null(phylo$node.label)){phylo$node.label<-NULL}
 old.labels<-as.numeric(names(sort(branching.times(phylo),decreasing=TRUE)))
 if(any(diff(old.labels)!=1)){ #if nodes are not in sequential order, this renames them so that they are
 	checkmat<-cbind(old.labels,seq(root,length(phylo$tip.label)+phylo$Nnode))
