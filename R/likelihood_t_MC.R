@@ -1,5 +1,6 @@
 likelihood_t_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
 {
+	if(is.null(names(data))){stop("data missing taxa names")}
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for S")}
   	sig2<-exp(par[1]) 
 	sterm<-par[2]

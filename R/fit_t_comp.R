@@ -2,6 +2,7 @@ fit_t_comp<-function(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography
 
 #check to make sure data are univariate, with names matching phylo object
 if(length(data)!=length(phylo$tip.label)){stop("length of data does not match length of tree")}
+if(is.null(names(data))){stop("data missing taxa names")}
 if(!is.null(dim(data))){stop("data needs to be a single trait")}
 if(is.null(par)){par<-c(log(var(data)/max(nodeHeights(phylo))),0)}
 if(is.null(bounds[["lower"]]) & is.null(bounds[["upper"]])){

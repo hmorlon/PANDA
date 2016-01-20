@@ -1,4 +1,5 @@
 likelihood_t_DD<-function(phylo,data,par,model=c("DDlin","DDexp")){
+	if(is.null(names(data))){stop("data missing taxa names")}
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for the slope")}
 	sig2<-exp(par[1])
 	rate<-par[2]
