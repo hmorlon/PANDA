@@ -54,7 +54,7 @@ if(!is.null(geography.object)){
 	if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have more or fewer components than internode intervals in phylo")}
 	if(model=="MC"){
 		opt<-optim(par,likelihood_t_MC_geog,phylo=phylo,geo.object=geography.object,data=data,method=method, lower=bounds$lower, upper=bounds$upper)
-		sig2 = abs(opt$par[1])
+		sig2 = exp(opt$par[1])
 		S = -abs(opt$par[2])
 		V = .VCV.rescale.geog(phylo,sig2,0,S,geography.object)
 		data<-as.matrix(data[rownames(V)])
