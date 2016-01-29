@@ -203,6 +203,73 @@ updateBranchingMatrixSigma <- function(Sigma, copy, paste){
 }
 
 setGeneric(
+    name="getTipDistribution2",
+    def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution2")}
+)
+
+setMethod(
+    f="getTipDistribution2",
+    signature="PhenotypicModel",
+    definition=function(object, params, v=FALSE){
+        if(v){
+            cat("*** Computation of tip traits distribution through ODE resolution (Riccati equation: dX = AX +XA +B) ***\n(Method working for any model)\n")
+            beginning <- Sys.time()
+        }
+        # Initialisation of the distribution at the beginning of the process
+        initialCondition <- object@initialCondition(params)
+        mean <- initialCondition$mean
+        Sigma <- initialCondition$var
+
+        # Sur chaque periode [t_i, t_i+1[ :
+        for(i in 1:(length(object@period)-1)){
+
+            # If there is a branching event at the beginning of the period, we update the mean and covariances
+            if(object@numbersPaste[i] != 0){
+                # update of the vector of means
+                if( object@numbersPaste[i] <= length(mean) ){
+                    mean <- c( mean[1:(object@numbersPaste[i]-1)], mean[object@numbersCopy[i]], mean[object@numbersPaste[i]:length(mean)] )
+                }else{
+                    mean <- c( mean, mean[object@numbersCopy[i]] )
+                }
+                # update of the matrix of covariances
+                Sigma <- updateBranchingMatrixSigma(Sigma, object@numbersCopy[i], object@numbersPaste[i])
+            }
+
+            # On the considered period, the model is determined by
+            ai <- object@aAGamma(i, params)$a
+            Ai <- object@aAGamma(i, params)$A
+            Gammai <- object@aAGamma(i, params)$Gamma
+            n = length(mean)
+            # We now need to build the ODE system such that dSigma/dt = -A Sigma - Sigma A + Gamma
+            derivativeSigma <- function(t,y,params){
+                X = matrix(y,nrow=n)
+                dX <- -Ai %*% X - X %*% Ai + Gammai(t)
+                return(list(dX))
+            }
+
+            # And we build a second ODE system such that dm/dt = -Ai m + ai
+            derivativemean <- function(t,y,params){
+                return(list(-Ai %*% y + ai(t)))
+            }
+
+            # We update the vectors of means and covariances through their ODE system resolution
+            times <- c(object@period[i], object@period[i+1])
+            mean  <- ode(mean, times, derivativemean)[2, 2:(n+1)]
+            sigma <- ode(as.vector(Sigma), times, derivativeSigma)[2, 2:(n*n+1)]
+            Sigma = matrix(sigma,nrow=n)
+        }
+	mean <- matrix(data=mean, ncol=1)
+
+        if(v){
+            end <- Sys.time()
+            cat("Computation time :", format(end-beginning), "\n")
+        }
+
+        return(list(mean = mean, Sigma = Sigma))
+    }
+)
+
+setGeneric(
     name="getTipDistribution",
     def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution")}
 )
