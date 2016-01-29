@@ -13,29 +13,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*vectorU)
+            matrixB <- function(t) return(params[4]*diag(vectorU))
+            matrixA <- diag(0, sizeU)
             
-            functiona <- function(t){
-                return(params[3]*description$livingLineages)
-            }
-            
-            matrixA <- diag(0, description$nLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[4]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
         
-        constraints <- function(params){
-            return(params[2]>=0 && params[4]>=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[4]>=0)
         
         model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
 
@@ -48,29 +39,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*vectorU)
+            matrixB <- function(t) return(params[4]*diag(vectorU))
+            matrixA <- diag(0, sizeU)
             
-            functiona <- function(t){
-                return(params[3]*description$livingLineages)
-            }
-            
-            matrixA <- diag(0, description$nLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[4]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
         
-        constraints <- function(params){
-            return(params[2]>=0 && params[4]>=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[4]>=0)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
@@ -83,29 +65,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list( mean=c(0), var=matrix(c(0)) ) )
-        }
+        initialCondition <- function(params) return( list( mean=c(0), var=matrix(c(0)) ) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[1]*vectorU)
+            matrixB <- function(t) return(params[2]*diag(vectorU))
+            matrixA <- diag(0, sizeU)
             
-            functiona <- function(t){
-                return(params[1]*description$livingLineages)
-            }
-            
-            matrixA <- diag(0, description$nLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[2]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
         
-        constraints <- function(params){
-            return(params[2]>=0)
-        }
+        constraints <- function(params) return(params[2]>=0)
         
         model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
 
@@ -118,29 +91,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list( mean=c(0), var=matrix(c(0)) ) )
-        }
+        initialCondition <- function(params) return( list( mean=c(0), var=matrix(c(0)) ) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(0*vectorU)
+            matrixB <- function(t) return(params[1]*diag(vectorU))
+            matrixA <- diag(0, sizeU)
             
-            functiona <- function(t){
-                return(0*description$livingLineages)
-            }
-            
-            matrixA <- diag(0, description$nLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[1]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
         
-        constraints <- function(params){
-            return(params[1]>=0)
-        }
+        constraints <- function(params) return(params[1]>=0)
         
         model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
 
@@ -153,29 +117,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*params[4]*vectorU)
+            matrixB <- function(t) return(params[5]*diag(vectorU))
+            matrixA <- params[3]*diag(vectorU)
             
-            functiona <- function(t){
-                return(params[3]*params[4]*description$livingLineages)
-            }
-            
-            matrixA <- params[3]*diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[5]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[5]>=0 && params[3]!=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
         
         model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
 
@@ -188,29 +143,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*params[4]*vectorU)
+            matrixB <- function(t) return(params[5]*diag(vectorU))
+            matrixA <- params[3]*diag(vectorU)
             
-            functiona <- function(t){
-                return(params[3]*params[4]*description$livingLineages)
-            }
-            
-            matrixA <- params[3]*diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[5]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[5]>=0 && params[3]!=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
         
         model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
@@ -223,29 +169,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*params[4]*vectorU)
+            matrixB <- function(t) return(params[5]*diag(vectorU))
+            matrixA <- params[3]*diag(vectorU)
             
-            functiona <- function(t){
-                return(params[3]*params[4]*description$livingLineages)
-            }
-            
-            matrixA <- params[3]*diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[5]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[5]>=0 && params[3]!=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
@@ -263,29 +200,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(0), var=matrix(c(0))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(0), var=matrix(c(0))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[1]*params[2]*vectorU)
+            matrixB <- function(t) return(params[3]*diag(vectorU))
+            matrixA <- params[1]*diag(vectorU)
             
-            functiona <- function(t){
-                return(params[1]*params[2]*description$livingLineages)
-            }
-            
-            matrixA <- params[1]*diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(diag(params[3]*description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
         
-        constraints <- function(params){
-            return(params[3]>=0 && params[1]!=0)
-        }
+        constraints <- function(params) return(params[3]>=0 && params[1]!=0)
 
         model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
 
@@ -298,29 +226,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages
+            vectorU <- description$livingLineages 
+            vectorA <- function(t) return(rep(0, sizeU))
+            matrixB <- function(t) return(params[3]*exp(-params[4]*t)*diag(vectorU))
+            matrixA <- diag(0, sizeU)
             
-            functiona <- function(t){
-                return(rep(0, description$nLineages))
-            }
-            
-            matrixA <- diag(0, description$nLineages)
-            
-            functionGamma <- function(t){
-                return(params[3]*exp(-params[4]*t)*diag(description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
         
         model <- new(Class="PhenotypicEB", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
 
@@ -333,29 +252,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
+            sizeU <- description$nLineages
+            vectorU <- description$livingLineages 
+            vectorA <- function(t) return(rep(0, sizeU))
+            matrixB <- function(t) return(params[3]*exp(-params[4]*t)*diag(vectorU))
+            matrixA <- diag(0, sizeU)
             
-            functiona <- function(t){
-                return(rep(0, description$nLineages))
-            }
-            
-            matrixA <- diag(0, description$nLineages)
-            
-            functionGamma <- function(t){
-                return(params[3]*exp(-params[4]*t)*diag(description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
@@ -368,29 +278,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
-        
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
+            
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
-            
-            functiona <- function(t){
-                return(params[3]*params[4]*description$livingLineages)
-            }
-            
-            matrixA <- (params[4]+params[5])*diag(description$livingLineages) - (params[5]/description$nLineages) * diag(description$livingLineages) %*% matrix( rep(1,description$nLineages*description$nLineages), nrow=description$nLineages ) %*% diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(params[6]*diag(description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*params[4]*vectorU)
+            matrixB <- function(t) return(params[6]*diag(vectorU))
+            matrixA <- (params[4]+params[5])*diag(vectorU) - (params[5]/sizeU) * outer(vectorU,vectorU) 
+              
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[6]>=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
         
         model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
@@ -403,29 +304,20 @@ createModel <- function(tree, keyword){
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
-        
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
+            
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
-            
-            functiona <- function(t){
-                return(params[3]*params[4]*description$livingLineages)
-            }
-            
-            matrixA <- (params[4]+params[5])*diag(description$livingLineages) - (params[5]/description$nLineages) * diag(description$livingLineages) %*% matrix( rep(1,description$nLineages*description$nLineages), nrow=description$nLineages ) %*% diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(params[6]*diag(description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(params[3]*params[4]*vectorU)
+            matrixB <- function(t) return(params[6]*diag(vectorU))
+            matrixA <- (params[4]+params[5])*diag(vectorU) - (params[5]/sizeU) * outer(vectorU,vectorU) 
+              
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[6]>=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
@@ -437,30 +329,21 @@ createModel <- function(tree, keyword){
         
         periodizing <- periodizeOneTree(tree)
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params){
-            return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        }
-        
+
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
+            
         aAGamma <- function(i, params){
             description <- describeOnePeriod(i, periodizing, tree)
-            
-            functiona <- function(t){
-                return(0*description$livingLineages)
-            }
-            
-            matrixA <- params[3]*diag(description$livingLineages) - (params[3]/description$nLineages) * diag(description$livingLineages) %*% matrix( rep(1,description$nLineages*description$nLineages), nrow=description$nLineages ) %*% diag(description$livingLineages)
-            
-            functionGamma <- function(t){
-                return(params[4]*diag(description$livingLineages))
-            }
-            
-            return(list(a=functiona, A=matrixA, Gamma=functionGamma))
+            sizeU <- description$nLineages  
+            vectorU <- description$livingLineages
+            vectorA <- function(t) return(0*vectorU)
+            matrixB <- function(t) return(params[4]*diag(vectorU))
+            matrixA <- params[3]*diag(vectorU) - (params[3]/sizeU) * outer(vectorU,vectorU) 
+              
+            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
         }
 
-        constraints <- function(params){
-            return(params[2]>=0 && params[4]>=0)
-        }
+        constraints <- function(params) return(params[2]>=0 && params[4]>=0)
         
         model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
