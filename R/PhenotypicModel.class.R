@@ -254,8 +254,10 @@ setMethod(
 
             # We update the vectors of means and covariances through their ODE system resolution
             times <- c(object@period[i], object@period[i+1])
-            mean  <- ode(mean, times, derivativemean)[2, 2:(n+1)]
-            sigma <- ode(as.vector(Sigma), times, derivativeSigma)[2, 2:(n*n+1)]
+            if((object@period[i+1]-object@period[i])> 1e-15 ){
+                mean  <- ode(mean, times, derivativemean)[2, 2:(n+1)]
+                sigma <- ode(as.vector(Sigma), times, derivativeSigma)[2, 2:(n*n+1)]
+            }
             Sigma = matrix(sigma,nrow=n)
         }
 	mean <- matrix(data=mean, ncol=1)
@@ -361,8 +363,10 @@ setMethod(
 
             # We update the vectors of means and covariances through their ODE system resolution
             times <- c(object@period[i], object@period[i+1])
-            sigma <- ode(sigma, times, derivativesigma)[2, 2:(L+1)]
-            mean <- ode(mean, times, derivativemean)[2, 2:(n+1)]
+            if((object@period[i+1]-object@period[i])> 1e-15 ){
+                sigma <- ode(sigma, times, derivativesigma)[2, 2:(L+1)]
+                mean  <- ode(mean, times, derivativemean)[2, 2:(n+1)]
+            } 
         }
 
         # At the end, we get m and the list of covariances sigma. We thus reconstruct a variance matrix before returning it (Sigma is a matrix, sigma is a vector)
