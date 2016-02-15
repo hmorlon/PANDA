@@ -321,6 +321,30 @@ createModel <- function(tree, keyword){
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
 
+    }else if(keyword == "PM_IMACS"){
+
+        comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
+        paramsNames <- c("m0", "v0", "theta", "psi", "S", "sigma")
+        params0 <- c(0,0,0,0.2,0.5,1)
+        
+        periodizing <- periodizeOneTree(tree)
+        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
+        
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
+            
+        aAGamma <- function(i, params){
+            description <- describeOnePeriod(i, periodizing, tree)
+            vectorU <- description$livingLineages
+              
+            return(list(v=vectorU))
+        }
+
+        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
+        
+        model <- new(Class="PhenotypicADiagIMACS", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment)
+
+
+
     }else if(keyword == "PM_OUless"){
 
         comment <- "Simplified Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression, without the OU term."
