@@ -47,14 +47,14 @@ setMethod(
             R1 <- diag( exp( -delta_t * e$values ) )
             r2 <- rep(0, n)
             r3 <- rep(0, n)
-            for(k in 1:n){
-                if(e$values[k] == 0){
-                    r2[k] <- delta_t
-                    r3[k] <- delta_t
-                }else{
+            for(k in 1:n){ 
+                if(abs(delta_t*e$values[k]) > 1e-3 ){
                     r2[k] <- (1 - exp( -delta_t*e$values[k] ))/e$values[k]
                     r3[k] <- (1 - exp( -delta_t*2*e$values[k] ))/(2*e$values[k])
-                }
+                }else{ # DL en 0 ordre 3 
+                    r2[k] <- delta_t + 1/2*e$values[k]*delta_t^2 + 1/6*e$values[k]^2*delta_t^3
+                    r3[k] <- delta_t +     e$values[k]*delta_t^2 + 2/3*e$values[k]^2*delta_t^3
+                }      
             }
             R2 <- diag( r2 )
             R3 <- diag( r3 )
