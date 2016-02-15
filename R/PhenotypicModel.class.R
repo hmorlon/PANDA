@@ -236,9 +236,10 @@ setMethod(
             }
 
             # On the considered period, the model is determined by
-            ai <- object@aAGamma(i, params)$a
-            Ai <- object@aAGamma(i, params)$A
-            Gammai <- object@aAGamma(i, params)$Gamma
+            aAGammai <- object@aAGamma(i, params)
+            ai <- aAGammai$a
+            Ai <- aAGammai$A
+            Gammai <- aAGammai$Gamma
             n = length(mean)
             # We now need to build the ODE system such that dSigma/dt = -A Sigma - Sigma A + Gamma
             derivativeSigma <- function(t,y,params){
@@ -314,9 +315,10 @@ setMethod(
             }
 
             # On the considered period, the model is determined by
-            ai <- object@aAGamma(i, params)$a
-            Ai <- object@aAGamma(i, params)$A
-            Gammai <- object@aAGamma(i, params)$Gamma
+            aAGammai <- object@aAGamma(i, params)
+            ai <- aAGammai$a
+            Ai <- aAGammai$A
+            Gammai <- aAGammai$Gamma
             n = length(Ai[,1])
             L =  n*(n+1)/2
 
@@ -536,7 +538,8 @@ setMethod(
                 # The time period is sliced
                 time <- seq( from = object@period[i], to = object@period[i+1], by = dt )
                 for(t in time){
-                    X <- X + (object@aAGamma(i, params)$a(t) - object@aAGamma(i, params)$A %*% X)*dt + sqrtdt* object@aAGamma(i, params)$Gamma(t) %*% rnorm(length(X), 0, 1)
+                    aAGammai <- object@aAGamma(i, params)  
+                    X <- X + (aAGammai$a(t) - aAGammai$A %*% X)*dt + sqrtdt* aAGammai$Gamma(t) %*% rnorm(length(X), 0, 1)
                 }
             }
         }

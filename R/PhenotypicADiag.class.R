@@ -33,9 +33,10 @@ setMethod(
             }
 
             # On the considered period, the model is determined by
-            ai <- object@aAGamma(i, params)$a(0)
-            Ai <- object@aAGamma(i, params)$A
-            Gammai <- object@aAGamma(i, params)$Gamma(0)
+            aAGammai <- object@aAGamma(i, params) 
+            ai <- aAGammai$a(0)
+            Ai <- aAGammai$A
+            Gammai <- aAGammai$Gamma(0)
             n = length(Ai[,1])
 
             # The mean and covariances evolve through the period with the following formula
