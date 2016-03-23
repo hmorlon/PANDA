@@ -89,12 +89,17 @@ setMethod(
             }
         }
 
+        mean <- matrix(mean,ncol=1)
+        rownames(mean) <- object@tipLabels
+        rownames(Sigma) <- object@tipLabels
+        colnames(Sigma) <- object@tipLabels
+
         if(v){
             end <- Sys.time()
             cat("Computation time :", format(end-beginning), "\n")
         }
 
-        return(list(mean = matrix(mean,ncol=1), Sigma = Sigma))
+        return(list(mean = mean, Sigma = Sigma))
     }
 )
 

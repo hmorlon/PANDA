@@ -41,6 +41,9 @@ setMethod(
         }
 
         mean <- matrix(data=mean, ncol=1)
+        rownames(mean) <- object@tipLabels
+        rownames(Sigma) <- object@tipLabels
+        colnames(Sigma) <- object@tipLabels
         return(list(mean = mean, Sigma = Sigma))
     }
 )

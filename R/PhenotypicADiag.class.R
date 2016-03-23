@@ -63,6 +63,10 @@ setMethod(
             mean <- Q %*% R1 %*% Qt %*% mean + Q %*% R2 %*% Qt %*% ai
             Sigma <- Q %*% R1 %*% Qt %*% Sigma %*% Q %*% R1 %*% Qt + Gammai %*% t(Gammai) %*% Q %*% R3 %*% Qt            
         }
+           
+        rownames(mean) <- object@tipLabels
+        rownames(Sigma) <- object@tipLabels
+        colnames(Sigma) <- object@tipLabels
 
         if(v){
             end <- Sys.time()

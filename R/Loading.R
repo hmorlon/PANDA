@@ -2,6 +2,7 @@
 library(ape)
 library(deSolve)
 library(mvtnorm)
+library(phytools)
 
 # Our codes
 source("PhenotypicModel.class.R")

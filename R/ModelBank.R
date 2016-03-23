@@ -16,12 +16,10 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[3]*vectorU)
             matrixGamma <- function(t) return(params[4]*diag(vectorU))
-            matrixA <- diag(0, sizeU)
+            matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
@@ -42,12 +40,10 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[3]*vectorU)
             matrixGamma <- function(t) return(params[4]*diag(vectorU))
-            matrixA <- diag(0, sizeU)
+            matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
@@ -68,14 +64,12 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list( mean=c(0), var=matrix(c(0)) ) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[1]*vectorU)
-            matrixB <- function(t) return(params[2]*diag(vectorU))
-            matrixA <- diag(0, sizeU)
+            matrixGamma <- function(t) return(params[2]*diag(vectorU))
+            matrixA <- diag(0, length(vectorU))
             
-            return(list(a=vectorA, A=matrixA, Gamma=matrixB))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
         
         constraints <- function(params) return(params[2]>=0)
@@ -94,12 +88,10 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list( mean=c(0), var=matrix(c(0)) ) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(0*vectorU)
             matrixGamma <- function(t) return(params[1]*diag(vectorU))
-            matrixA <- diag(0, sizeU)
+            matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
@@ -120,9 +112,7 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[3]*params[4]*vectorU)
             matrixGamma <- function(t) return(params[5]*diag(vectorU))
             matrixA <- params[3]*diag(vectorU)
@@ -146,9 +136,7 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[3]*params[4]*vectorU)
             matrixGamma <- function(t) return(params[5]*diag(vectorU))
             matrixA <- params[3]*diag(vectorU)
@@ -172,9 +160,7 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[3]*params[4]*vectorU)
             matrixGamma <- function(t) return(params[5]*diag(vectorU))
             matrixA <- params[3]*diag(vectorU)
@@ -203,9 +189,7 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(0), var=matrix(c(0))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages  
-            vectorU <- description$livingLineages
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(params[1]*params[2]*vectorU)
             matrixGamma <- function(t) return(params[3]*diag(vectorU))
             matrixA <- params[1]*diag(vectorU)
@@ -229,12 +213,10 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages
-            vectorU <- description$livingLineages 
-            vectorA <- function(t) return(rep(0, sizeU))
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
+            vectorA <- function(t) return(rep(0, length(vectorU)))
             matrixGamma <- function(t) return(params[3]*exp(-params[4]*t)*diag(vectorU))
-            matrixA <- diag(0, sizeU)
+            matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
@@ -255,12 +237,10 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
         
         aAGamma <- function(i, params){
-            description <- describeOnePeriod(i, periodizing, tree)
-            sizeU <- description$nLineages
-            vectorU <- description$livingLineages 
-            vectorA <- function(t) return(rep(0, sizeU))
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
+            vectorA <- function(t) return(rep(0, length(vectorU)))
             matrixGamma <- function(t) return(params[3]*exp(-params[4]*t)*diag(vectorU))
-            matrixA <- diag(0, sizeU)
+            matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
@@ -500,6 +480,15 @@ endOfPeriods <- function(periodizing, tree){
     labeling <- tree$tip.label[order(permutationLabels)]
     
     return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages, labeling=labeling))
+}
+
+getLivingLineages <- function(i, eventEndOfPeriods){
+    
+    livingLineages <- rep(1, times=eventEndOfPeriods$nLineages[i])
+    deads <- eventEndOfPeriods$copy[1:i][eventEndOfPeriods$paste[1:i] == 0]
+    livingLineages[deads] <- 0
+    
+    return(livingLineages)
 }
 
 ############################################

@@ -222,9 +222,9 @@ setMethod(
             n = length(mean)
             # We now need to build the ODE system such that dSigma/dt = -A Sigma - Sigma A + Gamma
             derivativeSigma <- function(t,y,params){
-                X = matrix(y,nrow=n)
-                dX <- -Ai %*% X - X %*% Ai + Gammai(t)
-                return(list(dX))
+                Sigma = matrix(y,nrow=n)
+                dSigma <- -Ai %*% Sigma - t(Sigma) %*% t(Ai) + Gammai(t) %*% t(Gammai(t))
+                return(list(dSigma))
             }
 
             # And we build a second ODE system such that dm/dt = -Ai m + ai
