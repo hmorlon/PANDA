@@ -10,6 +10,7 @@ setClass(
         paramsNames = "character",
         constraints = "function",
         params0 = "numeric",
+        tipLabels = "character",
         comment = "character"
     ),
     prototype=prototype(
@@ -35,6 +36,7 @@ setClass(
             return(params[1] > 0)
         },
         params0 = c(1),
+        tipLabels = c("A", "B", "C", "D", "E", "F", "G"),
         comment = "Toy model defined by defaut"
     ),
     validity=function(object){
@@ -70,6 +72,7 @@ setMethod(
                 "paramsNames"={return(x@paramsNames)},
                 "constraints"={return(x@constraints)},
                 "params0"={return(x@params0)},
+                "tipLabels"={return(x@tipLabels)},
                 "comment"={return(x@comment)},
                 stop("This variable name does not exist !")
         )
@@ -90,6 +93,7 @@ setReplaceMethod(
                 "paramsNames"={x@paramsNames <- value},
                 "constraints"={x@constraints <- value},
                 "params0"={x@params0 <- value},
+                "tipLabels"={x@tipLabels <- value},
                 "comment"={x@comment <- value},
                 stop("This variable name does not exist !")
         )
@@ -128,6 +132,8 @@ setMethod(
         print(x@constraints)
         cat("*** Defaut parameter values : ")
         print(x@params0)
+        cat("*** Tip labels : \n")
+        print(x@tipLabels)
         cat("****************************************************************\n")
     }
 )
@@ -235,6 +241,9 @@ setMethod(
             Sigma = matrix(sigma,nrow=n)
         }
         mean <- matrix(data=mean, ncol=1)
+        rownames(mean) <- object@tipLabels
+        rownames(Sigma) <- object@tipLabels
+        colnames(Sigma) <- object@tipLabels
 
         if(v){
             end <- Sys.time()
