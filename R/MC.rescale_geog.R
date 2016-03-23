@@ -9,7 +9,7 @@ require(deSolve)
 .VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geo.object){
 ##these are the three parameters that the equations use to produce the variance-covariance matrix, and will ultimately be estimated with ML
 parameters<-c(a=alpha,b=sigma,s=sterm) 
-if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
+if(any(grepl("___",phylo$tip.label))|any(grepl("-",phylo$tip.label))|any(grepl("*",phylo$tip.label))|any(grepl("/",phylo$tip.label))|any(grepl("^",phylo$tip.label))|any(grepl("+",phylo$tip.label))){stop("script will not work with '___', '-', '+', '*','/', or '^' in any tip labels; remove these characters")}
 if(!is.binary.tree(phylo)){stop("tree must not contain any polytomies")}
 if(sum(phylo$edge.length<0)>0){stop("tree cannot have negative branch lengths")}
 if(!is.ultrametric(phylo)){stop("tree must be ultrametric; current verson cannot handle fossil taxa (in development)")}

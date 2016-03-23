@@ -154,61 +154,34 @@ setMethod(
 #    Distribution
 ###################################
 
-getPositionVectSigma <- function(n,i,j){
-    # finds the position of Cov(X^i,X^j) in the one-D vector of covariances
-    return((n+1-i/2)*(i-1)+(j-i+1))
-}
-
-getOldPosition <- function(i, copy, paste){
-    # We are in position (i,j) of the new matrix Sigma : which value of the old Sigma, with indices (k,l), do we put there ?
-    if( i < paste ){
-        k <- i
-    }
-    else if( i == paste){
-        k <- copy
-    }
-    else if( i > paste ){
-        k <- i-1
-    }
-    return(k)
-}
-
-updateBranchingVectSigma <- function(sigma, copy, paste){
-    # copy of a branching lineage in the one-D vector of covariances 'sigma'
-    n = (1/2)*(-1+sqrt(1+8*length(sigma)))
-    L = (n+1)*(n+2)/2
-    newsigma <- rep(0, times=L)
-    for(i in 1:(n+1)){
-        for(j in i:(n+1)){
-            k <- getOldPosition(i, copy, paste)
-            l <- getOldPosition(j, copy, paste)
-            newsigma[getPositionVectSigma(n+1,i,j)] <- sigma[getPositionVectSigma(n,k,l)]
-        }
-    }
-    return(newsigma)
-}
-
 updateBranchingMatrixSigma <- function(Sigma, copy, paste){
     # copy of a branching lineage in the matrix of covariances 'Sigma'
     n = length(Sigma[1,])
     newSigma <- diag(0, n+1)
-    for(i in 1:(n+1)){
-        for(j in 1:(n+1)){
-            k <- getOldPosition(i, copy, paste)
-            l <- getOldPosition(j, copy, paste)
-            newSigma[i,j] <- Sigma[k,l]
-        }
+    
+    newSigma[1:(paste-1),1:(paste-1)] <- Sigma[1:(paste-1),1:(paste-1)]
+    newSigma[paste,1:(paste-1)] <- Sigma[copy,1:(paste-1)]
+    newSigma[1:(paste-1),paste] <- Sigma[1:(paste-1),copy]
+    newSigma[paste,paste] <- Sigma[copy,copy]
+
+    if(paste < n+1){
+        newSigma[(paste+1):(n+1),1:(paste-1)] <- Sigma[paste:n,1:(paste-1)]
+        newSigma[(paste+1):(n+1),paste] <- Sigma[paste:n,copy]
+        newSigma[1:(paste-1),(paste+1):(n+1)] <- Sigma[1:(paste-1),paste:n]
+        newSigma[paste,(paste+1):(n+1)] <- Sigma[copy,paste:n]
+        newSigma[(paste+1):(n+1),(paste+1):(n+1)] <- Sigma[paste:n, paste:n]
     }
+
     return(newSigma)
 }
 
 setGeneric(
-    name="getTipDistribution2",
-    def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution2")}
+    name="getTipDistribution",
+    def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution")}
 )
 
 setMethod(
-    f="getTipDistribution2",
+    f="getTipDistribution",
     signature="PhenotypicModel",
     definition=function(object, params, v=FALSE){
         if(v){
@@ -261,7 +234,7 @@ setMethod(
             }
             Sigma = matrix(sigma,nrow=n)
         }
-	mean <- matrix(data=mean, ncol=1)
+        mean <- matrix(data=mean, ncol=1)
 
         if(v){
             end <- Sys.time()
@@ -272,125 +245,6 @@ setMethod(
     }
 )
 
-setGeneric(
-    name="getTipDistribution",
-    def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution")}
-)
-
-setMethod(
-    f="getTipDistribution",
-    signature="PhenotypicModel",
-    definition=function(object, params, v=FALSE){
-        if(v){
-            cat("*** Computation of tip traits distribution through ODE resolution ***\n(Method working for any model)\n")
-            beginning <- Sys.time()
-        }
-        # Initialisation of the distribution at the beginning of the process
-        initialCondition <- object@initialCondition(params)
-        mean <- initialCondition$mean
-        Sigma <- initialCondition$var
-
-        # Sigma is a matrix, we need to transform it into a one-D vector of covariances
-        n <- length(Sigma[,1])
-        sigma <- c()
-        for(i in 1:n){
-            for(j in i:n){
-                sigma <- c(sigma, Sigma[i,j])
-            }
-        }
-
-        # Sur chaque periode [t_i, t_i+1[ :
-        for(i in 1:(length(object@period)-1)){
-
-            # If there is a branching event at the beginning of the period, we update the mean and covariances
-            if(object@numbersPaste[i] != 0){
-                # update of the vector of means
-                if( object@numbersPaste[i] <= length(mean) ){
-                    mean <- c( mean[1:(object@numbersPaste[i]-1)], mean[object@numbersCopy[i]], mean[object@numbersPaste[i]:length(mean)] )
-                }else{
-                    mean <- c( mean, mean[object@numbersCopy[i]] )
-                }
-                # update of the vector of covariances
-                sigma <- updateBranchingVectSigma(sigma, object@numbersCopy[i], object@numbersPaste[i])
-            }
-
-            # On the considered period, the model is determined by
-            aAGammai <- object@aAGamma(i, params)
-            ai <- aAGammai$a
-            Ai <- aAGammai$A
-            Gammai <- aAGammai$Gamma
-            n = length(Ai[,1])
-            L =  n*(n+1)/2
-
-            # We now need to build the ODE system such that dsigma/dt = Msigma + d
-            #print(paste("la longeur de sigma est de ", length(sigma), " tandis que la longueur determinee a partir de a est ", L))
-            #print(paste("La longeur de mean est de ", length(mean), "tandis que la longueur de A est", n))
-            #print(paste("la taille de Gamma est ", length(Gammai(0)[,1]), "par ", length(Gammai(0)[1,]) ))
-            # M does not depend on time t because Ai is a constant matrix on the period
-            M = diag(0, L)
-            for(k in 1:n){
-                for(l in k:n){
-                    # On the line concerning Cov(k,l) :
-                    p1 <- getPositionVectSigma(n,k,l)
-                    for(m in 1:n){                        
-                        p2 <- getPositionVectSigma(n, min(m,l), max(m,l))
-                        M[p1, p2] <- M[p1, p2] - Ai[k,m]
-                        
-                        p3 <- getPositionVectSigma(n, min(m,k), max(m,k))
-                        M[p1, p3] <- M[p1, p3] - Ai[l,m]
-                    }
-                }
-            }
-            # d is a function of time, because Gammai is a function of time
-            d <- function(t){
-                d = rep(0, times=L)
-                for(k in 1:n){
-                    for(l in k:n){
-                        p1 <- getPositionVectSigma(n,k,l)
-                        for(m in 1:n){
-                            d[p1] <- d[p1] + Gammai(t)[k,m]*Gammai(t)[l,m]
-                        }
-                    }
-                }
-                return(d)
-            }
-            derivativesigma <- function(t,y,params){
-                return(list(M %*% y + d(t)))
-            }
-
-            # And we build a second ODE system such that dm/dt = -Ai m + ai
-            derivativemean <- function(t,y,params){
-                return(list(-Ai %*% y + ai(t)))
-            }
-
-            # We update the vectors of means and covariances through their ODE system resolution
-            times <- c(object@period[i], object@period[i+1])
-            if((object@period[i+1]-object@period[i])> 1e-15 ){
-                sigma <- ode(sigma, times, derivativesigma)[2, 2:(L+1)]
-                mean  <- ode(mean, times, derivativemean)[2, 2:(n+1)]
-            } 
-        }
-
-        # At the end, we get m and the list of covariances sigma. We thus reconstruct a variance matrix before returning it (Sigma is a matrix, sigma is a vector)
-        n = length(mean)
-        Sigma <- diag(0, n)
-        for(k in 1:n){
-            for(l in 1:n){
-                p <- getPositionVectSigma(n, min(k,l), max(k,l))
-                Sigma[k,l] <- sigma[p]
-            }
-        }
-	mean <- matrix(data=mean, ncol=1)
-        #names(mean) <- c()
-
-        if(v){
-            end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
-        }
-
-        return(list(mean = mean, Sigma = Sigma))
-    }
-)
 
 setGeneric(
     name="getDataLikelihood",
