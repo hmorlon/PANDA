@@ -385,6 +385,31 @@ createModel <- function(tree, keyword){
 #    Describe the periods on a 'phylo' tree
 ##################################################
 
+getMatrixOfCoalescenceTimes <- function(tree){
+    startingTimes <- getStartingTimes(tree)
+    # we get the matrix giving the number of the mrca node to each pair of tips
+    matrixMRCA <- mrca(tree)
+    matrixCoalescenceTimes <- diag(0, length(matrixMRCA[,1]))
+
+    # We fill the matrix of coalescence times
+    for(i in 1:length(matrixMRCA[,1])){
+        for(j in i:length(matrixMRCA[1,])){
+            # if the mrca is an internal node, we take its date from the root
+            if( matrixMRCA[i,j] %in% tree$edge[,1]){
+                index <- which(tree$edge[,1]==matrixMRCA[i,j])[1]
+                matrixCoalescenceTimes[i,j] <- startingTimes[index]
+                matrixCoalescenceTimes[j,i] <- startingTimes[index]
+            # if the mrca is a tip, we take its death time
+            }else{
+                index <- which(tree$edge[,2]==matrixMRCA[i,j])
+                matrixCoalescenceTimes[i,j] <- startingTimes[index]+tree$edge.length[index]
+                matrixCoalescenceTimes[j,i] <- startingTimes[index]+tree$edge.length[index]
+            }
+        }
+    }
+    return(matrixCoalescenceTimes)
+}
+
 getStartingTimes <- function(tree){
     # Returns a vector giving the starting time for each branch of a tree in format "phylo"
     
@@ -409,7 +434,7 @@ removeIdenticalEntries <- function(vector){
     # Remove identical entries on a vector in ascending order
     new_vector <- c(vector[1])
     for(i in 1:(length(vector)-1)){
-        if(vector[i] != vector[i+1]){
+        if(vector[i] < vector[i+1]-1e-5){
             new_vector <- c(new_vector, vector[i+1])
         }
     }
@@ -433,6 +458,63 @@ periodizeOneTree <- function(tree){
     
     return(list(periods=periods, startingTimes=startingTimes, endTimes=endTimes))
 }
+
+endOfPeriods <- function(periodizing, tree){
+    # Returns the list of branching or dying lineages at the beginning of each period : copy
+    # Together with the list of places where the new lineage is inserted (or zero if a lineage dies) : paste
+    # And the number of lineages on the focal period : nLineages
+    # The rule is : at each branching point, the first of the two new branches is assigned its mother label, and the new one takes the last label (n, where n is the number of lineages at that time)
+    
+    nBranch <- length(periodizing$startingTimes)
+    nPeriods <- length(periodizing$periods)
+    
+    numbersCopy <- rep(0, times=nPeriods)
+    numbersPaste <- rep(0, times=nPeriods)
+    numbersLineages <- rep(0, times=nPeriods)
+
+    # We initialize the labeling of branches in the tree
+    labelingLineages <- rep(0, times=nBranch)
+    initialBranches <- periodizing$startingTimes[periodizing$startingTimes==0]
+    if(length(initialBranches) == 1){
+        labelingLineages[1] <- 1
+        n <- 1
+    }else{
+        labelingLineages[periodizing$startingTimes==0] <- c(1,2)
+        n <- 2
+    }
+    numbersLineages[1] <- n
+    numbersCopy[1] <- 1
+    numbersPaste[1] <- 2
+    
+    for(i in 2:nPeriods){
+        tau_i <- periodizing$periods[i]
+        newBranches <- which(tau_i == periodizing$startingTimes)
+        # If tau_i is a birth time on the tree
+        if(length(newBranches) == 2){
+            n <- n+1
+            labelingLineages[newBranches[1]] <- labelingLineages[newBranches[1]-1]
+            labelingLineages[newBranches[2]] <- n
+            numbersCopy[i] <- labelingLineages[newBranches[1]-1]
+            numbersPaste[i] <- n
+        # Else, tau_i is only a death time of one or many terminal branches.
+        }else{
+            deadBranches <- which(tau_i == periodizing$endTimes)
+            numbersCopy[i] <- labelingLineages[ deadBranches[1] ]
+            numbersPaste[i] <- 0
+        }
+        numbersLineages[i] <- n
+    }
+
+    permutationLabels <- labelingLineages[!(periodizing$endTimes %in% periodizing$startingTimes)]
+    labeling <- tree$tip.label[order(permutationLabels)]
+    
+    return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages, labeling=labeling))
+}
+
+############################################
+# Old stuff with 'ever changing' labeling, slower
+# The following should be deleted at some point
+############################################
 
 describeOnePeriod <- function(i, periodizing, tree){
     
@@ -475,7 +557,7 @@ describeOnePeriod <- function(i, periodizing, tree){
     return(list(copy=numberCopied, paste=numberPasted, nLineages=IDLineage-1, livingLineages=livingLineages))
 }
 
-endOfPeriods <- function(periodizing, tree){
+endOfPeriods2 <- function(periodizing, tree){
     # Returns the list of branching or dying lineages at the beginning of each period : copy
     # Together with the list of places where the new lineage is inserted (or zero if a lineage dies) : paste
     # And the number of lineages on the focal period : nLineages
@@ -495,29 +577,4 @@ endOfPeriods <- function(periodizing, tree){
     }
     
     return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages))
-}
-
-getMatrixOfCoalescenceTimes <- function(tree){
-    startingTimes <- getStartingTimes(tree)
-    # we get the matrix giving the number of the mrca node to each pair of tips
-    matrixMRCA <- mrca(tree)
-    matrixCoalescenceTimes <- diag(0, length(matrixMRCA[,1]))
-
-    # We fill the matrix of coalescence times
-    for(i in 1:length(matrixMRCA[,1])){
-        for(j in i:length(matrixMRCA[1,])){
-            # if the mrca is an internal node, we take its date from the root
-            if( matrixMRCA[i,j] %in% tree$edge[,1]){
-                index <- which(tree$edge[,1]==matrixMRCA[i,j])[1]
-                matrixCoalescenceTimes[i,j] <- startingTimes[index]
-                matrixCoalescenceTimes[j,i] <- startingTimes[index]
-            # if the mrca is a tip, we take its death time
-            }else{
-                index <- which(tree$edge[,2]==matrixMRCA[i,j])
-                matrixCoalescenceTimes[i,j] <- startingTimes[index]+tree$edge.length[index]
-                matrixCoalescenceTimes[j,i] <- startingTimes[index]+tree$edge.length[index]
-            }
-        }
-    }
-    return(matrixCoalescenceTimes)
 }
