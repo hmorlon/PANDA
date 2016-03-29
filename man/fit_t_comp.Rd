@@ -8,7 +8,7 @@ Fits models of trait evolution incorporating competitive interactions
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,method="Nelder-Mead")
+fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,method="Nelder-Mead",bounds=NULL)
 }
 
 \arguments{
@@ -30,6 +30,10 @@ vector specifying starting parameter values for maximum likelihood optimization.
   \item{method}{
 method to use for ML optimization (default is Nelder-Mead)
 }
+  \item{bounds}{
+optional list (default bounds are \code{list(lower=-Inf,upper=Inf)}) to be specified when using \code{L-BFGS-B} ML optimization method.
+}
+
 }
 
 \value{
