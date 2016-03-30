@@ -48,9 +48,8 @@ plot.Phi=function(rep,lambda,xleg=1,yleg=0,ylim=c(0,1),legend=3){
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-prodMatVect_FFT=function(G, v){
-    N= length(v)
-    w=Re(ifft(G*fft(c(v,matrix(0,N))))[0:N])
+prodMatVect_FFT=function(G, v, v0){
+    w=Re(ifft(G*fft(c(v,v0)))[0:length(v)])
     return(w)
 }
 
@@ -61,7 +60,7 @@ expMatBVect_FFT=function(G, v, D1, D2, D3, dt, eps){
     Gnv=v
     n=1
     N= length(v)
-    v0 = matrix(0,N)
+    v0 = rep(0,N)
     D4=D3*D2
     
     while (norm(Gnv) > eps*norm(v)){ 
@@ -89,15 +88,16 @@ Phi_FFT=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
     vec_density = exp(-lambdaIsT^2/(2*sigma^2))
   } 
   G=Re(fft(vec_density))
-  # ------- Topelitz matrix -------------
+  # ------- Toeplitz matrix -------------
   M = toeplitz(exp(-lambdaIs^2/(2*sigma^2)))
   normM = 1/rowSums(M)
   M = normM * M 
 
   ini=rep((1-f),nlambda+1)
+  vect0 = rep(0,length(ini))  
   
   dPhi=function(t,y,parms){
-    dy=lambdaIs*((normM*prodMatVect_FFT(G,y))^2-y)+mu*(1-y)
+    dy=lambdaIs*((normM*prodMatVect_FFT(G,y,vect0))^2-y)+mu*(1-y)
     return(list(dy))
   }
 
@@ -140,20 +140,20 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     ini=1-phi$fun[tini,-1]  
     
   }else{
-    M2=M/(lambdas[2])
     #on transforme la proba d'être dans un intervalle (de taille lambdas[2]) en densité 
     ind=c(which.min(abs(lambdas-lambda1)),which.min(abs(lambdas-lambda2)))
-    ini=1-phi$fun[tini,-1] 
-    ini=M2[ind[1],]*M2[ind[2],]*lambdas*(1-phi$fun[tini,ind[1]+1])*(1-phi$fun[tini,ind[2]+1])
+    temp = (1-phi$fun[tini,ind[1]+1])*(1-phi$fun[tini,ind[2]+1])/(lambdas[2])^2  
+    ini = temp*(M[ind[1],]*M[ind[2],]*lambdas)
     # print(ini)
   }
   
   if (substring(method,1,3) == "FFT") {
+    vect0 = rep(0,length(ini)) 
     if(tini==tend){
-      A = as.vector(2*lambdas*(phi$normM*prodMatVect_FFT(phi$G,phi$fun[tini,-1])))
+      A = as.vector(2*lambdas*(phi$normM*prodMatVect_FFT(phi$G,phi$fun[tini,-1],vect0)))
     }else{
-      SumPhi=rowSums(t(phi$fun[tini:tend,-1]))
-      A = as.vector(2*lambdas*(phi$normM*prodMatVect_FFT(phi$G,SumPhi)))
+      SumPhi=colSums(phi$fun[tini:tend,-1])
+      A = as.vector(2*lambdas*(phi$normM*prodMatVect_FFT(phi$G,SumPhi,vect0)))
       A=A/(tend-tini+1)
     }
     if(method=="FFT_none"){
