@@ -1,4 +1,6 @@
 library(parallel)
+source("birthdeath.tree.rateshift.R")
+source("Vraisemblance-mort-IMACS.R")
 
 proposalGeneratorFactoryDE <- function(p=0.01,var=1e-6,burn=0,n.thin=0,decreasing.var=0,alpha=log(0.1)/1000,N.sigma=0){
   returnProposal <- function(chains,x,n){
@@ -246,12 +248,12 @@ if (T){
   
   start=list()
   N=1
-  start=lapply(1:N,function(i){runif(n = nedges+3,0,0.01)})
+  start=lapply(1:N,function(i){runif(n = nedges+3,0.01,0.02)})
   
   target <- function(x) {if(x[1]<1e-4){-Inf}else{fun(x[-(1:2)],x[1],x[2] ,f)}}
   target(start[[1]])
   testGenerator <- proposalGeneratorFactoryDE(var = 1e-6,p=0.1)
   sampler=mcmcSamplerDE(target,startvalue = start,proposalGenerator = testGenerator,Nchain = N,consoleupdates = 1)
-  sampler=getSamplesDE(mcmcSampler = sampler,iterations = 200,thin = 1,nCPU=1)
+  sampler=getSamplesDE(mcmcSampler = sampler,iterations = 20,thin = 1,nCPU=1)
   plot(sampler$codaChain)
 }

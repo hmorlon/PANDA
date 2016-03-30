@@ -1,4 +1,6 @@
 library(parallel)
+source("birthdeath.tree.rateshift.R")
+source("Vraisemblance-mort-IMACS.R")
 
 proposalGeneratorFactoryDE_gibbs <- function(proba.gibbs,p=0.01,var=1e-6,burn=0,n.thin=0,decreasing.var=0,alpha=log(0.1)/1000,N.sigma=0){
 
@@ -12,19 +14,14 @@ proposalGeneratorFactoryDE_gibbs <- function(proba.gibbs,p=0.01,var=1e-6,burn=0,
       decreasing.var=rep(decreasing.var,npar)
     }
     gibbs=sample(1:npar,sample(1:npar,1,prob = proba.gibbs))
-#     ind1.1=1
-#     ind1.2=1
-#     ind2.1=1
-#     ind2.2=1
     
       
       ind1.1=sample(1:length(chains),1)
       ind2.1=sample(1:length(chains),1)
       if(n.thin==0 | (n-N)<=n.thin){
-        # if(n.thin==0 | (n-N)<=n.thin){
+
         if(floor(N)==0){
-#           ind1.2=n
-#           ind2.2=n
+
           ind1.2=sample(1:n,1)
           ind2.2=sample(1:n,1)
         }else{
@@ -77,54 +74,6 @@ mcmcSamplerDE_gibbs <- function(likelihood,proba.gibbs, Nchain=3, prior = NULL, 
     }
   }
   
-#   catchingLikelihood <- function(x){
-#     out <- tryCatch(
-#       {
-#         x = likelihood(x)
-#         if (x == Inf ){
-#           x = -Inf
-#           warning("Positive Inf values occured in the likelihood. Set to -Inf")
-#         }
-#         x 
-#       },
-#       error=function(cond){
-#         message("Problem in the likelihood")
-#         message(cond)
-#         return(-Inf)
-#       }
-#     )
-#     return(out)
-#   }
-#   
-#   catchingPrior <- function(x){
-#     out <- tryCatch(
-#       {
-#         prior(x)
-#       },
-#       error=function(cond) {
-#         message("Problem in the prior")
-#         message(cond)
-#         return(-Inf)
-#       }
-#     )
-#     if (out == Inf) out = -Inf
-#     return(out)
-#   }
-#   
-#   posterior <- function(x){
-#     priorResult = catchingPrior(x) # Checking first if outside the prior to save calculation time
-#     if (priorResult == -Inf) return(c(-Inf, -Inf))
-#     else{
-#       likelihoodResult = catchingLikelihood(x)
-#       return(c(likelihoodResult, likelihoodResult + priorResult))
-#     }
-#   }  
-#   
-#   posterior2 <- function(x){
-#     priorResult = catchingPrior(x) # Checking first if outside the prior to save calculation time
-#     if (priorResult == -Inf) return(-Inf)
-#     else return(catchingLikelihood(x) + priorResult)
-#   }
   
   numPars = length(startvalue[[1]]) + length(startmodel)
   
@@ -153,10 +102,9 @@ mcmcSamplerDE_gibbs <- function(likelihood,proba.gibbs, Nchain=3, prior = NULL, 
   
   classFields = list(
     likelihood = likelihood, 
-    # catchingLikelihood = catchingLikelihood,
+
     prior = prior,
-#     catchingPrior = catchingPrior,
-#     posterior = posterior,
+
     startvalue = startvalue, 
     numPars = numPars,
     indexLL = numPars + 1,
@@ -200,7 +148,6 @@ getSamplesDE_gibbs <- function(mcmcSampler, iterations, post, thin=NULL,nCPU=1,c
   i=lastvalue+1
 
   while (i <((lastvalue+iterations/mcmcSampler$thin)+1)){
-    # for(j in 1:mcmcSampler$Nchain){    
     currentchain=mclapply(1:mcmcSampler$Nchain,function(j){
       current=mcmcSampler$chains[[j]][k,]
       form=former[[j]]
@@ -208,11 +155,7 @@ getSamplesDE_gibbs <- function(mcmcSampler, iterations, post, thin=NULL,nCPU=1,c
       proposal = try(mcmcSampler$proposalGenerator$returnProposal(mcmcSampler$chains,current[1:mcmcSampler$numPars],k))
       proposalEval <- try(post(proposal,form),silent = T)
       if(!is.null(proposal) & !inherits(proposal,"try-error") & !inherits(proposalEval,"try-error") & inherits(proposalEval,"list")){
-#         if(is.nan(proposalEval$logLik)){debug(Phi)
-#           post(proposal,form)
-#           print(proposal)}
         if(!is.nan(proposalEval$logLik) & proposalEval$logLik<Inf & proposalEval$logLik>-Inf){
-      # print(proposalEval$logLik)
       probab = exp(proposalEval$logLik - current[mcmcSampler$numPars+2])
       
       if (is.nan(probab) | runif(1) < probab){
@@ -226,16 +169,12 @@ getSamplesDE_gibbs <- function(mcmcSampler, iterations, post, thin=NULL,nCPU=1,c
       if(sum(!sapply(currentchain,is.null))==mcmcSampler$Nchain ) {
         mcmcSampler$chains=lapply(1:mcmcSampler$Nchain,function(j){rbind(mcmcSampler$chains[[j]],currentchain[[j]]$current)})
         mcmcSampler$former=lapply(1:mcmcSampler$Nchain,function(j){currentchain[[j]]$former})
-        # print(currentchain[[1]]$former$logLik)
+
       flush.console()
-      # }
-      # }
-    
-    # if( i %% mcmcSampler$thin == 0 ) { 
       k=k+1
       i=i+1
       }
-    if( (i-1)*mcmcSampler$thin %% mcmcSampler$consoleupdates == 0 ) cat("\r","MCMC in progress",(i-1)*mcmcSampler$thin,"of",iterations+mcmcSampler$thin*(lastvalue-1),"please wait!","\r")}
+    if( (i-2)*mcmcSampler$thin %% mcmcSampler$consoleupdates == 0 ) cat("\r","MCMC in progress",(i-2)*mcmcSampler$thin,"of",iterations+mcmcSampler$thin*(lastvalue-1),"please wait!","\r")}
   
   message("Done.")
   for(i in 1:mcmcSampler$Nchain){
@@ -256,7 +195,7 @@ burn.list=function(mcmcSampler,burn,thin=1,col=NULL,chain=NULL){
   return(mcmc.list(rep))
 }
 
-createLikelihood_death_gibbs <- function(phylo, root_depth=0, relative = F,nt=1000,M=2,method="expoRkit",banded=T,nlambda_max=5000){
+createLikelihood_death_gibbs <- function(phylo, root_depth=0, relative = F,nt=1000,M=2,method="expoRkit",banded=T,Nl=5000){
   
   nbtips = Ntip(phylo)
   edge = phylo$edge
@@ -308,7 +247,7 @@ createLikelihood_death_gibbs <- function(phylo, root_depth=0, relative = F,nt=10
   tf=max(nodeprof)
   
   
-  ll<-function(lambda, sigma, mu,f,former=NULL,nlambda=min(nlambda_max,5*M/(sigma))){
+  ll<-function(lambda, sigma, mu,f,former=NULL,nlambda=Nl){
     
     lambda2=lambda
     lambda2=relToAbs(lambda2)
@@ -380,7 +319,6 @@ createLikelihood_death_gibbs <- function(phylo, root_depth=0, relative = F,nt=10
   return(ll)
   
 }
-
 # ############test###################
 
 if (T){
@@ -398,17 +336,13 @@ if (T){
   nCPU=1
   
   name_method="FFT" 
-  fun=createLikelihood_death_gibbs(tree,relative = T,nlambda_max = 1000,nt = 1000,M=2,banded = 10000,method = "FFT")
+  fun=createLikelihood_death_gibbs(tree,relative = T,Nl= 100,nt = 1000,M=2,banded = 0,method = "FFT")
   target <- function(x,former=NULL) {if(x[1]<1e-4){-Inf}else{fun(x[-(1:2)],x[1],x[2] ,1,former=former)}}
   
   start=list()
   N=1
-  start=lapply(1:N,function(i){runif(n = nedges+3,0,0.01)})
-  
+  start=lapply(1:N,function(i){runif(n = nedges+3,0.01,0.02)})
   target(start[[1]])
-  testGenerator <- proposalGeneratorFactoryDE_gibbs(var = 1e-6,p=0.1)
-  sampler=mcmcSamplerDE_gibbs(target,startvalue = start,proposalGenerator = testGenerator,Nchain = N,consoleupdates = 1)
-  sampler=getSamplesDE_gibbs(mcmcSampler = sampler,iterations = 200,thin = 1,nCPU=1)
   
   g=10
   testGenerator <- proposalGeneratorFactoryDE_gibbs(var=1e-5,proba.gibbs=c(rep(1,g),rep(0,nedges+3-g)),p=0.1)
