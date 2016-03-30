@@ -398,7 +398,7 @@ if (T){
   nCPU=1
   
   name_method="FFT" 
-  fun=createLikelihood_death2(tree,relative = T,nlambda_max = 1000,nt = 1000,M=2,banded = 10000,method = "FFT")
+  fun=createLikelihood_death_gibbs(tree,relative = T,nlambda_max = 1000,nt = 1000,M=2,banded = 10000,method = "FFT")
   target <- function(x,former=NULL) {if(x[1]<1e-4){-Inf}else{fun(x[-(1:2)],x[1],x[2] ,1,former=former)}}
   
   start=list()
