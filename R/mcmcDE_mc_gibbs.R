@@ -39,7 +39,7 @@ proposalGeneratorFactoryDE_gibbs <- function(proba.gibbs,p=0.01,var=1e-6,burn=0,
     u=runif(1,0,1)
     
     if(u>p){
-      gamma=2.36/sqrt(2*npar)
+      gamma=2.36/sqrt(2*length(gibbs))
     }else{
       gamma=1
     }
@@ -176,7 +176,6 @@ mcmcSamplerDE_gibbs <- function(likelihood,proba.gibbs, Nchain=3, prior = NULL, 
   class(classFields) <- append(class(classFields),"mcmcSampler")
   return(classFields)
 }
-
 
 getSamplesDE_gibbs <- function(mcmcSampler, iterations, post, thin=NULL,nCPU=1,colnames=c("sigma","mu","l_0")){
   post=mcmcSampler$post
