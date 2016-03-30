@@ -1,6 +1,6 @@
 Package: RPANDA
-Version: 1.1
-Date: 2015-09-14
+Version: 1.2
+Date: 2016-03-30
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends: R (>= 2.14.2), picante
@@ -10,6 +10,6 @@ Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"))
 Maintainer: Hélène Morlon <morlon@biologie.ens.fr>
-Description: Implements macroevolutionary analyses on phylogenetic trees. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. (2015) and Lewitus & Morlon (submitted).
+Description: Implements macroevolutionary analyses on phylogenetic trees. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. Eco Lett (2015), Lewitus & Morlon Syst Biol (2016), and Drury et al. Syst Biol (2016).
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
