@@ -8,7 +8,8 @@ Fits models of trait evolution incorporating competitive interactions
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,method="Nelder-Mead",bounds=NULL)
+fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,
+	method="Nelder-Mead",bounds=NULL)
 }
 
 \arguments{
@@ -90,6 +91,7 @@ geography.object<-Anolis.data$geography.object
 pPC1<-Anolis.data$data
 phylo<-Anolis.data$phylo
 
+\donttest{
 #Fit three models without biogeography to pPC1 data
 MC.fit<-fit_t_comp(phylo,pPC1,model="MC")
 DDlin.fit<-fit_t_comp(phylo,pPC1,model="DDlin")
@@ -99,5 +101,6 @@ DDexp.fit<-fit_t_comp(phylo,pPC1,model="DDexp")
 MC.geo.fit<-fit_t_comp(phylo,pPC1,model="MC",geography.object=geography.object)
 DDlin.geo.fit<-fit_t_comp(phylo,pPC1,model="DDlin",geography.object=geography.object)
 DDexp.geo.fit<-fit_t_comp(phylo,pPC1,model="DDexp",geography.object=geography.object)
+}
 
 }
