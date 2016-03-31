@@ -10,6 +10,6 @@ Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"))
 Maintainer: Hélène Morlon <morlon@biologie.ens.fr>
-Description: Implements macroevolutionary analyses on phylogenetic trees. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. Eco Lett (2015), Lewitus & Morlon Syst Biol (2016), and Drury et al. Syst Biol (2016).
+Description: Implements macroevolutionary analyses on phylogenetic trees. See Morlon et al. (2010) <DOI:10.1371/journal.pbio.1000493>, Morlon et al. (2011) <DOI:10.1073/pnas.1102543108>, Condamine et al. (2013) <DOI:10.1111/ele.12062>, Morlon et al. (2014) <DOI:10.1111/ele.12251>, Manceau et al. (2015) <DOI:10.1111/ele.12415>, Lewitus & Morlon (2016) <DOI:10.1093/sysbio/syv116>, and Drury et al. (2016) <DOI:10.1093/sysbio/syw020>.
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
