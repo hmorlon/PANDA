@@ -62,7 +62,7 @@ expMatBVect_FFT=function(G, v, D1, D2, D3, dt, eps){
     n=1
     N= length(v)
     NG = length(G)
-    v0 = rep(0,N)
+    v0 = rep(0,NG-N)
     D4=D3*D2
     epsnormv = eps*norm_vect1(v)
     
@@ -75,6 +75,16 @@ expMatBVect_FFT=function(G, v, D1, D2, D3, dt, eps){
       }
       expGv[mask_D1] = 2e-9
     return(expGv)
+}
+
+power2_FFT=function(vec,N){
+    # compute the next higher power of 2 for FFT 
+    N2 = 2*N
+    size=2^ceiling(log(N2)/log(2))
+    vec2=rep(0,size)
+    vec2[0:N]=vec[0:N]
+    vec2[(size-N+1):size]=vec[(N+1):N2]  
+    return(vec2)
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,14 +100,14 @@ Phi_FFT=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
   }else{
     vec_density = exp(-lambdaIsT^2/(2*sigma^2))
   } 
-  G=Re(fft(vec_density))
+  G=Re(fft(power2_FFT(vec_density,nlambda+1))) 
   # ------- Toeplitz matrix -------------
   M = toeplitz(exp(-lambdaIs^2/(2*sigma^2)))
   normM = 1/rowSums(M)
   M = normM * M 
 
   ini=rep((1-f),nlambda+1)
-  vect0 = rep(0,length(ini))  
+  vect0 = rep(0,length(G)-length(ini))
   
   dPhi=function(t,y,parms){
     My=normM*prodMatVect_FFT(G,y,vect0)
@@ -152,7 +162,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
   }
   
   if (substring(method,1,3) == "FFT") {
-    vect0 = rep(0,length(ini)) 
+    vect0 = rep(0,length(phi$G)-length(ini))  
     if(tini==tend){
       A = as.vector(2*lambdas*(phi$normM*prodMatVect_FFT(phi$G,phi$fun[tini,-1],vect0)))
     }else{
