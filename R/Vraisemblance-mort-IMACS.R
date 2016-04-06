@@ -3,7 +3,6 @@ library(fields)
 library(expoRkit)
 library(rexpokit)
 library(Matrix)
-library(signal)
 
 source("birthdeath.tree.rateshift.R")
 
@@ -49,9 +48,11 @@ plot.Phi=function(rep,lambda,xleg=1,yleg=0,ylim=c(0,1),legend=3){
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 prodMatVect_FFT=function(G, v, v0){
-    w=Re(ifft(G*fft(c(v,v0)))[0:length(v)])
+    w=Re(fft(G*fft(c(v,v0)),inverse=TRUE)[0:length(v)])/length(G) 
     return(w)
 }
+
+norm_vect1=function(x) sum(abs(x))
 
 expMatBVect_FFT=function(G, v, D1, D2, D3, dt, eps){
     mask_D1 = D1 < -20/dt
@@ -60,11 +61,13 @@ expMatBVect_FFT=function(G, v, D1, D2, D3, dt, eps){
     Gnv=v
     n=1
     N= length(v)
+    NG = length(G)
     v0 = rep(0,N)
     D4=D3*D2
+    epsnormv = eps*norm_vect1(v)
     
-    while (norm(Gnv) > eps*norm(v)){ 
-      Gnv = D1*Gnv + D4*Re(ifft(G*fft(c(Gnv,v0)))[0:N])
+    while (norm_vect1(Gnv) > epsnormv){ 
+      Gnv = D1*Gnv + D4*Re(fft(G*fft(c(Gnv,v0)),inverse=TRUE)[0:N])/NG
       Gnv = (dt/n)*Gnv
       Gnv[mask_D1] = 0
       expGv = expGv + Gnv
@@ -97,7 +100,8 @@ Phi_FFT=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
   vect0 = rep(0,length(ini))  
   
   dPhi=function(t,y,parms){
-    dy=lambdaIs*((normM*prodMatVect_FFT(G,y,vect0))^2-y)+mu*(1-y)
+    My=normM*prodMatVect_FFT(G,y,vect0)
+    dy=lambdaIs*(My^2-y)+mu*(1-y)
     return(list(dy))
   }
 
