@@ -45,7 +45,7 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 }
 
 \references{
-	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
+	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020
 
 	Nuismer, S. & Harmon, L. 2015. Predicting rates of interspecific interaction from phylogenetic trees. \emph{Ecology Letters} 18:17-27.
 	
@@ -62,14 +62,16 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 
 data(Cetacea)
 
+\donttest{
 # Simulate data under the matching competition model
 MC.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,S=-0.1),root.value=0,Nsegments=1000,model="MC")
 
 # Simulate data under the diversity dependent linear model
-DDlin.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,model="DDlin")
+DDlin.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,b=-0.0001),root.value=0,Nsegments=1000,
+	model="DDlin")
 
 # Simulate data under the diversity dependent linear model
 DDexp.data<-sim_t_comp(Cetacea,pars=c(sig2=0.01,r=-0.01),root.value=0,Nsegments=1000,model="DDexp")
-
+}
 
 }
