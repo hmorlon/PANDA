@@ -60,14 +60,14 @@ setMethod(
                 if (abs((psi+S)*delta_t) > 1e-3){
                     integral1 <- (1-exp(-2*(psi+S)*delta_t))/(2*(psi+S))
                 }else{
-                    integral1 <- delta_t - 2*(psi+S)*delta_t^2
+                    integral1 <- delta_t - (psi+S)*delta_t^2
                 } 
                 if (abs(psi*delta_t) > 1e-3) {
                     integral2 <- (1-exp(-2*psi*delta_t))/(2*psi)
                 }else{
-                    integral2 <-  delta_t - 2*psi*delta_t^2
+                    integral2 <-  delta_t - dpsi*delta_t^2
                 }
-                Sigma <- Sigma + sigma^2 * integral1 * diag(c(vectorU)) + sigma^2 * (integral2 - integral1)/n * t(vectorU) %*% vectorU
+                Sigma <- Sigma + diag(c(sigma^2 * integral1 *vectorU)) + sigma^2 * (integral2 - integral1)/n * t(vectorU) %*% vectorU
             }
 
             # No problem for the integral associated with a_i and the evolution of the mean
