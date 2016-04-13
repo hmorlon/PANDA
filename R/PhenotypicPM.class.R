@@ -51,9 +51,10 @@ setMethod(
             delta_t <- object@period[i+1]-object@period[i]
 
             n <- sum(vectorU)
-            exp_delta_Ai <- diag(c(exp(-(psi+S)*delta_t*vectorU))) + (exp(-psi*delta_t) - exp(-(psi+S)*delta_t))/n * t(vectorU) %*% vectorU
-            Sigma <- exp_delta_Ai %*% Sigma %*% exp_delta_Ai
-            mean <- exp_delta_Ai %*% mean
+            d <- exp(-(psi+S)*delta_t*vectorU)
+            f <- (exp(-psi*delta_t) - exp(-(psi+S)*delta_t))/n
+            Sigma <- outer(d,d)*Sigma + f *( outer(c(d*(Sigma%*%vectorU)), vectorU) + outer(vectorU, c((vectorU%*%Sigma)*d)) + f* c(vectorU%*%Sigma%*%vectorU) * outer(vectorU,vectorU) )
+            mean <- f*( vectorU%*%mean )*vectorU + d*mean
 
             # The exponential or the Taylor expansion depending on the parameter values
             if( sigma != 0 ){
@@ -67,11 +68,11 @@ setMethod(
                 }else{
                     integral2 <-  delta_t - dpsi*delta_t^2
                 }
-                Sigma <- Sigma + diag(c(sigma^2 * integral1 *vectorU)) + sigma^2 * (integral2 - integral1)/n * t(vectorU) %*% vectorU
+                Sigma <- Sigma + diag(sigma^2 * integral1 *vectorU) + sigma^2 * (integral2 - integral1)/n * outer(vectorU, vectorU)
             }
 
             # No problem for the integral associated with a_i and the evolution of the mean
-            mean <- mean + theta * (1-exp(-psi*delta_t)) * t(vectorU)
+            mean <- mean + theta * (1-exp(-psi*delta_t)) * vectorU
         }
 
         mean <- matrix(mean,ncol=1)

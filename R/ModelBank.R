@@ -309,7 +309,7 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
             
         aAGamma <- function(i, params){
-            vectorU <- matrix(getLivingLineages(i, eventEndOfPeriods),nrow=1)
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
               
             return(list(u=vectorU, OU=TRUE))
         }
@@ -330,7 +330,7 @@ createModel <- function(tree, keyword){
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
             
         aAGamma <- function(i, params){
-            vectorU <- matrix(getLivingLineages(i, eventEndOfPeriods),nrow=1)
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
               
             return(list(u=vectorU, OU=FALSE))
         }
