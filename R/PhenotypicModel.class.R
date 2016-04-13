@@ -298,32 +298,66 @@ setMethod(
 
 setGeneric(
     name="fitTipData",
-    def=function(object="PhenotypicModel", data="numeric", params0="numeric"){standardGeneric("fitTipData")}
+    def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical"){standardGeneric("fitTipData")}
 )
 
 setMethod(
     f="fitTipData",
     signature="PhenotypicModel",
-    definition=function(object, data, params0=NULL){
+    definition=function(object, data, params0=NULL, GLSstyle=FALSE){
         cat("*** Fit of tip trait data ***\n")
         cat("Finding the maximum likelihood estimator of the parameters, before returning the likelihood and the inferred parameters...\n")
         beginning <- Sys.time()
+
+        n <- length(data)
 
         # If params0 is not given, we use the 'params0' value contained in the model
         if(is.null(params0)){
             params0 <- object@params0
         }
+        # In "GLS-style" mode, there is an analytical expression for the first parameter, namely m0
+        if(GLSstyle){
+            params0 <- params0[2:length(params0)]
+        }
 
-        n <- length(data)
-        
         # computing the mean vector and variance matrix for the model, returns -log(likelihood) (a real number)
         toBeOptimized <- function(params){
-            return(getDataLikelihood(object, data, params))
+
+            if(GLSstyle){paramsPrVerif <- c(0, params)}else{paramsPrVerif <- params}
+            if(object@constraints(paramsPrVerif)){
+
+                if(GLSstyle){
+                    tipdistribution <- getTipDistribution(object, c(0,params))
+                    m0 <- (1/sum(colSums(tipdistribution$Sigma))) * colSums(solve( tipdistribution$Sigma )) %*% data
+                    dataminusXT <- matrix(data - rep(m0, times=n), nrow=1)
+                    dataminusX <- matrix(data - rep(m0, times=n), ncol=1)
+
+                    ProdVectoriel = dataminusXT %*% solve( tipdistribution$Sigma ) %*% dataminusX
+                    deter = det( tipdistribution$Sigma )
+
+                    calcul <-  (ProdVectoriel + log( deter ) + n*log(2*pi)) /2
+                    params <- c(m0, params)
+
+                }else{
+                    calcul <- getDataLikelihood(object, data, params)
+                }
+
+            }else{
+                calcul <- -Inf
+            }
+
+            return(calcul)
         }
 
         # looking for the argmin of -log(likelihood) (i.e. argmax of likelihood)
         optimisation <- optim(params0, toBeOptimized)
         inferredParams <- optimisation$par
+        # In GLS-style, we got all parameters except the first one, 'm0' that we compute through a last call to getTipDistribution
+        if(GLSstyle){
+            tipdistribution <- getTipDistribution(object, c(0,inferredParams))
+            m0 <- (1/sum(colSums(tipdistribution$Sigma))) * (colSums(solve( tipdistribution$Sigma )) %*% data)
+            inferredParams <- c(m0, inferredParams)
+        }
         names(inferredParams) <- object@paramsNames
 
         end <- Sys.time()

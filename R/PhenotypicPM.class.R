@@ -51,9 +51,10 @@ setMethod(
             delta_t <- object@period[i+1]-object@period[i]
 
             n <- sum(vectorU)
-            d <- exp(-(psi+S)*delta_t*vectorU)
-            f <- (exp(-psi*delta_t) - exp(-(psi+S)*delta_t))/n
-            Sigma <- outer(d,d)*Sigma + f *( outer(c(d*(Sigma%*%vectorU)), vectorU) + outer(vectorU, c((vectorU%*%Sigma)*d)) + f* c(vectorU%*%Sigma%*%vectorU) * outer(vectorU,vectorU) )
+            d <- exp(-(psi+S)*delta_t*vectorU)      # d is a vector
+            SigmaU <- as.vector(Sigma%*%vectorU)    # SigmaU is a vector. Note that SigmaU = USigma because A is symmetric.
+            f <- (exp(-psi*delta_t) - exp(-(psi+S)*delta_t))/n      # f is a scalar
+            Sigma <- outer(d,d)*Sigma + outer(f*d*SigmaU, vectorU) + outer(f*vectorU, SigmaU*d) + outer(f^2 * c(vectorU%*%SigmaU) * vectorU,vectorU) 
             mean <- f*( vectorU%*%mean )*vectorU + d*mean
 
             # The exponential or the Taylor expansion depending on the parameter values
@@ -68,7 +69,7 @@ setMethod(
                 }else{
                     integral2 <-  delta_t - dpsi*delta_t^2
                 }
-                Sigma <- Sigma + diag(sigma^2 * integral1 *vectorU) + sigma^2 * (integral2 - integral1)/n * outer(vectorU, vectorU)
+                Sigma <- Sigma + diag(sigma^2 * integral1 *vectorU) + outer(sigma^2 * (integral2 - integral1)/n * vectorU, vectorU)
             }
 
             # No problem for the integral associated with a_i and the evolution of the mean
