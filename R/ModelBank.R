@@ -26,7 +26,7 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[2]>=0 && params[4]>=0)
         
-        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
+        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "BMbis"){
 
@@ -74,7 +74,7 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[2]>=0)
         
-        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
+        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "BM_from0_driftless"){
 
@@ -98,7 +98,7 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[1]>=0)
         
-        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
+        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "OU"){
 
@@ -122,7 +122,7 @@ createModel <- function(tree, keyword){
 
         constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
         
-        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
+        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "OUbis"){
 
@@ -199,7 +199,7 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[3]>=0 && params[1]!=0)
 
-        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
+        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "EB"){
 
@@ -223,7 +223,7 @@ createModel <- function(tree, keyword){
 
         constraints <- function(params) return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
         
-        model <- new(Class="PhenotypicEB", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=getMatrixOfCoalescenceTimes(tree))
+        model <- new(Class="PhenotypicEB", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "EBbis"){
 
@@ -246,6 +246,54 @@ createModel <- function(tree, keyword){
         }
 
         constraints <- function(params) return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
+        
+        model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
+
+    }else if(keyword == "DD"){
+
+        comment <- "Diversity-dependent model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(r n_t) dW_t"
+        paramsNames <- c("m0", "v0", "r", "sigma0")
+        params0 <- c(0,0,100,1)
+        
+        periodizing <- periodizeOneTree(tree)
+        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
+        
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
+        
+        aAGamma <- function(i, params){
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
+            vectorA <- function(t) return(rep(0, length(vectorU)))
+            matrixGamma <- function(t) return(params[4]*exp(params[4]*sum(vectorU))*diag(vectorU))
+            matrixA <- diag(0, length(vectorU))
+            
+            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        }
+
+        constraints <- function(params) return(params[2]>=0 && params[4]>0)
+        
+        model <- new(Class="PhenotypicDD", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceJ=getMatrixCoalescenceJ(tree, periodizing$periods), nLivingLineages=eventEndOfPeriods$nLivingLineages)
+
+    }else if(keyword == "DDbis"){
+
+        comment <- "Diversity-dependent model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(r n_t) dW_t"
+        paramsNames <- c("m0", "v0", "r", "sigma0")
+        params0 <- c(0,0,100,1)
+        
+        periodizing <- periodizeOneTree(tree)
+        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
+        
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
+        
+        aAGamma <- function(i, params){
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
+            vectorA <- function(t) return(rep(0, length(vectorU)))
+            matrixGamma <- function(t) return(params[4]*exp(params[3]*sum(vectorU))*diag(vectorU))
+            matrixA <- diag(0, length(vectorU))
+            
+            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        }
+
+        constraints <- function(params) return(params[2]>=0 && params[4]>0)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
 
@@ -377,60 +425,18 @@ createModel <- function(tree, keyword){
 #    Describe the periods on a 'phylo' tree
 ##################################################
 
-getMatrixOfCoalescenceTimes <- function(tree){
-    startingTimes <- getStartingTimes(tree)
-    # we get the matrix giving the number of the mrca node to each pair of tips
-    matrixMRCA <- mrca(tree)
-    matrixCoalescenceTimes <- diag(0, length(matrixMRCA[,1]))
-
-    # We fill the matrix of coalescence times
-    for(i in 1:length(matrixMRCA[,1])){
-        for(j in i:length(matrixMRCA[1,])){
-            # if the mrca is an internal node, we take its date from the root
-            if( matrixMRCA[i,j] %in% tree$edge[,1]){
-                index <- which(tree$edge[,1]==matrixMRCA[i,j])[1]
-                matrixCoalescenceTimes[i,j] <- startingTimes[index]
-                matrixCoalescenceTimes[j,i] <- startingTimes[index]
-            # if the mrca is a tip, we take its death time
-            }else{
-                index <- which(tree$edge[,2]==matrixMRCA[i,j])
-                matrixCoalescenceTimes[i,j] <- startingTimes[index]+tree$edge.length[index]
-                matrixCoalescenceTimes[j,i] <- startingTimes[index]+tree$edge.length[index]
-            }
+getMatrixCoalescenceJ <- function(tree, periods){
+    # The entry (k,l) of the matrix is the index j such that tau_j = t_{k,l}
+    matrixCoalescenceTimes <- findMRCA(tree, type="height")
+    n <- length(matrixCoalescenceTimes[,1])
+    matrixCoalescenceJ <- diag(0, n)
+    for(k in 1:n){
+        for(l in 1:n){
+            matrixCoalescenceJ[k,l] <- which(periods == matrixCoalescenceTimes[k,l])
         }
     }
-    return(matrixCoalescenceTimes)
-}
 
-getStartingTimes <- function(tree){
-    # Returns a vector giving the starting time for each branch of a tree in format "phylo"
-    
-    nBranch = length(tree$edge.length)
-    starting_times <- rep(0, times=nBranch)
-    
-    # we add progressively for each branch the length of all parent branches in the vector "starting_times"
-    for(n1 in 1:nBranch){
-        n2 <- n1 + 1
-        while(n2 <= nBranch){
-            if(tree$edge[n2,1]==tree$edge[n1,2]){
-                starting_times[n2] <- starting_times[n1] + tree$edge.length[n1]
-            }
-            n2 <- n2+1
-        }
-    }
-    
-    return(starting_times)
-}
-
-removeIdenticalEntries <- function(vector){
-    # Remove identical entries on a vector in ascending order
-    new_vector <- c(vector[1])
-    for(i in 1:(length(vector)-1)){
-        if(vector[i] < vector[i+1]-1e-5){
-            new_vector <- c(new_vector, vector[i+1])
-        }
-    }
-    return(new_vector)
+    return(matrixCoalescenceJ)
 }
 
 isATip <- function(tree, branch_number){
@@ -443,10 +449,12 @@ periodizeOneTree <- function(tree){
     # 2) the starting times of all branches in the tree 
     # 3) the death time of all branches in the tree
     
-    startingTimes <- getStartingTimes(tree)
-    endTimes <- startingTimes + tree$edge.length
+    nodeheight <- nodeHeights(tree)
+    startingTimes <- nodeheight[,1]
+    endTimes <- nodeheight[,2]
     all_time_events <- sort(c(startingTimes, endTimes))
-    periods <- removeIdenticalEntries(all_time_events)
+    # the following removes identical entries in the vector
+    periods <- unique(all_time_events)
     
     return(list(periods=periods, startingTimes=startingTimes, endTimes=endTimes))
 }
@@ -463,6 +471,7 @@ endOfPeriods <- function(periodizing, tree){
     numbersCopy <- rep(0, times=nPeriods)
     numbersPaste <- rep(0, times=nPeriods)
     numbersLineages <- rep(0, times=nPeriods)
+    numbersLivingLineages <- rep(0, times=nPeriods)
 
     # We initialize the labeling of branches in the tree
     labelingLineages <- rep(0, times=nBranch)
@@ -475,6 +484,7 @@ endOfPeriods <- function(periodizing, tree){
         n <- 2
     }
     numbersLineages[1] <- n
+    numbersLivingLineages[1] <- n
     numbersCopy[1] <- 1
     numbersPaste[1] <- 2
     
@@ -488,11 +498,13 @@ endOfPeriods <- function(periodizing, tree){
             labelingLineages[newBranches[2]] <- n
             numbersCopy[i] <- labelingLineages[newBranches[1]-1]
             numbersPaste[i] <- n
+            numbersLivingLineages[i] <- numbersLivingLineages[i-1]+1
         # Else, tau_i is only a death time of one or many terminal branches.
         }else{
             deadBranches <- which(tau_i == periodizing$endTimes)
             numbersCopy[i] <- labelingLineages[ deadBranches[1] ]
             numbersPaste[i] <- 0
+            numbersLivingLineages[i] <- numbersLivingLineages[i-1]-1
         }
         numbersLineages[i] <- n
     }
@@ -500,7 +512,7 @@ endOfPeriods <- function(periodizing, tree){
     permutationLabels <- labelingLineages[!(periodizing$endTimes %in% periodizing$startingTimes)]
     labeling <- tree$tip.label[order(permutationLabels)]
     
-    return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages, labeling=labeling))
+    return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages, labeling=labeling, nLivingLineages=numbersLivingLineages))
 }
 
 getLivingLineages <- function(i, eventEndOfPeriods){
