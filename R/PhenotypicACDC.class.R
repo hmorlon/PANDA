@@ -1,5 +1,5 @@
 setClass(
-    Class = "PhenotypicEB",
+    Class = "PhenotypicACDC",
     representation = representation(
         matrixCoalescenceTimes="matrix"
     ),
@@ -9,7 +9,7 @@ setClass(
 
 setMethod(
     f="getTipDistribution",
-    signature="PhenotypicEB",
+    signature="PhenotypicACDC",
     definition=function(object, params, v=FALSE){
         if(v){
             cat("*** Computation of tip traits distribution through the analytical formula for an EB process ***\n")
@@ -25,7 +25,7 @@ setMethod(
 
         n = length(object@matrixCoalescenceTimes[1,])
         mean <- rep(m0, n)
-        Sigma <- v0 + (sigma0**2/r)*(1 - exp(-r*object@matrixCoalescenceTimes))
+        Sigma <- v0 + (sigma0**2/(2*r))*(exp(2*r*object@matrixCoalescenceTimes) - 1)
 
         if(v){
             end <- Sys.time()

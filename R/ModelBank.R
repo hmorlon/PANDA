@@ -201,9 +201,9 @@ createModel <- function(tree, keyword){
 
         model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
-    }else if(keyword == "EB"){
+    }else if(keyword == "ACDC"){
 
-        comment <- "Early-Burst model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(-1/2rt) dW_t"
+        comment <- "ACcelerating or DeCelerating rate of evolution.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(rt) dW_t"
         paramsNames <- c("m0", "v0", "sigma0", "r")
         params0 <- c(0,0,100,1)
         
@@ -215,19 +215,19 @@ createModel <- function(tree, keyword){
         aAGamma <- function(i, params){
             vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(rep(0, length(vectorU)))
-            matrixGamma <- function(t) return(params[3]*exp(-params[4]*t)*diag(vectorU))
+            matrixGamma <- function(t) return(params[3]*exp(params[4]*t)*diag(vectorU))
             matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
 
-        constraints <- function(params) return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
+        constraints <- function(params) return(params[2]>=0 && params[3]>0)
         
-        model <- new(Class="PhenotypicEB", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        model <- new(Class="PhenotypicACDC", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
-    }else if(keyword == "EBbis"){
+    }else if(keyword == "ACDCbis"){
 
-        comment <- "Early-Burst model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(-1/2rt) dW_t"
+        comment <- "ACcelerating or DeCelerating rate of evolution.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(rt) dW_t"
         paramsNames <- c("m0", "v0", "sigma0", "r")
         params0 <- c(0,0,100,1)
         
@@ -239,13 +239,13 @@ createModel <- function(tree, keyword){
         aAGamma <- function(i, params){
             vectorU <- getLivingLineages(i, eventEndOfPeriods)
             vectorA <- function(t) return(rep(0, length(vectorU)))
-            matrixGamma <- function(t) return(params[3]*exp(-params[4]*t)*diag(vectorU))
+            matrixGamma <- function(t) return(params[3]*exp(params[4]*t)*diag(vectorU))
             matrixA <- diag(0, length(vectorU))
             
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
 
-        constraints <- function(params) return(params[2]>=0 && params[3]>0 && params[4]<=1 && params[4] >= -1)
+        constraints <- function(params) return(params[2]>=0 && params[3]>0)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
 
@@ -297,6 +297,27 @@ createModel <- function(tree, keyword){
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
 
+    }else if(keyword == "PM"){
+
+        comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
+        paramsNames <- c("m0", "v0", "theta", "psi", "S", "sigma")
+        params0 <- c(0,0,0,0.2,0.5,1)
+        
+        periodizing <- periodizeOneTree(tree)
+        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
+        
+        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
+            
+        aAGamma <- function(i, params){
+            vectorU <- getLivingLineages(i, eventEndOfPeriods)
+              
+            return(list(u=vectorU, OU=TRUE))
+        }
+
+        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
+        
+        model <- new(Class="PhenotypicPM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
+
     }else if(keyword == "PMbis"){
 
         comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
@@ -344,27 +365,6 @@ createModel <- function(tree, keyword){
         constraints <- function(params) return(params[2]>=0 && params[6]>=0)
         
         model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "PM"){
-
-        comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
-        paramsNames <- c("m0", "v0", "theta", "psi", "S", "sigma")
-        params0 <- c(0,0,0,0.2,0.5,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
-            
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-              
-            return(list(u=vectorU, OU=TRUE))
-        }
-
-        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
-        
-        model <- new(Class="PhenotypicPM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
 
     }else if(keyword == "PM_OUless"){
 
@@ -524,70 +524,3 @@ getLivingLineages <- function(i, eventEndOfPeriods){
     return(livingLineages)
 }
 
-############################################
-# Old stuff with 'ever changing' labeling, slower
-# The following should be deleted at some point
-############################################
-
-describeOnePeriod <- function(i, periodizing, tree){
-    
-    nBranch <- length(periodizing$startingTimes)
-    numbering <- rep(0, times=nBranch)
-    IDLineage <- 1
-    numberCopied <- 0
-    livingLineages <- c()
-        
-    for(k in 1:nBranch){
-
-        # If the branch is running, we assign it a number and we put a 1 in the livingLineages vector
-        if( periodizing$startingTimes[k] <= periodizing$periods[i] && periodizing$endTimes[k] > periodizing$periods[i] ){
-            numbering[k] <- IDLineage
-            IDLineage <- IDLineage + 1
-            livingLineages <- c(livingLineages, 1)
-            
-            # If two branches start at the beginning of the period, we copy the ID of the first
-            if(periodizing$startingTimes[k] == periodizing$periods[i] && numberCopied == 0){
-                numberCopied <- numbering[k]
-                numberPasted <- numbering[k] + 1
-            }
-            
-        # If this is a tip already dead on the considered period, we assign it a number and we put a zero in livingLineages
-        }else if( periodizing$startingTimes[k] <= periodizing$periods[i] && isATip(tree,k) ){
-            numbering[k] <- IDLineage
-            IDLineage <- IDLineage + 1
-            livingLineages <- c(livingLineages, 0)
-            
-            # If a tip branch is stopping at the beginning of the period
-            if(periodizing$endTimes[k] == periodizing$periods[i] ){
-                # the branch number is collected
-                numberCopied <- numbering[k]
-                numberPasted <- 0
-            }
-        }
-        
-    }
-    
-    return(list(copy=numberCopied, paste=numberPasted, nLineages=IDLineage-1, livingLineages=livingLineages))
-}
-
-endOfPeriods2 <- function(periodizing, tree){
-    # Returns the list of branching or dying lineages at the beginning of each period : copy
-    # Together with the list of places where the new lineage is inserted (or zero if a lineage dies) : paste
-    # And the number of lineages on the focal period : nLineages
-    
-    nBranch <- length(periodizing$startingTimes)
-    nPeriods <- length(periodizing$periods)
-    
-    numbersCopy <- rep(0, times=nPeriods)
-    numbersPaste <- rep(0, times=nPeriods)
-    numbersLineages <- rep(0, times=nPeriods)
-    
-    for(i in 1:nPeriods){
-        specificPeriod <- describeOnePeriod(i, periodizing, tree)
-        numbersCopy[i] <- specificPeriod$copy
-        numbersPaste[i] <- specificPeriod$paste
-        numbersLineages[i] <- specificPeriod$nLineages
-    }
-    
-    return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages))
-}
