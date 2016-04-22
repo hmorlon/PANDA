@@ -4,7 +4,7 @@
 
 createModel <- function(tree, keyword){
     
-    if(keyword == "BM"){
+    if(keyword == "BM" || keyword == "BMbis"){
 
         comment <- "Brownian Motion model with linear drift.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = d dt + sigma dW_t"
         paramsNames <- c("m0", "v0", "d", "sigma")
@@ -26,31 +26,11 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[2]>=0 && params[4]>=0)
         
-        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
-
-    }else if(keyword == "BMbis"){
-
-        comment <- "Brownian Motion model with linear drift.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = d dt + sigma dW_t"
-        paramsNames <- c("m0", "v0", "d", "sigma")
-        params0 <- c(0,0,0,1)
-
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(params[3]*vectorU)
-            matrixGamma <- function(t) return(params[4]*diag(vectorU))
-            matrixA <- diag(0, length(vectorU))
-            
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        if( keyword == "BM" ){
+            model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        }else{
+            model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
         }
-        
-        constraints <- function(params) return(params[2]>=0 && params[4]>=0)
-        
-        model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
 
     }else if(keyword == "BM_from0"){
 
@@ -74,7 +54,7 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[2]>=0)
         
-        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
     }else if(keyword == "BM_from0_driftless"){
 
@@ -98,33 +78,9 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[1]>=0)
         
-        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        model <- new(Class="PhenotypicBM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
-    }else if(keyword == "OU"){
-
-        comment <- "Ornstein-Uhlenbeck model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = psi(theta- X_t) dt + sigma dW_t"
-        paramsNames <- c("m0", "v0", "psi", "theta", "sigma")
-        params0 <- c(0,0,1,0,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(params[3]*params[4]*vectorU)
-            matrixGamma <- function(t) return(params[5]*diag(vectorU))
-            matrixA <- params[3]*diag(vectorU)
-            
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
-        }
-
-        constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
-        
-        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
-
-    }else if(keyword == "OUbis"){
+    }else if(keyword == "OU" || keyword == "OUbis" || keyword == "OUter"){
 
         comment <- "Ornstein-Uhlenbeck model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = psi(theta- X_t) dt + sigma dW_t"
         paramsNames <- c("m0", "v0", "psi", "theta", "sigma")
@@ -146,31 +102,13 @@ createModel <- function(tree, keyword){
 
         constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
         
-        model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "OUter"){
-
-        comment <- "Ornstein-Uhlenbeck model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = psi(theta- X_t) dt + sigma dW_t"
-        paramsNames <- c("m0", "v0", "psi", "theta", "sigma")
-        params0 <- c(0,0,1,0,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(params[3]*params[4]*vectorU)
-            matrixGamma <- function(t) return(params[5]*diag(vectorU))
-            matrixA <- params[3]*diag(vectorU)
-            
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        if( keyword == "OU" ){
+            model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        }else if( keyword == "OUbis" ){
+            model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }else{
+            model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
         }
-
-        constraints <- function(params) return(params[2]>=0 && params[5]>=0 && params[3]!=0)
-        
-        model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
 
     }else if(keyword == "OU_from0"){
 
@@ -199,33 +137,9 @@ createModel <- function(tree, keyword){
         
         constraints <- function(params) return(params[3]>=0 && params[1]!=0)
 
-        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        model <- new(Class="PhenotypicOU", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
 
-    }else if(keyword == "ACDC"){
-
-        comment <- "ACcelerating or DeCelerating rate of evolution.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(rt) dW_t"
-        paramsNames <- c("m0", "v0", "sigma0", "r")
-        params0 <- c(0,0,100,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(rep(0, length(vectorU)))
-            matrixGamma <- function(t) return(params[3]*exp(params[4]*t)*diag(vectorU))
-            matrixA <- diag(0, length(vectorU))
-            
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
-        }
-
-        constraints <- function(params) return(params[2]>=0 && params[3]>0)
-        
-        model <- new(Class="PhenotypicACDC", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
-
-    }else if(keyword == "ACDCbis"){
+    }else if(keyword == "ACDC" || keyword == "ACDCbis"){
 
         comment <- "ACcelerating or DeCelerating rate of evolution.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(rt) dW_t"
         paramsNames <- c("m0", "v0", "sigma0", "r")
@@ -247,9 +161,13 @@ createModel <- function(tree, keyword){
 
         constraints <- function(params) return(params[2]>=0 && params[3]>0)
         
-        model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
+        if( keyword == "ACDC" ){
+            model <- new(Class="PhenotypicACDC", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceTimes=findMRCA(tree, type="height"))
+        }else{
+            model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }
 
-    }else if(keyword == "DD"){
+    }else if(keyword == "DD" || keyword == "DDbis"){
 
         comment <- "Diversity-dependent model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(r n_t) dW_t"
         paramsNames <- c("m0", "v0", "r", "sigma0")
@@ -271,54 +189,13 @@ createModel <- function(tree, keyword){
 
         constraints <- function(params) return(params[2]>=0 && params[4]>0)
         
-        model <- new(Class="PhenotypicDD", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, comment=comment, matrixCoalescenceJ=getMatrixCoalescenceJ(tree, periodizing$periods), nLivingLineages=eventEndOfPeriods$nLivingLineages)
-
-    }else if(keyword == "DDbis"){
-
-        comment <- "Diversity-dependent model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving independently after branching.\ndX_t = sigma0 exp(r n_t) dW_t"
-        paramsNames <- c("m0", "v0", "r", "sigma0")
-        params0 <- c(0,0,100,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) )
-        
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(rep(0, length(vectorU)))
-            matrixGamma <- function(t) return(params[4]*exp(params[3]*sum(vectorU))*diag(vectorU))
-            matrixA <- diag(0, length(vectorU))
-            
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        if( keyword == "DD" ){
+            model <- new(Class="PhenotypicDD", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=tree$tip.label, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, matrixCoalescenceJ=getMatrixCoalescenceJ(tree, periodizing$periods), nLivingLineages=eventEndOfPeriods$nLivingLineages)
+        }else{
+            model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
         }
 
-        constraints <- function(params) return(params[2]>=0 && params[4]>0)
-        
-        model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "PM"){
-
-        comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
-        paramsNames <- c("m0", "v0", "theta", "psi", "S", "sigma")
-        params0 <- c(0,0,0,0.2,0.5,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
-            
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-              
-            return(list(u=vectorU, OU=TRUE))
-        }
-
-        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
-        
-        model <- new(Class="PhenotypicPM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "PMbis"){
+    }else if(keyword == "PM" || keyword == "PMbis" || keyword == "PMter"){
 
         comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
         paramsNames <- c("m0", "v0", "theta", "psi", "S", "sigma")
@@ -335,59 +212,20 @@ createModel <- function(tree, keyword){
             matrixGamma <- function(t) return(params[6]*diag(vectorU))
             matrixA <- (params[4]+params[5])*diag(vectorU) - (params[5]/sum(vectorU)) * outer(vectorU,vectorU) 
               
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma, u=vectorU, OU=TRUE))
         }
 
         constraints <- function(params) return(params[2]>=0 && params[6]>=0)
         
-        model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "PMter"){
-
-        comment <- "Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression."
-        paramsNames <- c("m0", "v0", "theta", "psi", "S", "sigma")
-        params0 <- c(0,0,0,0.2,0.5,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-        
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
-            
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(params[3]*params[4]*vectorU)
-            matrixGamma <- function(t) return(params[6]*diag(vectorU))
-            matrixA <- (params[4]+params[5])*diag(vectorU) - (params[5]/sum(vectorU)) * outer(vectorU,vectorU) 
-              
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        if( keyword == "PM" ){
+            model <- new(Class="PhenotypicPM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }else if( keyword == "PMbis" ){
+            model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }else{
+            model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
         }
 
-        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
-        
-        model <- new(Class="PhenotypicModel", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "PM_OUless"){
-
-        comment <- "Simplified Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression, without the OU term."
-        paramsNames <- c("m0", "v0", "S", "sigma")
-        params0 <- c(0,0,0.5,1)
-        
-        periodizing <- periodizeOneTree(tree)
-        eventEndOfPeriods <- endOfPeriods(periodizing, tree)
-
-        initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(params[2]))) ) 
-            
-        aAGamma <- function(i, params){
-            vectorU <- getLivingLineages(i, eventEndOfPeriods)
-              
-            return(list(u=vectorU, OU=FALSE))
-        }
-
-        constraints <- function(params) return(params[2]>=0 && params[4]>=0)
-        
-        model <- new(Class="PhenotypicPM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
-
-    }else if(keyword == "PM_OUlessbis"){
+    }else if(keyword == "PM_OUless" || keyword == "PM_OUlessbis"){
 
         comment <- "Simplified Phenotype Matching model.\nStarts with two lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the Phenotype Matching expression, without the OU term."
         paramsNames <- c("m0", "v0", "S", "sigma")
@@ -404,12 +242,16 @@ createModel <- function(tree, keyword){
             matrixGamma <- function(t) return(params[4]*diag(vectorU))
             matrixA <- params[3]*diag(vectorU) - (params[3]/sum(vectorU)) * outer(vectorU,vectorU) 
               
-            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma, u=vectorU, OU=FALSE))
         }
 
         constraints <- function(params) return(params[2]>=0 && params[4]>=0)
         
-        model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
+        if( keyword == "PM_OUless" ){
+            model <- new(Class="PhenotypicPM", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }else{
+            model <- new(Class="PhenotypicADiag", name=keyword, period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }
 
     }else{
         stop("Keyword does not correspond to any model in the model bank")
