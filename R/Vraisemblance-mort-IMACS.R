@@ -173,7 +173,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     if(method=="FFT_none"){
       rep=rep(1, length(ini))
     }else{
-      rep = expMatBVect_FFT(phi$G,ini,-(lambdas+mu), phi$normM, A,t-s,1e-20)
+      rep = expMatBVect_FFT(phi$G,ini,-(lambdas+mu), phi$normM, A,t-s,1e-10)
     }
   }else{
     if(tini==tend){

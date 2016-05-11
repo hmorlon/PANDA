@@ -36,7 +36,8 @@ proposalGeneratorFactoryDE_gibbs <- function(proba.gibbs,p=0.01,var=1e-6,burn=0,
     u=runif(1,0,1)
     
     if(u>p){
-      gamma=2.36/sqrt(2*length(gibbs))
+      gamma=2.36/sqrt(2*npar)
+      # gamma=2.36/sqrt(2*length(gibbs))
     }else{
       gamma=1
     }
@@ -87,11 +88,17 @@ mcmcSamplerDE_gibbs <- function(likelihood,proba.gibbs, Nchain=3, prior = NULL, 
   currentLPs=list()
   former=list()
   for(i in 1:Nchain){
+    if(i==1 | !identical(startvalue[[i]],startvalue[[1]])){
     chain = array(dim = c(1,numPars+2))
     chain[1,1:numPars] = c(startvalue[[i]], startmodel)
     colnames(chain) = c(1:numPars, "LL", "LP")
     form=likelihood(startvalue[[i]])
     chain[1, (numPars+1):(numPars+2)] = c(form$logLik,form$logLik)
+    }else{
+      chain=chains[[1]]
+      form=former[[1]]
+    }
+
     former[[i]]=form
     currentLPs[[i]] = chain[1, (numPars+2)]
     chains[[i]]=chain
@@ -247,7 +254,7 @@ createLikelihood_death_gibbs <- function(phylo, root_depth=0, relative = F,nt=10
   tf=max(nodeprof)
   
   
-  ll<-function(lambda, sigma, mu,f,former=NULL,nlambda=Nl){
+  ll<-function(lambda, sigma, mu,f,former=NULL,nlambda=max(100,min(Nl,ceiling(20*M/sigma)))){
     
     lambda2=lambda
     lambda2=relToAbs(lambda2)
@@ -321,7 +328,7 @@ createLikelihood_death_gibbs <- function(phylo, root_depth=0, relative = F,nt=10
 }
 # ############test###################
 
-if (T){
+if (F){
   seed=92146169
   set.seed(seed)
   d=0
