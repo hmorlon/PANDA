@@ -92,8 +92,8 @@ mcmcSamplerDE_gibbs <- function(likelihood,proba.gibbs, Nchain=3, prior = NULL, 
     chain = array(dim = c(1,numPars+2))
     chain[1,1:numPars] = c(startvalue[[i]], startmodel)
     colnames(chain) = c(1:numPars, "LL", "LP")
-    form=likelihood(startvalue[[i]])
-    chain[1, (numPars+1):(numPars+2)] = c(form$logLik,form$logLik)
+    form=likelihood(startvalue[[i]])$logLik
+    chain[1, (numPars+1):(numPars+2)] = c(form,form)
     }else{
       chain=chains[[1]]
       form=former[[1]]
