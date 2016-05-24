@@ -102,9 +102,9 @@ Phi_FFT=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
   } 
   G=Re(fft(power2_FFT(vec_density,nlambda+1))) 
   # ------- Toeplitz matrix -------------
-  M = toeplitz(exp(-lambdaIs^2/(2*sigma^2)))
-  normM = 1/rowSums(M)
-  M = normM * M 
+  row = exp(-lambdaIs^2/(2*sigma^2))
+  first_row = c(rev(row), row[-1])
+  normM = 1/rowSums(toeplitz(row))
 
   ini=rep((1-f),nlambda+1)
   vect0 = rep(0,length(G)-length(ini))
@@ -118,7 +118,7 @@ Phi_FFT=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
   times <- seq(from = tini, to =tf, by = by)
   out   <- ode(y = ini, times = times, func = dPhi, parms = NULL)
 
-  return(list(lambda=lambdaIs,fun=out,mu=mu,f=f,sigma=sigma,M=M,func="Phi",G=G,normM=normM))
+  return(list(lambda=lambdaIs,fun=out,mu=mu,f=f,sigma=sigma,func="Phi",G=G,normM=normM,first_row=first_row))
 }
 
 plot.Phi_FFT=function(rep,lambda,xleg=1,yleg=0,ylim=c(0,1),legend=3){
@@ -139,7 +139,7 @@ plot.Phi_FFT=function(rep,lambda,xleg=1,yleg=0,ylim=c(0,1),legend=3){
 #calcul des fonctions Khi, Psi, Ksi, Zeta (cf document). Le calcul de ces quatres fonctions utilsent phi, donc cette fonction 
 #prend en entrée la sortie de la fonction Phi (pour ne pas la recalculer dans le calcul de la vraisemblance)
 
-Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
+Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,mu=phi$mu,
                       timePhi=phi$fun[,1],nt=1000,method="Higham08.b",banded=0,sparse=F){
 
   if(t>phi$fun[nrow(phi$fun),1]) stop("t must be lower than phi$t")
@@ -157,7 +157,11 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     #on transforme la proba d'être dans un intervalle (de taille lambdas[2]) en densité 
     ind=c(which.min(abs(lambdas-lambda1)),which.min(abs(lambdas-lambda2)))
     temp = (1-phi$fun[tini,ind[1]+1])*(1-phi$fun[tini,ind[2]+1])/(lambdas[2])^2  
-    ini = temp*(M[ind[1],]*M[ind[2],]*lambdas)
+    if (substring(method,1,3) == "FFT") {
+      ini = temp*(phi$normM[ind[1]] * phi$normM[ind[2]] * phi$first_row[(nlambda+1-ind[1]):(2*nlambda-ind[1])]*phi$first_row[(nlambda+1-ind[2]):(2*nlambda-ind[2])]*lambdas)
+    } else {
+      ini = temp*(phi$M[ind[1],]*phi$M[ind[2],]*lambdas)
+    }
     # print(ini)
   }
   
