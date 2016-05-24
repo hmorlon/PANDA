@@ -104,7 +104,7 @@ Phi_FFT=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
   # ------- Toeplitz matrix -------------
   row = exp(-lambdaIs^2/(2*sigma^2))
   first_row = c(rev(row), row[-1])
-  normM = 1/rowSums(toeplitz(row))
+  normM = simplify2array(vapply(1:(nlambda+1), function(i) { 1.0 / sum(first_row[i:(i+nlambda)]) }, numeric(1), USE.NAMES = F))
 
   ini=rep((1-f),nlambda+1)
   vect0 = rep(0,length(G)-length(ini))
