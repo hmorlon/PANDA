@@ -9,12 +9,13 @@
 
 
 
-likelihood_t_env<-function(phylo, data, par=NULL, model=c("EnvExp", "EnvLin")){
+likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
 
 # Use mvMORPH for computing the log-likelihood
 #require(mvMORPH)
 
 ## Parameterization
+    par<-list(...)
 
 # Default model
     if(!is.function(model)){
