@@ -9,8 +9,8 @@ Fits model of trait evolution for which evolutionary rates depends on an environ
 }
 \usage{
 
-fit_t_env(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), par=NULL, 
-       method="Nelder-Mead", control=list(maxit=20000))
+fit_t_env(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), 
+          method="Nelder-Mead", control=list(maxit=20000), ...)
 }
 \arguments{
   \item{phylo}{
@@ -26,17 +26,19 @@ Environmental data, given as a time continuous function (see, e.g. splinefun) or
 A named vector with standard error for each species.
 }
   \item{model}{
-The model describing the functional form of variation of the evolutionary rate \eqn{\sigma} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used (forward in time).
-This function has three arguments: the first argument is time; the second argument is the environmental variable; the third arguement is a numeric vector of the parameters controlling the time and environmental variation (to be estimated). See the example below.
+The model describing the functional form of variation of the evolutionary rate \eqn{\sigma^2} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used (forward in time).
+This function has three arguments: the first argument is time; the second argument is the environmental variable; the third argument is a numeric vector of the parameters controlling the time and environmental variation (to be estimated). See the example below.
 }
-  \item{par}{
-List of arguments to be passed to the function. See details. 
-}
+
   \item{method}{
 Methods used by the optimization routine (see ?optim for details).
 }
   \item{control}{
 Max. bound for the number of iteration of the optimizer; other options can be fixed on the list (see ?optim). 
+}
+
+\item{...}{
+Arguments to be passed to the function. See details. 
 }
 }
 
@@ -98,11 +100,7 @@ e.g.:
 
 
 
-
-
-
-
-The various options are passed through the "par" list. 
+The various options are passed through "...". 
 
 -param: The starting values used for the model. The lengths of the "param" argument in the par list is used to compute the total number of parameters for user specified models.
 
@@ -130,7 +128,7 @@ Clavel, J. & Morlon, H. (in prep)
 \author{J. Clavel}
 
 \seealso{
-%% add later  \code{\link{simulate_t_env}}  
+%% add later  \code{\link{sim_t_env}}  
 \code{\link{plot.fit_t.env}}, 
 \code{\link{likelihood_t_env}}
 }
@@ -141,23 +139,25 @@ data(InfTemp)
 
 # Simulate trait on the Cetacean tree
 set.seed(123)
-trait<-rTraitCont(Cetacea)
+
+trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
+					root.value=0, step=0.001, plot=TRUE)
 
 ## Fit the Environmental-exponential model
   # Fit the environmental model
-  result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
+  result1=fit_t_env(Cetacea, trait, env_data=InfTemp, scale=TRUE)
   plot(result1)
-\dontrun{
+\donttest{
   # Add to the plot the results from different smoothing of the temperature curve
-  result2=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(df=10, scale=TRUE))
+  result2=fit_t_env(Cetacea, trait, env_data=InfTemp, df=10, scale=TRUE)
   lines(result2, col="red")
 
-  result3=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(df=50, scale=TRUE))
+  result3=fit_t_env(Cetacea, trait, env_data=InfTemp, df=50, scale=TRUE)
   lines(result3, col="blue")
 
 ## Fit the environmental linear model
 
-  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", par=list(df=50, scale=TRUE))
+  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", df=50, scale=TRUE)
 
 ## Fit user defined model
 
@@ -165,10 +165,13 @@ trait<-rTraitCont(Cetacea)
   my_fun<-function(t, env_cont, param){ 
       exp(param[1])*exp(param[2]*env_cont(t))
   }
-
-  res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun, par=list(param=c(0.1,0)))
+  
+  res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun, 
+                 param=c(0.1,0), scale=TRUE)
+  # Retrieve the parameters and compare to 'result1'
   res
   plot(res, col="red")
+	
 
 ## Fit user defined environmental function
 
@@ -185,6 +188,6 @@ require(pspline)
   
 ## Various parameterization (box constraints, df, scaling of the curve...) example
  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", 
- par=list(scale=TRUE, lower=-30, upper=20, df=10))
+ 			scale=TRUE, lower=-30, upper=20, df=10)
  }
 }

@@ -8,7 +8,7 @@ Likelihood of a dataset under the matching competition model with biogeography.
 Computes the likelihood of a dataset under the matching competition model with specified \code{sigma2} and \code{S} values and with a \code{geography.object} formed using \code{\link{CreateGeoObject}}. 
 }
 \usage{
-likelihood_t_MC_geog(phylo, data, par,geography.object)
+likelihood_t_MC_geog(phylo, data, par,geo.object)
 }
 
 \arguments{
@@ -22,17 +22,14 @@ a named vector of continuous data with names corresponding to \code{phylo$tip.la
  \item{par}{
 a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model), in that order
 }
-  \item{geography.object}{
-a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages at each internode interval (see details)}
-
+  \item{geo.object}{
+a geography object indicating sympatry through time, created using \code{\link{CreateGeoObject}}
+}
 }
 
 \details{
 	When specifying \code{par}, \code{sig2} must be listed before \code{S}.
 	
-	The \code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created with the \code{\link{CreateGeoObject}} function.
-
 }
 
 \note{
@@ -43,7 +40,7 @@ names that match the \code{$geography.object} object created with the \code{\lin
   the negative log-likelihood value of the dataset (accordingly, the negative of the output should be recorded as the likelihood), given the phylogeny, \code{sig2} and \code{S} values, and \code{geography.object}.
 }
 \references{
-	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
+	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020
 
 	Nuismer, S. & Harmon, L. 2015. Predicting rates of interspecific interaction from phylogenetic trees. \emph{Ecology Letters} 18:17-27.
 }

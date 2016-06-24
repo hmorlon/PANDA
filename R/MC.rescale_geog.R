@@ -1,13 +1,15 @@
 ##this version allows for a tree to not have sequentially numbered nodes (e.g., trees loaded with read.tree function)
+##this version updates the covariance equation to correctly deal with covariance between allopatric lineages
+##this version also permits non-island types of biogeography
 
 require(geiger)
 require(phytools)
 require(deSolve)
 
-.VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geography.object){
+.VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geo.object){
 ##these are the three parameters that the equations use to produce the variance-covariance matrix, and will ultimately be estimated with ML
 parameters<-c(a=alpha,b=sigma,s=sterm) 
-if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
+if(any(grepl("___",phylo$tip.label))|any(grepl("-",phylo$tip.label))|any(grepl("/",phylo$tip.label))){stop("script will not work with '___', '-', '+', '*','/', or '^' in any tip labels; remove these characters")}
 if(!is.binary.tree(phylo)){stop("tree must not contain any polytomies")}
 if(sum(phylo$edge.length<0)>0){stop("tree cannot have negative branch lengths")}
 if(!is.ultrametric(phylo)){stop("tree must be ultrametric; current verson cannot handle fossil taxa (in development)")}
@@ -20,19 +22,20 @@ heights<-nodeHeights(phylo)
 totlen<-max(heights)
 nodeDist<-c(as.numeric(sort(max(branching.times(phylo))-branching.times(phylo))),totlen)	
 nodeDiff<-diff(nodeDist)
+if(!is.null(phylo$node.label)){phylo$node.label<-NULL}
 old.labels<-as.numeric(names(sort(branching.times(phylo),decreasing=TRUE)))
 if(any(diff(old.labels)!=1)){ #if nodes are not in sequential order, this renames them so that they are
 	checkmat<-cbind(old.labels,seq(root,length(phylo$tip.label)+phylo$Nnode))
 	old.edge<-phylo$edge
 	for(j in 1:phylo$Nnode){phylo$edge[which(old.edge==checkmat[j,1])]<-checkmat[j,2]}
 	}
+
+newDist<-geo.object$times
+newDiff<-geo.object$spans
+geography.object<-geo.object$geography.object
 if(any(nodeDiff==0)){stop("VCV.rescale cannot handle trees with two or more nodes occurring at exactly the same time")}
-if(length(geography.object)!=phylo$Nnode){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
-det.v<-vector()
-for(i in 1:length(geography.object)){
-	det.v<-c(det.v,det(geography.object[[i]]))
-	}
-if(any(det.v!=0 & det.v!=1)){stop("geography.object must be a block diagonal matrix (see 'Details') in help function")}
+if(length(geography.object)!=length(newDiff)){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
+
 	
 mat<-matrix(nrow=0, ncol=3)
 counter_three_letters <- 0
@@ -53,27 +56,15 @@ for(i in 1:phylo$Nnode){
 		}
 	}		
 nat<-list()
-for(i in 1:length(nodeDiff)){
-	if(i==1){
-	nat[[i]]<-list(mat[mat[,1]==(length(phylo$tip.label)+i),2])} else {
-	IN<-vector()
-	P<-mat[as.numeric(mat[,1])<=(length(phylo$tip.label)+i),c(2,3)]
-	IN<-c(IN, P[P[,2]=="0",1],P[as.numeric(P[,2])>(length(phylo$tip.label)+i),1])
-	nat[[i]]<-list(IN)
+for(i in 1:length(newDiff)){
+	nat[[i]]<-rownames(geography.object[[i]])
 	}
-	}	
-for(i in 2:length(nodeDiff)){			##THIS LOOP checks for an error
-	if(length(unlist(nat[[i]]))!=(length(unlist(nat[[i-1]]))+1)){
-		print(paste("ERROR at node",i+length(phylo$tip.label)))
-		}	
-	}
-
-
+	
 #### NOW DEFINE ODEs for each interval and numerically integrate from root to tip, one interval at at a time ###
 output<-list() ##initialize storage of results from ODEs 
 env.results<-new.env(size = 1, parent = emptyenv())
 
-for(i in 1:phylo$Nnode){ ##for each interval between branches...
+for(i in 1:length(newDiff)){ ##for each interval between branches...
 
 ##var.list is the list of terms for which there is a variance term at each step in time
 ##cov.list is the list of covariance terms
@@ -114,8 +105,11 @@ Cmat[lower.tri(Cmat)]<-cov.list
 	if(parameters['s']!=0){
 	updated.alpha<-vector()	
 	for(term in 1:length(indJ)){
-		j<-indJ[term]
-		int<-(((sum(geography.object[[i]][,j])-1)/sum(geography.object[[i]][,j]))/((len-1)/len)*(coefAlpha-2* parameters['a']))+2* parameters['a']
+		jj<-indJ[term]
+		ii<-indI[term]
+		nj=sum(geography.object[[i]][,jj])
+		ni=sum(geography.object[[i]][,ii])
+		int<-((1-(1/(2*nj))-(1/(2*ni)))/((len-1)/len)*(coefAlpha-2* parameters['a']))+2* parameters['a']
 		updated.alpha<-c(updated.alpha, int)
 		}	
 	diag(A)<--updated.alpha
@@ -126,25 +120,17 @@ Cmat[lower.tri(Cmat)]<-cov.list
 		coefBetaV[term]<-int
 		}	
 	for(ind_jk in 1:dim) {
-	    j <- indI[[ind_jk]]
-	    k <- indJ[[ind_jk]]
-	    coefBetaV[[k]] <- 0
-	    #term<-ifelse(ind_jk%%len==0,len,ind_jk%%len)
-	    if(geography.object[[i]][match(ind_jk,ind)]==0){A[ind_jk, ind[j, ] ] <- 0} else{ 
-	    	##first make a list of match terms
+		    j <- indI[[ind_jk]]
+		    k <- indJ[[ind_jk]]
+		    geog<-geography.object[[i]][match(ind[k,],ind)]
+			coefB<-rep(coefBetaV[k],len) #is the right coefBetaV term being repped
+	    	coefB[k]<-0
+		    A[ind_jk, ind[j, ] ] <- (A[ind_jk, ind[j, ] ] + coefB)*geog 
 	    	geog<-geography.object[[i]][match(ind[j,],ind)]
-	    	A[ind_jk, ind[j, ] ] <- (A[ind_jk, ind[j, ] ] + coefBetaV)*geog
-	    	} #should diagonal be preserved? does it matter?
-	    coefBetaV[[k]] <- coefBeta*(len/sum(geography.object[[i]][,k]))
-	    coefBetaV[[j]] <- 0
-	    if(geography.object[[i]][match(ind_jk,ind)]==0){A[ind_jk, ind[k, ] ] <- 0} else{ 
-	    	geog<-geography.object[[i]][match(ind[k,],ind)]
-	    	A[ind_jk, ind[k, ] ] <- (A[ind_jk, ind[k, ] ] + coefBetaV)*geog
-	    	} #should diagonal be preserved? does it matter?
- 
-	    coefBetaV[[j]] <- coefBeta*(len/sum(geography.object[[i]][,j]))
-	}
-	#diag(A)<-updated.alpha #whether this is included does affect result, but not sure how yet, should in theory contain the OU part of the model
+    		coefB<-rep(coefBetaV[j],len)
+    		coefB[j]<-0
+	    	A[ind_jk, ind[k, ] ] <- (A[ind_jk, ind[k, ] ] + coefB)*geog
+			}
 	diag(A)<-sapply(diag(A),function(x) {if(x==0){x<--(2* parameters['a'])}else{x<-x}})
 	
  # return the rate of change
@@ -176,6 +162,10 @@ else { #if term is not present in previous generation/branch of the tree, lookup
 	else{ ##for covariance terms that weren't present in previous generation/branch, it is necessary to decompose covariance term, look up terms appropriately, and re-assemble them in the correct order so they match the lower triangle format used in definition of terms
 		firstterm<-strsplit(term,"___")[[1]][1]
 		scondterm<-strsplit(term,"___")[[1]][2]
+		rearr<-paste(text=scondterm,"___",firstterm,sep="")
+		if(exists(rearr,envir=env.results)){
+			state[l]<-get(rearr, envir=env.results)
+		}else{
 		if(exists(firstterm, envir=env.results) || exists(scondterm, envir=env.results)){
 			if(exists(firstterm, envir=env.results)){
 				prev.branch<-mat[mat[,3]==mat[mat[,2]==scondterm,1],2]
@@ -199,6 +189,7 @@ else { #if term is not present in previous generation/branch of the tree, lookup
 	}
 	}
 	}
+	}
 
 ou <- function(t, state, parameters) {
   dX <- A %*% state + rhs
@@ -206,7 +197,7 @@ ou <- function(t, state, parameters) {
 }
 
 ##NOW, run numerical integration for given time step and append to a list
-output<-ode(y=state,times=c(0,nodeDiff[i]),func=ou,parms=NULL)
+output<-ode(y=state,times=c(0,newDiff[i]),func=ou,parms=NULL)
 colN <- colnames(output)
 env.results<-new.env(size = length(colN), parent = emptyenv())
 for (k in 2:length(colN)){
@@ -215,8 +206,8 @@ for (k in 2:length(colN)){
 }
 
 Vou<-matrix(nrow=length(phylo$tip.label),ncol=length(phylo$tip.label))
-rownames(Vou)<-unlist(nat[[phylo$Nnode]])
-colnames(Vou)<-unlist(nat[[phylo$Nnode]])
+rownames(Vou)<-unlist(nat[[length(newDiff)]])
+colnames(Vou)<-unlist(nat[[length(newDiff)]])
 diag(Vou)<-output[2,][2:(length(phylo$tip.label)+1)]
 for(j in (length(phylo$tip.label)+2):length(output[2,])){
 

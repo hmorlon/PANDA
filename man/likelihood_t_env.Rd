@@ -9,7 +9,7 @@ Computes the likelihood of a dataset under either the linear or exponential envi
 }
 
 \usage{
-likelihood_t_env(phylo, data, par=NULL, model=c("EnvExp", "EnvLin"))
+likelihood_t_env(phylo, data, model=c("EnvExp", "EnvLin"), ...)
 }
 
 \arguments{
@@ -21,14 +21,15 @@ an object of class 'phylo' (see ape documentation)
 a named vector of continuous data with names corresponding to \code{phylo$tip.label}
 }
 
- \item{par}{
-a list with "param", "fun", "times", "mtot" and "error" arguments.
+ \item{...}{
+ "param", "fun", "times", "mtot" and "error" arguments.
 
 -param: a vector with the parameters used in the environmental function. The first value is \code{sig2} and the second is \code{beta}.
 
 -fun: a time contnuous function of an environmental variable (see e.g. ?fit_t_env)
 
--times: a vector of branching times starting at zero (e.g. max(branching.times(phylo))-branching.times(phylo))
+-times: a vector of branching times starting at zero 
+(e.g. max(branching.times(phylo))-branching.times(phylo))
 
 -mtot: root age of the tree (e.g. max(branching.times(phylo)))
 
@@ -71,29 +72,30 @@ data(InfTemp)
 
 # Simulate trait on the Cetacean tree
 set.seed(123)
-trait<-rTraitCont(Cetacea)
 
+trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
+					root.value=0, step=0.001, plot=TRUE)
+					
 # Compute the likelihood 
-parameters <- list(param=c(0.1, 0), fun=InfTemp)
-likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
+likelihood_t_env(Cetacea, trait, param=c(0.1, 0), fun=InfTemp, model="EnvExp")
 
 # Provide the times
 brtime<-branching.times(Cetacea)
 mtot<-max(brtime)
 times<-mtot-brtime
 
-parameters <- list(param=c(0.1, 0), fun=InfTemp, times=times, mtot=mtot)
-likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
+likelihood_t_env(Cetacea,trait,param=c(0.1, 0), fun=InfTemp, 
+                  times=times, mtot=mtot, model="EnvExp")
 
 # Provide the environmental function rather than the dataset (faster if used recursively)
-\dontrun{
+\donttest{
 spline_result <- sm.spline(InfTemp[,1],InfTemp[,2], df=50)
 env_func <- function(t){predict(spline_result,t)}
 t<-unique(InfTemp[,1])
 # We build the interpolated smoothing spline function
 env_data<-splinefun(t,env_func(t))
   
-parameters <- list(param=c(0.1, 0), fun=env_data, times=times, mtot=mtot)
-likelihood_t_env(Cetacea,trait,par=parameters,model="EnvExp")
+likelihood_t_env(Cetacea, trait, param=c(0.1, 0), fun=env_data, 
+                 times=times, mtot=mtot, model="EnvExp")
 	}  
 }

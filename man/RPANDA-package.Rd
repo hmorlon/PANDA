@@ -12,8 +12,8 @@ Implements macroevolutionary analyses on phylogenetic trees
 \tabular{ll}{
 Package: \tab RPANDA\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-12-27\cr
+Version: \tab 1.1\cr
+Date: \tab 2015-09-14\cr
 License: \tab GPL (>= 2)\cr
 }
 
@@ -21,7 +21,11 @@ License: \tab GPL (>= 2)\cr
 \author{
 Hélène Morlon <morlon@biologie.ens.fr>
 
+Julien Clavel <clavel@biologie.ens.fr>
+
 Fabien Condamine <fabien.condamine@gmail.com>
+
+Jonathan Drury <drury@biologie.ens.fr>
 
 Eric Lewitus <lewitus@biologie.ens.fr>
 
@@ -40,7 +44,7 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 
 Manceau, M., Lambert, A., Morlon, H. (2015) Phylogenies support out-of-equilibrium models of biodiversity Eco Lett 18: 347-356
 
-Lewitus E., Morlon H. (submitted) A graph-theoretical approach to characterising and comparing phylogenies
+Lewitus E., Morlon H. Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476
 }
 %\keyword{ phylogeny }
 

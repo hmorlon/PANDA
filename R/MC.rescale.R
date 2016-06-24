@@ -3,7 +3,7 @@ require(phytools)
 require(deSolve)
 
 .VCV.rescale<-function(phylo,sigma,alpha,sterm){
-	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
+	if(any(grepl("___",phylo$tip.label))|any(grepl("-",phylo$tip.label))|any(grepl("/",phylo$tip.label))){stop("script will not work with '___', '-', '+', '*','/', or '^' in any tip labels; remove these characters")}
 	if(!is.binary.tree(phylo)){stop("tree must not contain any polytomies")}
 	if(sum(phylo$edge.length<0)>0){stop("tree cannot have negative branch lengths")}
 	if(!is.ultrametric(phylo)){stop("tree must be ultrametric; current verson cannot handle fossil taxa (in development)")}
@@ -17,6 +17,7 @@ require(deSolve)
 	totlen<-max(heights)
 	nodeDist<-c(as.numeric(sort(max(branching.times(phylo))-branching.times(phylo))),totlen)	
 	nodeDiff<-diff(nodeDist)
+	if(!is.null(phylo$node.label)){phylo$node.label<-NULL}
 	old.labels<-as.numeric(names(sort(branching.times(phylo),decreasing=TRUE)))
 	if(any(diff(old.labels)!=1)){ #if nodes are not in sequential order, this renames them so that they are
 		checkmat<-cbind(old.labels,seq(root,length(phylo$tip.label)+phylo$Nnode))

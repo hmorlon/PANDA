@@ -1,4 +1,4 @@
-.vcv.rescale.DDlin_geog<-function(phylo,sig2,rate,geography.object,check=TRUE){
+.VCV.rescale.DDlin_geog<-function(phylo,sig2,rate,geo.object,check=FALSE){
 
 
 paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
@@ -50,21 +50,16 @@ for(i in 1:phylo$Nnode){
 		mat<-rbind(mat,int)
 		}
 	}		
+newDist<-geo.object$times
+newDiff<-geo.object$spans
+geography.object<-geo.object$geography.object
+if(any(nodeDiff==0)){stop("VCV.rescale cannot handle trees with two or more nodes occurring at exactly the same time")}
+if(length(geography.object)!=length(newDiff)){stop("The number of sympatry/allopatry matrices does not equal the number of time periods")}
 nat<-list()
-for(i in 1:length(nodeDiff)){
-	if(i==1){
-	nat[[i]]<-list(mat[mat[,1]==(length(phylo$tip.label)+i),2])} else {
-	IN<-vector()
-	P<-mat[as.numeric(mat[,1])<=(length(phylo$tip.label)+i),c(2,3)]
-	IN<-c(IN, P[P[,2]=="0",1],P[as.numeric(P[,2])>(length(phylo$tip.label)+i),1])
-	nat[[i]]<-list(IN)
+for(i in 1:length(newDiff)){
+	nat[[i]]<-rownames(geography.object[[i]])
 	}
-	}	
-for(i in 2:length(nodeDiff)){			##THIS LOOP checks for an error
-	if(length(unlist(nat[[i]]))!=(length(unlist(nat[[i-1]]))+1)){
-		print(paste("ERROR at node",i+length(phylo$tip.label)))
-		}	
-	}
+
 
 if(length(geography.object)>0){
 count=1
@@ -75,7 +70,7 @@ while(count<=length(nat)){
 		}}
 
 V=vcv.phylo(phylo)
-N=c(2:(length(nodeDiff)+1))
+N=c(2:(length(newDiff)+1))
 
 
 if(check==TRUE){
@@ -87,7 +82,7 @@ for(i in 1:length(phylo$tip.label)){
 		for(m in 1:length(N)){
 			if(rownames(V)[i]%in%unlist(nat[[m]])){ #this means that the lineage is present
 				geog.int<-sum(geography.object[[m]][match(rownames(V)[i],rownames(geography.object[[m]])),])			
-				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
+				inta<-(sig2+(rate*geog.int))*(max(sij-newDist[m],0)-max(sij-newDist[m+1],0)) 
 				int<-c(int,inta)
 			} else{
 				prev.branch<-mat[mat[,3]==mat[mat[,2]==rownames(V)[i],1],2]
@@ -95,7 +90,7 @@ for(i in 1:length(phylo$tip.label)){
 					prev.branch<-mat[mat[,3]==mat[mat[,2]==prev.branch,1],2]
 					}
 				geog.int<-sum(geography.object[[m]][match(prev.branch,rownames(geography.object[[m]])),])			
-				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
+				inta<-(sig2+(rate*geog.int))*(max(sij-newDist[m],0)-max(sij-newDist[m+1],0)) 
 				int<-c(int,inta)
 			}			
 		}
@@ -121,7 +116,7 @@ for(i in 1:length(phylo$tip.label)){
 		for(m in 1:length(N)){
 			if(rownames(V)[i]%in%unlist(nat[[m]])){ #this means that the lineage is present
 				geog.int<-sum(geography.object[[m]][match(rownames(V)[i],rownames(geography.object[[m]])),])			
-				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
+				inta<-(sig2+(rate*geog.int))*(max(sij-newDist[m],0)-max(sij-newDist[m+1],0)) 
 				int<-c(int,inta)
 			} else{
 				prev.branch<-mat[mat[,3]==mat[mat[,2]==rownames(V)[i],1],2]
@@ -129,7 +124,7 @@ for(i in 1:length(phylo$tip.label)){
 					prev.branch<-mat[mat[,3]==mat[mat[,2]==prev.branch,1],2]
 					}
 				geog.int<-sum(geography.object[[m]][match(prev.branch,rownames(geography.object[[m]])),])			
-				inta<-(sig2+(rate*geog.int))*(max(sij-nodeDist[m],0)-max(sij-nodeDist[m+1],0)) 
+				inta<-(sig2+(rate*geog.int))*(max(sij-newDist[m],0)-max(sij-newDist[m+1],0)) 
 				int<-c(int,inta)
 			}			
 		}

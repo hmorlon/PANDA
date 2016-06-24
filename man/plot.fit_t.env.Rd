@@ -8,7 +8,7 @@ Plot the phenotypic evolutionary rate through time estimated by the \emph{fit_t_
 Fits model of trait evolution for which evolutionary rates depends on an environmental function.
 }
 \usage{
-## S3 method for class 'fit_t.env'
+
 \method{plot}{fit_t.env}(x, steps = 100, ...)
 
 }
@@ -55,11 +55,14 @@ data(InfTemp)
 
 # Simulate trait on the Cetacean tree
 set.seed(123)
-trait<-rTraitCont(Cetacea)
+
+trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
+					root.value=0, step=0.01, plot=TRUE)
+
 
 ## Fit the Environmental-exponential model
 
-result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
+result1=fit_t_env(Cetacea, trait, env_data=InfTemp, scale=TRUE)
 plot(result1)
 
 # further options

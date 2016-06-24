@@ -1,6 +1,7 @@
 likelihood_t_DD<-function(phylo,data,par,model=c("DDlin","DDexp")){
+	if(is.null(names(data))){stop("data missing taxa names")}
   	if(length(par)!=2){stop("par must contain two values, one for sig2 and another for the slope")}
-	sig2<-abs(par[1])
+	sig2<-exp(par[1])
 	rate<-par[2]
 	if(model=="DDlin"){
 	test=sig2+(rate*length(phylo$tip.label))
@@ -19,7 +20,7 @@ likelihood_t_DD<-function(phylo,data,par,model=c("DDlin","DDexp")){
 	IV=try(solve(V))
   	options(show.error.messages=op)
   if(class(IV)=="try-error"){
-    IV=pseudoinverse(V) ## It's slower to use the pseudoinverse but safer if the matrix is singular...
+    IV=corpcor::pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
   

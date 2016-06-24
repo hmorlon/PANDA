@@ -8,7 +8,8 @@ Fits models of trait evolution incorporating competitive interactions
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,method="Nelder-Mead")
+fit_t_comp(phylo,data,model=c("MC","DDexp","DDlin"),par=NULL,geography.object=NULL,
+	method="Nelder-Mead",bounds=NULL)
 }
 
 \arguments{
@@ -22,8 +23,7 @@ a named vector of trait values with names matching \code{phylo$tip.label}
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
   \item{geography.object}{
-a list specifying sympatry (= 1) and allopatry (= 0) for each extant lineages
-at each internode interval (see Details)
+a list of sympatry through time created using \code{\link{CreateGeoObject}}
 }
   \item{par}{
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
@@ -31,6 +31,10 @@ vector specifying starting parameter values for maximum likelihood optimization.
   \item{method}{
 method to use for ML optimization (default is Nelder-Mead)
 }
+  \item{bounds}{
+optional list (default bounds are \code{list(lower=-Inf,upper=Inf)}) to be specified when using \code{L-BFGS-B} ML optimization method.
+}
+
 }
 
 \value{
@@ -50,15 +54,13 @@ method to use for ML optimization (default is Nelder-Mead)
 \details{
 If unspecified, \code{par} takes the default values of \code{var(data)/max(nodeHeights(phylo))} for sig2 and 0 for either \code{S} for the matching competition model, 
 \code{b} for the linear diversity dependence model, or \code{r} for the exponential diversity dependence model. Values can be manually entered as a vector with the first element
-equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}.
-
-\code{geography.object} should be a list of matrices with row and column
-names that match the \code{$geography.object} object created within the \code{\link{CreateGeoObject}} function.
+equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}. Note that, since the starting value for
+sig2 is exponentiated to stabilize the likelihood search, if you input a \code{par} value, the first value specifying sig2 should be the log of the desired starting value.
 
 }
 
 \references{
-	Drury, J., Clavel, J., and Morlon, H. (submitted) Estimating the effect of competition on trait evolution using maximum likelihood inference.
+	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020
 
 	Nuismer, S. & Harmon, L. 2015. Predicting rates of interspecific interaction from phylogenetic trees. \emph{Ecology Letters} 18:17-27.
 	
@@ -89,6 +91,7 @@ geography.object<-Anolis.data$geography.object
 pPC1<-Anolis.data$data
 phylo<-Anolis.data$phylo
 
+\donttest{
 #Fit three models without biogeography to pPC1 data
 MC.fit<-fit_t_comp(phylo,pPC1,model="MC")
 DDlin.fit<-fit_t_comp(phylo,pPC1,model="DDlin")
@@ -98,5 +101,6 @@ DDexp.fit<-fit_t_comp(phylo,pPC1,model="DDexp")
 MC.geo.fit<-fit_t_comp(phylo,pPC1,model="MC",geography.object=geography.object)
 DDlin.geo.fit<-fit_t_comp(phylo,pPC1,model="DDlin",geography.object=geography.object)
 DDexp.geo.fit<-fit_t_comp(phylo,pPC1,model="DDexp",geography.object=geography.object)
+}
 
 }
