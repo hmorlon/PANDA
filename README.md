@@ -34,7 +34,7 @@ You can also install it directly from gitHub through devtools:
 ```
 library(devtools)
 
-install_github("hmorlon/PANDA")
+install_github("hmorlon/PANDA", ref="environmental")
 ```
 
 
