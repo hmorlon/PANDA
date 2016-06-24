@@ -27,6 +27,17 @@ R CMD INSTALL --build RPANDA_1.X.tar.gz
 
 Note: You must have gcc/gfortran, rtools... installed
 
+**With devtools**
+
+You can also install it directly from gitHub through devtools:
+
+```
+library(devtools)
+
+install_github("hmorlon/PANDA")
+```
+
+
 
 ###**Report an issue**
 Any bugs encountered when using the package can be reported [here](https://github.com/hmorlon/PANDA/issues)
