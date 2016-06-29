@@ -1,9 +1,7 @@
 ---
 title: "Examples Panda MCMC"
 author: "Florian Hartig"
-output:
-  html_document:
-    keep_md: yes
+output: html_document
 ---
 
 Loading the package and the functions
@@ -20,6 +18,8 @@ data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
 ```
 
+# Constant birth rate model
+
 Fit the pure birth model (no extinction) with a constant speciation rate
 
 
@@ -34,10 +34,14 @@ prior = BayesianTools::createUniformPrior(lower = c(0), upper = c(1))
 result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par, f=87/89,cst.lamb=TRUE,fix.mu=TRUE,dt=1e-3, mcmc = F, mcmcSettings = list(iterations = 3000), prior = prior)
 ```
 
-For using 
+The MCMC results are stored in result result_cst$mcmc
 
 ```{r}
-library(BayesianTools)
+result_cst$mcmc
+```
+
+
+```{r}
 plot(result_cst$mcmc)
 summary(result_cst$mcmc)
 DIC(result_cst$mcmc)
@@ -45,6 +49,7 @@ DIC(result_cst$mcmc)
 ```
 
 
+# Time-dependent birth rate model
 
 ```{r, warning=F}
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
@@ -58,8 +63,6 @@ result_exp <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,expo.l
 ```
 
 ```{r}
-library(BayesianTools)
-getSample(result_exp$mcmc, start = 2500)
 plot(result_exp$mcmc, start = 2500)
 summary(result_exp$mcmc, start = 2500)
 marginalPlot(result_exp$mcmc, start = 2500)
@@ -68,7 +71,7 @@ DIC(result_exp$mcmc, start = 2500)
 #marginalLikelihood(result_exp$mcmc, start = 2500)
 ```
 
-# Environmental model
+# Environmental-dependent birth rate model
 
 ```{r}
 
@@ -92,7 +95,6 @@ result_env <- fit_env(Cetacea,InfTemp,tot_time,f.lamb,f.mu,lamb_par,mu_par, f=87
 
 
 ```{r}
-library(BayesianTools)
 plot(result_env$mcmc, start = 2500)
 summary(result_env$mcmc, start = 2500)
 marginalPlot(result_env$mcmc, start = 2500)

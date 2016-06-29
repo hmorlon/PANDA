@@ -50,6 +50,9 @@ fit_bd <-
   }
   
   if (mcmc==TRUE){
+    
+    require(BayesianTools) # Note Florian: I attach the BT package at this point to make sure that the BT analysis functions are available to the user after the MCMCs have been run. We could get rid of this of course, but I think it's convenient has has minimal risk, lower at any rate than attaching BT with the package. If you would remove this, users would have to load library BT to analyze the MCMC output. 
+    
     if(fix.mu==FALSE) mcmcSettings$startValue = c(lamb.par, mu.par)
     LL <- function(par) -optimLH(par)
     names = paste("lambda", 1:length(lamb.par))
