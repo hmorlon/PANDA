@@ -8,9 +8,10 @@ output:
 
 Loading the package and the functions
 
-```{r}
+```{r, warning=F}
 require(RPANDA)
 source("../R/fit_bd.R")
+source("../R/fit_env.R")
 ```
 
 
@@ -30,7 +31,7 @@ mu_par<-c()
 
 prior = BayesianTools::createUniformPrior(lower = c(0), upper = c(1))
 
-result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par, f=87/89,cst.lamb=TRUE,fix.mu=TRUE,dt=1e-3, mcmc = T, mcmcSettings = list(iterations = 3000))
+result_cst <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par, f=87/89,cst.lamb=TRUE,fix.mu=TRUE,dt=1e-3, mcmc = F, mcmcSettings = list(iterations = 3000), prior = prior)
 ```
 
 For using 
@@ -45,26 +46,59 @@ DIC(result_cst$mcmc)
 
 
 
-```{r}
+```{r, warning=F}
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.05, 0.01)
 mu_par<-c()
 
-prior = BayesianTools::createUniformPrior(lower = c(0,-1), upper = c(5,1))
+prior = BayesianTools::createUniformPrior(lower = c(0,-0.5), upper = c(1,0.5))
 
 result_exp <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,expo.lamb=TRUE,fix.mu=TRUE,dt=1e-3, mcmc = T, mcmcSettings = list(iterations = 5000), prior = prior)
 ```
 
 ```{r}
 library(BayesianTools)
+getSample(result_exp$mcmc, start = 2500)
 plot(result_exp$mcmc, start = 2500)
 summary(result_exp$mcmc, start = 2500)
 marginalPlot(result_exp$mcmc, start = 2500)
 correlationPlot(result_exp$mcmc, start = 2500)
 DIC(result_exp$mcmc, start = 2500)
-marginalLikelihood(result_cst$mcmc, start = 2500)
+#marginalLikelihood(result_exp$mcmc, start = 2500)
 ```
 
+# Environmental model
+
+```{r}
+
+data(Cetacea)
+tot_time<-max(node.age(Cetacea)$ages)
+data(InfTemp)
+dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
+
+# Fits a model with lambda varying as an exponential function of temperature
+# and mu fixed to 0 (no extinction).  Here t stands for time and x for temperature.
+f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
+f.mu<-function(t,x,y){0}
+lamb_par<-c(0.10, 0.01)
+mu_par<-c()
+
+prior = BayesianTools::createUniformPrior(lower = c(0,-0.2), upper = c(0.5,0.2))
+
+result_env <- fit_env(Cetacea,InfTemp,tot_time,f.lamb,f.mu,lamb_par,mu_par, f=87/89,fix.mu=TRUE,df=dof,dt=1e-3, mcmc = T, mcmcSettings = list(iterations = 5000), prior = prior)
+```
+
+
+
+```{r}
+library(BayesianTools)
+plot(result_env$mcmc, start = 2500)
+summary(result_env$mcmc, start = 2500)
+marginalPlot(result_env$mcmc, start = 2500)
+correlationPlot(result_env$mcmc, start = 2500)
+DIC(result_env$mcmc, start = 2500)
+#marginalLikelihood(result_env$mcmc, start = 2500)
+```
 
 

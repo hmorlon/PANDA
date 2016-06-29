@@ -1,13 +1,13 @@
 fit_env <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, df=NULL, f=1,
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
-           expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown")
+           expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown", mcmc = F, mcmcSettings = NULL, prior = NULL)
 {
   # first a spline is used to build the approximation model Env(t)
   if (is.null(df))
   {
     df <- smooth.spline(x=env_data[,1], env_data[,2])$df
   }
-  spline_result <- sm.spline(env_data[,1],env_data[,2], df=df)
+  spline_result <- pspline::sm.spline(env_data[,1],env_data[,2], df=df)
   env_func <- function(t){predict(spline_result,t)}
   # In order to perform computation, the env_func is tabulated
   # control from lower_bound -10%, upper_bound + 10%
@@ -33,7 +33,7 @@ fit_env <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
   f.lamb.env <- function(t,y){ f.lamb(t, env_func_tab(t), y)}
   f.mu.env <- function(t,y){ f.mu(t, env_func_tab(t), y)}
   res <- fit_bd(phylo, tot_time, f.lamb.env, f.mu.env, lamb_par, mu_par, f,
-           meth, cst.lamb, cst.mu, expo.lamb, expo.mu, fix.mu, dt, cond)
+           meth, cst.lamb, cst.mu, expo.lamb, expo.mu, fix.mu, dt, cond, mcmc = mcmc, mcmcSettings = mcmcSettings, prior = prior)
   res$model <- "environmental birth death"
   res$f.lamb <- function(t){ f.lamb(t, env_func_tab(t), res$lamb_par)}
   if (fix.mu==FALSE)
