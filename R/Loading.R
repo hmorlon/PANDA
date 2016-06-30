@@ -12,5 +12,6 @@ source("PhenotypicACDC.class.R")
 source("PhenotypicADiag.class.R")
 source("PhenotypicPM.class.R")
 source("PhenotypicDD.class.R")
+source("PhenotypicGMM.class.R")
 source("ModelBank.R")
 

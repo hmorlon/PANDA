@@ -261,6 +261,45 @@ createModel <- function(tree, keyword){
     return(model)
 }
 
+createModelCoevolution <- function(tree1, tree2, keyword){
+
+    if(keyword == "GMM" || keyword == "GMMbis"){
+
+        comment <- "Generalist Matching Mutualism model.\nStarts with 3 or 4 lineages having the same value X_0 ~ Normal(m0,v0).\nOne trait in each lineage, all lineages evolving then non-independtly according to the GMM expression."
+        paramsNames <- c("m0", "v0", "d1", "d2", "S", "sigma")
+        params0 <- c(0,0,1,-1,0.5,1)
+        
+        eventEndOfPeriods <- endOfPeriodsGMM(tree1, tree2)
+        n <- eventEndOfPeriods$nLineages1[1] + eventEndOfPeriods$nLineages2[1] - 1
+
+        initialCondition <- function(params) return( list(mean=rep(params[1], times=n), var=matrix(rep(params[2], times=n*n), nrow=n ) ) ) 
+            
+        aAGamma <- function(i, params){
+            vectorA <- function(t) return( c( rep(params[3]*params[5], times=eventEndOfPeriods$nLineages1[i]), rep(params[4]*params[5], times=eventEndOfPeriods$nLineages2[i]) ) )
+            matrixGamma <- function(t) return(diag(params[6], eventEndOfPeriods$nLineages1[i] + eventEndOfPeriods$nLineages2[i]))
+
+            bloc1 <- diag(params[5], eventEndOfPeriods$nLineages1[i])
+            bloc2 <- matrix(rep(-params[5]/eventEndOfPeriods$nLineages2[i], times=eventEndOfPeriods$nLineages1[i]*eventEndOfPeriods$nLineages2[i]), nrow=eventEndOfPeriods$nLineages1[i])
+            bloc3 <- matrix(rep(-params[5]/eventEndOfPeriods$nLineages1[i], times=eventEndOfPeriods$nLineages1[i]*eventEndOfPeriods$nLineages2[i]), nrow=eventEndOfPeriods$nLineages2[i])
+            bloc4 <- diag(params[5], eventEndOfPeriods$nLineages2[i])
+            matrixA <- rbind(cbind(bloc1, bloc2), cbind(bloc3, bloc4))
+              
+            return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
+        }
+
+        constraints <- function(params) return(params[2]>=0 && params[6]>=0)
+        
+        if( keyword == "GMM" ){
+            model <- new(Class="PhenotypicGMM", name=keyword, period=eventEndOfPeriods$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment, n1=eventEndOfPeriods$nLineages1, n2=eventEndOfPeriods$nLineages2)
+        }else{
+            model <- new(Class="PhenotypicModel", name=keyword, period=eventEndOfPeriods$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, tipLabelsSimu=eventEndOfPeriods$labeling, comment=comment)
+        }
+
+    }
+
+    return(model)
+}
+
 
 
 ##################################################
@@ -292,8 +331,8 @@ periodizeOneTree <- function(tree){
     # 3) the death time of all branches in the tree
     
     nodeheight <- nodeHeights(tree)
-    startingTimes <- nodeheight[,1]
-    endTimes <- nodeheight[,2]
+    startingTimes <- round(nodeheight[,1],6)
+    endTimes <- round(nodeheight[,2], 6)
     all_time_events <- sort(c(startingTimes, endTimes))
     # the following removes identical entries in the vector
     periods <- unique(all_time_events)
@@ -366,3 +405,102 @@ getLivingLineages <- function(i, eventEndOfPeriods){
     return(livingLineages)
 }
 
+endOfPeriodsGMM <- function(tree1, tree2){
+    # Warning !! This has to be used on ultrametric trees only ! It could be extended to take into account the death of lineages, though.
+    # Returns the list of branching lineages at the beginning of each period : copy
+    # Together with the list of places where the new lineage is inserted : paste
+    # And the number of lineages in the first and second tree on the focal period : nLineages1, nLineages2
+    # The rule is : If a lineage in the first tree gives birth, the first of the two new branches is assigned its mother label, and the new one takes the label nLineages1. All other lineages are then pushed back. If a lineage in the second tree gives birth, the first of the two new branches is assigned its mother label, and the last one takes the last label (nLineages1 + nLineages2)
+    
+    periodizing1 <- periodizeOneTree(tree1)
+    periodizing2 <- periodizeOneTree(tree2)
+    nBranch1 <- length(periodizing1$startingTimes)
+    nBranch2 <- length(periodizing2$startingTimes)
+    nPeriods <- length(periodizing1$periods) + length(periodizing2$periods) - 1
+    
+    numbersCopy <- rep(0, times=nPeriods)
+    numbersPaste <- rep(0, times=nPeriods)
+    numbersLineages1 <- rep(0, times=nPeriods)
+    numbersLineages2 <- rep(0, times=nPeriods)
+    periods <- rep(0, times=nPeriods)
+
+    # We initialize the labeling of branches in the tree
+    labelingLineages1 <- rep(0, times=nBranch1)
+    labelingLineages2 <- rep(0, times=nBranch2)
+
+    # The highest tree starts with two lineages (crown) the other one starts with one (root)
+    Tmax1 <- periodizing1$periods[length(periodizing1$periods)]
+    Tmax2 <- periodizing2$periods[length(periodizing2$periods)]
+    if( Tmax1 < Tmax2 ){
+        n1 <- 1
+        n2 <- 2
+        labelingLineages1[1] <- c(1)
+        labelingLineages2[periodizing2$startingTimes==0] <- c(1,2)
+        periodizing1$periods <- periodizing1$periods + (Tmax2-Tmax1)
+        periodizing1$startingTimes <- periodizing1$startingTimes + (Tmax2-Tmax1)
+        periodizing1$endTimes <- periodizing1$endTimes + (Tmax2-Tmax1)
+        numbersCopy[1] <- n2
+        numbersPaste[1] <- n2+n1
+    }else if( Tmax2 < Tmax1 ){
+        n1 <- 2
+        n2 <- 1
+        labelingLineages1[periodizing1$startingTimes==0] <- c(1,2)
+        labelingLineages2[1] <- c(1)
+        periodizing2$periods <- periodizing2$periods + (Tmax1-Tmax2)
+        periodizing2$startingTimes <- periodizing2$startingTimes + (Tmax1-Tmax2)
+        periodizing2$endTimes <- periodizing2$endTimes + (Tmax1-Tmax2)
+        numbersCopy[1] <- 1
+        numbersPaste[1] <- 2
+    }else{
+        n1 <- 2
+        n2 <- 2
+        labelingLineages1[periodizing1$startingTimes==0] <- c(1,2)
+        labelingLineages2[periodizing2$startingTimes==0] <- c(1,2)
+        numbersCopy[1] <- 1
+        numbersPaste[1] <- 2
+    }
+    numbersLineages1[1] <- n1
+    numbersLineages2[1] <- n2
+    
+    for(i in 2:(nPeriods-1)){
+        tau_i1 <- periodizing1$periods[n1]
+        tau_i2 <- periodizing2$periods[n2]
+        if( tau_i1 < tau_i2 ){
+            n1 <- n1 +1
+            newBranches <- which(tau_i1 == periodizing1$startingTimes)
+            if(n1 > 2){
+                labelingLineages1[newBranches[1]] <- labelingLineages1[newBranches[1]-1]
+                numbersCopy[i] <- labelingLineages1[newBranches[1]-1]
+            }else{
+                numbersCopy[i] <- 1
+            }
+            labelingLineages1[newBranches[2]] <- n1
+            numbersPaste[i] <- n1
+            periods[i] <- tau_i1
+        }else{
+            n2 <- n2 +1
+            newBranches <- which(tau_i2 == periodizing2$startingTimes)
+            if(n2 > 2){
+                labelingLineages2[newBranches[1]] <- labelingLineages2[newBranches[1]-1]
+                numbersCopy[i] <- n1 + labelingLineages2[newBranches[1]-1]
+            }else{
+                numbersCopy[i] <- n1 + 1
+            }
+            labelingLineages2[newBranches[2]] <- n2
+            numbersPaste[i] <- n1+n2
+            periods[i] <- tau_i2
+        }
+        numbersLineages1[i] <- n1
+        numbersLineages2[i] <- n2
+    }
+
+    permutationLabels1 <- labelingLineages1[!(periodizing1$endTimes %in% periodizing1$startingTimes)]
+    labeling1 <- tree1$tip.label[order(permutationLabels1)]
+    permutationLabels2 <- labelingLineages2[!(periodizing2$endTimes %in% periodizing2$startingTimes)]
+    labeling2 <- tree2$tip.label[order(permutationLabels2)]
+    labeling <- c(labeling1, labeling2)
+
+    periods[nPeriods] <- max(Tmax1, Tmax2)
+    
+    return(list(periods=periods, copy=numbersCopy, paste=numbersPaste, nLineages1=numbersLineages1, nLineages2=numbersLineages2, labeling=labeling))
+}

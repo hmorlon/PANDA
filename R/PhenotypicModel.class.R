@@ -43,13 +43,13 @@ setClass(
     ),
     validity=function(object){
         if( length(object@numbersCopy) != length(object@numbersPaste) ){
-            stop("[PhenotypicModel : validation] The sequence of positions of branching lineages and the sequence of new positions for the traits in the newly born lineages should have the same length.")
+            stop("[PhenotypicModel : validation] \n The sequence of positions of branching lineages \n and the sequence of new positions for the traits in the newly born lineages\n should have the same length.")
         }
         if( length(object@numbersCopy) != length(object@period) ){
-            stop("[PhenotypicModel : validation] The sequence of positions of branching lineages and the sequence of time periods should have the same length.")
+            stop("[PhenotypicModel : validation] \n The sequence of positions of branching lineages \n and the sequence of time periods \n should have the same length.")
         }
         if( length(object@params0) != length(object@paramsNames) ){
-            stop("[PhenotypicModel : validation] There should be the same number of defaut parameters and parameter names.")
+            stop("[PhenotypicModel : validation] \n There should be the same number of defaut parameters \n and parameter names.")
         }
         return(TRUE)
     }
@@ -69,7 +69,7 @@ setMethod(
                 "period"={return(x@period)},
                 "aAGamma"={return(x@aAGamma)},
                 "numbersCopy"={return(x@numbersCopy)},
-                "numbersPaste"={return(x@numberPaste)},
+                "numbersPaste"={return(x@numbersPaste)},
                 "initialCondition"={return(x@initialCondition)},
                 "paramsNames"={return(x@paramsNames)},
                 "constraints"={return(x@constraints)},
@@ -91,7 +91,7 @@ setReplaceMethod(
                 "period"={x@period <- value},
                 "aAGamma"={x@aAGamma <- value},
                 "numbersCopy"={x@numbersCopy <- value},
-                "numbersPaste"={x@numberPaste <- value},
+                "numbersPaste"={x@numbersPaste <- value},
                 "initialCondition"={x@initialCondition <- value},
                 "paramsNames"={x@paramsNames <- value},
                 "constraints"={x@constraints <- value},
@@ -122,7 +122,7 @@ setMethod(
         print(x@paramsNames)
         cat("*** Description : ")
         cat(x@comment)
-        cat(paste("\n*** Periods : the model is cut into ", length(x@period), " parts. \n"))
+        cat(paste("\n*** Epochs : the model is cut into ", length(x@period), " parts. \n"))
         print(x@period)
         cat("*** Lineages branching (to be copied at the end of the corresponding period) :\n")
         print(x@numbersCopy)
@@ -263,7 +263,7 @@ setMethod(
 
 setGeneric(
     name="getDataLikelihood",
-    def=function(object="PhenotypicModel", data="numeric", params="numeric", v="boolean"){standardGeneric("getDataLikelihood")}
+    def=function(object="PhenotypicModel", data="numeric", params="numeric", v="logical"){standardGeneric("getDataLikelihood")}
 )
 
 setMethod(
@@ -273,6 +273,10 @@ setMethod(
         if(v){
             cat("*** Computing -log( likelihood ) of tip trait data under a given set of parameters ***\n")
             beginning <- Sys.time()
+        }
+
+        if(!is.null(rownames(data))){
+            data <- data[object@tipLabels,]
         }
 
         if(object@constraints(params)){
@@ -310,18 +314,23 @@ setMethod(
 
 setGeneric(
     name="fitTipData",
-    def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical"){standardGeneric("fitTipData")}
+    def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
 )
 
 setMethod(
     f="fitTipData",
     signature="PhenotypicModel",
-    definition=function(object, data, params0=NULL, GLSstyle=FALSE){
-        cat("*** Fit of tip trait data ***\n")
-        cat("Finding the maximum likelihood estimator of the parameters, before returning the likelihood and the inferred parameters...\n")
-        beginning <- Sys.time()
+    definition=function(object, data, params0=NULL, GLSstyle=FALSE, v=TRUE){
+        if(v){
+            cat("*** Fit of tip trait data ***\n")
+            cat("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
+            beginning <- Sys.time()
+        }
 
         n <- length(data)
+        if(!is.null(rownames(data))){
+            data <- data[object@tipLabels,]
+        }
 
         # If params0 is not given, we use the 'params0' value contained in the model
         if(is.null(params0)){
@@ -372,8 +381,10 @@ setMethod(
         }
         names(inferredParams) <- object@paramsNames
 
-        end <- Sys.time()
-        cat("Computation time :", format(end-beginning), "\n")
+        if(v){
+            end <- Sys.time()
+            cat("Computation time :", format(end-beginning), "\n")
+        }
 
         return(list(value = optimisation$value, inferredParams = inferredParams))
     }
@@ -423,7 +434,7 @@ setMethod(
         }
 
         if( method == 1 ){
-            if(v){ cat("Computes the tip distribution, and returns a simulated dataset drawn in this distribution...\n") }
+            if(v){ cat("Computes the tip distribution, and returns a simulated dataset drawn in this distribution.\n") }
             tipdistribution <- getTipDistribution(object, params)
             X <- rmvnorm(1, tipdistribution$mean, tipdistribution$Sigma)
             X <- matrix(data=X, ncol=1)
@@ -431,7 +442,7 @@ setMethod(
 
         }else{
             if( method==2 ){
-                if(v){ cat("Simulates step-by-step the whole trajectory, plots it, and returns tip data...\n") }
+                if(v){ cat("Simulates step-by-step the whole trajectory, plots it, and returns tip data.\n") }
                 firstGraph <- TRUE
                 # Here you can try "rainbow()", "terrain.colors()", "heat.colors()", "topo.colors()"
                 colorChoice <- terrain.colors(length(object@tipLabels))
@@ -444,7 +455,7 @@ setMethod(
                 ylim <- c( min(findLim) , max( findLim ) )
                 ylim <- c( ylim[1] - (ylim[2]-ylim[1])/10, ylim[2] + (ylim[2]-ylim[1])/10)
             }
-            else{ if(v){ cat("Simulates step-by-step the whole trajectory, but returns only the tip data...\n") } }
+            else{ if(v){ cat("Simulates step-by-step the whole trajectory, but returns only the tip data.\n") } }
             
             initialCondition <- object@initialCondition(params)
             X <- rnorm(length(initialCondition$mean), initialCondition$mean, initialCondition$var)
