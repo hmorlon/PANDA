@@ -1,7 +1,11 @@
 ---
-title: "Examples Panda MCMC"
+title: "Bayesian / MCMC Analysis with PANDA"
 author: "Florian Hartig"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bayesian / MCMC with PANDA}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8](inputenc)
 ---
 
 Loading the package and the functions
