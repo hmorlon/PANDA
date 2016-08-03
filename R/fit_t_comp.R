@@ -20,7 +20,7 @@ if(is.null(geography.object)){
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
 		z0<-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%data[,1]
-		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = sig2, S = S, z0 = as.numeric(z0), convergence = opt$convergence)
+		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, sig2 = sig2, S = S, z0 = as.numeric(z0), convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDexp"){
@@ -32,7 +32,7 @@ if(is.null(geography.object)){
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
 		z0<-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%data[,1]
-		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = sig2, r = r, z0 = as.numeric(z0), convergence = opt$convergence)
+		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, sig2 = sig2, r = r, z0 = as.numeric(z0), convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDlin"){
@@ -44,7 +44,7 @@ if(is.null(geography.object)){
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
 		z0<-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%data[,1]
-		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = sig2, b = b, z0 = as.numeric(z0), convergence = opt$convergence)
+		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, sig2 = sig2, b = b, z0 = as.numeric(z0), convergence = opt$convergence)
 		return(results)
 		}
 }
@@ -61,7 +61,7 @@ if(!is.null(geography.object)){
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
 		z0<-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%data[,1]
-		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = sig2, S = S, z0 = as.numeric(z0), convergence = opt$convergence)
+		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, sig2 = sig2, S = S, z0 = as.numeric(z0), convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDexp"){
@@ -73,7 +73,7 @@ if(!is.null(geography.object)){
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
 		z0<-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%data[,1]
-		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = sig2, r = r, z0 = as.numeric(z0), convergence = opt$convergence)
+		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, sig2 = sig2, r = r, z0 = as.numeric(z0), convergence = opt$convergence)
 		return(results)
 		}
 	if(model=="DDlin"){
@@ -87,7 +87,7 @@ if(!is.null(geography.object)){
 		IV<-solve(V)
 		I<-matrix(rep(1,length(phylo$tip.label)))
 		z0<-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%data[,1]
-		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = sig2, b = b, z0 = as.numeric(z0), convergence = opt$convergence)
+		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.paramaters = 3, sig2 = sig2, b = b, z0 = as.numeric(z0), convergence = opt$convergence)
 		return(results)
 		}
 
