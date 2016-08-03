@@ -124,7 +124,7 @@ if(!is.function(env_data)){
   N<-Ntip(tr)
   for(i in 1:nrow(tr$edge)){
     if(tr$edge[i,1]==(N+1)){
-      X[[i]]<-bmSimT(start=root.value, n=tr$edge.length[i], dt=step, age=Ages[i], fun, param, rootage, env_data) # N+1 = element à la racine; anc =state at the root
+      X[[i]]<-bmSimT(start=root.value, n=tr$edge.length[i], dt=step, age=Ages[i], fun, param, rootage, env_data) # N+1 = element à la racine; root.age =state at the root
     }else{
       parent<-match(tr$edge[i,1],tr$edge[,2]) # recherche le noeud parent de l'element i (peut par ex. etre N+1 si deuxieme noeud sur l'arbre). renvoie la ligne dans edge
       X[[i]]<-bmSimT(start=X[[parent]][length(X[[parent]])], n=tr$edge.length[i], dt=step, age=Ages[i], fun, param, rootage, env_data)
