@@ -8,6 +8,17 @@ The current stable version of the RPANDA package (1.2) is available on the CRAN 
 
 ###**Package Installation**
 
+**From gitHub**
+You can install RPANDA directly from gitHub with devtools:
+
+```
+library(devtools)
+
+install_github("hmorlon/PANDA")
+
+```
+
+
 **From the binaries**
 
 You can download the pre-released binaries for Windows and Mac OS X from the [release page](https://github.com/hmorlon/PANDA/releases)
@@ -24,8 +35,6 @@ Then, for compiling the binary:
 ```
 R CMD INSTALL --build RPANDA_1.X.tar.gz
 ```
-
-Note: You must have gcc/gfortran, rtools... installed
 
 
 ###**Report an issue**
