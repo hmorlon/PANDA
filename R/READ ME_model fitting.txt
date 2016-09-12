@@ -1,0 +1,31 @@
+To fit models using new, faster version of the MC and DD models, first it is necessary to source the files that define the PhenotypicModel.class and Phenotypic.ADiag class and to source the relevant R scripts for defining the models themselves (i.e., MC_geo_PM, DDlin_geo_ADiag, DDexp_geo_ADiag for MC or DD models with biogeography, MC_nogeo_ADiag, DDexp_nogeo_ADiag,DDlin_nogeo_ADiag for models without biogeography).
+
+For example:
+
+#NB: the order in which scripts are sourced is important, PhenotypicModel must be loaded first
+
+source('~/PANDA/R/PhenotypicModel.class.R', chdir = TRUE)
+source('~/PANDA/R/PhenotypicADiag.class.R', chdir = TRUE)
+source('~/PANDA/R/DDexp_geo_ADiag.R', chdir = TRUE)
+source('~/PANDA/R/DDexp_nogeo_ADiag.R', chdir = TRUE)
+source('~/PANDA/R/DDlin_geo_ADiag.R', chdir = TRUE)
+source('~/PANDA/R/DDlin_nogeo_ADiag.R', chdir = TRUE)
+source('~/PANDA/R/MC_geo_PM.R', chdir = TRUE)
+source('~/PANDA/R/MC_nogeo_ADiag.R', chdir = TRUE)
+source('~/PANDA/R/fit_t_comp.R', chdir = TRUE)
+source('~/PANDA/R/resortGeoObject.R')
+
+data(Anolis.data)
+geography.object<-Anolis.data$geography.object
+pPC1<-Anolis.data$data
+phylo<-Anolis.data$phylo
+
+#Fit three models without biogeography to pPC1 data
+MC.fit<-fit_t_comp(phylo,pPC1,model="MC")
+DDlin.fit<-fit_t_comp(phylo,pPC1,model="DDlin")
+DDexp.fit<-fit_t_comp(phylo,pPC1,model="DDexp")
+
+#Now fit models that incorporate biogeography, NOTE these models take longer to fit
+MC.geo.fit<-fit_t_comp(phylo,pPC1,model="MC",geography.object=geography.object)
+DDlin.geo.fit<-fit_t_comp(phylo,pPC1,model="DDlin",geography.object=geography.object)
+DDexp.geo.fit<-fit_t_comp(phylo,pPC1,model="DDexp",geography.object=geography.object)
