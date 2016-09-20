@@ -36,9 +36,9 @@ plot.fit_t.env<-function(x,steps=100,...){
     t <- seq(0,x$tot_time, length.out=steps)
     
     # Rates through time
-    rates<-fun_temp( x=t, temp=x$env_func, model=x$model, param=x$param)
-
-    plot(-t, rates, type='l', xlab="Times", ylab=bquote(paste("Evolutionary rates ", sigma)), main="Evolutionary rate through time", ...)
+    rates <- fun_temp( x=t, temp=x$env_func, model=x$model, param=x$param)
+    
+    plot(-t, rates, type='l', xlab="Times", ylab=bquote(paste("Evolutionary rates ", sigma)), ...)
     results<-list(time_steps=t, rates=rates)
     invisible(results)
 }
