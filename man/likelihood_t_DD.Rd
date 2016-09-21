@@ -22,7 +22,7 @@ a named vector of continuous data with names corresponding to \code{phylo$tip.la
 }
 
  \item{par}{
-a vector listing a value for \code{sig2} and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model), in that order.
+a vector listing a value for \code{log(sig2)} (see Note) and either \code{b} (for the linear diversity dependent model) or \code{r} (for the exponential diversity dependent model), in that order.
 }
 
  \item{model}{
@@ -32,8 +32,12 @@ model chosen to fit trait data, \code{"DDlin"} is the diversity-dependent linear
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before the slope parameter (\code{b} or \code{r}).
+	When specifying \code{par}, \code{log(sig2)} must be listed before the slope parameter (\code{b} or \code{r}).
 }
+
+\note{
+	To stabilize optimization, this function exponentiates the input \code{sig2} value, thus the user must input the log(sig2) value to compute the correct log likelihood (see example).
+}	
 
 \value{
   the negative log-likelihood value of the dataset (accordingly, the negative of the output should be recorded as the likelihood), given the phylogeny and \code{sig2} and slope values

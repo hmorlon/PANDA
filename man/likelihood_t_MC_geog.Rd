@@ -20,7 +20,7 @@ an object of type 'phylo' (see ape documentation)
 a named vector of continuous data with names corresponding to \code{phylo$tip.label}
 }
  \item{par}{
-a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model), in that order
+a vector listing a value for \code{log(sig2)} (see Note) and \code{S} (parameters of the matching competition model), in that order
 }
   \item{geo.object}{
 a geography object indicating sympatry through time, created using \code{\link{CreateGeoObject}}
@@ -28,12 +28,15 @@ a geography object indicating sympatry through time, created using \code{\link{C
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before \code{S}.
+	When specifying \code{par}, \code{log(sig2)} must be listed before \code{S}.
 	
 }
 
 \note{
 	S must be negative (if it is positive, the likelihood function will multiply input by -1).
+	
+	To stabilize optimization, this function exponentiates the input \code{sig2} value, thus the user must input the log(sig2) value to compute the correct log likelihood (see example).
+
 }
 
 \value{

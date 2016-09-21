@@ -20,17 +20,22 @@ an object of type 'phylo' (see ape documentation)
 a named vector of continuous data with names corresponding to \code{phylo$tip.label}
 }
  \item{par}{
-a vector listing a value for \code{sig2} and \code{S} (parameters of the matching competition model), in that order
+a vector listing a value for \code{log(sig2)} (see Note) and \code{S} (parameters of the matching competition model), in that order
 }
 }
 
 \details{
-	When specifying \code{par}, \code{sig2} must be listed before \code{S}.
+	When specifying \code{par}, \code{log(sig2)} must be listed before \code{S}.
 }
+
+\note{
+	To stabilize optimization, this function exponentiates the input \code{sig2} value, thus the user must input the log(sig2) value to compute the correct log likelihood (see example).
+}	
 
 \value{
   the negative log-likelihood value of the dataset (accordingly, the negative of the output should be recorded as the likelihood), given the phylogeny and \code{sig2} and \code{S} values
 }
+
 \references{
 	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020
 
