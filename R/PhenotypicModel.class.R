@@ -324,6 +324,7 @@ setMethod(
         if(v){
             cat("*** Fit of tip trait data ***\n")
             cat("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
+            cat("**WARNING** : This function uses the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\n distinct parameter sets for the initialisation.")
             beginning <- Sys.time()
         }
 
