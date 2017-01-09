@@ -68,10 +68,17 @@ likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
     mtot<-par$mtot
     }
 
-# Check if the root value is provided (could be used with an mcmc setting)
-    if(is.null(par[["mu"]])){
-        par$mu<-NULL
+# Check if the difference between tip and present day.
+    if(is.null(par[["maxdiff"]])){
+        maxdiff<-0
+    }else{
+        maxdiff<-par$maxdiff
     }
+
+# Check if the root value is provided (could be used with an mcmc setting)
+if(is.null(par[["mu"]])){
+    par$mu<-NULL
+}
 
 # Check if the tree is in prunning-wise order
     if(is.null(par[["check"]])){
@@ -105,7 +112,7 @@ likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
     }
      
     # Sigma is not provided but analytically computed instead
-    phylo <- .CLIMtransform(phylo, param=par$param, mtot=mtot, times=par$times, funEnv=par$fun, model=model, tips=tips, subdivisions=subdivisions)
+    phylo <- .CLIMtransform(phylo, param=par$param, mtot=mtot, times=par$times, funEnv=par$fun, model=model, tips=tips, subdivisions=subdivisions, maxdiff=maxdiff)
    
     # Add measurement error
     if(is_error){
@@ -130,15 +137,13 @@ return(LL)
 ## Should I get a general wrapper when neither EnvExp or EnvLin are provided?
 
 ## Function to scale the tree to parameters of the climatic model
-.CLIMtransform<-function(phy, param, mtot, times, funEnv, model, tips, subdivisions){
+.CLIMtransform<-function(phy, param, mtot, times, funEnv, model, tips, subdivisions, maxdiff){
     
-    # Not yet used (fixed at 0), depends on wether the tree have extant species
-    maxdiff<-0
     res <- phy
     
     if(is.function(model)){
         # user defined function
-        f<-function(x){ model(mtot-x, funEnv, param) }
+        f<-function(x){ model((mtot+maxdiff)-x, funEnv, param) }
         
     }else if(model=="EnvExp"){
         # define sigma and beta
