@@ -41,7 +41,6 @@ if(!is.null(geography.object)){
 	if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have fewer components than internode intervals in phylo")}
 	sgeo<-.resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in Marc code
 	if(model=="MC"){
-		library(deSolve)
 		mc.ob<-.createModel_MC_geo(phylo,sgeo)
 		opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2

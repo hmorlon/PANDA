@@ -19,7 +19,7 @@ sim.divergence.geo(phylo,pars, Nsegments=2500, plot=FALSE, geo.object)
 	a phylogenetic tree
 }
 \item{pars}{
-	A matrix with a number of rows corresponding to the desired number of simulations, columns containing values for \eqn{sig2} in \code{[,1]}, \eqn{m} in \code{[,2]}, \eqn{alpha} in [,3], \code{root.value} in \code{[,4]}, \eqn{psi} of the OU model in \code{[,5]}, and \eqn{theta} in the OU model in \code{[,6]}
+	A matrix with a number of rows corresponding to the desired number of simulations, columns containing values for \eqn{sig2} in \code{[,1]}, \eqn{m} in \code{[,2]}, \eqn{alpha} in \code{[,3]}, \code{root.value} in \code{[,4]}, \eqn{psi} of the OU model in \code{[,5]}, and \eqn{theta} in the OU model in \code{[,6]}
 }
 \item{Nsegments}{
 the minimum number of time steps to simulate
@@ -28,7 +28,8 @@ the minimum number of time steps to simulate
 logical indicating whether to plot the simulated trait values at each time step
 }
 \item{geo.object}{
-geography object created using \link{CreateGeoObject}}
+geography object created using \link{CreateGeoObject}
+}
 }
 
 
@@ -55,7 +56,7 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 
 
 \seealso{
-\code{\link{CreateGeoObj}}
+\code{\link{CreateGeoObject}}
 }
 
 \examples{

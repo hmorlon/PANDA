@@ -9,7 +9,7 @@ Create biogeography object using a stochastic map created from any model in BioG
 
 }
 \usage{
-CreateGeoObject_BioGeoBEARS(full.phylo,trimmed.phylo=NULL,ana.events,clado.events,stratified=NULL)
+CreateGeoObject_BioGeoBEARS(full.phylo,trimmed.phylo=NULL,ana.events,clado.events,stratified=FALSE)
 }
 
 
