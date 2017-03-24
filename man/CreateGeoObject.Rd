@@ -2,7 +2,7 @@
 \alias{CreateGeoObject}
 
 \title{
-Create blank geography object
+Create biogeography object
 }
 \description{
 This function returns names of internode intervals, named descendants of each node,
