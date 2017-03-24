@@ -1,35 +1,38 @@
+##This version of the code fits the matching competition model as implemented in Drury et al. 2016 SysBio
+
+
 ##################################################
 #    Bank of Classic 1D Phenotypic Models
 ##################################################
 
-.createModel_DDlin <- function(tree){
+.createModel_MC <- function(tree){
     
 
-        comment <- "Diversity dependent exponential model \n Implemented as in Drury et al. Systematic Biology."
-        paramsNames <- c("m0", "logsigma0", "r")
-        params0 <- c(0,log(1),-0.1)
+        comment <- "Matching competition model\n Implemented as in Drury et al. Systematic Biology."
+        paramsNames <- c("m0","logsigma","S")
+        params0 <- c(0,log(1),0)
 
-		###probably needs to be updated to reflect times/spans in geo object, perhaps could feed directly to model call below
 
         periodizing <- periodizeOneTree(tree) 
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        
-        ##need to figure out what this does, should I force it to 0 or do I need to call VCV matrix to get GLS solution for mean?
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(0))) ) 
         
-            
+        
+        ###is this where the A matrix incorporating geography needs to go? if so, what is the order in which lineage sympatry data need to be introduced
+        
         aAGamma <- function(i, params){
             vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(rep(0, length(vectorU)))
-            matrixGamma <- function(t) return(sqrt((exp(params[2])^2)+(params[3]*length(vectorU)))*diag(vectorU))
-            matrixA <- diag(0, length(vectorU))
+            vectorA <- function(t) return(0*vectorU)
+            matrixGamma <- function(t) return(exp(params[2])*diag(vectorU))
+            matrixA <- params[3]*diag(vectorU) - (params[3]/sum(vectorU)) * outer(vectorU,vectorU) 
+            
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
-
-        constraints <- function(params) return((exp(params[2])^2)+(params[3]*length(tree$tip.label)) > 0)
-
-        model <- new(Class="PhenotypicADiag", name="DDlin", period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
+        
+        constraints <- function(params) return(params[3]<=0)
+        
+        model <- new(Class="PhenotypicADiag", name="MC", period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling,  comment=comment)
 
 
     return(model)

@@ -2,7 +2,7 @@
 #    Bank of Classic 1D Phenotypic Models
 ##################################################
 
-createModel_DDexp <- function(tree){
+.createModel_DDexp <- function(tree){
     
 
         comment <- "Diversity dependent exponential model \n Implemented as in Drury et al. Systematic Biology."

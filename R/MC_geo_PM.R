@@ -1,35 +1,38 @@
+##This version of the code fits the biogeographic version of the matching competition model as implemented in Drury et al. 2016 SysBio
+
+
 ##################################################
 #    Bank of Classic 1D Phenotypic Models
 ##################################################
 
-.createModel_DDlin <- function(tree){
+.createModel_MC_geo <- function(tree,geo.object){
     
 
-        comment <- "Diversity dependent exponential model \n Implemented as in Drury et al. Systematic Biology."
-        paramsNames <- c("m0", "logsigma0", "r")
-        params0 <- c(0,log(1),-0.1)
+        comment <- "Matching competition model with biogeography\n Implemented as in Drury et al. Systematic Biology."
+        paramsNames <- c("m0","logsigma","S")
+        params0 <- c(0,log(1),0)
 
-		###probably needs to be updated to reflect times/spans in geo object, perhaps could feed directly to model call below
 
-        periodizing <- periodizeOneTree(tree) 
+        periodizing <- periodizeOneTree_geo(tree,geo.object) 
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
-        
-        ##need to figure out what this does, should I force it to 0 or do I need to call VCV matrix to get GLS solution for mean?
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(0))) ) 
         
-            
+        
+        ###is this where the A matrix incorporating geography needs to go? if so, what is the order in which lineage sympatry data need to be introduced
+        
         aAGamma <- function(i, params){
             vectorU <- getLivingLineages(i, eventEndOfPeriods)
-            vectorA <- function(t) return(rep(0, length(vectorU)))
-            matrixGamma <- function(t) return(sqrt((exp(params[2])^2)+(params[3]*length(vectorU)))*diag(vectorU))
-            matrixA <- diag(0, length(vectorU))
+            vectorA <- function(t) return(0*vectorU)
+            matrixGamma <- function(t) return(exp(params[2])*diag(vectorU))
+            nij <- colSums(geo.object$geography.object[[i]])
+            matrixA <- params[3]*diag(vectorU) -(geo.object$geography.object[[i]]*(params[3]/nij))
             return(list(a=vectorA, A=matrixA, Gamma=matrixGamma))
         }
-
-        constraints <- function(params) return((exp(params[2])^2)+(params[3]*length(tree$tip.label)) > 0)
-
-        model <- new(Class="PhenotypicADiag", name="DDlin", period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling, comment=comment)
+        
+        constraints <- function(params) return(params[3]<=0)
+        
+        model <- new(Class="PhenotypicModel", name="MC_geo", period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling,  comment=comment)
 
 
     return(model)
@@ -41,37 +44,52 @@
 #    Describe the periods on a 'phylo' tree
 ##################################################
 
-getMatrixCoalescenceJ <- function(tree, periods){
-    # The entry (k,l) of the matrix is the index j such that tau_j = t_{k,l}
-    matrixCoalescenceTimes <- findMRCA(tree, type="height")
-    n <- length(matrixCoalescenceTimes[,1])
-    matrixCoalescenceJ <- diag(0, n)
-    for(k in 1:n){
-        for(l in 1:n){
-            matrixCoalescenceJ[k,l] <- which(periods == matrixCoalescenceTimes[k,l])
+getStartingTimes <- function(tree){
+    # Returns a vector giving the starting time for each branch of a tree in format "phylo"
+    
+    nBranch = length(tree$edge.length)
+    starting_times <- rep(0, times=nBranch)
+    
+    # we add progressively for each branch the length of all parent branches in the vector "starting_times"
+    for(n1 in 1:nBranch){
+        n2 <- n1 + 1
+        while(n2 <= nBranch){
+            if(tree$edge[n2,1]==tree$edge[n1,2]){
+                starting_times[n2] <- starting_times[n1] + tree$edge.length[n1]
+            }
+            n2 <- n2+1
         }
     }
-
-    return(matrixCoalescenceJ)
+    
+    return(starting_times)
 }
+
 
 isATip <- function(tree, branch_number){
     return(!(tree$edge[branch_number,2] %in% tree$edge[,1]))
 }
 
-periodizeOneTree <- function(tree){
+periodizeOneTree_geo <- function(tree,geo.object){
     # Returns 3 vectors giving 
     # 1) the periods of the tree, 
     # 2) the starting times of all branches in the tree 
     # 3) the death time of all branches in the tree
-    
-    nodeheight <- nodeHeights(tree)
-    startingTimes <- nodeheight[,1]
-    endTimes <- nodeheight[,2]
+    hold<-nodeHeights(tree)
+    startingTimes <- hold[,1]
+    endTimes <- hold[,2]
     all_time_events <- sort(c(startingTimes, endTimes))
-    # the following removes identical entries in the vector
-    periods <- unique(all_time_events)
     
+    
+    nodetimes=max(branching.times(tree))-sort(branching.times(tree),decreasing=TRUE)
+	extv<-vapply(geo.object$geography.object,function(x)dim(x)[1],1)
+	outv<-c(1)
+	for(i in 2:length(extv)){
+		if(extv[i]!=extv[i-1]){
+			outv<-c(outv,i)
+		}}
+	
+	chg.times=which(!1:length(geo.object$times)%in%c(outv,length(geo.object$times)))
+	periods=sort(c(geo.object$times[chg.times],unique(startingTimes),max(endTimes)))
     return(list(periods=periods, startingTimes=startingTimes, endTimes=endTimes))
 }
 
@@ -87,7 +105,6 @@ endOfPeriods <- function(periodizing, tree){
     numbersCopy <- rep(0, times=nPeriods)
     numbersPaste <- rep(0, times=nPeriods)
     numbersLineages <- rep(0, times=nPeriods)
-    numbersLivingLineages <- rep(0, times=nPeriods)
 
     # We initialize the labeling of branches in the tree
     labelingLineages <- rep(0, times=nBranch)
@@ -100,7 +117,6 @@ endOfPeriods <- function(periodizing, tree){
         n <- 2
     }
     numbersLineages[1] <- n
-    numbersLivingLineages[1] <- n
     numbersCopy[1] <- 1
     numbersPaste[1] <- 2
     
@@ -114,13 +130,12 @@ endOfPeriods <- function(periodizing, tree){
             labelingLineages[newBranches[2]] <- n
             numbersCopy[i] <- labelingLineages[newBranches[1]-1]
             numbersPaste[i] <- n
-            numbersLivingLineages[i] <- numbersLivingLineages[i-1]+1
         # Else, tau_i is only a death time of one or many terminal branches.
         }else{
-            deadBranches <- which(tau_i == periodizing$endTimes)
-            numbersCopy[i] <- labelingLineages[ deadBranches[1] ]
+            numbersCopy[i] <- 0
+ 			#deadBranches <- which(tau_i == periodizing$endTimes)
+            #numbersCopy[i] <- labelingLineages[ deadBranches[1] ]
             numbersPaste[i] <- 0
-            numbersLivingLineages[i] <- numbersLivingLineages[i-1]-1
         }
         numbersLineages[i] <- n
     }
@@ -128,8 +143,9 @@ endOfPeriods <- function(periodizing, tree){
     permutationLabels <- labelingLineages[!(periodizing$endTimes %in% periodizing$startingTimes)]
     labeling <- tree$tip.label[order(permutationLabels)]
     
-    return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages, labeling=labeling, nLivingLineages=numbersLivingLineages))
+    return(list(copy=numbersCopy, paste=numbersPaste, nLineages=numbersLineages, labeling=labeling))
 }
+
 
 getLivingLineages <- function(i, eventEndOfPeriods){
     

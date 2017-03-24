@@ -1,4 +1,4 @@
-createModel_DDexp_geo <- function(tree,geo.object){
+.createModel_DDexp_geo <- function(tree,geo.object){
     
 
         comment <- "Diversity dependent exponential model with biogeography\n Implemented as in Drury et al. Systematic Biology."

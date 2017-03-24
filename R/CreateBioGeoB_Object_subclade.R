@@ -1,11 +1,4 @@
-##NOTE THIS SCRIPT takes a tree on which biogeobears stochastic maps were built after running a model like DEC
-##And builds a geo.object to be sent to fit_t_comp
-##v2 fixes an error where some subtrees could be labeled incorrectly, leading to erroneous calls of ranges while building the nat[[]] list
-
-require(geiger)
-require(phytools)
-require(data.table)
-CreateBioGeoB_Object_subclade<-function(anc.phylo,subclade.phylo,ana.events,clado.events,nat.only=FALSE){
+.CreateBioGeoB_Object_subclade<-function(anc.phylo,subclade.phylo,ana.events,clado.events,nat.only=FALSE){
 	phylo<-subclade.phylo
 	subclade.tips<-phylo$tip.label
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
@@ -147,7 +140,7 @@ CreateBioGeoB_Object_subclade<-function(anc.phylo,subclade.phylo,ana.events,clad
 				} else {
 					ogv<-geo.vector			##need to update old geo.vector
 					geo.vector<-vector(length=length(IN))
-					terms<-which(nat[[i-1]][,1]%chin%IN) #this should give the item numbers of old things
+					terms<-which(nat[[i-1]][,1]%in%IN) #this should give the item numbers of old things
 					geo.vector[match(nat[[i-1]][,1][terms],IN)]<-ogv[terms]
 					if(left<=totlen){
 						geo.vector[which(IN==phylo$tip.label[left])]<-lside
@@ -228,7 +221,7 @@ CreateBioGeoB_Object_subclade<-function(anc.phylo,subclade.phylo,ana.events,clad
 			for(j in 1:length(var.list)){
 				for(k in 1:length(var.list)){
 					if(j>k){
-						int.mat[j,k]<-ifelse(any(geo.list[[j]]%chin%geo.list[[k]]),1,0)
+						int.mat[j,k]<-ifelse(any(geo.list[[j]]%in%geo.list[[k]]),1,0)
 					}
 				}
 			}

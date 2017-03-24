@@ -1,6 +1,4 @@
-##This function sorts a previously constructed geo object according to the method used in Marc's code (should be merged with CreateGeoObject at some point, this is for testing purposes)
-
-resortGeoObject<-function(phylo,geo.object){
+.resortGeoObject<-function(phylo,geo.object){
 	gmat<-geo.object$geography.object
 	if(any(grepl("___",phylo$tip.label))|any(grepl("-",phylo$tip.label))|any(grepl("/",phylo$tip.label))){stop("script will not work with '___', '-', '+', '*','/', or '^' in any tip labels; remove these characters")}
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS

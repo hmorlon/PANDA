@@ -1,6 +1,6 @@
-stratified_BGB_to_tables<-function(tree,clado_events_tables,i){
+.stratified_BGB_to_tables<-function(tree,clado_events_tables,i){
 ##hack to get ana_events_table for constructing stochastic maps
-hold<-events_txt_list_into_events_table(events_txt_list=clado_events_tables[[i]]$anagenetic_events_txt_below_node, trtable=NULL, recalc_abs_ages=TRUE)
+hold<-.events_txt_list_into_events_table(events_txt_list=clado_events_tables[[i]]$anagenetic_events_txt_below_node, trtable=NULL, recalc_abs_ages=TRUE)
 rows<-which(clado_events_tables[[i]][,34]!="none")
 if(length(rows)<1){
 	ana.int<-NULL

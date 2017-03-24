@@ -9,7 +9,7 @@ params0<-c(0,pars)
 
 if(is.null(geography.object)){
 	if(model=="MC"){
-		mc.ob<-createModel_MC(phylo)
+		mc.ob<-.createModel_MC(phylo)
 		opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2
 		S<-opt$inferredParams[3]
@@ -18,7 +18,7 @@ if(is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDexp"){
-		ddexp.ob<-createModel_DDexp(phylo)
+		ddexp.ob<-.createModel_DDexp(phylo)
 		opt<-fitTipData(ddexp.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2
 		r<-opt$inferredParams[3]
@@ -27,7 +27,7 @@ if(is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDlin"){
-		ddlin.ob<-createModel_DDlin(phylo)
+		ddlin.ob<-.createModel_DDlin(phylo)
 		opt<-fitTipData(ddlin.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2
 		b<-opt$inferredParams[3]
@@ -39,10 +39,10 @@ if(is.null(geography.object)){
 
 if(!is.null(geography.object)){
 	if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have fewer components than internode intervals in phylo")}
-	sgeo<-resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in Marc code
+	sgeo<-.resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in Marc code
 	if(model=="MC"){
 		library(deSolve)
-		mc.ob<-createModel_MC_geo(phylo,sgeo)
+		mc.ob<-.createModel_MC_geo(phylo,sgeo)
 		opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2
 		S<-opt$inferredParams[3]
@@ -51,7 +51,7 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDexp"){
-		ddexp.ob<-createModel_DDexp_geo(phylo,sgeo)
+		ddexp.ob<-.createModel_DDexp_geo(phylo,sgeo)
 		opt<-fitTipData(ddexp.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2
 		r<-opt$inferredParams[3]
@@ -60,7 +60,7 @@ if(!is.null(geography.object)){
 		return(results)
 		}
 	if(model=="DDlin"){
-		ddlin.ob<-createModel_DDlin_geo(phylo,sgeo)
+		ddlin.ob<-.createModel_DDlin_geo(phylo,sgeo)
 		opt<-fitTipData(ddlin.ob,data,params0=params0,GLSstyle=TRUE)
 		sig2<-(exp(opt$inferredParams[2]))^2
 		b<-opt$inferredParams[3]

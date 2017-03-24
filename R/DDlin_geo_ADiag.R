@@ -2,7 +2,7 @@
 #    Bank of Classic 1D Phenotypic Models
 ##################################################
 
-createModel_DDlin_geo <- function(tree,geo.object){
+.createModel_DDlin_geo <- function(tree,geo.object){
     
 
         comment <- "Diversity dependent linear model with biogeography\n Implemented as in Drury et al. Systematic Biology."
