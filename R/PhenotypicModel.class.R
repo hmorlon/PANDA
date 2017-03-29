@@ -422,7 +422,7 @@ setMethod(
             cat("Computation time :", format(end-beginning), "\n")
         }
 
-        return(list(value = optimisation$value, inferredParams = inferredParams,convergence=optimisation$convergence))
+        return(list(value = optimisation$value, inferredParams = inferredParams, convergence = optimisation$convergence))
     }
 )
 
