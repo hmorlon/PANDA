@@ -1,6 +1,21 @@
+# Git files
 ^\.git$
 ^\.gitignore$
+
+# File used to automatically check package build on https://travis-ci.org/hmorlon/PANDA
 ^\.travis\.yml$
+
+# RPANDA tarball which may be present in current directory
 ^RPANDA_.*\.tar\.gz
+
+# Some R cache files
 \.Rapp\.history$
 \.RData$
+
+# Files currently present on github but which are not released yet
+^R/Loading.*
+^R/Phenotypic.*
+^R/ModelBank.*
+^R/mcmc.*
+^R/birthdeath\.tree\.rateshift\.R
+^R/Vraisemblance-mort-IMACS\.R

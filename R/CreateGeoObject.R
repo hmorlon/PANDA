@@ -54,7 +54,7 @@ CreateGeoObject<-function(phylo,map){
 		}
 ####				
 ####
-	if(geiger::is.phylo(map)){
+	if(any(class(map)=="phylo")){
 	for(i in 1:length(mat[,1])){
 		if(mat[i,3]==0){
 		mat[i,3]<-as.character(match(mat[i,2],phylo$tip.label))

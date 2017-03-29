@@ -1,3 +1,4 @@
+#This file was previously called "PhenotypicModel_JPDv2", and modifies the PhenotypicModel of Marc so that likelihood optimization happens using the approach of Drury et al. 2016 in Syst Biol (direct calculation of z0, the state at the root, log likelihood calculated as suggested by Julien)
 setClass(
     Class = "PhenotypicModel",
     representation = representation(
@@ -282,19 +283,25 @@ setMethod(
         if(object@constraints(params)){
             n <- length(data)
             tipdistribution <- getTipDistribution(object, params)
+            V<-tipdistribution$Sigma
+			data<-data[rownames(V)]
+	
+  			op <- getOption("show.error.messages")
+  			options(show.error.messages=FALSE)
+			IV=try(solve(V))
+  			options(show.error.messages=op)
+  			if(class(IV)=="try-error"){
+    			IV=pseudoinverse(V) 
+  				if(max(IV)==0){return(Inf)}
+  			}
 
             dataminusXT <- matrix(data - tipdistribution$mean, nrow=1)
             dataminusX <- matrix(data - tipdistribution$mean, ncol=1)
 
-            ProdVectoriel = dataminusXT %*% solve( tipdistribution$Sigma ) %*% dataminusX
-            deter = det( tipdistribution$Sigma )
+            ProdVectoriel = dataminusXT %*% IV %*% dataminusX
 
-            calcul <-  (ProdVectoriel + log( deter ) + n*log(2*pi)) /2
-            #if(deter <= 0 || ProdVectoriel < 0){
-            #    calcul <- -Inf
-            #}else{
-            #    calcul <-  (ProdVectoriel + log( deter ) + n*log(2*pi)) /2
-            #}
+            calcul <-  (ProdVectoriel + determinant(V)$modulus + n*log(2*pi)) /2
+			if(is.na(calcul) | is.infinite(calcul)){calcul=-1000000}
         }else{
             calcul <- -Inf
         }
@@ -315,7 +322,6 @@ setMethod(
 setGeneric(
     name="fitTipData",
     def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
-)
 
 setMethod(
     f="fitTipData",
@@ -332,6 +338,8 @@ setMethod(
         if(!is.null(rownames(data))){
             data <- data[object@tipLabels,]
         }
+
+        n <- length(data)
 
         # If params0 is not given, we use the 'params0' value contained in the model
         if(is.null(params0)){
@@ -350,14 +358,28 @@ setMethod(
 
                 if(GLSstyle){
                     tipdistribution <- getTipDistribution(object, c(0,params))
-                    m0 <- (1/sum(colSums(tipdistribution$Sigma))) * colSums(solve( tipdistribution$Sigma )) %*% data
+                  
+		            V<-tipdistribution$Sigma
+		            data<-data[rownames(V)]
+		  			op <- getOption("show.error.messages")
+		  			options(show.error.messages=FALSE)
+					IV=try(solve(V))
+		  			options(show.error.messages=op)
+		  			if(class(IV)=="try-error"){
+		    			IV=pseudoinverse(V) 
+		  				if(max(IV)==0){return(Inf)}
+		  			}
+		
+                    I<-matrix(rep(1,n))
+
+                    m0 <-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%as.matrix(data)[,1]
+
                     dataminusXT <- matrix(data - rep(m0, times=n), nrow=1)
                     dataminusX <- matrix(data - rep(m0, times=n), ncol=1)
 
-                    ProdVectoriel = dataminusXT %*% solve( tipdistribution$Sigma ) %*% dataminusX
-                    deter = det( tipdistribution$Sigma )
+                    ProdVectoriel = dataminusXT %*% IV %*% dataminusX
 
-                    calcul <-  (ProdVectoriel + log( deter ) + n*log(2*pi)) /2
+                    calcul <-  (ProdVectoriel + determinant(V)$modulus+ n*log(2*pi)) /2
                     params <- c(m0, params)
 
                 }else{
@@ -377,7 +399,20 @@ setMethod(
         # In GLS-style, we got all parameters except the first one, 'm0' that we compute through a last call to getTipDistribution
         if(GLSstyle){
             tipdistribution <- getTipDistribution(object, c(0,inferredParams))
-            m0 <- (1/sum(colSums(tipdistribution$Sigma))) * (colSums(solve( tipdistribution$Sigma )) %*% data)
+
+		    V<-tipdistribution$Sigma
+		  	op <- getOption("show.error.messages")
+		  	options(show.error.messages=FALSE)
+			IV=try(solve(V))
+		  	options(show.error.messages=op)
+		  	if(class(IV)=="try-error"){
+		    	IV=pseudoinverse(V) 
+		  		if(max(IV)==0){return(Inf)}
+		  	}
+		    data<-data[rownames(V)]
+            I<-matrix(rep(1,n))
+
+            m0 <-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%as.matrix(data)[,1]
             inferredParams <- c(m0, inferredParams)
         }
         names(inferredParams) <- object@paramsNames
@@ -387,7 +422,7 @@ setMethod(
             cat("Computation time :", format(end-beginning), "\n")
         }
 
-        return(list(value = optimisation$value, inferredParams = inferredParams))
+        return(list(value = optimisation$value, inferredParams = inferredParams,convergence=optimisation$convergence))
     }
 )
 
@@ -456,8 +491,7 @@ setMethod(
                 }
                 ylim <- c( min(findLim) , max( findLim ) )
                 ylim <- c( ylim[1] - (ylim[2]-ylim[1])/10, ylim[2] + (ylim[2]-ylim[1])/10)
-            }
-            else{ if(v){ cat("Simulates step-by-step the whole trajectory, but returns only the tip data.\n") } }
+            }else{ if(v){ cat("Simulates step-by-step the whole trajectory, but returns only the tip data.\n") } }
             
             initialCondition <- object@initialCondition(params)
             X <- rnorm(length(initialCondition$mean), initialCondition$mean, initialCondition$var)

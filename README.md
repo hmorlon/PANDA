@@ -1,12 +1,23 @@
 # RPANDA
 ##R: Phylogenetic ANalyses of DiversificAtion
 
-Implements fits of diversification models to phylogenetic data. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. Eco Lett (2015) and Lewitus and Morlon (submitted).
+Implements fits of diversification models to phylogenetic data. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. Eco Lett (2015), Lewitus & Morlon Syst Biol (2016), and Drury et al. Syst Biol (2016).
 
-The current stable version of the RPANDA package (1.1) is available on the CRAN repository.
-[http://cran.r-project.org/web/packages/RPANDA/index.html](http://cran.r-project.org/web/packages/RPANDA/index.html)
+The current stable version of the RPANDA package (1.2) is available on the CRAN repository.
+[https://cran.r-project.org/package=RPANDA](https://cran.r-project.org/package=RPANDA)
 
 ###**Package Installation**
+
+**From gitHub**
+You can install RPANDA directly from gitHub with devtools:
+
+```
+library(devtools)
+
+install_github("hmorlon/PANDA")
+
+```
+
 
 **From the binaries**
 
@@ -24,8 +35,6 @@ Then, for compiling the binary:
 ```
 R CMD INSTALL --build RPANDA_1.X.tar.gz
 ```
-
-Note: You must have gcc/gfortran, rtools... installed
 
 
 ###**Report an issue**

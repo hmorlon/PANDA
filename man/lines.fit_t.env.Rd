@@ -55,12 +55,14 @@ data(InfTemp)
 
 # Simulate trait on the Cetacean tree
 set.seed(123)
-trait<-rTraitCont(Cetacea)
+trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
+					root.value=0, step=0.01, plot=TRUE)
+
 
 ## Fit the Environmental-exponential model with different smoothing parameters
 
-result1=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE))
-result2=fit_t_env(Cetacea, trait, env_data=InfTemp, par=list(scale=TRUE, df=10))
+result1=fit_t_env(Cetacea, trait, env_data=InfTemp, scale=TRUE)
+result2=fit_t_env(Cetacea, trait, env_data=InfTemp, scale=TRUE, df=10)
 
 # first plot result1
 plot(result1, lwd=3)
