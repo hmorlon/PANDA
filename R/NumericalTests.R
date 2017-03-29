@@ -65,7 +65,7 @@ for(t in exp(seq(-2,6,length.out = 20))[1:16]){
   f=1
   mlambda=1e-20
   Mlambda=1e10
-  nlambda=2000
+  nlambda=200
   nt=200
   
   cP=try(check.Psi(t,sigma,alpha,mu,lambda_0,f,Nsim=10000,nt=nt,nlambda = nlambda,mlambda = mlambda,Mlambda = Mlambda))
@@ -86,19 +86,6 @@ for(t in exp(seq(-2,6,length.out = 20))[1:16]){
     }}
   print(dataFramePsi[nrow(dataFramePsi),])
 }
-
-func=function(x){(x)}
-par(mfrow=c(2,3))
-plot(dataFramePsi[dataFramePsi[,"id"]==id,"computedPsi"],dataFramePsi[dataFramePsi[,"id"]==id,"simulatedPsi"],xlab = "computed Psi", ylab = "simulated Psi")
-plot(dataFramePsi[dataFramePsi[,"id"]==id,"computedKhi"],dataFramePsi[dataFramePsi[,"id"]==id,"simulatedKhi"],xlab = "computed Khi", ylab = "simulated Khi")
-plot(dataFramePsi[dataFramePsi[,"id"]==id,"computedPhi"],dataFramePsi[dataFramePsi[,"id"]==id,"simulatedPhi"],xlab = "computed Phi", ylab = "simulated Phi")
-plot(dataFramePsi[dataFramePsi[,"id"]==id,"t"],func(dataFramePsi[dataFramePsi[,"id"]==id,"computedPsi"]),type='l',xlab="t",ylab="Psi")
-lines(dataFramePsi[dataFramePsi[,"id"]==id,"t"],func(dataFramePsi[dataFramePsi[,"id"]==id,"simulatedPsi"]),col="red")
-legend(30,1,col=c(1,2),legend = c("computed","simulated"),lty = 1)
-plot(dataFramePsi[dataFramePsi[,"id"]==id,"t"],func(dataFramePsi[dataFramePsi[,"id"]==id,"computedKhi"]),type='l',xlab="t",ylab="Khi")
-lines(dataFramePsi[dataFramePsi[,"id"]==id,"t"],func(dataFramePsi[dataFramePsi[,"id"]==id,"simulatedKhi"]),col="red")
-plot(dataFramePsi[dataFramePsi[,"id"]==id,"t"],func(dataFramePsi[dataFramePsi[,"id"]==id,"computedPhi"]),type='l',xlab="t",ylab="Phi")
-lines(dataFramePsi[dataFramePsi[,"id"]==id,"t"],func(dataFramePsi[dataFramePsi[,"id"]==id,"simulatedPhi"]),col="red")
 
 func=function(x){(x)}
 par(mfrow=c(2,2))

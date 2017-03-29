@@ -1,24 +1,50 @@
 library(geiger)
 library(ape)
+library(phytools)
 
 birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
-                                       f.lamb=function(x,y){exp(-alpha*x)*y}, f.mu=function(x,y){y}, lamb_shift=0,
+                                       f.lamb=function(x,y){y}, f.mu=function(x,y){y}, lamb_shift=0,relative_death=0,
                                        new_lamb_law="uniform",new_mu_law="uniform",alpha=0, sigma=0.1,lamb_max=1,lamb_min=0,mu_min=0,mu_max=0, time.stop = 0, 
-                                       sigma_mu=0,taxa.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE, condition="time")
-# start with only 1 lineage, not 2.
-# (not yet, for the moment constant rate only, but can easily be implemented) allow rate variation in time as specified by f.lamb, f.mu and the parameters lamb_par and mu_par, but 
-# the parameters of the time variation are given from the past to the present
-# extinct lineages can be pruned. Also return number of lineages through time.
-# Note: the resulting tree has no root length. This root lenght is given by the first time when there is an event, i.e. $times[2] 
-#At a speciation event, each new lineage get a new rate with probability theta. This new rate is uniformly 
-#drawn in [0, lamb_max]
+                                       sigma_mu=0,taxa.stop = Inf, return.all.extinct=TRUE, prune.extinct=TRUE, condition="time",nShiftMax=Inf)
 
-#new_lamb_law can be uniform (between 0 and lamb_max), normal or lognormal (parameter sigma)
-#If we want the same model as what we have in the likelihood, we need theta=1, new_lamb_law="normal", mu_par=mu_max=0
+# theta probability to have a shift at a speciation event (independant for the two new lineages)
+# lamb_par parameters of the birth rate function, i.e. initial speciation rate if you keep f.lamb the default
+# mu_par parameters of the birth rate function, i.e. initial extinction rate if you keep f.mu the default
+# f.lamb , f.mu could theoretically be used to have rates variing through time but I have to modify the function first, so for now it must stay the default
+# condition="time" the process stop after a certain time or number of taxa (if "taxa") is reached (or before if it goes extinct and return.all.extinct=TRUE)
+# time.stop, taxa.stop time or number of tips before the process is stoped
+  
+# new_lamb_law the probability law from which new speciation rates are drawn. Can be "uniform", "normal", "lognormal", "normal*t" (normal with standard 
+# deviation proportional to the length of the branch), "lognormal*shift", "normal+shift", "normal*shift" (lognormal or 
+# normal with mode the previous speciation rate * (or +) lamb_shift)
+  
+# new_mu_law the probability law from which new death rates are drawn. Can be "uniform", "normal", "lognormal","normal*t" (normal with standard 
+# deviation proportional to the length of the branch), "diversify" (constant diversification rate) or "turnover" (constant turnover rate)
+# Yet I never used it with varying extinction rate, so I am not sure there would be no problem. To have constant extinction rate 
+# set new_mu_law="uniform", mu_min=mu_max=mu_par
+
+# relative_death For new_mu_law="diversify" or "turnover", diversification or turnover rate. Not used in other cases
+# sigma=0.1 standard deviation for new_lamb_law = "normal", "lognormal", "normal*t", "lognormal*shift", "normal+shift", "normal*shift"
+# sigma_mu standard deviation for new_mu_law = "normal", "lognormal", "normal*t"
+
+# lamb_max,lamb_min,mu_min,mu_max, limits of the uniform laws
+# return.all.extinct if FALSE the fuction is runned until we get a tree that don't become extinct before the stopping condition is reached 
+# prune.extinct are extinct taxa removed from the phylogeny ?
+
+# nShiftMax : if this number of shifts in the phylogeny is reached, theta is set to 0
+
+# The function returns a list list with:
+# list$tree the resulting tree
+# list$rates the rate category for each branch
+# list$lamb and list$mu the speciation and extinctio rate of each rate category (so that speciation rate of each branch is obtained 
+# with list$lamb$par[list$rates])
+# list$times and list$nblineages speciation times and corresponding number of lineages 
+
 {
   lamb=list(fun=f.lamb,par=lamb_par)
   mu=list(fun=f.mu,par=mu_par)
   rates=c()
+  nShift=0
   
   while (1) {
     
@@ -30,7 +56,7 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
     #print(dt)
     t<-dt
     
-    if (t >= time.stop & condition=="time") {
+    if ((t >= time.stop| 1>taxa.stop) & condition=="time") {
       t <- time.stop
     	alive<-1
     	rates<-c(1)
@@ -55,7 +81,8 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
     }else{
       u=runif(2)
       for(i in 1:2){
-        if(u[i]<theta){
+        if(u[i]<theta & nShift<nShiftMax){
+          nShift=nShift+1
           rates=c(rates,length(lamb$par)+1)
           lamb$fun=c(lamb$fun,function(x,y){exp(-alpha*x)*y})
           if(new_lamb_law=="uniform"){
@@ -68,6 +95,8 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
               lamb$par=c(lamb$par,new_lambda)
           }else if (new_lamb_law=="lognormal"){
               lamb$par=c(lamb$par,rlnorm(1, meanlog = log(lamb$par[[1]]),sdlog = sigma))
+          }else if (new_lamb_law=="lognormal*shift"){
+            lamb$par=c(lamb$par,rlnorm(1, meanlog = log(lamb$par[[1]]*lamb_shift),sdlog = sigma))
           }else if (new_lamb_law=="normal*t"){
             new_lambda=rnorm(1,mean=lamb$par[[i]],sd=sigma*t)
             while(new_lambda<0){
@@ -96,6 +125,12 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
               new_mu=rnorm(1,mean=mu$par[[1]],sd=sigma)
             }
             mu$par=c(mu$par,new_mu)
+          }else if (new_mu_law=="diversify"){
+            new_mu=lamb$par[length(lamb$par)]-relative_death
+            mu$par=c(mu$par,max(0,new_mu))
+          }else if (new_mu_law=="turnover"){
+            new_mu=lamb$par[length(lamb$par)]*relative_death
+            mu$par=c(mu$par,new_mu)
           }else if (new_mu_law=="lognormal"){
             mu$par=c(mu$par,rlnorm(1, meanlog = log(mu$par[[1]]),sdlog = sigma_mu))
           }else if (new_mu_law=="normal*t"){
@@ -120,7 +155,7 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
     	
     	repeat {
     	  if (sum(alive) == 0)	 break
-    	  if (sum(alive)==taxa.stop & condition=="taxa") {
+    	  if (sum(alive)==taxa.stop){#} & condition=="taxa") {
     	    if(length(lamb$par)<=1){
     	      b=max(lamb$fun(t,lamb$par),.Machine$double.eps)
     	      d=mu$fun(t,mu$par)
@@ -188,7 +223,8 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
     		    nblineages<-c(nblineages,sum(alive))
     		    u=runif(2)
     		    for(j in 1:2){
-    		      if(u[j]<theta){
+    		      if(u[j]<theta & nShift<nShiftMax){
+    		        nShift=nShift+1
     		        rates=c(rates,length(lamb$par)+1)
     		        lamb$fun=c(lamb$fun,function(x,y){exp(-alpha*x)*y})
     		        if(new_lamb_law=="uniform"){
@@ -201,8 +237,10 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
     		          lamb$par=c(lamb$par,new_lambda)
     		        }else if (new_lamb_law=="lognormal"){
     		          lamb$par=c(lamb$par,rlnorm(1, meanlog = log(lamb$par[[i]]),sdlog = sigma))
-    		        }
-    		        else if (new_lamb_law=="normal*t"){
+    		        }else if (new_lamb_law=="lognormal*shift"){
+    		          #mean lamb$par[[i]] iff lamb_shift==exp(-sigma^2/2)
+    		          lamb$par=c(lamb$par,rlnorm(1, meanlog = log(lamb$par[[i]]*lamb_shift),sdlog = sigma))
+    		        }else if (new_lamb_law=="normal*t"){
     		          new_lambda=rnorm(1,mean=lamb$par[[i]],sd=sigma*edge.length[x])
     		          while(new_lambda<0){
     		            new_lambda=rnorm(1,mean=lamb$par[[i]],sd=sigma*edge.length[x])
@@ -229,6 +267,12 @@ birthdeath.tree.rateshift <- function (theta,lamb_par, mu_par,
     		          while(new_mu<0){
     		            new_mu=rnorm(1,mean=mu$par[[i]],sd=sigma_mu)
     		          }
+    		          mu$par=c(mu$par,new_mu)
+    		        }else if (new_mu_law=="turnover"){
+    		          new_mu=lamb$par[length(lamb$par)]*relative_death
+    		          mu$par=c(mu$par,new_mu)
+    		        }else if (new_mu_law=="diversify"){
+    		          new_mu=lamb$par[length(lamb$par)]+relative_death
     		          mu$par=c(mu$par,new_mu)
     		        }else if (new_mu_law=="lognormal"){
     		          mu$par=c(mu$par,rlnorm(1, meanlog = log(mu$par[[i]]),sdlog = sigma_mu))
@@ -366,4 +410,24 @@ rigth.order=function(phy,rates){
   return(list(tree=phy,rates=rates))
 }
 
-
+mean.rate=function(tree,rate){
+  nh=nodeHeights(tree)
+  times=sort(unique(c(nh[,1],nh[,2])))
+  meanRate=c()
+  nb=0
+  keep.i=c()
+  for(i in 1:(length(times)-1)){
+    t=times[i]
+    which.edge=(nh[,1]<=t & nh[,2]>t)
+    if(sum(which.edge)>nb){
+      nb=sum(which.edge)
+    meanRate=c(meanRate,sum(rate[which.edge])/sum(which.edge))
+    keep.i=c(keep.i,i)
+    }
+  }
+  keep.i=c(keep.i,length(times))
+  return(rbind(times[keep.i],c(meanRate[1],meanRate)))
+}
+# 
+# X=mean.rate(tree,true.rate)
+# plot.default(t(X), xaxs = "r", yaxs = "r",  type = "S")
