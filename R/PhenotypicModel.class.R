@@ -322,6 +322,7 @@ setMethod(
 setGeneric(
     name="fitTipData",
     def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
+)
 
 setMethod(
     f="fitTipData",
