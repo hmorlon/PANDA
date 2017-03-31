@@ -29,7 +29,7 @@ Toeplitz2=function (x,...)
 
 
 Phi=function(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
-  lambdaIs=seq(log(mlambda)+min(0,log(alpha)),log(Mlambda)+max(0,log(alpha)),(log(Mlambda)-log(mlambda)+abs(log(alpha)))/nlambda)
+  lambdaIs=seq(log(mlambda),log(Mlambda),(log(Mlambda)-log(mlambda))/nlambda)
   if(sigma==0){
     M=diag(rep(1,nlambda+1))
   }else{
@@ -219,7 +219,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
 
 
 createLikelihood_death <- function(phylo, root_depth=0, relative = F,nt=1000,nlambda=100,n=20, 
-                                   nCPU=1, method="Higham08.b",banded=0,sparse=F){
+                                   nCPU=1, method="Higham08.b",banded=0,sparse=F,mlambda=1e-5,Mlambda=1e5){
   
   nbtips = Ntip(phylo)
   edge = phylo$edge
@@ -266,13 +266,8 @@ createLikelihood_death <- function(phylo, root_depth=0, relative = F,nt=1000,nla
       
       # if (any(lambda2 <= 0)) return(-Inf)
       if (any(c(mu,f, alpha, sigma) < 0)) return(-Inf)
-      M=exp(max(lambda2))*(1+n*sigma)
-      # if(alpha>1) M=M*alpha
-      minL=exp(min(lambda2))/(1+n*sigma)
-      if (mu >0) minL=min(minL,mu/10000)
-      # if(alpha<1) minL=minL*alpha
       
-      phi=Phi_FFT(sigma,alpha,minL,M,nlambda,mu,f,tf=tf,by=tf/nt)
+      phi=Phi_FFT(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tf=tf,by=tf/nt)
       
       logLik=mclapply(1:(length(lambda2)-1),function(i){
         if(type[i]==1){
@@ -304,13 +299,8 @@ createLikelihood_death <- function(phylo, root_depth=0, relative = F,nt=1000,nla
       
       # if (any(lambda2 <= 0)) return(-Inf)
       if (any(c(mu,f,sigma) < 0)) return(-Inf)
-      M=exp(max(lambda2))*(1+n*sigma)
-      if(alpha>1) M=M*alpha
-      minL=exp(min(lambda2))/(1+n*sigma)
-      if (mu >0) minL=min(minL,mu/10000)
-      if(alpha<1) minL=minL*alpha
       
-      phi=Phi(sigma,alpha,minL,M,nlambda,mu,f,tf=tf,by=tf/nt)
+      phi=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tf=tf,by=tf/nt)
       
       logLik=mclapply(1:(length(lambda2)-1),function(i){
         if(type[i]==1){
