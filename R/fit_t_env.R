@@ -47,7 +47,13 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         subdivisions<-par$subdivisions
     }
 
-    
+    # Max difference between tips and present day
+    if(is.null(par[["maxdiff"]])){
+        maxdiff<-0
+    }else{
+        maxdiff<-par$maxdiff
+    }
+
     # Control options for the optimizer
     # set it to maximize the log-likelihood (allows using the likelihood function in mcmc without inverting the sign)
     control$fnscale=-1
@@ -166,7 +172,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
    
     # Optimization
     #estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, mtot=tot_time, subdivisions=subdivisions), model)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
-     estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo=phylo, data=data, model=model, param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, mtot=tot_time, subdivisions=subdivisions)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
+     estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo=phylo, data=data, model=model, param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, mtot=tot_time, subdivisions=subdivisions, maxdiff=maxdiff)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
     
     ## Results
     
@@ -193,7 +199,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         
         # Root value function
         return_root<-function(param, mtot, times, fun, model, tips, is_error){
-            phylo <- .CLIMtransform(phylo, param=param, mtot=mtot, times=times, funEnv=fun, model=model, tips=tips, subdivisions=subdivisions)
+            phylo <- .CLIMtransform(phylo, param=param, mtot=mtot, times=times, funEnv=fun, model=model, tips=tips, subdivisions=subdivisions, maxdiff=maxdiff)
             # Add measurement error
             if(is_error){
                 phylo$edge.length[index_error]<-phylo$edge.length[index_error]+error^2 # assume the "se" are provided in the error vector
