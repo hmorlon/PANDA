@@ -38,8 +38,7 @@ Class \code{"\linkS4class{PhenotypicModel}"}, directly.
 	 }
 }
 \references{
-Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic framework including traits coevolving across interacting lineages Systematic Biology \n
-and the associated Supplementary material.
+Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic framework including traits coevolving across interacting lineages Systematic Biology, and the associated Supplementary material.
 }
 \author{
 Marc Manceau
