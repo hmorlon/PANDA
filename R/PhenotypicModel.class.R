@@ -1,4 +1,4 @@
-#This file was previously called "PhenotypicModel_JPDv2", and modifies the PhenotypicModel of Marc so that likelihood optimization happens using the approach of Drury et al. 2016 in Syst Biol (direct calculation of z0, the state at the root, log likelihood calculated as suggested by Julien)
+#The superclass
 setClass(
     Class = "PhenotypicModel",
     representation = representation(
@@ -58,7 +58,67 @@ setClass(
 
 
 ###################################
-#    Getters and setters
+#    Subclasses
+###################################
+#a new subclass has been defined for each class of models for which the "getTipDistribution" function had been optimized.
+
+setClass(
+    Class = "PhenotypicACDC",
+    representation = representation(
+        matrixCoalescenceTimes="matrix"
+    ),
+    contains="PhenotypicModel"
+)
+
+setClass(
+    Class = "PhenotypicADiag",
+    representation = representation(),
+    contains="PhenotypicModel"
+)
+
+setClass(
+    Class = "PhenotypicBM",
+    representation = representation(
+        matrixCoalescenceTimes="matrix"
+    ),
+    contains="PhenotypicModel"
+)
+
+setClass(
+    Class = "PhenotypicDD",
+    representation = representation(
+        matrixCoalescenceJ="matrix",
+        nLivingLineages="numeric"
+    ),
+    contains="PhenotypicModel"
+)
+
+setClass(
+    Class = "PhenotypicGMM",
+    representation = representation(
+        n1="numeric",
+        n2="numeric"
+    ),
+    contains="PhenotypicModel"
+)
+
+setClass(
+    Class = "PhenotypicOU",
+    representation = representation(
+        matrixCoalescenceTimes="matrix"
+    ),
+    contains="PhenotypicModel"
+)
+
+setClass(
+    Class = "PhenotypicPM",
+    representation = representation(),
+    contains="PhenotypicModel"
+)
+
+
+###################################
+#    Basic methods
 ###################################
 
 setMethod(
@@ -163,392 +223,3 @@ setMethod(
     }
 )
 
-###################################
-#    Distribution
-###################################
-
-updateBranchingMatrixSigma <- function(Sigma, copy, paste){
-    # copy of a branching lineage in the matrix of covariances 'Sigma'
-    n = length(Sigma[1,])
-    newSigma <- diag(0, n+1)
-    
-    newSigma[1:(paste-1),1:(paste-1)] <- Sigma[1:(paste-1),1:(paste-1)]
-    newSigma[paste,1:(paste-1)] <- Sigma[copy,1:(paste-1)]
-    newSigma[1:(paste-1),paste] <- Sigma[1:(paste-1),copy]
-    newSigma[paste,paste] <- Sigma[copy,copy]
-
-    if(paste < n+1){
-        newSigma[(paste+1):(n+1),1:(paste-1)] <- Sigma[paste:n,1:(paste-1)]
-        newSigma[(paste+1):(n+1),paste] <- Sigma[paste:n,copy]
-        newSigma[1:(paste-1),(paste+1):(n+1)] <- Sigma[1:(paste-1),paste:n]
-        newSigma[paste,(paste+1):(n+1)] <- Sigma[copy,paste:n]
-        newSigma[(paste+1):(n+1),(paste+1):(n+1)] <- Sigma[paste:n, paste:n]
-    }
-
-    return(newSigma)
-}
-
-setGeneric(
-    name="getTipDistribution",
-    def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution")}
-)
-
-setMethod(
-    f="getTipDistribution",
-    signature="PhenotypicModel",
-    definition=function(object, params, v=FALSE){
-        if(v){
-            cat("*** Computation of tip traits distribution through ODE resolution ***\n(Method working for any model)\n")
-            beginning <- Sys.time()
-        }
-        # Initialisation of the distribution at the beginning of the process
-        initialCondition <- object@initialCondition(params)
-        mean <- initialCondition$mean
-        Sigma <- initialCondition$var
-
-        # Sur chaque periode [t_i, t_i+1[ :
-        for(i in 1:(length(object@period)-1)){
-
-            # If there is a branching event at the beginning of the period, we update the mean and covariances
-            if(object@numbersPaste[i] != 0){
-                # update of the vector of means
-                if( object@numbersPaste[i] <= length(mean) ){
-                    mean <- c( mean[1:(object@numbersPaste[i]-1)], mean[object@numbersCopy[i]], mean[object@numbersPaste[i]:length(mean)] )
-                }else{
-                    mean <- c( mean, mean[object@numbersCopy[i]] )
-                }
-                # update of the matrix of covariances
-                Sigma <- updateBranchingMatrixSigma(Sigma, object@numbersCopy[i], object@numbersPaste[i])
-            }
-
-            # On the considered period, the model is determined by
-            aAGammai <- object@aAGamma(i, params)
-            ai <- aAGammai$a
-            Ai <- aAGammai$A
-            Gammai <- aAGammai$Gamma
-            n = length(mean)
-            # We now need to build the ODE system such that dSigma/dt = -A Sigma - Sigma A + Gamma
-            derivativeSigma <- function(t,y,params){
-                Sigma = matrix(y,nrow=n)
-                dSigma <- -Ai %*% Sigma - t(Sigma) %*% t(Ai) + Gammai(t) %*% t(Gammai(t))
-                return(list(dSigma))
-            }
-
-            # And we build a second ODE system such that dm/dt = -Ai m + ai
-            derivativemean <- function(t,y,params){
-                return(list(-Ai %*% y + ai(t)))
-            }
-
-            # We update the vectors of means and covariances through their ODE system resolution
-            times <- c(object@period[i], object@period[i+1])
-            if((object@period[i+1]-object@period[i])> 1e-15 ){
-                mean  <- ode(mean, times, derivativemean)[2, 2:(n+1)]
-                sigma <- ode(as.vector(Sigma), times, derivativeSigma)[2, 2:(n*n+1)]
-            }
-            Sigma = matrix(sigma,nrow=n)
-        }
-        mean <- matrix(data=mean, ncol=1)
-        rownames(mean) <- object@tipLabels
-        rownames(Sigma) <- object@tipLabels
-        colnames(Sigma) <- object@tipLabels
-
-        if(v){
-            end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
-        }
-
-        return(list(mean = mean, Sigma = Sigma))
-    }
-)
-
-
-setGeneric(
-    name="getDataLikelihood",
-    def=function(object="PhenotypicModel", data="numeric", params="numeric", v="logical"){standardGeneric("getDataLikelihood")}
-)
-
-setMethod(
-    f="getDataLikelihood",
-    signature="PhenotypicModel",
-    definition=function(object, data, params, v=FALSE){
-        if(v){
-            cat("*** Computing -log( likelihood ) of tip trait data under a given set of parameters ***\n")
-            beginning <- Sys.time()
-        }
-
-        if(!is.null(rownames(data))){
-            data <- data[object@tipLabels,]
-        }
-
-        if(object@constraints(params)){
-            n <- length(data)
-            tipdistribution <- getTipDistribution(object, params)
-            V<-tipdistribution$Sigma
-			data<-data[rownames(V)]
-	
-  			op <- getOption("show.error.messages")
-  			options(show.error.messages=FALSE)
-			IV=try(solve(V))
-  			options(show.error.messages=op)
-  			if(class(IV)=="try-error"){
-    			IV=pseudoinverse(V) 
-  				if(max(IV)==0){return(Inf)}
-  			}
-
-            dataminusXT <- matrix(data - tipdistribution$mean, nrow=1)
-            dataminusX <- matrix(data - tipdistribution$mean, ncol=1)
-
-            ProdVectoriel = dataminusXT %*% IV %*% dataminusX
-
-            calcul <-  (ProdVectoriel + determinant(V)$modulus + n*log(2*pi)) /2
-			if(is.na(calcul) | is.infinite(calcul)){calcul=-1000000}
-        }else{
-            calcul <- -Inf
-        }
-
-        if(v){
-            end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
-        }
-        return(as.numeric(calcul))
-    }
-)
-
-
-###################################
-#    Parameter inferences
-###################################
-
-setGeneric(
-    name="fitTipData",
-    def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
-)
-
-setMethod(
-    f="fitTipData",
-    signature="PhenotypicModel",
-    definition=function(object, data, params0=NULL, GLSstyle=FALSE, v=TRUE){
-        if(v){
-            cat("*** Fit of tip trait data ***\n")
-            cat("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
-            cat("**WARNING** : This function uses the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\n distinct parameter sets for the initialisation.")
-            beginning <- Sys.time()
-        }
-
-        n <- length(data)
-        if(!is.null(rownames(data))){
-            data <- data[object@tipLabels,]
-        }
-
-        n <- length(data)
-
-        # If params0 is not given, we use the 'params0' value contained in the model
-        if(is.null(params0)){
-            params0 <- object@params0
-        }
-        # In "GLS-style" mode, there is an analytical expression for the first parameter, namely m0
-        if(GLSstyle){
-            params0 <- params0[2:length(params0)]
-        }
-
-        # computing the mean vector and variance matrix for the model, returns -log(likelihood) (a real number)
-        toBeOptimized <- function(params){
-
-            if(GLSstyle){paramsPrVerif <- c(0, params)}else{paramsPrVerif <- params}
-            if(object@constraints(paramsPrVerif)){
-
-                if(GLSstyle){
-                    tipdistribution <- getTipDistribution(object, c(0,params))
-                  
-		            V<-tipdistribution$Sigma
-		            data<-data[rownames(V)]
-		  			op <- getOption("show.error.messages")
-		  			options(show.error.messages=FALSE)
-					IV=try(solve(V))
-		  			options(show.error.messages=op)
-		  			if(class(IV)=="try-error"){
-		    			IV=pseudoinverse(V) 
-		  				if(max(IV)==0){return(Inf)}
-		  			}
-		
-                    I<-matrix(rep(1,n))
-
-                    m0 <-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%as.matrix(data)[,1]
-
-                    dataminusXT <- matrix(data - rep(m0, times=n), nrow=1)
-                    dataminusX <- matrix(data - rep(m0, times=n), ncol=1)
-
-                    ProdVectoriel = dataminusXT %*% IV %*% dataminusX
-
-                    calcul <-  (ProdVectoriel + determinant(V)$modulus+ n*log(2*pi)) /2
-                    params <- c(m0, params)
-
-                }else{
-                    calcul <- getDataLikelihood(object, data, params)
-                }
-
-            }else{
-                calcul <- -Inf
-            }
-
-            return(calcul)
-        }
-
-        # looking for the argmin of -log(likelihood) (i.e. argmax of likelihood)
-        optimisation <- optim(params0, toBeOptimized)
-        inferredParams <- optimisation$par
-        # In GLS-style, we got all parameters except the first one, 'm0' that we compute through a last call to getTipDistribution
-        if(GLSstyle){
-            tipdistribution <- getTipDistribution(object, c(0,inferredParams))
-
-		    V<-tipdistribution$Sigma
-		  	op <- getOption("show.error.messages")
-		  	options(show.error.messages=FALSE)
-			IV=try(solve(V))
-		  	options(show.error.messages=op)
-		  	if(class(IV)=="try-error"){
-		    	IV=pseudoinverse(V) 
-		  		if(max(IV)==0){return(Inf)}
-		  	}
-		    data<-data[rownames(V)]
-            I<-matrix(rep(1,n))
-
-            m0 <-solve(t(I)%*%IV%*%I)%*%t(I)%*%IV%*%as.matrix(data)[,1]
-            inferredParams <- c(m0, inferredParams)
-        }
-        names(inferredParams) <- object@paramsNames
-
-        if(v){
-            end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
-        }
-
-        return(list(value = optimisation$value, inferredParams = inferredParams, convergence = optimisation$convergence))
-    }
-)
-
-setGeneric(
-    name="modelSelection",
-    def=function(object="PhenotypicModel", data="numeric"){standardGeneric("modelSelection")}
-)
-
-setMethod(
-    f="modelSelection",
-    signature="PhenotypicModel",
-    definition=function(object, data){
-        cat("*** Model selection with tip trait data ***\n")
-        cat("For each model in \"object\", fits the model and returns its AIC value in a recap table...\n")
-        cat("**WARNING** : This function relies on the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\n distinct parameter sets for the initialisation.")
-
-        aic <- c()
-        names <- c()
-        for(model in object){
-            fit <- fitTipData(model, data)
-            aic <- c(aic, 2*length(model@params0)+2*fit$value )
-            names <- c(names, model@name)
-        }
-        names(aic) <- names
-
-        return(sort(aic))
-    }
-)
-
-###################################
-#    Simulation
-###################################
-
-setGeneric(
-    name="simulateTipData",
-    def=function(object="PhenotypicModel", params="numeric", method="numeric", v="logical"){standardGeneric("simulateTipData")}
-)
-
-setMethod(
-    f="simulateTipData",
-    signature="PhenotypicModel",
-    definition=function(object, params, method=3, v=TRUE){
-        if(v){
-            cat("*** Simulation of tip trait values ***\n")
-            beginning <- Sys.time()
-        }
-
-        if( method == 1 ){
-            if(v){ cat("Computes the tip distribution, and returns a simulated dataset drawn in this distribution.\n") }
-            tipdistribution <- getTipDistribution(object, params)
-            X <- rmvnorm(1, tipdistribution$mean, tipdistribution$Sigma)
-            X <- matrix(data=X, ncol=1)
-            rownames(X) <- object@tipLabels
-
-        }else{
-            if( method==2 ){
-                if(v){ cat("Simulates step-by-step the whole trajectory, plots it, and returns tip data.\n") }
-                firstGraph <- TRUE
-                # Here you can try "rainbow()", "terrain.colors()", "heat.colors()", "topo.colors()"
-                colorChoice <- terrain.colors(length(object@tipLabels))
-                xlim <- c(0,object@period[length(object@period)])
-                # we get ylim by simulating a few tip distributions and taking the max and min of the results
-                findLim <- c(object@initialCondition(params)$mean[1])
-                for(k in 1:5){
-                    findLim <- c(findLim, simulateTipData(object, params, method=1, v=FALSE) )
-                }
-                ylim <- c( min(findLim) , max( findLim ) )
-                ylim <- c( ylim[1] - (ylim[2]-ylim[1])/10, ylim[2] + (ylim[2]-ylim[1])/10)
-            }else{ if(v){ cat("Simulates step-by-step the whole trajectory, but returns only the tip data.\n") } }
-            
-            initialCondition <- object@initialCondition(params)
-            X <- rnorm(length(initialCondition$mean), initialCondition$mean, initialCondition$var)
-            dt <- 0.001
-            sqrtdt <- sqrt(dt)
-        
-            for(i in 1:(length(object@period)-1)){
-                # If there is a branching event at the beginning of the period
-                if(object@numbersPaste[i] != 0){
-                    if( object@numbersPaste[i] <= length(X) ){
-                        X <- c( X[1:(object@numbersPaste[i]-1)], X[object@numbersCopy[i]], X[object@numbersPaste[i]:length(X)] )
-                    }else{
-                        X <- c( X, X[object@numbersCopy[i]] )
-                    }
-                }
-
-                # The evolution of X on the sliced period
-                time <- seq( from = object@period[i], to = object@period[i+1], by = dt )
-
-                if( method==2 ){
-                    # We remember the value of X at each time step, in the matrix Xt of dimension (nTimeSlices+1)*nLineages
-                    nLineages <- length(X)
-                    nTimeSlices <- length(time)
-                    Xt <- matrix( rep(0, times=(nTimeSlices+1)*nLineages), ncol=nLineages )
-                    Xt[1,] <- X
-                    for(j in 1:nTimeSlices){
-                        aAGammai <- object@aAGamma(i, params)  
-                        Xt[j+1,] <- Xt[j,] + (aAGammai$a(time[j]) - aAGammai$A %*% Xt[j,])*dt + sqrtdt* aAGammai$Gamma(time[j]) %*% rnorm(nLineages, 0, 1)
-                    }
-                    X <- Xt[(nTimeSlices+1),]
-                    # Then the trajectories are plotted through time
-                    if( firstGraph ){
-                        matplot(time, Xt[2:(nTimeSlices+1),], ylab="Trait value", xlab="Time", col=colorChoice[1:nLineages], main="Whole trajectory of trait evolution", cex.main = 1, type="l", lty="solid", xlim=xlim, ylim=ylim)
-                        firstGraph <- FALSE
-                    }else{
-                        matlines(time, Xt[2:(nTimeSlices+1),], lty="solid", col=colorChoice[1:nLineages])
-                    }
-
-                }else{
-                    # If we don't plot the trajectories, it is faster to forget the previous time step
-                    for(t in time){
-                        aAGammai <- object@aAGamma(i, params)  
-                        X <- X + (aAGammai$a(t) - aAGammai$A %*% X)*dt + sqrtdt* aAGammai$Gamma(t) %*% rnorm(length(X), 0, 1)
-                    }
-                }
-            }
-
-	        X <- matrix(data=X, ncol=1)
-            rownames(X) <- object@tipLabelsSimu
-        }
-
-        if(v){
-            end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
-        }  
-
-        return(X)
-    }
-)
