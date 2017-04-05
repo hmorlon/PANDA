@@ -1,7 +1,3 @@
-##################################################
-#    Bank of Classic 1D Phenotypic Models
-##################################################
-
 createModel <- function(tree, keyword){
     
     if(keyword == "BM" || keyword == "BMbis"){
@@ -261,7 +257,7 @@ createModel <- function(tree, keyword){
     return(model)
 }
 
-createModelCoevolution <- function(tree1, tree2, keyword){
+createModelCoevolution <- function(tree1, tree2, keyword = "GMM"){
 
     if(keyword == "GMM" || keyword == "GMMbis"){
 

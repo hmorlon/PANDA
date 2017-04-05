@@ -3,7 +3,7 @@ Version: 1.2
 Date: 2016-03-30
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
-Depends: R (>= 2.14.2), picante
+Depends: R (>= 2.14.2), picante, methods
 Suggests: testthat
 Imports: ape, pspline, deSolve, igraph, TESS, cluster, fpc, pvclust, corpcor, phytools, mvMORPH, stats, graphics, grDevices, utils, BioGeoBEARS, methods
 Encoding: UTF-8
