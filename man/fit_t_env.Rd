@@ -122,7 +122,7 @@ The various options are passed through "...".
 	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
-Clavel, J. & Morlon, H. (in prep) 
+Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, doi: 10.1073/pnas.1606868114
 }
 
 \author{J. Clavel}
@@ -159,7 +159,8 @@ trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp",
 
   fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", df=50, scale=TRUE)
 
-## Fit user defined model
+## Fit user defined model( note that several other environmental variables 
+## can be encapsulated in this function)
 
   # We define the function for the model
   my_fun<-function(t, env_cont, param){ 

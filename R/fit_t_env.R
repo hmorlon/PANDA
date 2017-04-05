@@ -106,7 +106,11 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
        # the user can choose by specifying it in the "par" list
        
        if(is.null(par[["scale"]])){
+           par$scale <- FALSE
+       }
+       
        # We build the interpolated smoothing spline function
+       if(par$scale==FALSE){
            env_data<-splinefun(t,env_func(t))
        }else{
            curve_int<-env_func(t)
