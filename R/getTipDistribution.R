@@ -388,7 +388,7 @@ setMethod(
                 if (abs(psi*delta_t) > 1e-3) {
                     integral2 <- (1-exp(-2*psi*delta_t))/(2*psi)
                 }else{
-                    integral2 <-  delta_t - dpsi*delta_t^2
+                    integral2 <-  delta_t - psi*delta_t^2
                 }
                 Sigma <- Sigma + diag(sigma^2 * integral1 *vectorU) + outer(sigma^2 * (integral2 - integral1)/n * vectorU, vectorU)
             }
