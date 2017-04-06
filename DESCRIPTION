@@ -3,9 +3,9 @@ Version: 1.3
 Date: 2017-04-03
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
-Depends: R (>= 2.14.2), picante
+Depends: R (>= 2.14.2), picante, methods
 Suggests: testthat
-Imports: ape, pspline, deSolve, igraph, TESS, cluster, fpc, pvclust, corpcor, phytools, mvMORPH, stats, graphics, grDevices, utils, BioGeoBEARS, methods, mvtnorm
+Imports: ape, pspline, deSolve, igraph, TESS, cluster, fpc, pvclust, corpcor, phytools, mvMORPH, stats, graphics, grDevices, utils, BioGeoBEARS, mvtnorm
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"))
