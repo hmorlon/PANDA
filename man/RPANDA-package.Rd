@@ -42,9 +42,15 @@ Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectiv
 
 Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 7: 508-525
 
-Manceau, M., Lambert, A., Morlon, H. (2015) Phylogenies support out-of-equilibrium models of biodiversity Eco Lett 18: 347-356
+Manceau, M., Lambert, A., Morlon, H. (2015) Phylogenies support out-of-equilibrium models of biodiversity, Eco Lett 18: 347-356
 
-Lewitus E., Morlon H. Characterizing and comparing phylogenies from their Laplacian spectrum, bioRxiv doi: http://dx.doi.org/10.1101/026476
+Lewitus, E., Morlon, H. Characterizing and comparing phylogenies from their Laplacian spectrum, Syst Biol, 65: 495-507
+
+Drury, J., Clavel, J., Manceau, M., Morlon, H. (2016) Estimating the Effect of Competition on Trait Evolution Using Maximum Likelihood Inference, Syst Biol, 65: 700-710
+
+Manceau, M., Lambert, A., Morlon, H. (2016) A Unifying Comparative Phylogenetic Framework Including Traits Coevolving Across Interacting Lineages, Syst Biol doi: 10.1093/sysbio/syw115
+
+Clavel, J., Morlon, H., (2017). Accelerated body size evolution during cold climatic periods in the Cenozoic, Proc Nat Acad Sci, doi: 10.1073/pnas.1606868114
 }
 %\keyword{ phylogeny }
 
