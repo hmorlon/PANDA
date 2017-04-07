@@ -2,15 +2,13 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PhenotypicADiag-class}
-\alias{getTipDistribution,PhenotypicADiag-method}
 
 \title{Class \code{"PhenotypicADiag"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+A subclass of the PhenotypicModel class, intended to represent models of phenotypic evolution with a "A" matrix diagonalizable.
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("PhenotypicADiag", ...)}.
-%%  ~~ describe objects here ~~ 
 }
 \section{Slots}{
   \describe{
@@ -43,12 +41,6 @@ Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic fra
 Marc Manceau
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-}
 \examples{
 showClass("PhenotypicADiag")
 }

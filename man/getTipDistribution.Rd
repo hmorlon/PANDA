@@ -7,11 +7,11 @@ Distribution of tip trait values.
 Computes the mean and variance of the tip trait distribution under a specified model of trait evolution.
 }
 \usage{
-getTipDistribution(model, params, v)
+getTipDistribution(object, params, v)
 }
 
 \arguments{
-\item{model}{
+\item{object}{
 an object of class 'PhenotypicModel'
 }
 \item{params}{

@@ -4,13 +4,8 @@
 \alias{PhenotypicModel-class}
 \alias{[<-,PhenotypicModel,ANY,ANY,ANY-method}
 \alias{[,PhenotypicModel,ANY,ANY,ANY-method}
-\alias{fitTipData,PhenotypicModel-method}
-\alias{getDataLikelihood,PhenotypicModel-method}
-\alias{getTipDistribution,PhenotypicModel-method}
-\alias{modelSelection,PhenotypicModel-method}
 \alias{print,PhenotypicModel-method}
 \alias{show,PhenotypicModel-method}
-\alias{simulateTipData,PhenotypicModel-method}
 
 \title{Class \code{"PhenotypicModel"}}
 \description{
@@ -56,12 +51,6 @@ Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic fra
 Marc Manceau
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-}
 \examples{
 showClass("PhenotypicModel")
 }

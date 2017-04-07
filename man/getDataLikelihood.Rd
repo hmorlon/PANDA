@@ -7,18 +7,18 @@ Likelihood of tip trait values.
 Computes -log( likelihood ) of tip trait data under a given set of parameters, and for a specified model of trait evolution.
 }
 \usage{
-getTipDistribution(model, data, params, v)
+getDataLikelihood(object, data, params, v)
 }
 
 \arguments{
-\item{model}{an object of class 'PhenotypicModel'.}
+\item{object}{an object of class 'PhenotypicModel'.}
 \item{data}{vector of tip trait data.}
 \item{params}{vector of parameters, given in the same order as in the 'model' object.}
 \item{v}{boolean specifying the verbose mode. Default value : FALSE.}
 }
 
 \value{
-A numerical value : -log( likelihood )
+A numerical value : -log( likelihood ) of the model.
 }
 
 \references{

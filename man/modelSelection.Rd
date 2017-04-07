@@ -7,13 +7,13 @@ Phenotypic model selection from tip trait data.
 For each model taken as input, fits the model and returns its AIC value in a recap table.
 }
 \usage{
-modelSelection(listOfModels, data)
+modelSelection(object, data)
 }
 \details{
 Warning : This function relies on the standard R optimizer "optim". It may not always converge well. Please double check the convergence by trying distinct parameter sets for the initialisation.
 }
 \arguments{
-\item{listOfModels}{a list of objects of class 'PhenotypicModel'.}
+\item{object}{a vector of objects of class 'PhenotypicModel'.}
 \item{data}{vector of tip trait data.}
 }
 

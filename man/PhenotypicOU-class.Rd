@@ -2,15 +2,13 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PhenotypicOU-class}
-\alias{getTipDistribution,PhenotypicOU-method}
 
 \title{Class \code{"PhenotypicOU"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+A subclass of the PhenotypicModel class, intended to represent the Ornstein-Uhlenbeck model of phenotypic evolution.
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("PhenotypicOU", ...)}.
-%%  ~~ describe objects here ~~ 
 }
 \section{Slots}{
   \describe{
@@ -44,12 +42,6 @@ Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic fra
 Marc Manceau
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-}
 \examples{
 showClass("PhenotypicOU")
 }

@@ -1,18 +1,19 @@
-\name{PhenotypicPM-class}
+\name{PhenotypicDD-class}
 \Rdversion{1.1}
 \docType{class}
-\alias{PhenotypicPM-class}
+\alias{PhenotypicDD-class}
 
-\title{Class \code{"PhenotypicPM"}}
+\title{Class \code{"PhenotypicDD"}}
 \description{
-A subclass of the PhenotypicModel class, intended to represent the Phenotypic Matching model of phenotypic evolution, by Nuismer and Harmon (Eco Lett, 2014).
+A subclass of the PhenotypicModel class, intended to represent the model of Density-Dependent phenotypic evolution.
 }
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("PhenotypicPM", ...)}.
-%%  ~~ describe objects here ~~ 
+Objects can be created by calls of the form \code{new("PhenotypicDD", ...)}.
 }
 \section{Slots}{
   \describe{
+    \item{\code{matrixCoalescenceJ}:}{Object of class \code{"matrix"} ~~ }
+    \item{\code{nLivingLineages}:}{Object of class \code{"numeric"} ~~ }
     \item{\code{name}:}{Object of class \code{"character"} ~~ }
     \item{\code{period}:}{Object of class \code{"numeric"} ~~ }
     \item{\code{aAGamma}:}{Object of class \code{"function"} ~~ }
@@ -32,7 +33,7 @@ Class \code{"\linkS4class{PhenotypicModel}"}, directly.
 }
 \section{Methods}{
   \describe{
-    \item{getTipDistribution}{\code{signature(object = "PhenotypicPM")}: ... }
+    \item{getTipDistribution}{\code{signature(object = "PhenotypicDD")}: ... }
 	 }
 }
 \references{
@@ -43,6 +44,6 @@ Marc Manceau
 }
 
 \examples{
-showClass("PhenotypicPM")
+showClass("PhenotypicDD")
 }
 \keyword{classes}

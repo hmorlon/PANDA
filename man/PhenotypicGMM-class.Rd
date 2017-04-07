@@ -2,15 +2,13 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PhenotypicGMM-class}
-\alias{getTipDistribution,PhenotypicGMM-method}
 
 \title{Class \code{"PhenotypicGMM"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+A subclass of the PhenotypicModel class, intended to represent the Generalist Matching Mutualism model of phenotypic evolution. This is a model of phenotypic evolution with interactions between two clades, running on two trees.
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("PhenotypicGMM", ...)}.
-%%  ~~ describe objects here ~~ 
 }
 \section{Slots}{
   \describe{
@@ -45,12 +43,6 @@ Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic fra
 Marc Manceau
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-}
 \examples{
 showClass("PhenotypicGMM")
 }
