@@ -36,7 +36,8 @@ Description: Implements macroevolutionary analyses on phylogenetic trees. See
     <DOI:10.1073/pnas.1102543108>, Condamine et al. (2013) <DOI:10.1111/ele.12062>,
     Morlon et al. (2014) <DOI:10.1111/ele.12251>, Manceau et al. (2015) <DOI:
     10.1111/ele.12415>, Lewitus & Morlon (2016) <DOI:10.1093/sysbio/syv116>, Drury
-    et al. (2016) <DOI:10.1093/sysbio/syw020>, Manceau et al. (2016) <DOI:10.1093/sysbio/syw115> and Clavel & Morlon (2017) <DOI:10.1073/pnas.1606868114>.
+    et al. (2016) <DOI:10.1093/sysbio/syw020>, Manceau et al. (2016) <DOI:10.1093/sysbio/syw115>,
+    and Clavel & Morlon (2017) <DOI:10.1073/pnas.1606868114>.
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
 Repository: CRAN
