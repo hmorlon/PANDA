@@ -10,10 +10,10 @@ citEntry(entry="Article",
 		as.person("J Drury")),
 	journal = "Methods in Ecology and Evolution",
   	year = "2016",
-	volume = "doi: 10.1111/2041-210X.12526",
-	pages = "",
-	note = "R package version 1.0",
+	volume = "7",
+	pages = "589-597",
+	note = "R package version 1.3",
 	url = "http://CRAN.R-project.org/package=RPANDA",
 	
-    textVersion = "Morlon H, Condamine FL, Lewitus E, Manceau M. 2015. RPANDA: an R package for macroevolutionary analyses on phylogenetic trees. R package version 1.0. http://CRAN.R-project.org/package=RPANDA.")
+    textVersion = "Morlon H, Lewitus E, Condamine FL, Manceau M., Clavel J., Drury J., 2016. RPANDA: an R package for macroevolutionary analyses on phylogenetic trees. Methods in Ecology and Evolution, 7:589-597.")
 
