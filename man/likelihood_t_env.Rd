@@ -70,7 +70,7 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 \examples{
 data(Cetacea)
 data(InfTemp)
-
+\donttest{
 # Simulate trait on the Cetacean tree
 set.seed(123)
 
@@ -89,7 +89,7 @@ likelihood_t_env(Cetacea,trait,param=c(0.1, 0), fun=InfTemp,
                   times=times, mtot=mtot, model="EnvExp")
 
 # Provide the environmental function rather than the dataset (faster if used recursively)
-\donttest{
+
 spline_result <- sm.spline(InfTemp[,1],InfTemp[,2], df=50)
 env_func <- function(t){predict(spline_result,t)}
 t<-unique(InfTemp[,1])

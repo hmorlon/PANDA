@@ -48,7 +48,7 @@ Arguments to be passed to the function. See details.
   
   \item{LH}{the maximum log-likelihood value}
   \item{aic}{the Akaike's Information Criterion}
-  \item{aicc}{the size sample corrected Akaike's Information Criterion}
+  \item{aicc}{the second order Akaike’s Information Criterion}
   \item{free.parameters}{the number of estimated parameters}
   \item{param}{a numeric vector of estimated parameters, sigma and beta respectively for the defaults models. In the same order as defined by the user if a     customized model is provided}
   \item{root}{the estimated root value}
@@ -88,7 +88,7 @@ For instance, the \code{EnvExp} function can be coded as:
 where \code{param[1]} is the \eqn{\sigma^2} parameter and \code{param[2]} is 
 the \eqn{\beta} parameter. 
 Note that in this later case, two starting values should be provided in the \code{param} 
-argument through the \code{par} list.
+argument.
 
 e.g.:
 
@@ -96,7 +96,7 @@ e.g.:
 
 \code{beta=0}
 
-\code{fit_t_env(tree, data, env_data=InfTemp, model=fun, par=list(param=c(sigma,beta)))}
+\code{fit_t_env(tree, data, env_data=InfTemp, model=fun, param=c(sigma,beta))}
 
 
 
@@ -139,7 +139,7 @@ data(InfTemp)
 
 # Simulate trait on the Cetacean tree
 set.seed(123)
-
+\donttest{
 trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
 					root.value=0, step=0.001, plot=TRUE)
 
@@ -147,7 +147,7 @@ trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp",
   # Fit the environmental model
   result1=fit_t_env(Cetacea, trait, env_data=InfTemp, scale=TRUE)
   plot(result1)
-\donttest{
+
   # Add to the plot the results from different smoothing of the temperature curve
   result2=fit_t_env(Cetacea, trait, env_data=InfTemp, df=10, scale=TRUE)
   lines(result2, col="red")

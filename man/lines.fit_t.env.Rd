@@ -50,6 +50,8 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 }
 
 \examples{
+
+\donttest{
 data(Cetacea)
 data(InfTemp)
 
@@ -69,6 +71,6 @@ plot(result1, lwd=3)
 
 # add result2 to the current plot
 lines(result2, lty=2, lwd=3, col="red")
-
+}
 
 }
