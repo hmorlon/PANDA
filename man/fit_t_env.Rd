@@ -17,7 +17,7 @@ fit_t_env(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"),
 An object of class 'phylo' (see ape documentation)
 }
   \item{data}{
-A named vector of phenotypic trait with the same size of the tree.
+A named vector of phenotypic trait values.
 }
   \item{env_data}{
 Environmental data, given as a time continuous function (see, e.g. splinefun) or a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
