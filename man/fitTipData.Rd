@@ -46,5 +46,5 @@ modelBM <- createModel(tree, 'BM')
 dataBM <- simulateTipData(modelBM, c(0,0,0,1))
 
 #Fitting the model to the data
-fitTipData(modelBM, dataBM)
+fitTipData(modelBM, dataBM, v=TRUE)
 }
