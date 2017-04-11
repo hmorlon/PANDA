@@ -5,7 +5,7 @@
 Add to a plot line segments joining the phenotypic evolutionary rate through time estimated by the \emph{fit_t_env} function
 }
 \description{
-Fits model of trait evolution for which evolutionary rates depends on an environmental function.
+Plot estimated evolutionary rate as a function of the environmental data and time.
 }
 \usage{
 
@@ -55,7 +55,7 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 data(Cetacea)
 data(InfTemp)
 
-# Simulate trait on the Cetacean tree
+# Plot estimated evolutionary rate as a function of the environmental data and time.
 set.seed(123)
 trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
 					root.value=0, step=0.01, plot=TRUE)

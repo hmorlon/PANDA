@@ -79,7 +79,7 @@ Users defined models should have the following form:
 \emph{env}: is a time function of an environmental variable. 
 See for instance object created by \code{splinefun} when interpolating coordinate of points.
 
-\emph{param}: is a vector of parameters to estimates.
+\emph{param}: is a vector of parameters to estimate.
 
 For instance, the \code{EnvExp} function can be coded as: 
 
@@ -102,11 +102,11 @@ e.g.:
 
 The various options are passed through "...". 
 
--param: The starting values used for the model. The lengths of the "param" argument in the par list is used to compute the total number of parameters for user specified models.
+-param: The starting values used for the model. Must match the total number of parameters of the specified models.
 
--scale: scale the amplitude of the environmental curve between 0 and 1. This improve the parameters search.
+-scale: scale the amplitude of the environmental curve between 0 and 1. This may improve the parameters search in some situations.
 
--df: the degree of freedom to use to define the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df is used. See \emph{sm.spline} for details.
+-df: the degree of freedom to use for defining the spline. As a default, smooth.spline(env_data[,1], env_data[,2])$df is used. See \emph{sm.spline} for details.
 
 -upper: the upper bound for the parameter search when the "L-BFGS-B" method is used. See \emph{optim} for details.
 
@@ -137,7 +137,7 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 data(Cetacea)
 data(InfTemp)
 
-# Simulate trait on the Cetacean tree
+# Simulate a trait with temperature dependence on the Cetacean tree
 set.seed(123)
 \donttest{
 trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
@@ -159,8 +159,8 @@ trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp",
 
   fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", df=50, scale=TRUE)
 
-## Fit user defined model( note that several other environmental variables 
-## can be encapsulated in this function)
+## Fit user defined model (note that several other environmental variables 
+## can be simultaneously encapsulated in this function through the env argument)
 
   # We define the function for the model
   my_fun<-function(t, env_cont, param){ 

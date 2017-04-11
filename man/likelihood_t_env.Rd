@@ -71,7 +71,7 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 data(Cetacea)
 data(InfTemp)
 \donttest{
-# Simulate trait on the Cetacean tree
+# Simulate a trait with temperature dependence on the Cetacean tree
 set.seed(123)
 
 trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
