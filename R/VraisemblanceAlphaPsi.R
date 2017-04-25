@@ -186,10 +186,10 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     }
   }else{
     if(tini==tend){
-      A=as.vector(2*expLambda*(M %*% phi$fun[tini,-1][phi$ind]))
+      A=as.vector(2*expLambda*(M %*% phi$fun[tini,phi$ind+1]))
       B=(-(diag(expLambda+mu))+M*A)*(t-s)
     }else{
-      A=as.vector(2*expLambda*as.vector(M %*% rowSums(t(phi$fun[tini:tend,-1]))[phi$ind]))
+      A=as.vector(2*expLambda*as.vector(M %*% rowSums(t(phi$fun[tini:tend,phi$ind+1]))))
       B=(-(diag(expLambda+mu))+ M*A /(tend-tini+1))*(t-s)}
     if(banded>0){
       Bdm=min(abs(diag(B)))
