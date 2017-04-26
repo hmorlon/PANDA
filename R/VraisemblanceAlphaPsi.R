@@ -138,6 +138,61 @@ plot.Phi=function(rep,lambda,xleg=1,yleg=0,ylim=c(0,1),legend=3){
   }else if (legend==2){legend(xleg,y=yleg, legend=lambda,col=colors, lty=1, cex=0.8)}
 }
 
+InterpolatedPhi=function(phi,t){
+  tind=which.min(abs(phi$fun[,1]-t))
+  if (t >= phi$fun[nrow(phi$fun),1]) {
+    return(phi$fun[nrow(phi$fun),-1])
+  } else if (t <= phi$fun[1,1]) {
+    return(phi$fun[1,-1])
+  } else if (t >= phi$fun[tind,1]) {
+    alpha = (t - phi$fun[tind,1]) / (phi$fun[tind+1,1] - phi$fun[tind,1])
+    return(alpha*phi$fun[tind+1,-1] + (1-alpha)*phi$fun[tind,-1])
+  } else {
+    alpha = (t - phi$fun[tind-1,1]) / (phi$fun[tind,1] - phi$fun[tind-1,1])
+    return(alpha*phi$fun[tind,-1] + (1-alpha)*phi$fun[tind-1,-1])
+  }
+}
+
+#  Solve an ODE dY/dt = A(t) Y(t) by using Magnus expansion schemes
+MagnusExpansion=function(phi,ini,tini,tend,nt,method="order4_eq"){
+  expLambda=phi$expLambda
+  mu=phi$mu
+  timePhi=phi$fun[,1]
+  M=phi$M
+  if (method=="order4_eq") {
+    # Order 4 with equispaced points:
+    #    A1 = A(Tn), A2 = A(Tn + h/2), A3 = A(Tn+h)
+    #    Omega(h) = (h/6)*(A1 + 4 A2 + A3) - (h*h/12) [A1,A3]
+    #    Y(n+1) = exp(Omega(h)) Y(n)
+    h = timePhi[tini+2] - timePhi[tini]
+    A3 = as.vector(2*expLambda*(M %*% phi$fun[tini,-1]))*M
+    for (i in seq(tini, tend-2, by=2)) {
+      A1 = A3
+      A2 = as.vector(2*expLambda*(M %*% phi$fun[i+1,-1]))*M
+      A3 = as.vector(2*expLambda*(M %*% phi$fun[i+2,-1]))*M
+      Omega = - h * diag(expLambda+mu) + (h / 6) * (A1 + 4*A2 + A3) - (h*h / 12) * (A1 %*% A3 - A3 %*% A1)
+      rep = expv(x=Omega,v=ini,t=1)
+      ini = rep
+    }
+  } else if (method=="order4_GL") {
+    # Order 4 with Gauss-Legendre quadrature rule
+    #    A1 = A(Tn+(1/2 - sqrt(3)/6)h), A2 = A(Tn + (1/2 + sqrt(3)/6)h)
+    #    Omega(h) = (h/2)*(A1 + A2) - h*h*sqrt(3)/12 [A1,A2]
+    #    Y(n+1) = exp(Omega(h)) Y(n)
+    h = timePhi[tini+1] - timePhi[tini]
+    for (i in tini:(tend-1)) {
+      phi1 = InterpolatedPhi(phi, timePhi[i]+h*(1/2 - sqrt(3)/6))
+      phi2 = InterpolatedPhi(phi, timePhi[i]+h*(1/2 + sqrt(3)/6))
+      A1 = as.vector(2*expLambda*(M %*% phi1))*M
+      A2 = as.vector(2*expLambda*(M %*% phi2))*M
+      Omega = - h * diag(expLambda+mu) + (h / 2) * (A1 + A2) - (h*h*sqrt(3)/ 12) * (A1 %*% A2 - A2 %*% A1)
+      rep = expv(x=Omega,v=ini,t=1)
+      ini = rep
+    }
+  }
+  return(rep)
+}
+
 Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
              timePhi=phi$fun[,1],nt=1000,method="Higham08.b",banded=0,sparse=F){
   
@@ -193,29 +248,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
     rep = out[tend,-1]
   }else {
-    if(tini==tend){
-      A=as.vector(2*expLambda*(M %*% phi$fun[tini,phi$ind+1]))
-      B=(-(diag(expLambda+mu))+M*A)*(t-s)
-    }else{
-      A=as.vector(2*expLambda*as.vector(M %*% rowSums(t(phi$fun[tini:tend,phi$ind+1]))))
-      B=(-(diag(expLambda+mu))+ M*A /(tend-tini+1))*(t-s)}
-    if(banded>0){
-      Bdm=min(abs(diag(B)))
-      indices=abs(B)<(Bdm/banded)
-      B[indices]=rep(0,sum(indices))
-    }
-    if(sparse){B=Matrix(B,sparse=T)}
-    if(method=="Sidje98"){
-      rep=expAtv(B, ini)$eAtv
-    }else if(method=="expoRkit"){
-      rep=expv(x=B,v=ini,t=1)
-    }else if(method=="Rexpv"){
-      rep=expoRkit:::Rexpv(B@x,B@i+1,B@p+1,length(ini),ini)
-    }else if(method=="none"){
-      rep=rep(1, length(ini))
-    }else{
-      rep=expm(B,method = method) %*% ini
-    }
+    rep=MagnusExpansion(phi,ini,tini,tend,nt,method="order4_eq")
   }
   
   if(func=="Psi"|func=="Zeta"){
