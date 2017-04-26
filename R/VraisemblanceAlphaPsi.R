@@ -184,7 +184,15 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     }else{
       rep = expMatBVect_FFT(phi$G,ini,-(expLambda+mu), phi$normM, A,t-s,1e-12)
     }
-  }else{
+  }else if(method == "ode"){
+    dKhi=function(t,y,parms){
+      tindex=which.min(abs(timePhi-t))
+      dy=2*phi$expLambda*((phi$M %*% y)*(phi$M %*% phi$fun[tindex,2:ncol(phi$fun)])) - (phi$expLambda+phi$mu)*y
+      return(list(dy))
+    }
+    out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
+    rep = out[tend,-1]
+  }else {
     if(tini==tend){
       A=as.vector(2*expLambda*(M %*% phi$fun[tini,phi$ind+1]))
       B=(-(diag(expLambda+mu))+M*A)*(t-s)
