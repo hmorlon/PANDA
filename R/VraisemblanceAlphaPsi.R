@@ -164,15 +164,47 @@ MagnusExpansion=function(phi,ini,tini,tend,nt,method="order4_eq"){
     #    A1 = A(Tn), A2 = A(Tn + h/2), A3 = A(Tn+h)
     #    Omega(h) = (h/6)*(A1 + 4 A2 + A3) - (h*h/12) [A1,A3]
     #    Y(n+1) = exp(Omega(h)) Y(n)
-    h = timePhi[tini+2] - timePhi[tini]
+    step = 6
+    h = timePhi[tini+step] - timePhi[tini]
     A3 = as.vector(2*expLambda*(M %*% phi$fun[tini,-1]))*M
-    for (i in seq(tini, tend-2, by=2)) {
+    norm = 0
+    last = tini
+    i = tini
+    while (i <= tend - step) {
       A1 = A3
-      A2 = as.vector(2*expLambda*(M %*% phi$fun[i+1,-1]))*M
-      A3 = as.vector(2*expLambda*(M %*% phi$fun[i+2,-1]))*M
-      Omega = - h * diag(expLambda+mu) + (h / 6) * (A1 + 4*A2 + A3) - (h*h / 12) * (A1 %*% A3 - A3 %*% A1)
-      rep = expv(x=Omega,v=ini,t=1)
-      ini = rep
+      A2 = as.vector(2*expLambda*(M %*% phi$fun[i+step/2,-1]))*M
+      A3 = as.vector(2*expLambda*(M %*% phi$fun[i+step,-1]))*M
+      norm = norm + h * norm(- h * diag(expLambda+mu) + A3, type="F")
+      if (norm > pi) {
+        if ((i - last) %% 2 == 0) {
+          i = i - 2
+        } else {
+          i = i - 1
+        }
+        if (i < last + 2) {
+          i = last + 2
+        }
+        h = timePhi[i] - timePhi[last]
+        A1 = as.vector(2*expLambda*(M %*% phi$fun[last,-1]))*M
+        A2 = as.vector(2*expLambda*(M %*% phi$fun[(last+i)/2,-1]))*M
+        A3 = as.vector(2*expLambda*(M %*% phi$fun[i,-1]))*M
+        Omega = - h * diag(expLambda+mu) + (h / 6) * (A1 + 4*A2 + A3) - (h*h / 12) * (A1 %*% A3 - A3 %*% A1)
+        rep = expv(x=Omega,v=ini,t=1)
+        ini = rep
+        norm = 0
+        last = i
+      } else {
+        i = i + step
+      }
+    }
+    if (last < tend-1) {
+        h = timePhi[tend] - timePhi[last]
+        A1 = as.vector(2*expLambda*(M %*% phi$fun[last,-1]))*M
+        A2 = as.vector(2*expLambda*(M %*% phi$fun[(last+tend)/2,-1]))*M
+        A3 = as.vector(2*expLambda*(M %*% phi$fun[tend,-1]))*M
+        Omega = - h * diag(expLambda+mu) + (h / 6) * (A1 + 4*A2 + A3) - (h*h / 12) * (A1 %*% A3 - A3 %*% A1)
+        rep = expv(x=Omega,v=ini,t=1)
+        ini = rep
     }
   } else if (method=="order4_GL") {
     # Order 4 with Gauss-Legendre quadrature rule
