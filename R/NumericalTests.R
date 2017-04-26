@@ -8,7 +8,7 @@ check.Psi=function(t,sigma,alpha,mu,lambda_0,f,Nsim,mlambda=0.0001,Mlambda=100,n
   psi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Psi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
           timePhi=phi$fun[,1],nt=1000,method="expoRkit")
   khi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
-          timePhi=phi$fun[,1],nt=1000,method="expoRkit")
+          timePhi=phi$fun[,1],nt=1000,method="ode")
   
   simulatePsi=simulateKhi=0
   n=0
@@ -63,8 +63,8 @@ for(t in exp(seq(-2,6,length.out = 20))[1:16]){
   lambda_0=0.2
   f=1
   nlambda=200
-  mlambda=exp(log(lambda_0) - 5*sigma)
-  Mlambda=exp(log(lambda_0) + 5*sigma)
+  mlambda=exp(log(lambda_0/sqrt(alpha)) - 12*sigma)
+  Mlambda=exp(log(lambda_0/sqrt(alpha)) + 12*sigma)
   nt=200
   
   cP=try(check.Psi(t,sigma,alpha,mu,lambda_0,f,Nsim=10000,nt=nt,nlambda = nlambda,mlambda = mlambda,Mlambda = Mlambda))
