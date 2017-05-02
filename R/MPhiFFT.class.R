@@ -80,8 +80,9 @@ setMethod(
       Gnv=x
       i=1
       epsnormv = 1e-10 * norm_vect1(x)
+      MATVECT <- selectMethod(applyV, c("MPhiFFT","vector"))
       while (norm_vect1(Gnv) > epsnormv){
-        Gnv = (diag1*Gnv + diag2*applyV(object,Gnv)) / i
+        Gnv = (diag1*Gnv + diag2*MATVECT(object,Gnv)) / i
         Gnv[mask_diag1] = 0
         expGv = expGv + Gnv
         i=i+1

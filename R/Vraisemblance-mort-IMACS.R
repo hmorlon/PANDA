@@ -31,8 +31,9 @@ Phi=function(sigma,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1,method="Higham08.b"
   }
   ini=rep((1-f),nlambda+1)
   
+  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
   dPhi=function(t,y,parms){
-    dy=lambdaIs*(applyV(M, y)^2-y)+mu*(1-y)
+    dy=lambdaIs*(MATVECT(M, y)^2-y)+mu*(1-y)
     return(list(dy))
   }
   
