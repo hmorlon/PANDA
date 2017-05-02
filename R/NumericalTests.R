@@ -3,12 +3,12 @@ source("VraisemblanceAlphaPsi.R")
 source("birthdeath.tree.rateshift.R")
 
 
-check.Psi=function(t,sigma,alpha,mu,lambda_0,f,Nsim,mlambda=0.0001,Mlambda=100,nlambda=1000,nt=100){
-  phi=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=t,by=t/nt)
+check.Psi=function(t,sigma,alpha,mu,lambda_0,f,Nsim,mlambda=0.0001,Mlambda=100,nlambda=1000,nt=100,method="Higham08.b"){
+  phi=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=t,by=t/nt,method=method)
   psi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Psi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
-          timePhi=phi$fun[,1],nt=1000,method="expoRkit")
+          timePhi=phi$fun[,1],nt=1000)
   khi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
-          timePhi=phi$fun[,1],nt=1000,method="expoRkit")
+          timePhi=phi$fun[,1],nt=1000)
   
   simulatePsi=simulateKhi=0
   n=0
@@ -67,7 +67,7 @@ for(t in exp(seq(-2,6,length.out = 20))[1:16]){
   Mlambda=exp(log(lambda_0/sqrt(alpha)) + 12*sigma)
   nt=200
   
-  cP=try(check.Psi(t,sigma,alpha,mu,lambda_0,f,Nsim=10000,nt=nt,nlambda = nlambda,mlambda = mlambda,Mlambda = Mlambda))
+  cP=try(check.Psi(t,sigma,alpha,mu,lambda_0,f,Nsim=10000,nt=nt,nlambda = nlambda,mlambda = mlambda,Mlambda = Mlambda, method = "FFT"))
   
   if(! inherits(cP,"try-error")){
     if(nrow(dataFramePsi)==0){

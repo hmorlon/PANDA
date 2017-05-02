@@ -1,50 +1,56 @@
 library(deSolve)
 library(fields)
-library(expoRkit)
-library(rexpokit)
-library(Matrix)
 library(signal)
 library(parallel)
-source("birthdeath.tree.rateshift.R")
 library(pracma)
+
+source("birthdeath.tree.rateshift.R")
+source("MPhiAbstract.class.R")
+source("MPhiFFT.class.R")
+source("MPhiNoFFT.class.R")
 
 ######functions#############
 
 
-Toeplitz2=function (x,...) 
-{
-  if (!is.vector(x)) 
-    stop("'x' is not a vector")
-  if (!missing(...)) {
-    na <- length(list(...))
-    warning(sprintf(ngettext(na, "extra argument %s will be disregarded", 
-                             "extra arguments %s will be disregarded"), paste(sQuote(names(list(...))), 
-                                                                              collapse = ", ")), domain = NA)
+Phi=function(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1,method="Higham08.b"){
+  lambdaIs = seq(log(mlambda),log(Mlambda),length=nlambda+1)
+
+  if (substring(method,1,3) == "FFT") {
+    firstRow = -(lambdaIs-log(mlambda))+log(alpha)
+    firstCol = lambdaIs-log(mlambda)+log(alpha)
+    if(sigma==0){
+      row_indices = which.min(abs(firstRow))
+      firstRow = rep(0,nlambda+1)
+      firstRow[row_indices] = 1
+      col_indices = which.min(abs(firstCol))
+      firstCol = rep(0,nlambda+1)
+      firstCol[col_indices] = 1
+    }else{
+      firstRow = exp(-firstRow^2/(2*sigma^2))
+      firstCol = exp(-firstCol^2/(2*sigma^2))
+    }
+    M = MPhiFFT(firstCol, firstRow, method=method)
+  } else {
+    if(sigma==0){
+      B=diag(rep(1,nlambda+1))
+    }else{
+      B=t(sapply(lambdaIs,function(e){
+        s=sapply(lambdaIs,function(e2){exp(-(e-e2+log(alpha))^2/(2*sigma^2))});return(s/sum(s))
+      }))
+    }
+    M = MPhiNoFFT(B, method=method)
   }
-  n <- length(x)
-  n=ceiling(n/2)
-  A <- matrix(raw(), n, n)
-  matrix(x[col(A) - row(A) + n], n, n)
-}
 
-
-Phi=function(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
-  lambdaIs=seq(log(mlambda),log(Mlambda),(log(Mlambda)-log(mlambda))/nlambda)
-  if(sigma==0){
-    M=diag(rep(1,nlambda+1))
-  }else{
-    M=t(sapply(lambdaIs,function(e){
-      s=sapply(lambdaIs,function(e2){(1/(sqrt(6.28)*sigma))*exp(-(e-e2+log(alpha))^2/(2*sigma^2))});return(s/sum(s))
-    }))}
   ini=rep((1-f),nlambda+1)
   #   ini[1]=0
   #   ini[length(ini)]=0
   ind=(1:length(lambdaIs))
   expLambda=exp(lambdaIs)
   
+  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
   dPhi=function(t,y,parms){
     
-    dy=expLambda*((M%*%y)^2-y)+mu*(1-y)
+    dy=expLambda*(MATVECT(M, y)^2-y)+mu*(1-y)
     return(list(dy))
   }
   
@@ -53,75 +59,6 @@ Phi=function(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1){
   
   return(list(lambda=lambdaIs,expLambda=expLambda,fun=out,mu=mu,f=f,sigma=sigma,M=M,func="Phi",alpha=alpha,ind=ind))
 }
-
-prodMatVect_FFT=function(G, v, v0){
-  w=Re(ifft(G*fft(c(v,v0)))[0:length(v)])
-  return(w)
-}
-
-expMatBVect_FFT=function(G, v, D1, D2, D3, dt, eps){
-  mask_D1 = D1 < -20/dt
-  # mask_D1 = D1
-  v[mask_D1] = 0
-  expGv=v
-  Gnv=v
-  n=1
-  N= length(v)
-  v0 = rep(0,N)
-  D4=D3*D2
-  
-  while (norm(Gnv) > eps*norm(v)){ 
-    Gnv = D1*Gnv + D4*Re(ifft(G*fft(c(Gnv,v0)))[0:N])
-    Gnv = (dt/n)*Gnv
-    Gnv[mask_D1] = 0
-    expGv = expGv + Gnv
-    n=n+1
-  }
-  expGv[mask_D1] = 2e-9
-  return(expGv)
-}
-
-
-Phi_FFT=function(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=100,by=0.1,method ="lsoda"){
-  
-  coeff = (log(Mlambda)-log(mlambda))/nlambda
-  lambdaIs  = seq(0,nlambda,length=nlambda+1)*coeff
-  lambdaIs2 =-seq(nlambda,1,length=nlambda)*coeff
-  lambdaIsT = c(lambdaIs+log(alpha),10,lambdaIs2+log(alpha))
-  if(sigma==0){
-    vec_density = rep(0,2*nlambda+2)
-    vec_density[which.min(abs(lambdaIsT))]=1
-  }else{
-    vec_density = exp(-lambdaIsT^2/(2*sigma^2))
-  } 
-  
-  
-  G=(fft(vec_density))
-  # ------- Toeplitz matrix -------------
-  M = Toeplitz(vec_density[1:(nlambda+1)],c(vec_density[1],vec_density[(2*nlambda+2):(nlambda+3)]))
-  # M = Toeplitz2(c(vec_density[(nlambda+1):1],vec_density[(2*nlambda+2):(nlambda+3)]))
-  
-  invNorm=rowSums(M)
-  normM = 1/rowSums(M) #; normM[normM>1]=1
-  # normM = min(normM)
-  M = normM * M 
-  
-  ini=rep((1-f),nlambda+1)
-  vect0 = rep(0,length(ini))  
-  expLambda=exp(lambdaIs+log(mlambda))
-  dPhi=function(t,y,parms){
-    A=(normM*prodMatVect_FFT(G,y,vect0))
-    # if(max(A)>1) debug(dPhi)
-    dy=expLambda*(A^2-y)+mu*(1-y)
-    return(list(dy))
-  }
-  
-  times <- seq(from = tini, to =tf, by = by)
-  out   <- ode(y = ini, times = times, func = dPhi, parms = NULL)
-  
-  return(list(lambda=lambdaIs+log(mlambda),expLambda=expLambda,fun=out,mu=mu,f=f,sigma=sigma,alpha=alpha,M=M,func="Phi",G=G,normM=normM))
-}
-
 
 plot.Phi=function(rep,lambda,xleg=1,yleg=0,ylim=c(0,1),legend=3){
   ind=sapply(lambda, function(x){which.min(abs(rep$lambda-x))})
@@ -153,78 +90,6 @@ InterpolatedPhi=function(phi,t){
   }
 }
 
-#  Solve an ODE dY/dt = A(t) Y(t) by using Magnus expansion schemes
-MagnusExpansion=function(phi,ini,tini,tend,nt,method="order4_eq"){
-  expLambda=phi$expLambda
-  mu=phi$mu
-  timePhi=phi$fun[,1]
-  M=phi$M
-  if (method=="order4_eq") {
-    # Order 4 with equispaced points:
-    #    A1 = A(Tn), A2 = A(Tn + h/2), A3 = A(Tn+h)
-    #    Omega(h) = (h/6)*(A1 + 4 A2 + A3) - (h*h/12) [A1,A3]
-    #    Y(n+1) = exp(Omega(h)) Y(n)
-    step = 6
-    h = timePhi[tini+step] - timePhi[tini]
-    A3 = as.vector(2*expLambda*(M %*% phi$fun[tini,-1]))*M
-    norm = 0
-    last = tini
-    i = tini
-    while (i <= tend - step) {
-      A1 = A3
-      A2 = as.vector(2*expLambda*(M %*% phi$fun[i+step/2,-1]))*M
-      A3 = as.vector(2*expLambda*(M %*% phi$fun[i+step,-1]))*M
-      norm = norm + h * norm(- h * diag(expLambda+mu) + A3, type="F")
-      if (norm > pi) {
-        if ((i - last) %% 2 == 0) {
-          i = i - 2
-        } else {
-          i = i - 1
-        }
-        if (i < last + 2) {
-          i = last + 2
-        }
-        h = timePhi[i] - timePhi[last]
-        A1 = as.vector(2*expLambda*(M %*% phi$fun[last,-1]))*M
-        A2 = as.vector(2*expLambda*(M %*% phi$fun[(last+i)/2,-1]))*M
-        A3 = as.vector(2*expLambda*(M %*% phi$fun[i,-1]))*M
-        Omega = - h * diag(expLambda+mu) + (h / 6) * (A1 + 4*A2 + A3) - (h*h / 12) * (A1 %*% A3 - A3 %*% A1)
-        rep = expv(x=Omega,v=ini,t=1)
-        ini = rep
-        norm = 0
-        last = i
-      } else {
-        i = i + step
-      }
-    }
-    if (last < tend-1) {
-        h = timePhi[tend] - timePhi[last]
-        A1 = as.vector(2*expLambda*(M %*% phi$fun[last,-1]))*M
-        A2 = as.vector(2*expLambda*(M %*% phi$fun[(last+tend)/2,-1]))*M
-        A3 = as.vector(2*expLambda*(M %*% phi$fun[tend,-1]))*M
-        Omega = - h * diag(expLambda+mu) + (h / 6) * (A1 + 4*A2 + A3) - (h*h / 12) * (A1 %*% A3 - A3 %*% A1)
-        rep = expv(x=Omega,v=ini,t=1)
-        ini = rep
-    }
-  } else if (method=="order4_GL") {
-    # Order 4 with Gauss-Legendre quadrature rule
-    #    A1 = A(Tn+(1/2 - sqrt(3)/6)h), A2 = A(Tn + (1/2 + sqrt(3)/6)h)
-    #    Omega(h) = (h/2)*(A1 + A2) - h*h*sqrt(3)/12 [A1,A2]
-    #    Y(n+1) = exp(Omega(h)) Y(n)
-    h = timePhi[tini+1] - timePhi[tini]
-    for (i in tini:(tend-1)) {
-      phi1 = InterpolatedPhi(phi, timePhi[i]+h*(1/2 - sqrt(3)/6))
-      phi2 = InterpolatedPhi(phi, timePhi[i]+h*(1/2 + sqrt(3)/6))
-      A1 = as.vector(2*expLambda*(M %*% phi1))*M
-      A2 = as.vector(2*expLambda*(M %*% phi2))*M
-      Omega = - h * diag(expLambda+mu) + (h / 2) * (A1 + A2) - (h*h*sqrt(3)/ 12) * (A1 %*% A2 - A2 %*% A1)
-      rep = expv(x=Omega,v=ini,t=1)
-      ini = rep
-    }
-  }
-  return(rep)
-}
-
 Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
              timePhi=phi$fun[,1],nt=1000,method="Higham08.b",banded=0,sparse=F){
   
@@ -243,7 +108,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     
   }else{
     #on transforme la proba d'être dans un intervalle (de taille lambdas[2]-lambdas[1]) en densité 
-    if (T){#(substring(method,1,3) == "FFT") {
+    if (T){#(substring(method,1,3) == "FFT")
       indL=c(which.min(abs(lambdas-lambda1)),which.min(abs(lambdas-lambda2)))
       temp = (1-phi$fun[tini,indL[1]+1])*(1-phi$fun[tini,indL[2]+1])/(lambdas[2]-lambdas[1])^2  
       ini = temp*(M[indL[1],]*M[indL[2],]*expLambda)
@@ -256,31 +121,103 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     }
   }
   
-  if (substring(method,1,3) == "FFT") {
-    vect0 = rep(0,length(ini)) 
-    if(tini==tend){
-      A = as.vector(2*expLambda*(phi$normM*prodMatVect_FFT(phi$G,phi$fun[tini,-1],vect0)))
-    }else{
-      SumPhi=colSums(phi$fun[tini:tend,-1])
-      A = as.vector(2*expLambda*(phi$normM*prodMatVect_FFT(phi$G,SumPhi,vect0)))
-#       A=A/(tend-tini+1)
-      A=A/(tend-tini)
+  # Magnus expansion of order 4 with equispaced points:
+  #    B1 = B(Tn), B2 = B(Tn+h/2), B3 = B(Tn+h)
+  #    Omega(h) = (h/6)*(B1 + 4*B2 + B3) - (h*h/12) [B1,B3]
+  #    Y(n+1) = exp(Omega(h)) Y(n)
+  #
+  # We compute Y(n+1) = exp(Omega(h)) %*% Y(n) by an iterative process
+  #    OV(k+1) = Omega %*% OV(k) / (k+1)
+  #    EXPOV(k+1) = EXPOV(k) + OV(k+1)
+  # Series EXPOV(k) converges towards exp(Omega(h)) %*% Y(0), and we only need
+  # to explicit the product of Omega(h) by a vector.
+  #
+  # Here, B(t) = -diag(expLambda+mu) + (2*expLambda*(M %*% Phi(t))) * M
+  #    D1 = M %*% Phi(Tn), D2 = M %*% Phi(Tn+h/2), D3 = M %*% Phi(Tn+h)
+  # This gives
+  #    Omega(h) %*% V
+  #      = - h*(expLambda+mu)*V + (h/3)*expLambda*(D1+4*D2+D3)*applyV(M,V)
+  #           - (h*h/12) [B1,B3] %*% V
+  # First two terms are straightforward, we now have to explicit the last one
+  #    [B1,B3] %*% V = B1 %*% B3 %*% V - B3 %*% B1 %*% V
+  # Recall that
+  #    B1 = -diag(expLambda+mu) + 2*expLambda*D1*M
+  #    B3 = -diag(expLambda+mu) + 2*expLambda*D3*M
+  # Thus,
+  #    B3 %*% V = -(expLambda+mu)*V + 2*expLambda*D3*applyV(M,V)
+  #    B1 %*% B3 %*% V = - B1 %*% ((expLambda+mu)*V) + 2*B1 %*% (expLambda*D3*applyV(M,V))
+  #       = (expLambda+mu)^2*V - 2*expLambda*D1*applyV(M,(expLambda+mu)*V)
+  #       - 2*(expLambda+mu)*expLambda*D3*applyV(M,V) + 4*expLambda*D1*applyV(M,expLambda*D3*applyV(M,V))
+  # By symmetry,
+  #    B3 %*% B1 %*% V
+  #       = (expLambda+mu)^2*V - 2*expLambda*D3*applyV(M,(expLambda+mu)*V)
+  #       - 2*(expLambda+mu)*expLambda*D1*applyV(M,V) + 4*expLambda*D3*applyV(M,expLambda*D1*applyV(M,V))
+  # and eventually
+  #    [B1,B3] %*% V = 2*expLambda*(D3-D1)*applyV(M,(expLambda+mu)*V) + 2*(expLambda+mu)*expLambda*(D1-D3)*applyV(M,V)
+  #        + 4*expLambda*D1*applyV(M,expLambda*D3*applyV(M,V))
+  #        - 4*expLambda*D3*applyV(M,expLambda*D1*applyV(M,V))
+  #      = 2*expLambda*(((D3-D1)*applyV(M,(expLambda+mu)*V) - (expLambda+mu)*applyV(M,V)) +
+  #          2*D1*applyV(M,expLambda*D3*applyV(M,V)) - 2*D3*applyV(M,expLambda*D1*applyV(M,V)))
+  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
+  step = 6
+  h = timePhi[tini+step] - timePhi[tini]
+  norm = 0
+  last = tini
+  i = tini
+  rep = ini
+  while (i < tend - step) {
+    phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
+    D1 = MATVECT(M, phi$fun[i,-1])
+    D3 = MATVECT(M, phi$fun[i+step,-1])
+    OV = h * ( - (expLambda+mu) * rep + expLambda*applyV(M, phi123)*applyV(M,rep) / 3
+      - (h/6) * expLambda * (
+          (D3-D1)*(applyV(M,(expLambda+mu)*rep) - (expLambda+mu)*applyV(M,rep))
+           + 2*D1*applyV(M,expLambda*D3*applyV(M,rep)) - 2*D3*applyV(M,expLambda*D1*applyV(M,rep))
+      ))
+    norm = norm + h * sum(abs(OV)) / sum(abs(rep))
+    if (norm > pi || i >= tend - 2*step) {
+      if (norm > pi) {
+        if ((i - last) %% 2 == 0) {
+          i = i - 2
+        } else {
+          i = i - 1
+        }
+        if (i < last + 2) {
+          i = last + 2
+        }
+      } else {
+        i = tend - step
+      }
+      h = timePhi[i] - timePhi[last]
+      phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
+      D1 = MATVECT(M, phi$fun[i,-1])
+      D3 = MATVECT(M, phi$fun[i+step,-1])
+
+      # Compute iteratively exp(Omega)*V
+      mask = - (expLambda+mu) < -20
+      rep[mask] = 0
+      EXPOV=rep
+      OV=rep
+      k=1
+      epsnormv = 1e-10 * sum(abs(OV))
+      while (sum(abs(OV)) > epsnormv){
+        OV = h * ( - (expLambda+mu) * OV + expLambda*applyV(M, phi123)*applyV(M,OV) / 3
+                   - (h/6) * expLambda * (
+                        (D3-D1)*(applyV(M,(expLambda+mu)*OV) - (expLambda+mu)*applyV(M,OV))
+                         + 2*D1*applyV(M,expLambda*D3*applyV(M,OV)) - 2*D3*applyV(M,expLambda*D1*applyV(M,OV))
+                 )) / k
+        OV[mask] = 0
+        EXPOV = EXPOV + OV
+        k=k+1
+      }
+      EXPOV[mask] = 2e-9
+
+      rep = EXPOV
+      norm = 0
+      last = i
+    } else {
+      i = i + step
     }
-    if(method=="FFT_none"){
-      rep=rep(1, length(ini))
-    }else{
-      rep = expMatBVect_FFT(phi$G,ini,-(expLambda+mu), phi$normM, A,t-s,1e-12)
-    }
-  }else if(method == "ode"){
-    dKhi=function(t,y,parms){
-      tindex=which.min(abs(timePhi-t))
-      dy=2*phi$expLambda*((phi$M %*% y)*(phi$M %*% phi$fun[tindex,2:ncol(phi$fun)])) - (phi$expLambda+phi$mu)*y
-      return(list(dy))
-    }
-    out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
-    rep = out[tend,-1]
-  }else {
-    rep=MagnusExpansion(phi,ini,tini,tend,nt,method="order4_eq")
   }
   
   if(func=="Psi"|func=="Zeta"){
@@ -330,74 +267,37 @@ createLikelihood_death <- function(phylo, root_depth=0, relative = F,nt=1000,nla
   nodeprof=max(nodeprof)-nodeprof+root_depth
   tf=max(nodeprof)
   
-  
-  
-  if (substring(method,1,3) == "FFT") {
-    ll<-function(lambda, sigma, alpha, mu,f){
-      lambda2=lambda
-      lambda2=relToAbs(lambda2)
-      
-      # if (any(lambda2 <= 0)) return(-Inf)
-      if (any(c(mu,f, alpha, sigma) < 0)) return(-Inf)
-      
-      phi=Phi_FFT(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tf=tf,by=tf/nt)
-      
-      logLik=mclapply(1:(length(lambda2)-1),function(i){
-        if(type[i]==1){
-          m=Khi(phi,0,nodeprof[phylo$edge[i,1]],nt=nt,method=method,banded = banded,sparse=sparse)
-          ind=which.min(abs(lambda2[i+1]-phi$lambda))
-          return(log(m[ind]))
-        }else{
-          m=Khi(phi,nodeprof[phylo$edge[i,2]],nodeprof[phylo$edge[i,1]],lambda1 = lambda2[offspring[1,i]+1],
-                lambda2 = lambda2[offspring[2,i]+1],func = "Zeta",nt=nt,method=method,banded = banded,sparse=sparse)
-          ind=which.min(abs(lambda2[i+1]-phi$lambda))
-          return(log(m[ind]))}},mc.cores = nCPU)
-      # print(logLik)
-      logLik=sum(sapply(logLik,function(x){x}))
-      if(root_depth==0){
-        logLik=logLik+sum(dnorm(lambda[roots+1],mean=0,sd=sigma,log=T))
+  ll<-function(lambda, sigma, alpha, mu,f){
+    lambda2=lambda
+    lambda2=relToAbs(lambda2)
+    
+    # if (any(lambda2 <= 0)) return(-Inf)
+    if (any(c(mu,f, alpha, sigma) < 0)) return(-Inf)
+    
+    phi=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tf=tf,by=tf/nt,method=method)
+    
+    logLik=mclapply(1:(length(lambda2)-1),function(i){
+      if(type[i]==1){
+        m=Khi(phi,0,nodeprof[phylo$edge[i,1]],nt=nt,method=method,banded = banded,sparse=sparse)
+        ind=which.min(abs(lambda2[i+1]-phi$lambda))
+        return(log(m[ind]))
       }else{
-        m=Khi(phi,root_depth+nodeprof[nbtips+1],nodeprof[nbtips+1],lambda1 = lambda2[roots[1]+1],
-              lambda2 = lambda2[roots[2]+1],func = "Zeta",nt=nt,method = method,banded = banded,sparse=sparse)
-        ind=which.min(abs(lambda2[1]-phi$lambda))
-        logLik=logLik+log(m$fun[nrow(m$fun),ind])
-      }
-      
-      return(logLik)
+        m=Khi(phi,nodeprof[phylo$edge[i,2]],nodeprof[phylo$edge[i,1]],lambda1 = lambda2[offspring[1,i]+1],
+              lambda2 = lambda2[offspring[2,i]+1],func = "Zeta",nt=nt,method=method,banded = banded,sparse=sparse)
+        ind=which.min(abs(lambda2[i+1]-phi$lambda))
+        return(log(m[ind]))}},mc.cores = nCPU)
+    # print(logLik)
+    logLik=sum(sapply(logLik,function(x){x}))
+    if(root_depth==0){
+      logLik=logLik+sum(dnorm(lambda[roots+1],mean=0,sd=sigma,log=T))
+    }else{
+      m=Khi(phi,root_depth+nodeprof[nbtips+1],nodeprof[nbtips+1],lambda1 = lambda2[roots[1]+1],
+            lambda2 = lambda2[roots[2]+1],func = "Zeta",nt=nt,method = method,banded = banded,sparse=sparse)
+      ind=which.min(abs(lambda2[1]-phi$lambda))
+      logLik=logLik+log(m$fun[nrow(m$fun),ind])
     }
-  }else{
-    ll<-function(lambda, sigma, alpha, mu,f){
-      lambda2=lambda
-      lambda2=relToAbs(lambda2)
-      
-      # if (any(lambda2 <= 0)) return(-Inf)
-      if (any(c(mu,f,sigma) < 0)) return(-Inf)
-      
-      phi=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tf=tf,by=tf/nt)
-      
-      logLik=mclapply(1:(length(lambda2)-1),function(i){
-        if(type[i]==1){
-          m=Khi(phi,0,nodeprof[phylo$edge[i,1]],nt=nt,func = "Psi",method=method,banded = banded,sparse=sparse)
-          ind=which.min(abs(lambda2[i+1]-phi$lambda))
-          return(log(m[ind]))
-        }else{
-          m=Khi(phi,nodeprof[phylo$edge[i,2]],nodeprof[phylo$edge[i,1]],lambda1 = lambda2[offspring[1,i]+1],
-                lambda2 = lambda2[offspring[2,i]+1],func = "Zeta",nt=nt,method=method,banded = banded,sparse=sparse)
-          ind=which.min(abs(lambda2[i+1]-phi$lambda))
-          return(log(m[ind]))}},mc.cores = nCPU)
-      # print(logLik)
-      logLik=sum(sapply(logLik,function(x){x}))
-      if(root_depth==0){
-        logLik=logLik+sum(dnorm(lambda[roots+1],mean=0,sd=sigma,log=T))
-      }else{
-        m=Khi(phi,root_depth+nodeprof[nbtips+1],nodeprof[nbtips+1],lambda1 = lambda2[roots[1]+1],
-              lambda2 = lambda2[roots[2]+1],func = "Zeta",nt=nt,method = method,banded = banded,sparse=sparse)
-        ind=which.min(abs(lambda2[1]-phi$lambda))
-        logLik=logLik+log(m$fun[nrow(m$fun),ind])
-      }
-      
-      return(logLik)
-    }
+    
+    return(logLik)
   }
   return(ll)
   
