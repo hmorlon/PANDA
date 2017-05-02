@@ -46,7 +46,7 @@ setMethod(
           stop("Error: first row and first column must have the same first element")
       }
       .Object@n <- length(firstColumn)
-      .Object@d0 <- sapply(1:length(firstColumn), function(irow) {return(1/norm_vect1(c(firstColumn[irow:2], firstRow[1:(.Object@n+1-irow)])))})
+      .Object@d0 <- sapply(1:length(firstColumn), function(irow) {return(1/sum(c(firstColumn[irow:2], firstRow[1:(.Object@n+1-irow)])))})
       # Compute the next higher power of 2 for FFT, it is better to perform FFT on
       # vectors of length power of 2.
       N2 = 2 * .Object@n
@@ -66,8 +66,6 @@ setMethod(
     }
 )
 
-norm_vect1=function(x) sum(abs(x))
-
 # Compute exp(diag(diag1)+M*diag2)%*%x = exp(diag(diag1)+diag(diag2)%*%M)%*%x
 #                                      = exp(diag1*x + (diag2*d0)*(toeplitz%*%x))
 setMethod(
@@ -79,9 +77,9 @@ setMethod(
       expGv=x
       Gnv=x
       i=1
-      epsnormv = 1e-10 * norm_vect1(x)
+      epsnormv = 1e-10 * sum(abs(x))
       MATVECT <- selectMethod(applyV, c("MPhiFFT","vector"))
-      while (norm_vect1(Gnv) > epsnormv){
+      while (sum(abs(Gnv)) > epsnormv){
         Gnv = (diag1*Gnv + diag2*MATVECT(object,Gnv)) / i
         Gnv[mask_diag1] = 0
         expGv = expGv + Gnv
