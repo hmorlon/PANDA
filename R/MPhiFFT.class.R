@@ -47,13 +47,14 @@ setMethod(
       }
       .Object@n <- length(firstColumn)
       .Object@d0 <- sapply(1:length(firstColumn), function(irow) {return(1/sum(c(firstColumn[irow:2], firstRow[1:(.Object@n+1-irow)])))})
+      .Object@d0[1] <- 1/sum(firstRow)
       # Compute the next higher power of 2 for FFT, it is better to perform FFT on
       # vectors of length power of 2.
       N2 = 2 * .Object@n
       size=2^ceiling(log(N2)/log(2))
       circulantColumn=c(firstColumn, rep(0, size + 1 - 2*.Object@n), firstRow[length(firstRow):2])
       .Object@zero <- rep(0, size - .Object@n)
-      .Object@fftColumn <- Re(fft(circulantColumn))
+      .Object@fftColumn <- fft(circulantColumn)
       return(.Object)
     }
 )
