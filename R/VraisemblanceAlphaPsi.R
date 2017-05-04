@@ -120,7 +120,20 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
       ini = temp*(M[i1,]*M[i2,]*expLambda)
     }
   }
+
+  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
   
+  if(method == "ode"){
+    dKhi=function(t,y,parms){
+      tindex=which.min(abs(timePhi-t))
+      dy=2*expLambda*((MATVECT(M,y))*(MATVECT(M,phi$fun[tindex,2:ncol(phi$fun)]))) - (expLambda+mu)*y
+      return(list(dy))
+    }
+    out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
+    rep = out[tend,-1]
+ 
+  }else if(method == "Magnus"){
+
   # Magnus expansion of order 4 with equispaced points:
   #    B1 = B(Tn), B2 = B(Tn+h/2), B3 = B(Tn+h)
   #    Omega(h) = (h/6)*(B1 + 4*B2 + B3) - (h*h/12) [B1,B3]
@@ -158,7 +171,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
   #        - 4*expLambda*D3*applyV(M,expLambda*D1*applyV(M,V))
   #      = 2*expLambda*(((D3-D1)*applyV(M,(expLambda+mu)*V) - (expLambda+mu)*applyV(M,V)) +
   #          2*D1*applyV(M,expLambda*D3*applyV(M,V)) - 2*D3*applyV(M,expLambda*D1*applyV(M,V)))
-  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
+
   step = 6
   h = timePhi[tini+step] - timePhi[tini]
   norm = 0
@@ -219,7 +232,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
       i = i + step
     }
   }
-  
+  }
   if(func=="Psi"|func=="Zeta"){
     rep=rep/(1-phi$fun[tend,-1])
   }

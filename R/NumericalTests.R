@@ -6,11 +6,11 @@ source("birthdeath.tree.rateshift.R")
 check.Psi=function(t,sigma,alpha,mu,lambda_0,f,Nsim,mlambda=0.0001,Mlambda=100,nlambda=1000,nt=100,method="Higham08.b"){
   phi=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=t,by=t/nt,method=method)
   psi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Psi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
-          timePhi=phi$fun[,1],nt=1000)
+          timePhi=phi$fun[,1],nt=1000,method="ode")
   khi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
-          timePhi=phi$fun[,1],nt=1000)
+          timePhi=phi$fun[,1],nt=1000,method="ode")
   
-  test_Phi=T
+  test_Phi=F
   if (test_Phi==T){
     phi_noFFT=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=t,by=t/nt,method="NoFFT") 
     cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
@@ -18,6 +18,27 @@ check.Psi=function(t,sigma,alpha,mu,lambda_0,f,Nsim,mlambda=0.0001,Mlambda=100,n
     cat(" test Phi : |Phi_FFT-Phi|/|Phi_FFT|=",format(norm(phi_noFFT$fun-phi$fun)/norm(phi$fun)),"\n")
     cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
   }
+
+  test_Khi=T
+  if (test_Khi==T){
+    khi2=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
+          timePhi=phi$fun[,1],nt=1000,method="Magnus")
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+    cat(" test Khi : |Khi_ODE-Khi|          =",format(norm(khi2-khi)),"\n")
+    cat(" test Khi : |Khi_ODE-Khi|/|Khi_ODE|=",format(norm(khi2-khi)/norm(khi)),"\n")
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+  }
+
+  test_Psi=T
+  if (test_Psi==T){
+    psi2=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Psi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
+          timePhi=phi$fun[,1],nt=1000,method="Magnus")
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+    cat(" test Psi : |Psi_ODE-Psi|          =",format(norm(psi2-psi)),"\n")
+    cat(" test Psi : |Psi_ODE-Psi|/|Psi_ODE|=",format(norm(psi2-psi)/norm(psi)),"\n")
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+  }
+
 
   simulatePsi=simulateKhi=0
   n=0
