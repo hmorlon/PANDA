@@ -10,6 +10,15 @@ check.Psi=function(t,sigma,alpha,mu,lambda_0,f,Nsim,mlambda=0.0001,Mlambda=100,n
   khi=Khi(phi,s=0,t=phi$fun[nrow(phi$fun),1],func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
           timePhi=phi$fun[,1],nt=1000)
   
+  test_Phi=T
+  if (test_Phi==T){
+    phi_noFFT=Phi(sigma,alpha,mlambda,Mlambda,nlambda,mu,f,tini=0,tf=t,by=t/nt,method="NoFFT") 
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+    cat(" test Phi : |Phi_FFT-Phi|          =",format(norm(phi_noFFT$fun-phi$fun)),"\n")
+    cat(" test Phi : |Phi_FFT-Phi|/|Phi_FFT|=",format(norm(phi_noFFT$fun-phi$fun)/norm(phi$fun)),"\n")
+    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+  }
+
   simulatePsi=simulateKhi=0
   n=0
   i=0
