@@ -96,83 +96,75 @@ InterpolatedPhi=function(phi,t){
 #    Omega(h) = (h/6)*(B1 + 4 B2 + B3) - (h*h/12) [B1,B3]
 #    Y(n+1) = exp(Omega(h)) Y(n)
 
-MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
+MagnusExpansion=function(phi,ini,tini,tend,step){
   expLambda=phi$expLambda
   mu=phi$mu
   timePhi=phi$fun[,1]
   M=phi$M
   MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
 
-  h = timePhi[tini+2] - timePhi[tini]
-  for (i in seq(tini, tend-2, by=2)) {
-    rep = expOmegaV(h,phi,i,i+2,ini,MATVECT)
-    ini = rep
-  }
-  return(rep)
-}
-
-expOmegaV=function(h,phi,i1,i2,x,MATVECT){
-  # Compute iteratively exp(Omega)*V
-
-  # Magnus expansion of order 4 with equispaced points:
-  #    B1 = B(Tn), B2 = B(Tn+h/2), B3 = B(Tn+h)
-  #    Omega(h) = (h/6)*(B1 + 4*B2 + B3) - (h*h/12) [B1,B3]
-  #    Y(n+1) = exp(Omega(h)) Y(n)
-  #
-  # We compute Y(n+1) = exp(Omega(h)) %*% Y(n) by an iterative process
-  #    OV(k+1) = Omega %*% OV(k) / (k+1)
-  #    EXPOV(k+1) = EXPOV(k) + OV(k+1)
-  # Series EXPOV(k) converges towards exp(Omega(h)) %*% Y(0), and we only need
-  # to explicit the product of Omega(h) by a vector.
-  #
-  # Here, B(t) = -diag(expLambda+mu) + (2*expLambda*diag(M %*% Phi(t))) * M
-  #    D0 = diag(expLambda+mu)
-  #    D1 = expLambda*diag(M %*% Phi(Tn)),
-  #    D2 = expLambda*diag(M %*% Phi(Tn+h/2))
-  #    D3 = expLambda*diag(M %*% Phi(Tn+h))
-  #    D123 = D1+4*D2+D3 = expLambda*diag(M %*% (Phi(Tn) + 4 Phi(Tn+h/2) + Phi(Tn+h)))
-  #
-  # This gives
-  #    Omega(h)  = - h*D0 + (h/3)*D123 * M - (h*h/12) [B1,B3]
-  #
-  # First two terms are straightforward, we now have to explicit the last one  [B1,B3] = B1*B3 - B3*B1
-  # Recall that
-  #    B1 = - D0 + 2*D1*M
-  #    B3 = - D0 + 2*D3*M
-  # Thus,
-  #    B1 * B3 = D0^2 - 2*D0*D3*M - 2*D1*M*D0 + 4*D1*M*D3*M
-  #    B3 * B1 = D0^2 - 2*D0*D1*M - 2*D3*M*D0 + 4*D3*M*D1*M
-  #    [B1,B3] = - 2*D0*(D3-D1)*M + 2*(D3-D1)*M*D0 + 4*(D1*M*D3*M - D3*M*D1*M)
-  #            = - 2*(D3-D1)*(D0*M - M*D0) + 4*(D1*M*D3*M - D3*M*D1*M)
-  # Eventually,
-  #    Omega(h) = - h*D0 + (h/3)*D123*M - (h*h/12)*[B1,B3]
-  #             = - h*D0 + (h/3)*D123*M + (h*h/6)*(D3-D1)*(D0*M - M*D0) - (h*h/3)*(D1*M*D3*M - D3*M*D1*M)
-
-  expLambda=phi$expLambda
-  mu=phi$mu
-  M=phi$M
-
-  phi123 = phi$fun[i1,-1] + 4 * phi$fun[(i1+i2)/2,-1] + phi$fun[i2,-1]
-  D1 = expLambda*MATVECT(M, phi$fun[i1,-1])
-  D3 = expLambda*MATVECT(M, phi$fun[i2,-1])
-  D123 = expLambda*MATVECT(M,phi123)
+  h = timePhi[tini+step] - timePhi[tini]
   D0 = expLambda+mu
-
   mask = - (expLambda+mu) < -20
-  x[mask] = 0
-  EXPOV=x
-  OV=x
-  i=1
-  epsnormv = 1e-10 * sum(abs(OV))
-  while (sum(abs(OV)) > epsnormv){
-    MOV = MATVECT(M,OV)
-    OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(D0*MOV - MATVECT(M,D0*OV)) - (h*h/3)*(D1*MATVECT(M,D3*MOV)-D3*MATVECT(M,D1*MOV))
-    OV = OV/i
-    OV[mask] = 0
-    EXPOV = EXPOV + OV
-    i=i+1
+  D3 = expLambda*MATVECT(M, phi$fun[tini+step,-1])
+  for (i in seq(tini, tend-step, by=step)) {
+    # Compute iteratively exp(Omega)*V
+  
+    # Magnus expansion of order 4 with equispaced points:
+    #    B1 = B(Tn), B2 = B(Tn+h/2), B3 = B(Tn+h)
+    #    Omega(h) = (h/6)*(B1 + 4*B2 + B3) - (h*h/12) [B1,B3]
+    #    Y(n+1) = exp(Omega(h)) Y(n)
+    #
+    # We compute Y(n+1) = exp(Omega(h)) %*% Y(n) by an iterative process
+    #    OV(k+1) = Omega %*% OV(k) / (k+1)
+    #    EXPOV(k+1) = EXPOV(k) + OV(k+1)
+    # Series EXPOV(k) converges towards exp(Omega(h)) %*% Y(0), and we only need
+    # to explicit the product of Omega(h) by a vector.
+    #
+    # Here, B(t) = -diag(expLambda+mu) + (2*expLambda*diag(M %*% Phi(t))) * M
+    #    D0 = diag(expLambda+mu)
+    #    D1 = expLambda*diag(M %*% Phi(Tn)),
+    #    D2 = expLambda*diag(M %*% Phi(Tn+h/2))
+    #    D3 = expLambda*diag(M %*% Phi(Tn+h))
+    #    D123 = D1+4*D2+D3 = expLambda*diag(M %*% (Phi(Tn) + 4 Phi(Tn+h/2) + Phi(Tn+h)))
+    #
+    # This gives
+    #    Omega(h)  = - h*D0 + (h/3)*D123 * M - (h*h/12) [B1,B3]
+    #
+    # First two terms are straightforward, we now have to explicit the last one  [B1,B3] = B1*B3 - B3*B1
+    # Recall that
+    #    B1 = - D0 + 2*D1*M
+    #    B3 = - D0 + 2*D3*M
+    # Thus,
+    #    B1 * B3 = D0^2 - 2*D0*D3*M - 2*D1*M*D0 + 4*D1*M*D3*M
+    #    B3 * B1 = D0^2 - 2*D0*D1*M - 2*D3*M*D0 + 4*D3*M*D1*M
+    #    [B1,B3] = - 2*D0*(D3-D1)*M + 2*(D3-D1)*M*D0 + 4*(D1*M*D3*M - D3*M*D1*M)
+    #            = - 2*(D3-D1)*(D0*M - M*D0) + 4*(D1*M*D3*M - D3*M*D1*M)
+    # Eventually,
+    #    Omega(h) = - h*D0 + (h/3)*D123*M - (h*h/12)*[B1,B3]
+    #             = - h*D0 + (h/3)*D123*M + (h*h/6)*(D3-D1)*(D0*M - M*D0) - (h*h/3)*(D1*M*D3*M - D3*M*D1*M)
+  
+    phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
+    D1 = D3
+    D3 = expLambda*MATVECT(M, phi$fun[i+step,-1])
+    D123 = expLambda*MATVECT(M,phi123)
+  
+    ini[mask] = 0
+    EXPOV=ini
+    OV=ini
+    k=1
+    epsnormv = 1e-10 * sum(abs(OV))
+    while (sum(abs(OV)) > epsnormv){
+      MOV = MATVECT(M,OV)
+      OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(D0*MOV - MATVECT(M,D0*OV)) - (h*h/3)*(D1*MATVECT(M,D3*MOV)-D3*MATVECT(M,D1*MOV))
+      OV = OV/k
+      OV[mask] = 0
+      EXPOV = EXPOV + OV
+      k=k+1
+    }
+    EXPOV[mask] = 2e-9
+    ini = EXPOV
   }
-  EXPOV[mask] = 2e-9
   return(EXPOV)
 }
 
@@ -219,7 +211,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     rep = out[tend,-1]
 
   }else if(method == "Magnus"){
-   rep = MagnusExpansion(phi,ini,tini,tend,method="order4_eq")
+   rep = MagnusExpansion(phi,ini,tini,tend,2)
   }
   if(func=="Psi"|func=="Zeta"){
     rep=rep/(1-phi$fun[tend,-1])
