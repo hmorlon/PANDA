@@ -252,7 +252,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
   if(method == "ode"){
     dKhi=function(t,y,parms){
       tindex=which.min(abs(timePhi-t))
-      dy=2*expLambda*((applyV(M,y))*(applyV(M,phi$fun[tindex,2:ncol(phi$fun)]))) - (expLambda+mu)*y
+      dy=2*expLambda*((MATVECT(M,y))*(MATVECT(M,phi$fun[tindex,2:ncol(phi$fun)]))) - (expLambda+mu)*y
       return(list(dy))
     }
     out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
