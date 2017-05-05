@@ -96,18 +96,22 @@ InterpolatedPhi=function(phi,t){
 #    Omega(h) = (h/6)*(B1 + 4 B2 + B3) - (h*h/12) [B1,B3]
 #    Y(n+1) = exp(Omega(h)) Y(n)
 
-MagnusExpansion=function(phi,ini,tini,tend,step){
+MagnusExpansion=function(phi,ini,tini,tend){
   expLambda=phi$expLambda
   mu=phi$mu
   timePhi=phi$fun[,1]
   M=phi$M
   MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
 
-  h = timePhi[tini+step] - timePhi[tini]
+  step = 2
+  deltaT = timePhi[tini+step] - timePhi[tini]
   D0 = expLambda+mu
   mask = - (expLambda+mu) < -20
   D3 = expLambda*MATVECT(M, phi$fun[tini+step,-1])
-  for (i in seq(tini, tend-step, by=step)) {
+  norm = 0
+  last = tini
+  i = tini
+  while ( i < tend - step) {
     # Compute iteratively exp(Omega)*V
   
     # Magnus expansion of order 4 with equispaced points:
@@ -145,10 +149,36 @@ MagnusExpansion=function(phi,ini,tini,tend,step){
     #             = - h*D0 + (h/3)*D123*M + (h*h/6)*(D3-D1)*(D0*M - M*D0) - (h*h/3)*(D1*M*D3*M - D3*M*D1*M)
   
     phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
-    D1 = D3
+    D1 = expLambda*MATVECT(M, phi$fun[i,-1])
     D3 = expLambda*MATVECT(M, phi$fun[i+step,-1])
     D123 = expLambda*MATVECT(M,phi123)
-  
+    Mini = MATVECT(M,ini)
+    OV = - deltaT*D0*ini + (deltaT/3)*D123*Mini + (deltaT*deltaT/6)*(D3-D1)*(D0*Mini - MATVECT(M,D0*ini)) - (deltaT*deltaT/3)*(D1*MATVECT(M,D3*Mini)-D3*MATVECT(M,D1*Mini))
+    norm = norm + deltaT * sum(abs(OV)) / sum(abs(ini))
+    if (norm <= pi && i - last < 20 && i >= tend - 2*step) {
+      i = i + step
+      next
+    }
+    if (norm > pi) {
+      if ((i - last) %% 2 == 0) {
+        i = i - 2
+      } else {
+        i = i - 1
+      }
+    }
+    if (i < last + 2) {
+      i = last + 2
+    }
+    if (i >= tend - 2*step) {
+      i = tend - step
+    }
+
+    h = timePhi[i] - timePhi[last]
+    phi123 = phi$fun[last,-1] + 4 * phi$fun[(last+i)/2,-1] + phi$fun[i,-1]
+    D1 = expLambda*MATVECT(M, phi$fun[last,-1])
+    D3 = expLambda*MATVECT(M, phi$fun[i,-1])
+    D123 = expLambda*MATVECT(M,phi123)
+
     ini[mask] = 0
     EXPOV=ini
     OV=ini
@@ -164,6 +194,8 @@ MagnusExpansion=function(phi,ini,tini,tend,step){
     }
     EXPOV[mask] = 2e-9
     ini = EXPOV
+    norm = 0
+    last = i
   }
   return(EXPOV)
 }
@@ -211,7 +243,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     rep = out[tend,-1]
 
   }else if(method == "Magnus"){
-   rep = MagnusExpansion(phi,ini,tini,tend,2)
+   rep = MagnusExpansion(phi,ini,tini,tend)
   }
   if(func=="Psi"|func=="Zeta"){
     rep=rep/(1-phi$fun[tend,-1])
