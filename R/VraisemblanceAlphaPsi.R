@@ -103,51 +103,10 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
   M=phi$M
   MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
 
-  if (method=="order4_eq") {
-    h = timePhi[tini+2] - timePhi[tini]
-    for (i in seq(tini, tend-2, by=2)) {
-      rep = expOmegaV(h,phi,i,i+2,ini,MATVECT)
-      ini = rep 
-    }
-  } else if (method=="order4_eq2") {
-    step = 6
-    h = timePhi[tini+step] - timePhi[tini]
-    norm = 0
-    last = tini
-    i = tini
-    while (i <= tend - step) {
-      phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
-      D1 = expLambda*MATVECT(M, phi$fun[i,-1])
-      D3 = expLambda*MATVECT(M, phi$fun[i+step,-1])
-      D123 = expLambda*MATVECT(M,phi123)
-      D0 = expLambda+mu
-
-      Mini = MATVECT(M,ini)
-      OV = - h*D0*ini + (h/3)*D123*Mini + (h*h/6)*(D3-D1)*(MATVECT(M,D0*ini)-D0*Mini) - (h*h/3)*(D1*MATVECT(M,D3*Mini)-D3*MATVECT(M,D1*Mini))
-      norm = norm + h * sum(abs(OV)) / sum(abs(ini))
-      if (norm > pi) {
-        if ((i - last) %% 2 == 0) {
-          i = i - 2
-        } else {
-          i = i - 1
-        }
-        if (i < last + 2) {
-          i = last + 2
-        }
-        h = timePhi[i] - timePhi[last]
-        rep = expOmegaV(h,phi,last,i,ini,MATVECT)
-        ini = rep
-        norm = 0
-        last = i
-      } else {
-        i = i + step
-      }
-    }
-    if (last < tend-1) {
-        h = timePhi[tend] - timePhi[last]
-        rep = expOmegaV(h,phi,last,tend,ini,MATVECT)
-        ini = rep
-    }
+  h = timePhi[tini+2] - timePhi[tini]
+  for (i in seq(tini, tend-2, by=2)) {
+    rep = expOmegaV(h,phi,i,i+2,ini,MATVECT)
+    ini = rep
   }
   return(rep)
 }
@@ -168,27 +127,26 @@ expOmegaV=function(h,phi,i1,i2,x,MATVECT){
   #
   # Here, B(t) = -diag(expLambda+mu) + (2*expLambda*diag(M %*% Phi(t))) * M
   #    D0 = diag(expLambda+mu)
-  #    D1 = expLambda*diag(M %*% Phi(Tn)), 
+  #    D1 = expLambda*diag(M %*% Phi(Tn)),
   #    D2 = expLambda*diag(M %*% Phi(Tn+h/2))
   #    D3 = expLambda*diag(M %*% Phi(Tn+h))
-  #    D123 = D1+4*D2+D3
-
+  #    D123 = D1+4*D2+D3 = expLambda*diag(M %*% (Phi(Tn) + 4 Phi(Tn+h/2) + Phi(Tn+h)))
+  #
   # This gives
   #    Omega(h)  = - h*D0 + (h/3)*D123 * M - (h*h/12) [B1,B3]
-
-  # First two terms are straightforward, we now have to explicit the last one  [B1,B3] = B1 %*% B3 - B3 %*% B1 
+  #
+  # First two terms are straightforward, we now have to explicit the last one  [B1,B3] = B1*B3 - B3*B1
   # Recall that
-  #    B1 = -D0 + 2*D1*M = -D0 + A1
-  #    B3 = -D0 + 2*D3*M = -D0 + A3
+  #    B1 = - D0 + 2*D1*M
+  #    B3 = - D0 + 2*D3*M
   # Thus,
-  #    B1 %*% B3 = D0^2 - D0*A3 - A1*D0 + A1*A3
-  #    B3 %*% B1 = D0^2 - D0*A1 - A3*D0 + A3*A1
-  #    [B1,B3]   = - D0*(A3-A1) + (A3-A1)*D0 +  A1*A3 - A3*A1
-  #    [B1,B3]   = - 2*(D0*(D3-D1)*M + (D3-D1)*M*D0) + 4(D1*M*D3*M - D3*M*D1*M)
-  #    [B1,B3]   = - 2*(D3-D1)*(D0*M + M*D0) + 4(D1*M*D3*M - D3*M*D1*M)
-  # and,
-  #    Omega(h)  = - h*D0 + (h/3)*D123*M - (h*h/12) [B1,B3]
-  #    Omega(h)  = - h*D0 + (h/3)*D123*M + (h*h/6)(D3-D1)*(D0*M + M*D0) - (h*h/3)(D1*M*D3*M - D3*M*D1*M) 
+  #    B1 * B3 = D0^2 - 2*D0*D3*M - 2*D1*M*D0 + 4*D1*M*D3*M
+  #    B3 * B1 = D0^2 - 2*D0*D1*M - 2*D3*M*D0 + 4*D3*M*D1*M
+  #    [B1,B3] = - 2*D0*(D3-D1)*M + 2*(D3-D1)*M*D0 + 4*(D1*M*D3*M - D3*M*D1*M)
+  #            = - 2*(D3-D1)*(D0*M - M*D0) + 4*(D1*M*D3*M - D3*M*D1*M)
+  # Eventually,
+  #    Omega(h) = - h*D0 + (h/3)*D123*M - (h*h/12)*[B1,B3]
+  #             = - h*D0 + (h/3)*D123*M + (h*h/6)*(D3-D1)*(D0*M - M*D0) - (h*h/3)*(D1*M*D3*M - D3*M*D1*M)
 
   expLambda=phi$expLambda
   mu=phi$mu
@@ -208,8 +166,8 @@ expOmegaV=function(h,phi,i1,i2,x,MATVECT){
   epsnormv = 1e-10 * sum(abs(OV))
   while (sum(abs(OV)) > epsnormv){
     MOV = MATVECT(M,OV)
-    OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(MATVECT(M,D0*OV)-D0*MOV) - (h*h/3)*(D1*MATVECT(M,D3*MOV)-D3*MATVECT(M,D1*MOV))
-    OV = OV/i 
+    OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(D0*MOV - MATVECT(M,D0*OV)) - (h*h/3)*(D1*MATVECT(M,D3*MOV)-D3*MATVECT(M,D1*MOV))
+    OV = OV/i
     OV[mask] = 0
     EXPOV = EXPOV + OV
     i=i+1
