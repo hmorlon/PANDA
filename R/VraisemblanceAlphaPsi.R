@@ -117,10 +117,11 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
       phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
       D1 = expLambda*applyV(M, phi$fun[i,-1])
       D3 = expLambda*applyV(M, phi$fun[i+step,-1])
-      D0 = expLambda*applyV(M,phi123)
+      D123 = expLambda*applyV(M,phi123)
+      D0 = expLambda+mu
+
       Mini = applyV(M,ini)
-      OV = - h*(expLambda+mu)*ini + (h/3)*( D0*Mini - h*( D1*applyV(M,D3*Mini)-D3*applyV(M,D1*Mini) ) )
-      OV = OV + (h*h/6)*( (D3-D1)*applyV(M,(expLambda+mu)*ini) - (expLambda+mu)* (D3-D1)*Mini )
+      OV = - h*D0*ini + (h/3)*D123*Mini + (h*h/6)*(D3-D1)*(applyV(M,D0*ini)-D0*Mini) - (h*h/3)*(D1*applyV(M,D3*Mini)-D3*applyV(M,D1*Mini))
       norm = norm + h * sum(abs(OV)) / sum(abs(ini))
       if (norm > pi) {
         if ((i - last) %% 2 == 0) {
@@ -152,6 +153,41 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
 expOmegaV=function(h,phi,i1,i2,x){
   # Compute iteratively exp(Omega)*V
 
+  # Magnus expansion of order 4 with equispaced points:
+  #    B1 = B(Tn), B2 = B(Tn+h/2), B3 = B(Tn+h)
+  #    Omega(h) = (h/6)*(B1 + 4*B2 + B3) - (h*h/12) [B1,B3]
+  #    Y(n+1) = exp(Omega(h)) Y(n)
+  #
+  # We compute Y(n+1) = exp(Omega(h)) %*% Y(n) by an iterative process
+  #    OV(k+1) = Omega %*% OV(k) / (k+1)
+  #    EXPOV(k+1) = EXPOV(k) + OV(k+1)
+  # Series EXPOV(k) converges towards exp(Omega(h)) %*% Y(0), and we only need
+  # to explicit the product of Omega(h) by a vector.
+  #
+  # Here, B(t) = -diag(expLambda+mu) + (2*expLambda*diag(M %*% Phi(t))) * M
+  #    D0 = diag(expLambda+mu)
+  #    D1 = expLambda*diag(M %*% Phi(Tn)), 
+  #    D2 = expLambda*diag(M %*% Phi(Tn+h/2))
+  #    D3 = expLambda*diag(M %*% Phi(Tn+h))
+  #    D123 = D1+4*D2+D3
+
+  # This gives
+  #    Omega(h)  = - h*D0 + (h/3)*D123 * M - (h*h/12) [B1,B3]
+
+  # First two terms are straightforward, we now have to explicit the last one  [B1,B3] = B1 %*% B3 - B3 %*% B1 
+  # Recall that
+  #    B1 = -D0 + 2*D1*M = -D0 + A1
+  #    B3 = -D0 + 2*D3*M = -D0 + A3
+  # Thus,
+  #    B1 %*% B3 = D0^2 - D0*A3 - A1*D0 + A1*A3
+  #    B3 %*% B1 = D0^2 - D0*A1 - A3*D0 + A3*A1
+  #    [B1,B3]   = - D0*(A3-A1) + (A3-A1)*D0 +  A1*A3 - A3*A1
+  #    [B1,B3]   = - 2*(D0*(D3-D1)*M + (D3-D1)*M*D0) + 4(D1*M*D3*M - D3*M*D1*M)
+  #    [B1,B3]   = - 2*(D3-D1)*(D0*M + M*D0) + 4(D1*M*D3*M - D3*M*D1*M)
+  # and,
+  #    Omega(h)  = - h*D0 + (h/3)*D123*M - (h*h/12) [B1,B3]
+  #    Omega(h)  = - h*D0 + (h/3)*D123*M + (h*h/6)(D3-D1)*(D0*M + M*D0) - (h*h/3)(D1*M*D3*M - D3*M*D1*M) 
+
   expLambda=phi$expLambda
   mu=phi$mu
   M=phi$M
@@ -159,7 +195,8 @@ expOmegaV=function(h,phi,i1,i2,x){
   phi123 = phi$fun[i1,-1] + 4 * phi$fun[(i1+i2)/2,-1] + phi$fun[i2,-1]
   D1 = expLambda*applyV(M, phi$fun[i1,-1])
   D3 = expLambda*applyV(M, phi$fun[i2,-1])
-  D0 = expLambda*applyV(M,phi123)
+  D123 = expLambda*applyV(M,phi123)
+  D0 = expLambda+mu
 
   mask = - (expLambda+mu) < -20
   x[mask] = 0
@@ -169,8 +206,7 @@ expOmegaV=function(h,phi,i1,i2,x){
   epsnormv = 1e-10 * sum(abs(OV))
   while (sum(abs(OV)) > epsnormv){
     MOV = applyV(M,OV)
-    OV = - h*(expLambda+mu)*OV + (h/3)*( D0*MOV - h*( D1*applyV(M,D3*MOV)-D3*applyV(M,D1*MOV) ) )
-    OV = OV + (h*h/6)*( (D3-D1)*applyV(M,(expLambda+mu)*OV) - (expLambda+mu)* (D3-D1)*MOV )
+    OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(applyV(M,D0*OV)-D0*MOV) - (h*h/3)*(D1*applyV(M,D3*MOV)-D3*applyV(M,D1*MOV))
     OV = OV/i 
     OV[mask] = 0
     EXPOV = EXPOV + OV
