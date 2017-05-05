@@ -199,9 +199,8 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     }
   }
 
-  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
-  
   if(method == "ode"){
+    MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
     dKhi=function(t,y,parms){
       tindex=which.min(abs(timePhi-t))
       dy=2*expLambda*((MATVECT(M,y))*(MATVECT(M,phi$fun[tindex,2:ncol(phi$fun)]))) - (expLambda+mu)*y
@@ -209,8 +208,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
     }
     out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
     rep = out[tend,-1]
-
-  }else if(method == "Magnus"){
+  }else{
    rep = MagnusExpansion(phi,ini,tini,tend,2)
   }
   if(func=="Psi"|func=="Zeta"){
