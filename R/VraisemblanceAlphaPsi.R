@@ -101,10 +101,12 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
   mu=phi$mu
   timePhi=phi$fun[,1]
   M=phi$M
+  MATVECT <- selectMethod(applyV, c(class(M), class(ini)))
+
   if (method=="order4_eq") {
     h = timePhi[tini+2] - timePhi[tini]
     for (i in seq(tini, tend-2, by=2)) {
-      rep = expOmegaV(h,phi,i,i+2,ini)
+      rep = expOmegaV(h,phi,i,i+2,ini,MATVECT)
       ini = rep 
     }
   } else if (method=="order4_eq2") {
@@ -115,13 +117,13 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
     i = tini
     while (i <= tend - step) {
       phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
-      D1 = expLambda*applyV(M, phi$fun[i,-1])
-      D3 = expLambda*applyV(M, phi$fun[i+step,-1])
-      D123 = expLambda*applyV(M,phi123)
+      D1 = expLambda*MATVECT(M, phi$fun[i,-1])
+      D3 = expLambda*MATVECT(M, phi$fun[i+step,-1])
+      D123 = expLambda*MATVECT(M,phi123)
       D0 = expLambda+mu
 
-      Mini = applyV(M,ini)
-      OV = - h*D0*ini + (h/3)*D123*Mini + (h*h/6)*(D3-D1)*(applyV(M,D0*ini)-D0*Mini) - (h*h/3)*(D1*applyV(M,D3*Mini)-D3*applyV(M,D1*Mini))
+      Mini = MATVECT(M,ini)
+      OV = - h*D0*ini + (h/3)*D123*Mini + (h*h/6)*(D3-D1)*(MATVECT(M,D0*ini)-D0*Mini) - (h*h/3)*(D1*MATVECT(M,D3*Mini)-D3*MATVECT(M,D1*Mini))
       norm = norm + h * sum(abs(OV)) / sum(abs(ini))
       if (norm > pi) {
         if ((i - last) %% 2 == 0) {
@@ -133,7 +135,7 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
           i = last + 2
         }
         h = timePhi[i] - timePhi[last]
-        rep = expOmegaV(h,phi,last,i,ini)
+        rep = expOmegaV(h,phi,last,i,ini,MATVECT)
         ini = rep
         norm = 0
         last = i
@@ -143,14 +145,14 @@ MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
     }
     if (last < tend-1) {
         h = timePhi[tend] - timePhi[last]
-        rep = expOmegaV(h,phi,last,tend,ini)
+        rep = expOmegaV(h,phi,last,tend,ini,MATVECT)
         ini = rep
     }
   }
   return(rep)
 }
 
-expOmegaV=function(h,phi,i1,i2,x){
+expOmegaV=function(h,phi,i1,i2,x,MATVECT){
   # Compute iteratively exp(Omega)*V
 
   # Magnus expansion of order 4 with equispaced points:
@@ -191,11 +193,11 @@ expOmegaV=function(h,phi,i1,i2,x){
   expLambda=phi$expLambda
   mu=phi$mu
   M=phi$M
-  
+
   phi123 = phi$fun[i1,-1] + 4 * phi$fun[(i1+i2)/2,-1] + phi$fun[i2,-1]
-  D1 = expLambda*applyV(M, phi$fun[i1,-1])
-  D3 = expLambda*applyV(M, phi$fun[i2,-1])
-  D123 = expLambda*applyV(M,phi123)
+  D1 = expLambda*MATVECT(M, phi$fun[i1,-1])
+  D3 = expLambda*MATVECT(M, phi$fun[i2,-1])
+  D123 = expLambda*MATVECT(M,phi123)
   D0 = expLambda+mu
 
   mask = - (expLambda+mu) < -20
@@ -205,8 +207,8 @@ expOmegaV=function(h,phi,i1,i2,x){
   i=1
   epsnormv = 1e-10 * sum(abs(OV))
   while (sum(abs(OV)) > epsnormv){
-    MOV = applyV(M,OV)
-    OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(applyV(M,D0*OV)-D0*MOV) - (h*h/3)*(D1*applyV(M,D3*MOV)-D3*applyV(M,D1*MOV))
+    MOV = MATVECT(M,OV)
+    OV = - h*D0*OV + (h/3)*D123*MOV + (h*h/6)*(D3-D1)*(MATVECT(M,D0*OV)-D0*MOV) - (h*h/3)*(D1*MATVECT(M,D3*MOV)-D3*MATVECT(M,D1*MOV))
     OV = OV/i 
     OV[mask] = 0
     EXPOV = EXPOV + OV
