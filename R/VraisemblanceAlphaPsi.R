@@ -90,6 +90,96 @@ InterpolatedPhi=function(phi,t){
   }
 }
 
+#  Solve an ODE dY/dt = A(t) Y(t) by using Magnus expansion schemes
+#  Order 4 with equispaced points:
+#    B1 = B(Tn), B2 = B(Tn + h/2), B3 = B(Tn+h)
+#    Omega(h) = (h/6)*(B1 + 4 B2 + B3) - (h*h/12) [B1,B3]
+#    Y(n+1) = exp(Omega(h)) Y(n)
+
+MagnusExpansion=function(phi,ini,tini,tend,method="order4_eq"){
+  expLambda=phi$expLambda
+  mu=phi$mu
+  timePhi=phi$fun[,1]
+  M=phi$M
+  if (method=="order4_eq") {
+    h = timePhi[tini+2] - timePhi[tini]
+    for (i in seq(tini, tend-2, by=2)) {
+      rep = expOmegaV(h,phi,i,i+2,ini)
+      ini = rep 
+    }
+  } else if (method=="order4_eq2") {
+    step = 6
+    h = timePhi[tini+step] - timePhi[tini]
+    norm = 0
+    last = tini
+    i = tini
+    while (i <= tend - step) {
+      phi123 = phi$fun[i,-1] + 4 * phi$fun[i+step/2,-1] + phi$fun[i+step,-1]
+      D1 = expLambda*applyV(M, phi$fun[i,-1])
+      D3 = expLambda*applyV(M, phi$fun[i+step,-1])
+      D0 = expLambda*applyV(M,phi123)
+      Mini = applyV(M,ini)
+      OV = - h*(expLambda+mu)*ini + (h/3)*( D0*Mini - h*( D1*applyV(M,D3*Mini)-D3*applyV(M,D1*Mini) ) )
+      OV = OV + (h*h/6)*( (D3-D1)*applyV(M,(expLambda+mu)*ini) - (expLambda+mu)* (D3-D1)*Mini )
+      norm = norm + h * sum(abs(OV)) / sum(abs(ini))
+      if (norm > pi) {
+        if ((i - last) %% 2 == 0) {
+          i = i - 2
+        } else {
+          i = i - 1
+        }
+        if (i < last + 2) {
+          i = last + 2
+        }
+        h = timePhi[i] - timePhi[last]
+        rep = expOmegaV(h,phi,last,i,ini)
+        ini = rep
+        norm = 0
+        last = i
+      } else {
+        i = i + step
+      }
+    }
+    if (last < tend-1) {
+        h = timePhi[tend] - timePhi[last]
+        rep = expOmegaV(h,phi,last,tend,ini)
+        ini = rep
+    }
+  }
+  return(rep)
+}
+
+expOmegaV=function(h,phi,i1,i2,x){
+  # Compute iteratively exp(Omega)*V
+
+  expLambda=phi$expLambda
+  mu=phi$mu
+  M=phi$M
+  
+  phi123 = phi$fun[i1,-1] + 4 * phi$fun[(i1+i2)/2,-1] + phi$fun[i2,-1]
+  D1 = expLambda*applyV(M, phi$fun[i1,-1])
+  D3 = expLambda*applyV(M, phi$fun[i2,-1])
+  D0 = expLambda*applyV(M,phi123)
+
+  mask = - (expLambda+mu) < -20
+  x[mask] = 0
+  EXPOV=x
+  OV=x
+  i=1
+  epsnormv = 1e-10 * sum(abs(OV))
+  while (sum(abs(OV)) > epsnormv){
+    MOV = applyV(M,OV)
+    OV = - h*(expLambda+mu)*OV + (h/3)*( D0*MOV - h*( D1*applyV(M,D3*MOV)-D3*applyV(M,D1*MOV) ) )
+    OV = OV + (h*h/6)*( (D3-D1)*applyV(M,(expLambda+mu)*OV) - (expLambda+mu)* (D3-D1)*MOV )
+    OV = OV/i 
+    OV[mask] = 0
+    EXPOV = EXPOV + OV
+    i=i+1
+  }
+  EXPOV[mask] = 2e-9
+  return(EXPOV)
+}
+
 Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,mu=phi$mu,
              timePhi=phi$fun[,1],nt=1000,method="Higham08.b",banded=0,sparse=F){
   
@@ -126,13 +216,17 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
   if(method == "ode"){
     dKhi=function(t,y,parms){
       tindex=which.min(abs(timePhi-t))
-      dy=2*expLambda*((MATVECT(M,y))*(MATVECT(M,phi$fun[tindex,2:ncol(phi$fun)]))) - (expLambda+mu)*y
+      dy=2*expLambda*((applyV(M,y))*(applyV(M,phi$fun[tindex,2:ncol(phi$fun)]))) - (expLambda+mu)*y
       return(list(dy))
     }
     out <- ode(y = ini, times = timePhi, func = dKhi, parms = NULL)
     rep = out[tend,-1]
- 
+
   }else if(method == "Magnus"){
+   rep = MagnusExpansion(phi,ini,tini,tend,method="order4_eq")
+  }else if(method == "Magnus2"){
+   rep = MagnusExpansion(phi,ini,tini,tend,method="order4_eq2")
+  }else if(method == "Magnus1"){
 
   # Magnus expansion of order 4 with equispaced points:
   #    B1 = B(Tn), B2 = B(Tn+h/2), B3 = B(Tn+h)
@@ -171,7 +265,7 @@ Khi=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=phi$M,m
   #        - 4*expLambda*D3*applyV(M,expLambda*D1*applyV(M,V))
   #      = 2*expLambda*(((D3-D1)*applyV(M,(expLambda+mu)*V) - (expLambda+mu)*applyV(M,V)) +
   #          2*D1*applyV(M,expLambda*D3*applyV(M,V)) - 2*D3*applyV(M,expLambda*D1*applyV(M,V)))
-
+ 
   step = 6
   h = timePhi[tini+step] - timePhi[tini]
   norm = 0
