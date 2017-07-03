@@ -80,7 +80,7 @@ spectR<-function (phylo, method = c("standard"))
         e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)), 
             weighted = T), normalized = T), symmetric = T, only.values = F)
         m = subset(e$values, e$values >= 0)
-        d = dens(log(m))
+        d = dens(m)
         dsc = d$y/integr(d$x, d$y)
         gaps <- abs(diff(m))
         gapMat <- as.matrix(gaps)
