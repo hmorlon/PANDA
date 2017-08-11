@@ -1,0 +1,67 @@
+\name{GIC}
+\alias{GIC}
+
+\title{
+Generalized Information Criterion (GIC) to compare models fit by Maximum Likelihood (ML) or Penalized Likelihood (PL).
+}
+\description{
+The GIC allows comparing models fit by Maximum Likelihood (ML) or Penalized Likelihood (PL).
+}
+\usage{
+
+
+GIC(object)
+  
+  
+}
+\arguments{
+  \item{object}{
+An object of class "fit_pl.rpanda". See ?loocvPhylo}
+
+}
+
+
+\value{
+		a list with the following components
+  
+  \item{LogLikelihood}{the log-likelihood estimated for the model with estimated parameters}
+  \item{GIC}{the GIC criterion}
+  \item{bias}{the value of the bias term estimated to compute the GIC}
+
+}
+
+\details{
+\code{GIC} allows comparing the fit of various models estimated by Penalized Likelihood (see ?loocvPhylo). It's a wrapper to the \code{gic_criterion} function.
+}
+
+	
+\references{
+Clavel, J. & Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. in prep
+}
+
+\author{J. Clavel}
+
+\seealso{
+%% add later  \code{\link{sim_t_env}}  
+\code{\link{gic_criterion}}, 
+\code{\link{loocvPhylo}}
+}
+
+\examples{
+\donttest{
+require(mvMORPH)
+set.seed(1)
+n <- 32 # number of species
+p <- 40 # number of traits
+
+tree <- pbtree(n=n) # phylogenetic tree
+R <- Posdef(p)      # a random symmetric matrix (covariance)
+# simulate a dataset
+Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
+
+fit1 <- loocvPhylo(Y, tree, model="BM", method="RidgeAlt")
+fit2 <- loocvPhylo(Y, tree, model="OU", method="RidgeAlt")
+
+GIC(fit1); GIC(fit2)
+}
+}
