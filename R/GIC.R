@@ -24,6 +24,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   
   # check for parameters
   if(is.null(param) & model!="BM") stop("please provide a parameter value for the evolutionary model!!")
+  if(method=="ML" & p>=n) warning("The covariance matrix is singular, the log-likelihood (and the GIC) is unreliable!!")
   
   # Choose the model
   switch(model,
