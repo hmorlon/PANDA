@@ -101,17 +101,17 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
     tr <- tree
   }
   
-  D <- pruning(tr)$sqrtMat
-  Yi <- D%*%Y
-  X <- D%*%matrix(1,nrow(Y))
+  precalc <- pruning(tr)
+  D <- precalc$sqrtMat
+  Yi <- D%*%Y               # for mvMORPH 1.1.0, use crossprod(D,Y)
+  X <- D%*%matrix(1,nrow(Y))# for mvMORPH 1.1.0, use crossprod(D,matrix(1,nrow(Y)))
   beta <- pseudoinverse(X)%*%Yi
   Yk <- Yi-X%*%beta
   S <- crossprod(Yk)/n
   
   # Determinant for the phylogenetic tree
-  var_pic <- pruning(tr)
-  var_root <- var_pic$varRoot
-  var_contr <- var_pic$varNode
+  var_root <- precalc$varRoot
+  var_contr <- precalc$varNode
   
   if(REML==TRUE){
     Ccov <- sum(log(var_contr))
