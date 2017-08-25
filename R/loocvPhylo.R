@@ -54,7 +54,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
   }
   
   # Parameters
-  n <- nrow(Y)
+  n <- nO <- nrow(Y)
   nC <- n-1
   if(REML==TRUE) n <- n-1
   
@@ -499,7 +499,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
   regularizedEstimates <- .covPenalized(S=Snew, method=method, targM=targM, tuning=gamma)
   
   # return the results
-  results <- list(loocv=estimModel$value, model.par=model.par, gamma=gamma, scaled_tree=phy_estim, model=model, method=method, p=p, n=n, targM=targM, R=regularizedEstimates, REML=REML, Y=Y)
+  results <- list(loocv=estimModel$value, model.par=model.par, gamma=gamma, scaled_tree=phy_estim, model=model, method=method, p=p, n=nO, targM=targM, R=regularizedEstimates, REML=REML, Y=Y)
   class(results) <- "fit_pl.rpanda"
   return(results)
 }
