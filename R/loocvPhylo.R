@@ -495,8 +495,14 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
   gamma <- transAlpha(estimModel$par[idx2])
   # Compute R
   Ytransform <-  apply(Y,2,function(i) pic(i,phy_estim))
-  Snew <- crossprod(Ytransform)/n  
-  regularizedEstimates <- .covPenalized(S=Snew, method=method, targM=targM, tuning=gamma)
+  Snew <- crossprod(Ytransform)/n
+  matMeth <- method
+  if(method == "LASSOapprox"){
+      matMeth <- "LASSO"
+  }else if(method == "RidgeAltapprox"){
+      matMeth <- "RidgeAlt"
+  }
+  regularizedEstimates <- .covPenalized(S=Snew, method=matMeth, targM=targM, tuning=gamma)
   
   # return the results
   results <- list(loocv=estimModel$value, model.par=model.par, gamma=gamma, scaled_tree=phy_estim, model=model, method=method, p=p, n=nO, targM=targM, R=regularizedEstimates, REML=REML, Y=Y)
