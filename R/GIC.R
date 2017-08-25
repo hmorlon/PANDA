@@ -22,6 +22,10 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   # Select the method
   targM <- match.arg(targM)[1]
   
+  # Parameters
+  n <- nrow(Y)
+  p <- ncol(Y)
+  
   # check for parameters
   if(is.null(param) & model!="BM") stop("please provide a parameter value for the evolutionary model!!")
   if(method=="ML" & p>=n) warning("The covariance matrix is singular, the log-likelihood (and the GIC) is unreliable!!")
@@ -89,8 +93,6 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
            phyTrans <- function(phy, beta) return(phy)
            mod.par = 0
          })
-  n <- nrow(Y)
-  p <- ncol(Y)
   nC <- n
   if(REML==TRUE) n <- n-1
   
@@ -219,7 +221,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   GIC <- 2*llik + 2*(sigma_df+beta_df+mod.par)
   
   # return the results
-  results <- list(LogLikelihood=-llik, GIC=GIC, p=p, n=n, bias=sigma_df+beta_df+mod.par)
+  results <- list(LogLikelihood=-llik, GIC=GIC, p=p, n=nC, bias=sigma_df+beta_df+mod.par)
   class(results) <- "gic.rpanda"
   return(results)
 }
