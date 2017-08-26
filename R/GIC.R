@@ -10,7 +10,7 @@
 
 
 
-gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","LASSO","ML"), targM=c("null","Variance","unitVariance"), param=NULL, tuning=0, REML=TRUE, ...){
+gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","LASSO","ML","RidgeAltapprox","LASSOapprox"), targM=c("null","Variance","unitVariance"), param=NULL, tuning=0, REML=TRUE, ...){
   
   # ellipsis for additional arguments
   par <- list(...)
@@ -18,8 +18,13 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   
   # Select the method
   method <- match.arg(method)[1]
+  if(method=="RidgeAltapprox"){
+      method <- "RidgeAlt"
+  }else if(method=="LASSOapprox"){
+      method <- "LASSO"
+  }
   
-  # Select the method
+  # Select the target
   targM <- match.arg(targM)[1]
   
   # Parameters
