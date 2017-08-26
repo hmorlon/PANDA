@@ -458,48 +458,44 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
   # computationally intensive but maybe better to ensure good starting values
   
   if(is.null(starting)){
-      range_val <- log(c(0.01, 0.1, 1, 10, 100, 1000))
+      if(method=="RidgeArch"){
+          range_val <- c(0.01,0.1,0.2,0.5,0.7,0.9)
+      }else{
+          range_val <- log(c(0.01, 0.1, 1, 10, 100, 1000))
+      }
       switch(model,
       "lambda"={
           mod_val <- 0.5
-          if(method=="RidgeArch"){
-              tuning = abs(1 - (1/log(p)))
-          }else{
-              min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
-              tuning <- range_val[min_tune]
-          }
+          min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+          tuning <- range_val[min_tune]
+          
           start <- c(mod_val,tuning)
       },
       "OU"={
           mod_val <- log(log(2)/max(branching.times(tree))*5)
-          if(method=="RidgeArch"){
-              tuning = abs(1 - (1/log(p)))
-          }else{
-              min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
-              tuning <- range_val[min_tune]
-          }
+          min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+          tuning <- range_val[min_tune]
+          
           start <- c(mod_val,tuning)
       },
       "EB"={
           mod_val <- -log(2)/(max(branching.times(tree))*5)
-          if(method=="RidgeArch"){
-              tuning = abs(1 - (1/log(p)))
-          }else{
-              min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
-              tuning <- range_val[min_tune]
-          }
+          min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+          tuning <- range_val[min_tune]
+          
           start <- c(mod_val,tuning)
       },
       "BM"={
-          if(method=="RidgeArch"){
-              tuning = abs(1 - (1/log(p)))
-          }else{
-              min_tune <- which.min(sapply(range_val, function(x){ loocv(x)}))
-              tuning <- range_val[min_tune]
-          }
+          min_tune <- which.min(sapply(range_val, function(x){ loocv(x)}))
+          tuning <- range_val[min_tune]
+          
           start <- tuning
       })
-      message("Best starting for the tuning:",exp(tuning))
+      if(method=="RidgeArch"){
+          message("Best starting for the tuning: ",tuning)
+      }else{
+          message("Best starting for the tuning: ",exp(tuning))
+      }
   }else{
       start <- starting
   }
