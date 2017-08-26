@@ -69,12 +69,6 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
   # Default penalty is Ridge "null"
   target <- matrix(0,p,p)
   
-  # vague starting values for the regularization
-  if(method=="RidgeArch"){
-    tuning = abs(1 - (1/log(p)))
-  }else{
-    tuning = log(n)+log(p)
-  }
   
   ## ---- Transform phylo
   switch(model,
@@ -87,12 +81,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
              phy$edge.length[tips] <- phy$edge.length[tips] + (rootOrig * (1-lambda))
              return(phy)
            }
-           if(is.null(starting)){
-             start <- c(0.5, tuning)
-             }else{
-             start <- starting
-           }
-           
+
            transform <- function(x) x
            
            if(method!="RidgeArch"){
@@ -126,11 +115,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
              phy <- phy2
              return(phy)
            }
-           if(is.null(starting)){
-             start <- c(log(log(2)/max(branching.times(tree))*5), tuning)
-           }else{
-             start <- starting
-           }
+
            
            transform <- function(x) exp(x)
            
@@ -163,11 +148,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
              }
              return(phy)
            }
-           if(is.null(starting)){
-             start <- c(-log(2)/(max(branching.times(tree))*5), tuning)
-           }else{
-             start <- starting
-           }
+
            transform <- function(x) x
            
            if(method!="RidgeArch"){
@@ -185,11 +166,6 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
            phyTrans <- function(phy, beta) return(phy)
            transform <- function(x) x
            
-           if(is.null(starting)){
-             start <- tuning
-           }else{
-             start <- starting
-           }
            
            if(method!="RidgeArch"){
              upperBound <- log(1e6)
@@ -477,6 +453,52 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
            
          }     
   )
+  
+  # Starting values over range of parameters for quadratic ridge and LASSO (because the tuning value is between 0->Inf)
+  # computationally intensive but maybe better to ensure good starting values
+  
+  if(is.null(starting)){
+      range_val <- log(c(0.01, 0.1, 1, 10, 100, 1000))
+      switch(model,
+      "lambda"={
+          mod_val <- 0.5
+          if(method=="RidgeArch"){
+              tuning = abs(1 - (1/log(p)))
+          }else{
+              tuning <- min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+          }
+          start <- c(mod_val,tuning)
+      },
+      "OU"={
+          mod_val <- log(log(2)/max(branching.times(tree))*5)
+          if(method=="RidgeArch"){
+              tuning = abs(1 - (1/log(p)))
+          }else{
+              tuning <- min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+          }
+          start <- c(mod_val,tuning)
+      },
+      "EB"={
+          mod_val <- -log(2)/(max(branching.times(tree))*5)
+          if(method=="RidgeArch"){
+              tuning = abs(1 - (1/log(p)))
+          }else{
+              tuning <- min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+          }
+          start <- c(mod_val,tuning)
+      },
+      "BM"={
+          if(method=="RidgeArch"){
+              tuning = abs(1 - (1/log(p)))
+          }else{
+              tuning <- min(sapply(range_val, function(x){ loocv(x)}))
+          }
+          start <- tuning
+      }
+      )
+  }else{
+      start <- starting
+  }
   
   # Optimization of the cross-validated likelihood
   estimModel <- optim(start, fn = loocv, method="L-BFGS-B", upper=upperBound, lower=lowerBound)
