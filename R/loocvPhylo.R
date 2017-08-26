@@ -494,8 +494,8 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
               tuning <- min(sapply(range_val, function(x){ loocv(x)}))
           }
           start <- tuning
-      }
-      )
+      })
+      message("Best starting values:",start)
   }else{
       start <- starting
   }
