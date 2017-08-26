@@ -465,7 +465,8 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
           if(method=="RidgeArch"){
               tuning = abs(1 - (1/log(p)))
           }else{
-              tuning <- min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+              min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+              tuning <- range_val[min_tune]
           }
           start <- c(mod_val,tuning)
       },
@@ -474,7 +475,8 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
           if(method=="RidgeArch"){
               tuning = abs(1 - (1/log(p)))
           }else{
-              tuning <- min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+              min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+              tuning <- range_val[min_tune]
           }
           start <- c(mod_val,tuning)
       },
@@ -483,7 +485,8 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
           if(method=="RidgeArch"){
               tuning = abs(1 - (1/log(p)))
           }else{
-              tuning <- min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+              min_tune <- which.min(sapply(range_val, function(x){ loocv(c(mod_val,x))}))
+              tuning <- range_val[min_tune]
           }
           start <- c(mod_val,tuning)
       },
@@ -491,11 +494,12 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
           if(method=="RidgeArch"){
               tuning = abs(1 - (1/log(p)))
           }else{
-              tuning <- min(sapply(range_val, function(x){ loocv(x)}))
+              min_tune <- which.min(sapply(range_val, function(x){ loocv(x)}))
+              tuning <- range_val[min_tune]
           }
           start <- tuning
       })
-      message("Best starting values:",start)
+      message("Best starting for the tuning:",exp(tuning))
   }else{
       start <- starting
   }
