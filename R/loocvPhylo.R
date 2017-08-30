@@ -24,7 +24,7 @@
 require(mvMORPH)    # >= 1.0.9
 require(glassoFast) # https://github.com/JClavel/glassoFast
 
-loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeAlt","RidgeArch","RidgeAltapprox","LASSO","LASSOapprox"), targM=c("null","Variance","unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=1e-6, starting=NULL){
+loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeAlt","RidgeArch","RidgeAltapprox","LASSO","LASSOapprox"), targM=c("null","Variance","unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=1e-12, starting=NULL){
   
   # Checks
   if(missing(tree)) stop("Please provide a phylogenetic tree of class \"phylo\" ")
@@ -459,9 +459,9 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
   
   if(is.null(starting)){
       if(method=="RidgeArch"){
-          range_val <- c(0.01,0.1,0.2,0.5,0.7,0.9)
+          range_val <- c(1e-6, 0.01, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9)
       }else{
-          range_val <- log(c(0.01, 0.1, 1, 10, 100, 1000))
+          range_val <- log(c(1e-6, 0.01, 0.1, 1, 10, 100, 1000, 10000))
       }
       switch(model,
       "lambda"={

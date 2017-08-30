@@ -8,7 +8,7 @@ Phylogenetic Leave-One-Out Cross-Validated (LOOCV) penalized likelihood for high
 Fits high-dimensional model of trait evolution on trees through penalized likelihood. A phylogenetic LOOCV is used to estimate model parameters}
 \usage{
 
-loocvPhylo(Y, tree, model=c("BM", "OU", "EB", "lambda"), method=c("RidgeAlt", "RidgeArch", "RidgeAltapprox", "LASSO", "LASSOapprox"), targM=c("null", "Variance", "unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=1e-6, starting=NULL)
+loocvPhylo(Y, tree, model=c("BM", "OU", "EB", "lambda"), method=c("RidgeAlt", "RidgeArch", "RidgeAltapprox", "LASSO", "LASSOapprox"), targM=c("null", "Variance", "unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=1e-12, starting=NULL)
   
 }
 \arguments{
