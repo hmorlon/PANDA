@@ -45,15 +45,14 @@ minimum value for the regularization parameter. Singularities can occur with a z
 
 \item{starting}{
 Starting values for the parameter search (optional).}
-}
 
 \item{SE}{
 Standard errors associated with values in Y. If TRUE, SE will be estimated.}
-}
 
 \item{scale.height}{
 Whether the tree should be scaled to unit length or not. (default is TRUE)}
 }
+
 
 \value{
 	a list with the following components

@@ -82,7 +82,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
     
     # Identifying tips values
     tipsIndices <- which(  tree$edge[, 2] <= Ntip(tree))
-    if(SE==FALSE) SE <- NULL
+    if(!is.null(SE) && SE!=TRUE) SE <- NULL
     
     
     # Default tolerance for the parameter search
