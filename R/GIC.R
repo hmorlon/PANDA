@@ -148,7 +148,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   # Construct the penalty term
   switch(method,
          "RidgeAlt"={
-           P <- .makePenalty(S,tuning,Target,targM)
+           P <- .makePenalty(S,tuning,Target,targM)$S
            eig <- eigen(P)
            V <- eig$vectors
            d <- eig$values

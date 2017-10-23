@@ -82,7 +82,12 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
     I <- diag(p)
     
     # Default penalty is Ridge "null"
-    target <- matrix(0,p,p)
+    if(method=="RidgeArch" & targM=="null"){
+        warning("The \"null\" target cannot be used with the \"RidgeArch\" method. The \"unitVariance\" target is used instead.")
+        targM <- "unitVariance"
+    }else{
+        target <- matrix(0,p,p)
+    }
     
     # Identifying tips values
     tipsIndices <- which(  tree$edge[, 2] <= Ntip(tree))
