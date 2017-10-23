@@ -38,7 +38,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
     
     # Supp. param
     parLoo <- list(...)
-    if(is.null(parLoo[["echo"]])){ echo <- TRUE }
+    if(is.null(parLoo[["echo"]])){ echo <- TRUE }else{ echo <- parLoo$echo}
     
     # Select the model
     model <- match.arg(model)[1]
