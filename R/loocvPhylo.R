@@ -24,7 +24,7 @@
 require(mvMORPH)    # >= 1.0.9
 require(glassoFast) # https://github.com/JClavel/glassoFast
 
-loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeAlt","RidgeArch","RidgeAltapprox","LASSO","LASSOapprox"), targM=c("null","Variance","unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=NULL, starting=NULL, SE=NULL, scale.height=TRUE){
+loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeAlt","RidgeArch","RidgeAltapprox","LASSO","LASSOapprox"), targM=c("null","Variance","unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=NULL, starting=NULL, SE=NULL, scale.height=TRUE, ...){
     
     # Preliminary checks
     if(missing(tree)) stop("Please provide a phylogenetic tree of class \"phylo\" ")
@@ -35,6 +35,10 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
     }else{
         warning("rownames in Y are missing. It is assumed that they are in the same order as in the tree.")
     }
+    
+    # Supp. param
+    parLoo <- list(...)
+    if(is.null(parLoo[["echo"]])){ echo <- TRUE }
     
     # Select the model
     model <- match.arg(model)[1]
@@ -532,7 +536,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
             upperBound = c(upperBound,Inf)
         }
         
-        message("Initialization via grid search. Please wait...")
+       if(echo==TRUE) message("Initialization via grid search. Please wait...")
         if(method=="RidgeArch"){
             range_val <- c(1e-6, 0.01, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 0.9)
         }else{
@@ -583,16 +587,19 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
             start <- brute_force[which.min(apply(brute_force,1,loocv)),]
             tuning <- start[1]
         })
-        if(method=="RidgeArch"){
-            cat("Best starting for the tuning: ",as.numeric(tuning))
-        }else{
-            cat("Best starting for the tuning: ",as.numeric(exp(tuning)))
+        if(echo==TRUE){
+            if(method=="RidgeArch"){
+                cat("Best starting for the tuning: ",as.numeric(tuning))
+            }else{
+                cat("Best starting for the tuning: ",as.numeric(exp(tuning)))
+            }
         }
     }else{
         start <- .starting_val(starting, model, method, SE)
     }
     # Initial guesses found we start the optimization
-    message("Start optimization. Please wait...")
+    if(echo==TRUE) message("Start optimization. Please wait...")
+    
     # Optimization of the cross-validated likelihood
     estimModel <- optim(start, fn = loocv, method="L-BFGS-B", upper=upperBound, lower=lowerBound)
     
@@ -624,7 +631,7 @@ loocvPhylo <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("Ridg
     regularizedEstimates <- .covPenalized(S=Snew, method=matMeth, targM=targM, tuning=gamma)
     
     # End
-    message("Done in ", estimModel$count[1]," iterations.")
+    if(echo==TRUE) message("Done in ", estimModel$count[1]," iterations.")
     
     # return the results
     results <- list(loocv=estimModel$value, model.par=model.par, gamma=gamma, scaled_tree=phy_estim, model=model, method=method, p=p, n=nO, targM=targM, R=regularizedEstimates, REML=REML, Y=Y, SE=SE)
