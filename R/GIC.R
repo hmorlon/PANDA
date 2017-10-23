@@ -15,6 +15,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   # ellipsis for additional arguments
   par <- list(...)
   if(is.null(par[["fit"]])){ fit <- FALSE}else{ fit <- par$fit}
+  if(is.null(par[["SE"]])){ SE <- NULL}else{ SE <- par$SE}
   
   # Select the method
   method <- match.arg(method)[1]
@@ -101,6 +102,8 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
            phyTrans <- function(phy, beta) return(phy)
            mod.par = 0
          })
+         
+  if(!is.null(SE)) mod.par = mod.par + 1
   nC <- n
   if(REML==TRUE) n <- n-1
   
@@ -113,8 +116,8 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   
   precalc <- pruning(tr)
   D <- precalc$sqrtMat
-  Yi <- D%*%Y               # for mvMORPH 1.1.0, use crossprod(D,Y)
-  X <- D%*%matrix(1,nrow(Y))# for mvMORPH 1.1.0, use crossprod(D,matrix(1,nrow(Y)))
+  Yi <- D%*%Y
+  X <- D%*%matrix(1,nrow(Y))
   beta <- pseudoinverse(X)%*%Yi
   Yk <- Yi-X%*%beta
   S <- crossprod(Yk)/n
@@ -178,11 +181,11 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
     # 1) Hessian matrix (for Ridge)
     H <- (1/(0.5*(kronecker(d,d))))
     
-    # 2) First derivative of the functional
+    # 2) First derivative of the functional (we can use patterned matrix to target some matrix elements)
     T1 <- sapply(1:nC, function(i){
-      Sk <- Yk[i,]%*%t(Yk[i,]) ;
-      VSV <- .vec(t(V)%*%(0.5*(P - (1-tuning)*Sk - tuning*Target))%*%(V))
-      VSV2 <- .vec(t(V)%*%(0.5*(P - (1-tuning)*Sk - tuning*Target))%*%(V)) # if we use the patterned matrix ONE
+        Sk <- tcrossprod(Yk[i,]) ;
+        VSV <- .vec(crossprod(V, (0.5*(P - (1-tuning)*Sk - tuning*Target))%*%V));
+        VSV2 <- .vec(crossprod(V, (0.5*(P - Sk))%*%V));
       sum(VSV * (H*VSV2))
     })
     
@@ -206,9 +209,9 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
     
     # 2) First derivative of the functional
     T1 <- sapply(1:nC, function(i){
-      Sk <- Yk[i,]%*%t(Yk[i,]) ;
-      VSV <- .vec(t(V)%*%(0.5*(P - (Sk - tuning*Target) - tuning*Pi))%*%(V))
-      VSV2 <- .vec(t(V)%*%(0.5*(P - Sk))%*%(V))
+       Sk <- tcrossprod(Yk[i,]) ;
+       VSV <- .vec(crossprod(V, (0.5*(P - (Sk - tuning*Target) - tuning*Pi))%*%V));
+       VSV2 <- .vec(crossprod(V, (0.5*(P - Sk))%*%V));
       sum(VSV * (H*VSV2))
     })
     
@@ -218,7 +221,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   
   # Number of parameters for the root state:
   # The Information matrix from the Hessian
-  H2 <- pseudoinverse(Pi)
+  H2 <- P #pseudoinverse(Pi)
   gradient <- Pi%*%t(Yk)
   J2 <- tcrossprod(gradient)/n
   beta_df <- .tr(H2%*%J2)
@@ -237,5 +240,5 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
 # Extractor for fit_pl.rpanda 'class'
 GIC <- function(object){
   if(!inherits(object,"fit_pl.rpanda")) stop("only works with \"fit_pl.rpanda\" class objects")
-  gic_criterion(Y=object$Y, tree=object$scaled_tree, model=object$model, method=object$method, targM=object$targM, param=object$model.par, tuning=object$gamma, REML=object$REML, fit=TRUE)
+  gic_criterion(Y=object$Y, tree=object$scaled_tree, model=object$model, method=object$method, targM=object$targM, param=object$model.par, tuning=object$gamma, REML=object$REML, fit=TRUE, SE=object$SE)
 }

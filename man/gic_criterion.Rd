@@ -64,13 +64,12 @@ Additional options. Not used yet.}
 	The tuning parameter is assumed to be zero when using the "ML" method.}
 	
 \references{
-Clavel, J. & Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. in prep
+Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted
 }
 
 \author{J. Clavel}
 
 \seealso{
-%% add later  \code{\link{sim_t_env}}  
 \code{\link{GIC}}, 
 \code{\link{loocvPhylo}}
 }

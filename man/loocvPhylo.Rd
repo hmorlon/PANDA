@@ -40,13 +40,20 @@ Lower bound for the parameter search of the evolutionary model (optional).
 }
 
   \item{tol}{
-minimum value for the regularization parameter. Singularities can occur with a zero value in high-dimensional cases.}
+minimum value for the regularization parameter. Singularities can occur with a zero value in high-dimensional cases. (default is NULL)}
 
 
 \item{starting}{
 Starting values for the parameter search (optional).}
 }
 
+\item{SE}{
+Standard errors associated with values in Y. If TRUE, SE will be estimated.}
+}
+
+\item{scale.height}{
+Whether the tree should be scaled to unit length or not. (default is TRUE)}
+}
 
 \value{
 	a list with the following components
@@ -63,6 +70,7 @@ Starting values for the parameter search (optional).}
   \item{R}{a list with the estimated evolutionary covariance matrix and it's inverse}
   \item{REML}{logical indicating if the REML (TRUE) or ML (FALSE) method has been used}
   \item{Y}{the input dataset}
+  \item{SE}{the estimated standard error}
 }
 
 \details{
@@ -73,13 +81,12 @@ Starting values for the parameter search (optional).}
 	The LASSO is computationally intensive. Please wait!
 	The Ridge penalties with "null" or "unitVariance" targets are rotation invariants}
 \references{
-Clavel, J. & Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. in prep
+Clavel, J. Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted
 }
 
 \author{J. Clavel}
 
 \seealso{
-%% add later  \code{\link{sim_t_env}}  
 \code{\link{GIC}}, 
 \code{\link{gic_criterion}}
 }
