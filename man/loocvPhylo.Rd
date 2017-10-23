@@ -80,7 +80,7 @@ Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
 }
 
 \note{
-	The LASSO is computationally intensive. Please wait!
+	The LASSO is computationally intensive. Please wait! For highly-dimensional datasets you should favor the "RidgeArch" method to speed up the computations.
 	The Ridge penalties with "null" or "unitVariance" targets are rotation invariants}
 \references{
 Clavel, J. Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted

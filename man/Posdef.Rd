@@ -38,13 +38,12 @@ The eigenvalues. If not specified, eigenvalues are taken from an exponential dis
 Uyeda J.C., Caetano D.S., Pennell M.W. 2015. Comparative Analysis of Principal Components Can be Misleading. Syst. Biol. 64:677-689.
 	
 
-Clavel, J. & Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. in prep
+Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted
 }
 
 \author{J. Clavel}
 
 \seealso{
-%% add later  \code{\link{sim_t_env}}  
 \code{\link{GIC}}, 
 \code{\link{loocvPhylo}}
 }
