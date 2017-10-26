@@ -54,7 +54,30 @@ spectR<-function (phylo, method = c("standard"))
                 f[1:(n - 1)]))
             return(integral)
         }
-        
+        dens <- function(x, bw = bw.nrd0, kernel = kernelG, n = 4096,
+                from = min(x) - 3*sd, to = max(x) + 3*sd, adjust = 1,
+                ...) {
+  if(has.na <- any(is.na(x))) {
+    na.omit(x)->x
+    if(length(x) == 0)
+        stop('too infinite.')
+  }
+  	kernelG<-function(x, mean=0, sd=1) 
+		dnorm(x, mean = mean, sd = sd)
+if(method=="standard"){		
+  x<-log(x)	}
+if(method=="normal"){
+  x<-x
+ } 	
+  sd <- (if(is.numeric(bw)) bw[1] else bw(x)) * adjust
+  X <- seq(from, to, len = n)
+  M <- outer(X, x, kernel, sd = sd, ...)
+  structure(list(x = X, y = rowMeans(M), bw = sd,
+                 call = match.call(), n = length(x),
+                 data.name = deparse(substitute(x)),
+                 has.na = has.na), class =  "density")
+}
+
     
     if (method == "standard") {
         e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)), 
