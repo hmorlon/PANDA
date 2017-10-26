@@ -115,7 +115,7 @@ if(method=="normal"){
         kurtosis <- kurtosis.sub(dsc)
         skewness <- skewness(dsc)
         peak_height <- max(dsc)
-        res <- list(eigenvalues = e$values, principal_eigenvalue = principal_eigenvalue, 
+        res <- list(eigenvalues = m, principal_eigenvalue = principal_eigenvalue, 
             asymmetry = skewness, peakedness1 = kurtosis, peakedness2 = peak_height, 
             eigengap = eigenGap[, 1])
     }
