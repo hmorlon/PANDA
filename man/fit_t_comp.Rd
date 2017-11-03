@@ -40,15 +40,16 @@ vector specifying starting parameter values for maximum likelihood optimization.
   \item{S}{maximum-likelihood estimate of \code{S} parameter of matching competition model (see Note)}
   \item{b}{maximum-likelihood estimate of \code{b} parameter of linear diversity dependence model}
   \item{r}{maximum-likelihood estimate of \code{r} parameter of exponential diversity dependence model}
-  \item{r}{maximum-likelihood estimate of \code{z0}, the value at the root of the tree}
+  \item{z0}{maximum-likelihood estimate of \code{z0}, the value at the root of the tree}
   \item{convergence}{convergence diagnostics from \code{\link{optim}} function (see optim documentation)}
 }
 
 \details{
 If unspecified, \code{par} takes the default values of \code{var(data)/max(nodeHeights(phylo))} for sig2 and 0 for either \code{S} for the matching competition model, 
 \code{b} for the linear diversity dependence model, or \code{r} for the exponential diversity dependence model. Values can be manually entered as a vector with the first element
-equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}. Note that, since the starting value for
-sig2 is exponentiated to stabilize the likelihood search, if you input a \code{par} value, the first value specifying sig2 should be the log of the desired starting value.
+equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}. Note: since likelihood optimization
+uses sig rather than sig2, and since the starting value for is exponentiated to stabilize the likelihood search, if you input a \code{par} value, the first value specifying sig2 
+should be the log(sqrt()) of the desired sig2 starting value.
 
 }
 
@@ -60,7 +61,7 @@ sig2 is exponentiated to stabilize the likelihood search, if you input a \code{p
 	Weir, J. & Mursleen, S. 2012. Diversity-dependent cladogenesis and trait evolution in the adaptive radiation of the auks (Aves: Alcidae). \emph{Evolution} 67:403-416.
 }
 
-\author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
+\author{Jonathan Drury \href{mailto:jonathan.p.drury@gmail.com}{jonathan.p.drury@gmail.com}
 
 		Julien Clavel 
 }

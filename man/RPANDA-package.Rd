@@ -25,7 +25,7 @@ Julien Clavel <clavel@biologie.ens.fr>
 
 Fabien Condamine <fabien.condamine@gmail.com>
 
-Jonathan Drury <drury@biologie.ens.fr>
+Jonathan Drury <jonathan.p.drury@gmail.com>
 
 Eric Lewitus <lewitus@biologie.ens.fr>
 

@@ -42,7 +42,7 @@ The \code{map} can either be a matrix formed by specifying the region in which e
 	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020
 }
 
-\author{Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}}
+\author{Jonathan Drury \href{mailto:jonathan.p.drury@gmail.com}{jonathan.p.drury@gmail.com}}
 
 \seealso{
 \code{\link{fit_t_comp}} 

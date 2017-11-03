@@ -47,7 +47,7 @@ logical indicating whether the stochastic map was built from a stratified analys
 
 \author{
 
-	Jonathan Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
+	Jonathan Drury \href{mailto:jonathan.p.drury@gmail.com}{jonathan.p.drury@gmail.com}
 
 }
 
