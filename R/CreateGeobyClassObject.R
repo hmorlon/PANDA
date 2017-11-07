@@ -1,4 +1,4 @@
-CreateGeobyClassObject<-function(phylo,simmap,trim.class,ana.events,clado.events,stratified,rnd=5){
+CreateGeobyClassObject<-function(phylo,simmap,trim.class,ana.events,clado.events,stratified=FALSE,rnd=5){
 
 trc=trim.class
 
