@@ -9,8 +9,9 @@ Fits matching competition (MC), diversity dependent linear (DDlin), or diversity
 }
 \usage{
 
-fit_t_comp_subgroup(full.phylo,ana.events,clado.events,stratified=FALSE,map,data,
-	trim.class,model=c("MC","DDexp","DDlin"),par=NULL,method="Nelder-Mead",bounds=NULL)
+fit_t_comp_subgroup(full.phylo, ana.events, clado.events, stratified=FALSE, map,data, 
+	trim.class, model=c("MC","DDexp","DDlin"), par=NULL, method="Nelder-Mead", 
+	bounds=NULL)
 	
 }
 
@@ -119,9 +120,9 @@ Canidae.data<-rnorm(length(Canidae.phylo$tip.label))
 names(Canidae.data)<-Canidae.phylo$tip.label
 Canidae.A<-Canidae.data[which(dummy.group=="A")]
 
-fitA<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events,
-+	clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,map=Canidae.simmap,
-+	data=Canidae.A,trim.class="A",model="DDexp")
+fitA<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events, 
+clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,map=Canidae.simmap, 
+data=Canidae.A,trim.class="A",model="DDexp")
 	
 }
 

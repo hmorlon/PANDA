@@ -92,9 +92,9 @@ Canidae.simmap<-make.simmap(Canidae.phylo,dummy.group)
 
 #build GeobyClass object with "A" as the focal group
 
-Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Canidae.simmap,
-+	trim.class="A",ana.events=BGB.examples$Canidae.ana.events,
-+	clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
+Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Canidae.simmap, 
+trim.class="A",ana.events=BGB.examples$Canidae.ana.events, 
+clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
 	
 plotSimmap(Canidae.geobyclass.object$map)
 }

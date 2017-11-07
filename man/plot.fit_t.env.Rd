@@ -56,6 +56,7 @@ data(InfTemp)
 
 # Simulate a trait with temperature dependence on the Cetacean tree
 set.seed(123)
+\donttest{
 
 trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
 					root.value=0, step=0.01, plot=TRUE)
@@ -68,6 +69,6 @@ plot(result1)
 
 # further options
 plot(result1, lty=2, lwd=2, col="red")
-
+}
 
 }
