@@ -199,6 +199,7 @@ require(pspline)
 # We define the function for the Early-Burst/AC model:
 maxtime = max(branching.times(Cetacea))
 
+# sigma^2*e^(r*t)
 my_fun_ebac <- function(t, env_cont, param){
     time = (maxtime - t)
     param[1]*exp(param[2]*time)
