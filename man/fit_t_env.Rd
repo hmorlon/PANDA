@@ -70,7 +70,7 @@ defined below.
 \code{EnvLin}:
 \deqn{\sigma^2 (t)  =  \sigma_0^2 + \beta T(t)}{sigma^2(t) = sigma^2 + beta * T(t)}
 
-Users defined models should have the following form:
+Users defined models should have the following form (see also examples below):
 
 \code{fun <- function(t, env, param){ param*env(t)}}
 
@@ -115,6 +115,8 @@ The various options are passed through "...".
 -sig2: can be used instead of param to define the starting sigma value only
 
 -beta: can be used instead of param to define the beta starting value only
+
+-maxdiff: difference in time between tips and present day for phylogenetic trees with no contemporaneous species (default is 0)
 }
 
 \note{
@@ -122,7 +124,7 @@ The various options are passed through "...".
 	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
-Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, doi: 10.1073/pnas.1606868114
+Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, 114(16): 4183-4188.
 }
 
 \author{J. Clavel}
@@ -190,5 +192,22 @@ require(pspline)
 ## Various parameterization (box constraints, df, scaling of the curve...) example
  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", 
  			scale=TRUE, lower=-30, upper=20, df=10)
+
+
+## A very general model...
+
+# We define the function for the Early-Burst/AC model:
+maxtime = max(branching.times(Cetacea))
+
+my_fun_ebac <- function(t, env_cont, param){
+    time = (maxtime - t)
+    param[1]*exp(param[2]*time)
+}
+
+res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun_ebac,
+                param=c(0.1,0), scale=TRUE)
+res
+
+}
  }
 }

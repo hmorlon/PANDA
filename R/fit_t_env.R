@@ -24,13 +24,6 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         data<-data[phylo$tip.label]
     }
     
-    # Number of parameters (fixed up to now)
-    if(!is.function(model)){
-        nparam = 3 # 3 parameters: sig2, beta, mu
-    }else{
-        nparam = length(par$param)+1 # number of parameters + mu
-    }
-    
     # Number of taxa
     n = length(phylo$tip.label)
     
@@ -169,6 +162,13 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     # Vector of starting values is provided by the user
     startval<-par$param
     }
+   
+   # Number of parameters (fixed up to now)
+   if(!is.function(model)){
+       nparam = 3 # 3 parameters: sig2, beta, mu
+   }else{
+       nparam = length(par$param)+1 # number of parameters + mu
+   }
    
     # Optimization
     #estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, mtot=tot_time, subdivisions=subdivisions), model)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
