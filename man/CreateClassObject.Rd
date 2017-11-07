@@ -1,5 +1,3 @@
-#This is a  script that creates a class object which lists states for each branch at each point in time
-
 \name{CreateClassObject}
 \alias{CreateClassObject}
 
@@ -27,9 +25,8 @@ CreateClassObject(simmap,rnd=5)
   integer indicating the number of decimal places to which times should be rounded (default value is 5) (see \code{\link{round}})
 }
 
-
-
 }
+
 \value{
 	a list with the following components:
   \item{class.object}{a list of matrices specifying the state of each branch during each internode interval (see Details)}
@@ -39,7 +36,7 @@ CreateClassObject(simmap,rnd=5)
 
 \details{
 This function formats the class object so that it can be correctly
-passed to the numerical integration performed in \code{\link{fit_t_comp_subguild}}. 
+passed to the numerical integration performed in \code{\link{fit_t_comp_subgroup}}. 
 
 }
 

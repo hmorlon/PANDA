@@ -5,11 +5,12 @@
 Fits models of trait evolution incorporating competitive interactions, restricting competition to occur only between members of a subgroup
 }
 \description{
-Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset, phylogeny, and stochastic maps of both subgroup membership and biogeographt.
+Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset, phylogeny, and stochastic maps of both subgroup membership and biogeography.
 }
 \usage{
 
-fit_t_comp_subgroup(full.phylo,ana.events,clado.events,stratified=FALSE,map,data,trim.class,model=c("MC","DDexp","DDlin"),pars=NULL,method="Nelder-Mead",bounds=NULL)
+fit_t_comp_subgroup(full.phylo,ana.events,clado.events,stratified=FALSE,map,data,
+	trim.class,model=c("MC","DDexp","DDlin"),par=NULL,method="Nelder-Mead",bounds=NULL)
 
 }
 
@@ -39,7 +40,7 @@ a named vector of trait values for subgroup members with names matching \code{fu
   \item{model}{
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
-  \item{pars}{
+  \item{par}{
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
 }
   \item{method}{
@@ -91,7 +92,7 @@ should be the log(sqrt()) of the desired sig2 starting value.
 
 \seealso{
 \code{\link{likelihood_subgroup_model}}
-\code{\link{CreateGeobyClassObect}}
+\code{\link{CreateGeobyClassObject}}
 
 }
 
@@ -118,7 +119,10 @@ Canidae.data<-rnorm(length(Canidae.phylo$tip.label))
 names(Canidae.data)<-Canidae.phylo$tip.label
 Canidae.A<-Canidae.data[which(dummy.group=="A")]
 
-fitA<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events,clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,map=Canidae.simmap,data=Canidae.A,trim.class="A",model="DDexp")
+fitA<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events,
++	clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,map=Canidae.simmap,
++	data=Canidae.A,trim.class="A",model="DDexp")
+	
 }
 
 }

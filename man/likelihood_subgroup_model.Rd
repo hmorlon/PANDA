@@ -9,7 +9,8 @@ Computes the likelihood of a dataset under either the linear or exponential dive
 }
 
 \usage{
-likelihood_subgroup_model<-function(data,phylo,geography.object,model=c("MC","DDexp","DDlin"),par,return.z0=FALSE,maxN=NULL)
+likelihood_subgroup_model(data,phylo,geography.object,model=c("MC","DDexp","DDlin"),
+	par,return.z0=FALSE,maxN=NULL)
 
 }
 
@@ -95,10 +96,16 @@ set.seed(123)
 Canidae.data<-rnorm(length(Canidae.phylo$tip.label))
 names(Canidae.data)<-Canidae.phylo$tip.label
 Canidae.A<-Canidae.data[which(dummy.group=="A")]
-Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Canidae.simmap,trim.class="A",ana.events=BGB.examples$Canidae.ana.events,clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
+Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Canidae.simmap,
++	trim.class="A", ana.events=BGB.examples$Canidae.ana.events,
++	clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
 
 par <- c(log(0.01),-0.0005)
-maxN<-max(vapply(Canidae.geobyclass.object$geography.object$geography.object,function(x)max(rowSums(x)),1))
-lh <- -likelihood_subgroup_model(data=Canidae.A,phylo=Canidae.geobyclass.object$map,geo.object=Canidae.geobyclass.object$geography.object,model="DDlin",par=par,return.z0=FALSE,maxN=maxN)
+maxN<-max(vapply(Canidae.geobyclass.object$geography.object$geography.object,
++	function(x)max(rowSums(x)),1))
+
+lh <- -likelihood_subgroup_model(data=Canidae.A,phylo=Canidae.geobyclass.object$map,
++	geo.object=Canidae.geobyclass.object$geography.object,model="DDlin",par=par,
++	return.z0=FALSE,maxN=maxN)
 
 }

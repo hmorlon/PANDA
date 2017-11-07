@@ -11,7 +11,8 @@ Create a merged biogeography-by-class object to be passed to fit_t_comp_subgroup
 }
 \usage{
 
-CreateGeobyClassObject(phylo,simmap,trim.class,ana.events,clado.events,stratified=FALSE, rnd=5)
+CreateGeobyClassObject(phylo,simmap,trim.class,ana.events,clado.events,
+	stratified=FALSE,rnd=5)
 
 }
 
@@ -19,7 +20,7 @@ CreateGeobyClassObject(phylo,simmap,trim.class,ana.events,clado.events,stratifie
   \item{phylo}{
 the object of type 'phylo' (see ape documentation) used to build ancestral range stochastic maps in BioGeoBEARS
 }
-  \item{map}{
+  \item{simmap}{
 a phylo object created using \code{\link{make.simmap}} in phytools
 }
   \item{trim.class}{
@@ -90,7 +91,9 @@ Canidae.simmap<-make.simmap(Canidae.phylo,dummy.group)
 
 #build GeobyClass object with "A" as the focal group
 
-Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Canidae.simmap,trim.class="A",ana.events=BGB.examples$Canidae.ana.events,clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
+Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Canidae.simmap,trim.class="A",
++	ana.events=BGB.examples$Canidae.ana.events,clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
+	
 plotSimmap(Canidae.geobyclass.object$map)
 
 }
