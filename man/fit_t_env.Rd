@@ -208,6 +208,6 @@ res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun_ebac,
                 param=c(0.1,0), scale=TRUE)
 res
 
-}
+
  }
 }
