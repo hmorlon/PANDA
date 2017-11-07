@@ -52,7 +52,7 @@ CreateClassObject<-function(simmap,rnd=5){
       mat<-rbind(mat,int)
     }
   }
-  if(geiger::is.phylo(simmap)){
+  if(any(class(simmap)=="phylo")){
     for(i in 1:length(mat[,1])){
       if(mat[i,3]==0){
         mat[i,3]<-as.character(match(mat[i,2],simmap$tip.label))

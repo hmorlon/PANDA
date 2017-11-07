@@ -11,7 +11,7 @@ Fits matching competition (MC), diversity dependent linear (DDlin), or diversity
 
 fit_t_comp_subgroup(full.phylo,ana.events,clado.events,stratified=FALSE,map,data,
 	trim.class,model=c("MC","DDexp","DDlin"),par=NULL,method="Nelder-Mead",bounds=NULL)
-
+	
 }
 
 \arguments{
