@@ -54,7 +54,7 @@ model chosen to fit trait data, \code{"EnvExp"} is the exponential-environmental
   the log-likelihood value of the environmental model
 }
 \references{
-Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, doi: 10.1073/pnas.1606868114
+Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, 114(16): 4183-4188.
 
 }
 

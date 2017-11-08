@@ -53,7 +53,7 @@ It's possible to estimate the traits with the MLE from another fitted object (se
 }
 
 \references{
-Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, doi: 10.1073/pnas.1606868114
+Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science,  114(16): 4183-4188.
 
 }
 

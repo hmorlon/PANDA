@@ -5,7 +5,7 @@
 Maximum likelihood fit of the environmental model of trait evolution
 }
 \description{
-Fits model of trait evolution for which evolutionary rates depends on an environmental function.
+Fits model of trait evolution for which evolutionary rates depends on an environmental function, or more generally a time varying function.
 }
 \usage{
 
@@ -120,7 +120,7 @@ The various options are passed through "...".
 }
 
 \note{
-	The users defined function is evaluated forward in time i.e.: from the root to the tips.
+	The users defined function is evaluated forward in time i.e.: from the root to the tips (time = 0 at the (present) tips).
 	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
@@ -207,7 +207,7 @@ my_fun_ebac <- function(t, env_cont, param){
 
 res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun_ebac,
                 param=c(0.1,0), scale=TRUE)
-res
+res # note that "r" is positive: it's the AC model (~OU model on ultrametric tree)
 
 
  }
