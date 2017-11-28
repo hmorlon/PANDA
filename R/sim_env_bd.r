@@ -1,12 +1,5 @@
 birthdeath.tree.timevar_simp <- function (f.lamb, f.mu, lamb_par, mu_par, time.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE)
 
-#simplification of the birthdeath.tree.timevar code by removing everything that had to do with the taxa.stop criterion 
-# start with only 1 lineage, not 2.
-# allow rate variation in time as specified by f.lamb, f.mu and the parameters lamb_par and mu_par
-# the parameters of the time variation are given from the past to the present
-# extinct lineages can be pruned. Also return number of lineages through time.
-# Note: the resulting tree has no root length. This root lenght is given by the first time when there is an event, i.e. $times[2] 
-
 {
     if (time.stop == 0) 
     stop("Must have stopping time")
