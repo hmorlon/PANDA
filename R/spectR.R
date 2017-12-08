@@ -92,8 +92,8 @@ if(method=="normal"){
         eigenGap <- subset(gapMatCol, gapMatCol[, 2] == max(gapMatCol[, 
             2]))
         principal_eigenvalue <- max(m)
-        kurtosis <- kurtosis.sub(dsc)
-        skewness <- skewness(dsc)
+        kurtosis <- kurtosis.sub(x)
+        skewness <- skewness(x)
         peak_height <- max(dsc)
         res <- list(eigenvalues = e$values, principal_eigenvalue = principal_eigenvalue, 
             asymmetry = skewness, peakedness1 = kurtosis, peakedness2 = peak_height, 
@@ -112,8 +112,8 @@ if(method=="normal"){
         eigenGap <- subset(gapMatCol, gapMatCol[, 2] == max(gapMatCol[, 
             2]))
         principal_eigenvalue <- max(m)
-        kurtosis <- kurtosis.sub(dsc)
-        skewness <- skewness(dsc)
+        kurtosis <- kurtosis.sub(x)
+        skewness <- skewness(x)
         peak_height <- max(dsc)
         res <- list(eigenvalues = m, principal_eigenvalue = principal_eigenvalue, 
             asymmetry = skewness, peakedness1 = kurtosis, peakedness2 = peak_height, 
