@@ -28,9 +28,7 @@ the vector of eigenvalues}
 the largest (or principal) eigenvalue of the spectral density profile}
 \item{asymmetry}{
 the skewness of the spectral density profile} 
-	\item{peakedness1}{
-the kurtosis of the spectral density profile}
-	\item{peakedness2}{
+	\item{peak_height}{
 the largest y-axis value of the spectral density profile}
 	\item{eigengap}{
 the position of the largest difference between eigenvalues, giving the number of modalities in the tree}
