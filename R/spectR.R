@@ -1,5 +1,5 @@
-library(RPANDA)
-library(igraph)
+#library(RPANDA)
+#library(igraph)
 revised_spectR<-function (phylo, method = c("standard")) 
 			{
 #define skewness function				
