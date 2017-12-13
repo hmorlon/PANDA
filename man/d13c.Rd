@@ -1,14 +1,14 @@
-\name{delta^{13}C}
-\alias{delta^{13}C}
+\name{d13c}
+\alias{d13c}
 \docType{data}
-\title{delta^{13}C data since the Jurassic}
-\description{Benthic delta^{13}C weathering ratio since the Jurassic}
+\title{d13c data since the Jurassic}
+\description{Benthic d13c weathering ratio since the Jurassic}
 \usage{data(d13c)}
 \details{
   Ratio of stable carbon isotopes since the Jurassic calculated by Hannisdal and Peters (2011) and Lazarus et al. (2014) from marine carbonates. The format is a dataframe with the two following variables:
   \describe{
     \item{\code{age}}{a numeric vector corresponding to the geological age, in Myrs before the present}
-    \item{\code{d13c}}{a numeric vector corresponding to the estimated delta^{13}C at that age}
+    \item{\code{d13c}}{a numeric vector corresponding to the estimated d13c at that age}
   }
 }
 \references{
