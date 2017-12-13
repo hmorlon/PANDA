@@ -4,6 +4,7 @@
 ##########
 
 
+
 g <- function(t,b,d)
 {
 	denominator <- ( 1. - (d/b)*exp(-(b-d)*t) )
