@@ -1,5 +1,5 @@
-\name{sea level}
-\alias{sea level}
+\name{sealevel}
+\alias{sealevel}
 \docType{data}
 \title{Sea level data since the Jurassic}
 \description{Global sea level change since the Jurassic}

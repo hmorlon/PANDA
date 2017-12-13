@@ -1,3 +1,7 @@
+sim_env_bd <- function (env_data, f.lamb, f.mu, lamb_par, mu_par, df=NULL, time.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE)
+
+{
+
 birthdeath.tree.timevar_simp <- function (f.lamb, f.mu, lamb_par, mu_par, time.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE)
 
 {
@@ -114,10 +118,6 @@ birthdeath.tree.timevar_simp <- function (f.lamb, f.mu, lamb_par, mu_par, time.s
     }
     return(list("tree"=obj,"times"=times,"nblineages"=nblineages))
 }
-
-sim_env_bd <- function (env_data, f.lamb, f.mu, lamb_par, mu_par, df=NULL, time.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE)
-
-{
 
 if (is.null(df))
   {

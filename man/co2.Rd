@@ -1,14 +1,14 @@
-\name{CO_{2}}
-\alias{CO_{2}}
+\name{co2}
+\alias{co2}
 \docType{data}
-\title{CO_{2} data since the Jurassic}
-\description{Atmospheric CO_{2} data since the Jurassic}
+\title{co2 data since the Jurassic}
+\description{Atmospheric co2 data since the Jurassic}
 \usage{data(co2)}
 \details{
-  Atmospheric CO_{2} data since the Jurassic taken from Mayhew et al., (2008, 2012) and derived from the GeoCarb-III model (Berner and Kothavala, 2001). The data are eported as the ratio of the mass of CO_{2} at time t to that at present. The format is a dataframe with the two following variables:
+  Atmospheric co2 data since the Jurassic taken from Mayhew et al., (2008, 2012) and derived from the GeoCarb-III model (Berner and Kothavala, 2001). The data are eported as the ratio of the mass of co2 at time t to that at present. The format is a dataframe with the two following variables:
   \describe{
     \item{\code{age}}{a numeric vector corresponding to the geological age, in Myrs before the present}
-    \item{\code{co2}}{a numeric vector corresponding to the estimated CO_{2} at that age}
+    \item{\code{co2}}{a numeric vector corresponding to the estimated co2 at that age}
   }
 }
 \references{
