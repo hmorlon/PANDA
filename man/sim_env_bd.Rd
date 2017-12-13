@@ -8,7 +8,7 @@ Simulate birth-death tree dependent on an environmental curve
 Simulates a birth-death tree (starting with one lineage) with speciation and/or extinction rate that varies as a function of an input environmental curve. Notations follow Morlon et al. PNAS 2011 and Condamine et al. ELE 2013.
 }
 \usage{
-fit_env(env_data, f.lamb, f.mu, lamb_par, mu_par, df=NULL, time.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE)
+sim_env_bd(env_data, f.lamb, f.mu, lamb_par, mu_par, df=NULL, time.stop = 0, return.all.extinct=TRUE, prune.extinct=TRUE)
 }
 
 \arguments{
