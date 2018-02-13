@@ -71,7 +71,7 @@ penalized_phyl.pca <- function(object, plot=TRUE, ...){
   if(mode=="corr") covR <- cov2cor(covR)
   
   # ancestral states
-  anc <- estim.anc(object)
+  anc <- estim(object)
   a <- anc$root
   nodes <- anc$nodes
   one <- matrix(1, ncol=1, nrow=n)

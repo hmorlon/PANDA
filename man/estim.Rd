@@ -15,6 +15,7 @@ estim(object)
   \item{object}{
 A penalized likelihood model fit obtained by the \code{fit_t_pl} function.
 }
+}
  
 
 \value{
