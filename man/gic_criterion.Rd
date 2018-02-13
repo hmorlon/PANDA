@@ -57,21 +57,21 @@ Additional options. Not used yet.}
 }
 
 \details{
-\code{gic_criterion} allows comparing the fit of various models estimated by Penalized Likelihood (see ?loocvPhylo). Use the wrapper \code{GIC} instead for models fit with \code{loocvPhylo}.
+\code{gic_criterion} allows comparing the fit of various models estimated by Penalized Likelihood (see ?fit_t_pl). Use the wrapper \code{GIC} instead for models fit with \code{fit_t_pl}.
 }
 
 \note{
 	The tuning parameter is assumed to be zero when using the "ML" method.}
 	
 \references{
-Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted
+Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. submitted
 }
 
 \author{J. Clavel}
 
 \seealso{
 \code{\link{GIC}}, 
-\code{\link{loocvPhylo}}
+\code{\link{fit_t_pl}}
 }
 
 \examples{
@@ -91,7 +91,7 @@ Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 gic_criterion(Y, tree, model="BM", method="ML", tuning=0) # ML
 
 # Compare with PL?
-#test <- loocvPhylo(Y, tree, model="BM", method="RidgeAlt")
+#test <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
 #GIC(test)
 }
 }

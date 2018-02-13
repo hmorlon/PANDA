@@ -38,14 +38,14 @@ The eigenvalues. If not specified, eigenvalues are taken from an exponential dis
 Uyeda J.C., Caetano D.S., Pennell M.W. 2015. Comparative Analysis of Principal Components Can be Misleading. Syst. Biol. 64:677-689.
 	
 
-Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted
+Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. submitted
 }
 
 \author{J. Clavel}
 
 \seealso{
 \code{\link{GIC}}, 
-\code{\link{loocvPhylo}}
+\code{\link{fit_t_pl}}
 }
 
 \examples{
@@ -60,7 +60,7 @@ R <- Posdef(p) # a random symmetric matrix (covariance)
 # simulate a dataset
 Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 
-test <- loocvPhylo(Y, tree, model="BM", method="RidgeAlt")
+test <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
 GIC(test)
 
 }

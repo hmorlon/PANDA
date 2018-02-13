@@ -31,12 +31,12 @@ An object of class "fit_pl.rpanda". See ?loocvPhylo}
 }
 
 \details{
-\code{GIC} allows comparing the fit of various models estimated by Penalized Likelihood (see ?loocvPhylo). It's a wrapper to the \code{gic_criterion} function.
+\code{GIC} allows comparing the fit of various models estimated by Penalized Likelihood (see ?fit_t_pl). It's a wrapper to the \code{gic_criterion} function.
 }
 
 	
 \references{
-Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods. submitted
+Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. submitted
 }
 
 \author{J. Clavel}
@@ -44,7 +44,7 @@ Clavel, J., Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for
 \seealso{
 %% add later  \code{\link{sim_t_env}}  
 \code{\link{gic_criterion}}, 
-\code{\link{loocvPhylo}}
+\code{\link{fit_t_pl}}
 }
 
 \examples{
@@ -59,8 +59,8 @@ R <- Posdef(p)      # a random symmetric matrix (covariance)
 # simulate a dataset
 Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 
-fit1 <- loocvPhylo(Y, tree, model="BM", method="RidgeAlt")
-fit2 <- loocvPhylo(Y, tree, model="OU", method="RidgeAlt")
+fit1 <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
+fit2 <- fit_t_pl(Y, tree, model="OU", method="RidgeAlt")
 
 GIC(fit1); GIC(fit2)
 }
