@@ -21,7 +21,7 @@ estim.fit_pl.rpanda <- function(object){
   Y <- object$Y
   
   # covariance for the nodes
-  V <- vcvPhyloInternal(tree)
+  V <- .vcvPhyloInternal(tree)
   indice <- (1:n)
   AY <- V[-indice,indice]
   vY <- V[indice,indice]
