@@ -30,7 +30,7 @@ A penalized likelihood model fit obtained by the \code{fit_t_pl} function.
 \code{estim} reconstruct the ancestral states at the root and for each nodes of a phylogenetic tree from penalized likelihood models fit to high-dimensional datasets (where the number of variables p is larger than n; see details for the models options in \code{fit_t_pl}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
 
 \note{
-	Contrary to conventional PCA, the principal axes of the phylogenetic PCA are not orthogonal, they represent the main axes of (independent) evolutionary changes.}
+	The function is used internally in \code{penalized_phyl.pca}.}
 \references{
 Clavel, J. Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. submitted
 
@@ -65,7 +65,7 @@ Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 fit <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
 
 # Perform the ancestral states reconstruction
-ancestral <- estim(fit)
+ancestral <- RPANDA::estim(fit)
 
 # retrieve the scores
 head(ancestral$nodes)
