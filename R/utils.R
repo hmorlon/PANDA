@@ -36,7 +36,8 @@ ancestral.fit_t.env <- function(object){
     #rownames(recons_t) = paste("node_",n+1:Nnode(tree), sep="")
     
     # return the results
-    res <- list(root=a, nodes=recons_t)
+    #res <- list(root=a, nodes=recons_t)
+    res <- a
  return(res)
  warning("only the root state is currently estimated for models of the class \"fit_t.env\"") # To remove later
 
@@ -51,7 +52,7 @@ ancestral.fit_t.comp <- function(object){
     
     anc <- object$z0
     names(anc) ="root"
-    return(root)
+    return(anc)
     warning("only the root state is currently estimated for models of the class \"fit_t.comp\"")
 }
 

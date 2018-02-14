@@ -5,7 +5,7 @@
 Estimation of traits ancestral states.
 }
 \description{
-Reconstruct the ancestral states at the root and for each nodes of phylogenetic tree from models fit obtained using the \code{fit_t_pl} and \code{fit_t_env} functions.}
+Reconstruct the ancestral states at the root (and possibly for each nodes) of a phylogenetic tree from models fit obtained using the \code{fit_t_XX} functions.}
 \usage{
 
 ancestral(object)
@@ -27,7 +27,7 @@ A model fit object obtained by the \code{fit_t_XX} class of functions.
   }
 
 \details{
-\code{ancestral} reconstruct the ancestral states at the root and for each nodes of a phylogenetic tree from the models fit obtained by the \code{fit_t_XX} class of functions (e.g., \code{fit_t_pl} and \code{fit_t_env}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
+\code{ancestral} is an S3 method that reconstruct the ancestral states at the root and possibly for each nodes of a phylogenetic tree from the models fit obtained by the \code{fit_t_XX} class of functions (e.g., \code{fit_t_pl}, \code{fit_t_comp} and \code{fit_t_env}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
 
 \note{
 	The function is used internally in \code{phyl.pca_pl}.}
