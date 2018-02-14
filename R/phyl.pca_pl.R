@@ -1,24 +1,21 @@
-## J. Clavel
-# GLS estimation of ancestral states
+################################################################################
+##                                                                            ##
+##                 RPANDA : (PL) ancestral states and PCA                     ##
+##                                                                            ##
+##   Julien Clavel - 01-02-2018                                               ##
+##   S3 method for "ancestral"                                                ##
+##   require: corpcor                                                         ##
+################################################################################
 
-.vcvPhyloInternal <- function(tree){
-  nbtip <- Ntip(tree)
-  dis <- dist.nodes(tree)
-  MRCA <- mrca(tree, full = TRUE)
-  M <- dis[as.character(nbtip + 1), MRCA]
-  dim(M) <- rep(sqrt(length(M)), 2)
-  return(M)
-}
+# GLS estimation of ancestral states returned by the PL functions
+ancestral.fit_pl.rpanda <- function(object){
 
-
-estim.fit_pl.rpanda <- function(object){
-
-# extract objects
+  # extract objects
   if(!inherits(object,"fit_pl.rpanda")) stop("only works with \"fit_pl.rpanda\" class objects. See ?fit_t_pl")
   tree <- object$scaled_tree
   n <- object$n
   p <- object$p
-  Y <- object$Y
+  Y <- as.matrix(object$Y)
   
   # covariance for the nodes
   V <- .vcvPhyloInternal(tree)
@@ -43,12 +40,10 @@ return(res)
 
 }
 
-# make a specific S3 method "estim"
-estim <- function(object) UseMethod("estim")
 
 ## ------ Phylogenetic PCA on the penalized covariance matrix
-# see also Revell 2009
-penalized_phyl.pca <- function(object, plot=TRUE, ...){
+# see also Revell 2009 - Evolution
+phyl.pca_pl <- function(object, plot=TRUE, ...){
   
   if(!inherits(object,"fit_pl.rpanda")) stop("only works with \"fit_pl.rpanda\" class objects. See ?fit_t_pl")
   tree <- object$scaled_tree
@@ -71,7 +66,7 @@ penalized_phyl.pca <- function(object, plot=TRUE, ...){
   if(mode=="corr") covR <- cov2cor(covR)
   
   # ancestral states
-  anc <- estim(object)
+  anc <- ancestral(object)
   a <- anc$root
   nodes <- anc$nodes
   one <- matrix(1, ncol=1, nrow=n)
@@ -108,5 +103,5 @@ penalized_phyl.pca <- function(object, plot=TRUE, ...){
   # results
   res <- list(values=values, scores=S, loadings=L, nodes_scores=Srec)
   invisible(res)
-  return(res)
+  #return(res) # don't need to return for plot only?
 }

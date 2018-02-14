@@ -89,8 +89,8 @@ Clavel, J. Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for 
 \author{J. Clavel}
 
 \seealso{
-\code{\link{estim}},
-\code{\link{penalized_phyl.pca}},  
+\code{\link{ancestral}},
+\code{\link{phyl.pca_pl}},  
 \code{\link{GIC}}, 
 \code{\link{gic_criterion}}
 }

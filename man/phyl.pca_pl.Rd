@@ -1,14 +1,14 @@
-\name{penalized_phyl.pca}
-\alias{penalized_phyl.pca}
+\name{phyl.pca_pl}
+\alias{phyl.pca_pl}
 
 \title{
 Regularized Phylogenetic Principal Component Analysis (PCA).
 }
 \description{
-Performs a principal component analysis (PCA) on regularized evolutionary variance-covariance matrix obtained using the \code{fit_t_pl} function.}
+Performs a principal component analysis (PCA) on a regularized evolutionary variance-covariance matrix obtained using the \code{fit_t_pl} function.}
 \usage{
 
-penalized_phyl.pca(object, plot=TRUE, ...)
+phyl.pca_pl(object, plot=TRUE, ...)
   
 }
 \arguments{
@@ -33,7 +33,7 @@ Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
   }
 
 \details{
-\code{penalized_phyl.pca} allows computing a phylogenetic principal component analysis (following Revell 2009) using a regularized evolutionary variance-covariance matrix from penalized likelihood models fit to high-dimensional datasets (where the number of variables p is larger than n; see details for the models options in \code{fit_t_pl}). Models estimates are more accurate than maximum likelihood methods, particularly in the high-dimensional case.
+\code{phyl.pca_pl} allows computing a phylogenetic principal component analysis (following Revell 2009) using a regularized evolutionary variance-covariance matrix from penalized likelihood models fit to high-dimensional datasets (where the number of variables p is larger than n; see details for the models options in \code{fit_t_pl}). Models estimates are more accurate than maximum likelihood methods, particularly in the high-dimensional case.
 Ploting options, the number of axes to display (\code{axes=c(1,2)} is the default), and whether the covariance (\code{mode="cov"}) or correlation (\code{mode="corr"}) should be used can be specified through the ellipsis "..." argument.
 }
 
@@ -49,7 +49,7 @@ Revell, L.J., 2009. Size-correction and principal components for intraspecific c
 
 \seealso{
 \code{\link{fit_t_pl}},
-\code{\link{estim.anc}},
+\code{\link{ancestral}},
 \code{\link{GIC}}, 
 \code{\link{gic_criterion}}
 }
@@ -67,11 +67,11 @@ R <- Posdef(p)      # a random symmetric matrix (covariance)
 # simulate a dataset
 Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 
-# fit a multivariate BM with Penalized likelihood
-fit <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
+# fit a multivariate Pagel lambda model with Penalized likelihood
+fit <- fit_t_pl(Y, tree, model="lambda", method="RidgeAlt")
 
 # Perform a phylogenetic PCA using the model fit
-pca_results <- penalized_phyl.pca(fit, plot=T) 
+pca_results <- phyl.pca_pl(fit, plot=T) 
 
 # retrieve the scores
 head(pca_results$scores)

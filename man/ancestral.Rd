@@ -1,19 +1,19 @@
-\name{estim}
-\alias{estim}
+\name{ancestral}
+\alias{ancestral}
 
 \title{
 Estimation of traits ancestral states.
 }
 \description{
-Reconstruct the ancestral states at the root and for each nodes of phylogenetic tree from parameters obtained using the \code{fit_t_pl} function.}
+Reconstruct the ancestral states at the root and for each nodes of phylogenetic tree from models fit obtained using the \code{fit_t_pl} and \code{fit_t_env} functions.}
 \usage{
 
-estim(object)
+ancestral(object)
   
 }
 \arguments{
   \item{object}{
-A penalized likelihood model fit obtained by the \code{fit_t_pl} function.
+A model fit object obtained by the \code{fit_t_XX} class of functions.
 }
 }
  
@@ -22,15 +22,15 @@ A penalized likelihood model fit obtained by the \code{fit_t_pl} function.
 	a list with the following components
   
   \item{root}{the reconstructed ancestral states at the root}
-  \item{nodes}{the reconstructed ancestral states at each nodes}
+  \item{nodes}{the reconstructed ancestral states at each nodes (not yet implemented for all the methods)}
 
   }
 
 \details{
-\code{estim} reconstruct the ancestral states at the root and for each nodes of a phylogenetic tree from penalized likelihood models fit to high-dimensional datasets (where the number of variables p is larger than n; see details for the models options in \code{fit_t_pl}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
+\code{ancestral} reconstruct the ancestral states at the root and for each nodes of a phylogenetic tree from the models fit obtained by the \code{fit_t_XX} class of functions (e.g., \code{fit_t_pl} and \code{fit_t_env}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
 
 \note{
-	The function is used internally in \code{penalized_phyl.pca}.}
+	The function is used internally in \code{phyl.pca_pl}.}
 \references{
 Clavel, J. Aristide, L., Morlon, H., 2017. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. submitted
 
@@ -43,7 +43,8 @@ Martins E.P., Hansen T.F. 1997. Phylogenies and the comparative method: a genera
 
 \seealso{
 \code{\link{fit_t_pl}},
-\code{\link{penalized_phyl.pca}},
+\code{\link{fit_t_env}},
+\code{\link{phyl.pca_pl}},
 \code{\link{GIC}}, 
 \code{\link{gic_criterion}}
 }
@@ -65,9 +66,9 @@ Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 fit <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
 
 # Perform the ancestral states reconstruction
-ancestral <- RPANDA::estim(fit)
+anc <- ancestral(fit)
 
 # retrieve the scores
-head(ancestral$nodes)
+head(anc$nodes)
 }
 }

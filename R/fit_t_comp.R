@@ -15,6 +15,7 @@ if(is.null(geography.object)){
 		S<-opt$inferredParams[3]
 		z0<-opt$inferredParams[1]
 		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = as.numeric(sig2), S = as.numeric(S), z0 = as.numeric(z0), convergence = opt$convergence)
+        class(results)<-c("fit_t.comp")
 		return(results)
 		}
 	if(model=="DDexp"){
@@ -24,6 +25,7 @@ if(is.null(geography.object)){
 		r<-opt$inferredParams[3]
 		z0<-opt$inferredParams[1]
 		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = as.numeric(sig2), r = as.numeric(r), z0 = as.numeric(z0), convergence = opt$convergence)
+        class(results)<-c("fit_t.comp")
 		return(results)
 		}
 	if(model=="DDlin"){
@@ -33,6 +35,7 @@ if(is.null(geography.object)){
 		b<-opt$inferredParams[3]
 		z0<-opt$inferredParams[1]
 		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = as.numeric(sig2), b = as.numeric(b), z0 = as.numeric(z0), convergence = opt$convergence)
+        class(results)<-c("fit_t.comp")
 		return(results)
 		}
 }
@@ -47,6 +50,7 @@ if(!is.null(geography.object)){
 		S<-opt$inferredParams[3]
 		z0<-opt$inferredParams[1]
 		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = as.numeric(sig2), S = as.numeric(S), z0 = as.numeric(z0), convergence = opt$convergence)
+        class(results)<-c("fit_t.comp")
 		return(results)
 		}
 	if(model=="DDexp"){
@@ -56,6 +60,7 @@ if(!is.null(geography.object)){
 		r<-opt$inferredParams[3]
 		z0<-opt$inferredParams[1]
 		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = as.numeric(sig2), r = as.numeric(r), z0 = as.numeric(z0), convergence = opt$convergence)
+        class(results)<-c("fit_t.comp")
 		return(results)
 		}
 	if(model=="DDlin"){
@@ -65,6 +70,7 @@ if(!is.null(geography.object)){
 		b<-opt$inferredParams[3]
 		z0<-opt$inferredParams[1]
 		results<-list(LH = -opt$value, aic = (2*3 - 2*(-opt$value)), aicc = (2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)), free.parameters = 3, sig2 = as.numeric(sig2), b = as.numeric(b), z0 = as.numeric(z0), convergence = opt$convergence)
+        class(results)<-c("fit_t.comp")
 		return(results)
 		}
 
