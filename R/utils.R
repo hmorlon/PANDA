@@ -7,7 +7,10 @@
 ##                                                                            ##
 ################################################################################
 
-# make a specific S3 method "ancestral" for reconstructing or retrieving ancestral states (see phyl.pca_pl.R)
+# S3 generic GIC function
+GIC <- function(object) UseMethod("GIC")
+
+# S3 generic method "ancestral" for reconstructing or retrieving ancestral states (see phyl.pca_pl.R) # should I use "predict" instead?
 ancestral <- function(object) UseMethod("ancestral")
 
 # S3 for the fit_t_env class

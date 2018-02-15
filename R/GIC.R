@@ -238,7 +238,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
 }
 
 # Extractor for fit_pl.rpanda 'class'
-GIC <- function(object){
+GIC.fit_pl.rpanda <- function(object){
   if(!inherits(object,"fit_pl.rpanda")) stop("only works with \"fit_pl.rpanda\" class objects")
   gic_criterion(Y=object$Y, tree=object$scaled_tree, model=object$model, method=object$method, targM=object$targM, param=object$model.par, tuning=object$gamma, REML=object$REML, fit=TRUE, SE=object$SE)
 }
