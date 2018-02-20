@@ -10,14 +10,15 @@ The GIC allows comparing models fit by Maximum Likelihood (ML) or Penalized Like
 \usage{
 
 
-GIC(object)
+GIC(object, ...)
   
   
 }
 \arguments{
   \item{object}{
-An object of class "fit_pl.rpanda". See ?loocvPhylo}
-
+An object of class "fit_pl.rpanda". See ?fit_t_pl}
+  \item{...}{
+Options to be passed through.}
 }
 
 
