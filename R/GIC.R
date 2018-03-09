@@ -115,7 +115,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   }
   
   precalc <- pruning(tr)
-  D <- precalc$sqrtMat
+  D <- .transformsqrt(tr)$sqrtM1
   Yi <- D%*%Y
   X <- D%*%matrix(1,nrow(Y))
   beta <- pseudoinverse(X)%*%Yi
@@ -178,18 +178,17 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   # GIC score
   
   if(method=="RidgeArch"){
-    # 1) Hessian matrix (for Ridge)
-    H <- (1/(0.5*(kronecker(d,d))))
-    
-    # 2) First derivative of the functional (we can use patterned matrix to target some matrix elements)
+      
+    # First and second derivative of the functional (we can use patterned matrix to target some matrix elements)
+    # We use the Kronecker-vec identity to speed up the computations
     T1 <- sapply(1:nC, function(i){
         Sk <- tcrossprod(Yk[i,]) ;
-        VSV <- .vec(crossprod(V, (0.5*(P - (1-tuning)*Sk - tuning*Target))%*%V));
-        VSV2 <- .vec(crossprod(V, (0.5*(P - Sk))%*%V));
-      sum(VSV * (H*VSV2))
+        VSV <- 0.5*(P - (1-tuning)*Sk - tuning*Target);
+        VSV2 <- 0.5*(P - Sk);
+        sum(VSV * 2*(Pi%*%VSV2%*%Pi))
     })
     
-    df = sum(T1)/n
+    df = sum(T1)/nC
     sigma_df <- df
     
   }else if(method=="LASSO" | method=="ML"){
@@ -199,7 +198,7 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
       t(.vec(S*I))%*%.vec(P%*%(S*I)%*%P)
     }
     
-    sigma_df <- (1/(2*n))*sum(sapply(1:nC, function(i){
+    sigma_df <- (1/(2*nC))*sum(sapply(1:nC, function(i){
       Sk <- Yk[i,]%*%t(Yk[i,]) ;
       Tf2(Sk, Pi)})) - (1/2)*Tf2(S,Pi)
     
@@ -215,16 +214,18 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
       sum(VSV * (H*VSV2))
     })
     
-    df = sum(T1)/n
+    df = sum(T1)/nC
     sigma_df <- df
   }
   
   # Number of parameters for the root state:
-  # The Information matrix from the Hessian
-  H2 <- P #pseudoinverse(Pi)
-  gradient <- Pi%*%t(Yk)
-  J2 <- tcrossprod(gradient)/n
-  beta_df <- .tr(H2%*%J2)
+  # The Information matrix from the Hessian and gradients scores
+  XtX <- solve(t(X)%*%(X))
+  T2 <- sapply(1:nC, function(i){
+      gradient <- (X[i,])%*%t(Pi%*%t(Yi[i,]-X[i,]%*%beta))
+      sum(gradient * (XtX%*%gradient%*%P))
+  })
+  beta_df <- sum(T2)
   
   # LogLikelihood (minus)
   DP <- as.numeric(determinant(P)$modulus)

@@ -69,6 +69,16 @@ ancestral.fit_t.comp <- function(object){
     return(M)
 }
 
+# Build the matrix square root and inverse matrix square root of the phylogenetic covariance matrix
+.transformsqrt <- function(tree){
+    vcv_tr <- vcv.phylo(tree)
+    eig <- eigen(vcv_tr)
+    sqrtM1 <- eig$vectors%*%diag(1/sqrt(eig$values))%*%t(eig$vectors)
+    sqrtM <- eig$vectors%*%diag(sqrt(eig$values))%*%t(eig$vectors)
+    matrices <- list(sqrtM1=sqrtM1, sqrtM=sqrtM)
+    return(matrices)
+}
+
 # ---- Function to simulate random covariance matrices with a specified eigenstructure
 # From Uyeda et al. 2015 - Systematic Biology 64(4):677-689.
 Posdef <- function (p, ev = rexp(p, 1/100)) {
