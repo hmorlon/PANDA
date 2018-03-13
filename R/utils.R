@@ -73,8 +73,9 @@ ancestral.fit_t.comp <- function(object){
 .transformsqrt <- function(tree){
     vcv_tr <- vcv.phylo(tree)
     eig <- eigen(vcv_tr)
-    sqrtM1 <- eig$vectors%*%diag(1/sqrt(eig$values))%*%t(eig$vectors)
-    sqrtM <- eig$vectors%*%diag(sqrt(eig$values))%*%t(eig$vectors)
+    sqrtmValues <- sqrt(eig$values)
+    sqrtM1 <- tcrossprod(eig$vectors%*%diag(1/sqrtmValues), eig$vectors)
+    sqrtM <- tcrossprod(eig$vectors%*%diag(sqrtmValues), eig$vectors)
     matrices <- list(sqrtM1=sqrtM1, sqrtM=sqrtM)
     return(matrices)
 }

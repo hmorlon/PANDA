@@ -417,7 +417,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
             if(any(!is.finite(Sk))) return(1e6)
             
             # Determinant for the phylogenetic tree
-            var_pic <- pruning(tr)
+            var_pic <- pruning(tr) # use it to directly compute Yk instead
             var_root <- var_pic$varRoot
             var_contr <- var_pic$varNode
             
@@ -688,7 +688,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
 .sqM <- function(x){
     if(!all(is.finite(x))) return(Inf)
     eig <- eigen(x, symmetric = TRUE)
-    sqrtM <- eig$vectors %*% diag(sqrt(eig$values)) %*% solve(eig$vectors)
+    sqrtM <- tcrossprod(eig$vectors %*% diag(sqrt(eig$values)), eig$vectors)
     return(sqrtM)
 }
 
