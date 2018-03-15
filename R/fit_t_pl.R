@@ -688,6 +688,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
 .sqM <- function(x){
     if(!all(is.finite(x))) return(Inf)
     eig <- eigen(x, symmetric = TRUE)
+    if(any(eig$values<0)) eig$values <- abs(eig$values) # to avoid warning message?
     sqrtM <- tcrossprod(eig$vectors %*% diag(sqrt(eig$values)), eig$vectors)
     return(sqrtM)
 }

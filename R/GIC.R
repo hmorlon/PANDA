@@ -16,6 +16,10 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
   par <- list(...)
   if(is.null(par[["fit"]])){ fit <- FALSE}else{ fit <- par$fit}
   if(is.null(par[["SE"]])){ SE <- NULL}else{ SE <- par$SE}
+  if(is.null(par[["scale.height"]])){ scale.height <- FALSE }else{ scale.height <- par$scale.height}
+  
+  # Scale the tree to unit length
+  if(scale.height==TRUE) tree$edge.length <- tree$edge.length/max(branching.times(tree))
   
   # Select the method
   method <- match.arg(method)[1]
