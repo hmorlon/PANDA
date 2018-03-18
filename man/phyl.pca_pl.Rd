@@ -19,7 +19,7 @@ A penalized likelihood model fit obtained by the \code{fit_t_pl} function.
 Plot of the PC's axes. Default is TRUE (see details).'}
 
  \item{...}{
-Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
+Options to be passed through. (e.g., axes=c(1,2), col, pch, cex, mode="cov" or "corr", etc.)}
 }
 
 
@@ -33,7 +33,7 @@ Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
   }
 
 \details{
-\code{phyl.pca_pl} allows computing a phylogenetic principal component analysis (following Revell 2009) using a regularized evolutionary variance-covariance matrix from penalized likelihood models fit to high-dimensional datasets (where the number of variables p is larger than n; see details for the models options in \code{fit_t_pl}). Models estimates are more accurate than maximum likelihood methods, particularly in the high-dimensional case.
+\code{phyl.pca_pl} allows computing a phylogenetic principal component analysis (following Revell 2009) using a regularized evolutionary variance-covariance matrix from penalized likelihood models fit to high-dimensional datasets (where the number of variables p is potentially larger than n; see details for the models options in \code{fit_t_pl}). Models estimates are more accurate than maximum likelihood methods, particularly in the high-dimensional case.
 Ploting options, the number of axes to display (\code{axes=c(1,2)} is the default), and whether the covariance (\code{mode="cov"}) or correlation (\code{mode="corr"}) should be used can be specified through the ellipsis "..." argument.
 }
 
@@ -70,7 +70,7 @@ Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 # fit a multivariate Pagel lambda model with Penalized likelihood
 fit <- fit_t_pl(Y, tree, model="lambda", method="RidgeAlt")
 
-# Perform a phylogenetic PCA using the model fit
+# Perform a phylogenetic PCA using the model fit (Pagel lambda model)
 pca_results <- phyl.pca_pl(fit, plot=T) 
 
 # retrieve the scores

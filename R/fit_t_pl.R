@@ -327,7 +327,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
                 Ccov <- sum(log(c(var_root,var_contr)))
             }
             
-            ll <- 0.5 * (n*p*log(2*pi) + p*Ccov + n*mean(llik))
+            ll <- 0.5 * (n*p*log(2*pi) + p*Ccov + sum(llik))
             if (!is.finite(ll)) return(1e6)
             return(ll)
         }
@@ -386,7 +386,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
                 log(1 - beta*rk) + (rk/(1 - beta*rk))
             })
             
-            ll <- 0.5 * (n*p*log(2*pi) + p*Ccov + n*sum(2*log(diag(Gi))) + n*mean(llik))
+            ll <- 0.5 * (n*p*log(2*pi) + p*Ccov + n*sum(2*log(diag(Gi))) + sum(llik))
             if (!is.finite(ll)) return(1e6)
             return(ll)
         }
@@ -517,7 +517,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
             
             if(inherits(llik, 'try-error')) return(1e6)
             # det of the phylo matrix
-            ll <- 0.5 * (n*p*log(2*pi) + p*Ccov + n*mean(llik))
+            ll <- 0.5 * (n*p*log(2*pi) + p*Ccov + sum(llik))
             if(!is.finite(ll)) return(1e6)
             return(ll)
         }

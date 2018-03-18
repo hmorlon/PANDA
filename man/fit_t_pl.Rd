@@ -2,10 +2,10 @@
 \alias{fit_t_pl}
 
 \title{
-Phylogenetic Leave-One-Out Cross-Validated (LOOCV) penalized likelihood for high-dimensional models of trait evolution
+High-dimensional phylogenetic models of trait evolution
 }
 \description{
-Fits high-dimensional model of trait evolution on trees through penalized likelihood. A phylogenetic LOOCV is used to estimate model parameters}
+Fits high-dimensional model of trait evolution on trees through penalized likelihood. A phylogenetic Leave-One-Out Cross-Validated log-likelihood (LOOCV) is used to estimate model parameters.}
 \usage{
 
 fit_t_pl(Y, tree, model=c("BM", "OU", "EB", "lambda"), method=c("RidgeAlt", "RidgeArch", "RidgeAltapprox", "LASSO", "LASSOapprox"), targM=c("null", "Variance", "unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=NULL, starting=NULL, SE=NULL, scale.height=TRUE, ...)
