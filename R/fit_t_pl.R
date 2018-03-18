@@ -118,7 +118,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         transform <- function(x) x
         
         if(method!="RidgeArch"){
-            upperBound <- c(up,log(1e6))
+            upperBound <- c(up,log(10e6))
             lowerBound <- c(low,log(tol))
         }else{
             upperBound <- c(up,1)
@@ -154,7 +154,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         transform <- function(x) exp(x)
         
         if(method!="RidgeArch"){
-            upperBound <- c(log(up),log(1e6))
+            upperBound <- c(log(up),log(10e6))
             lowerBound <- c(log(low),log(tol))
         }else{
             upperBound <- c(log(up),1)
@@ -187,7 +187,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         transform <- function(x) x
         
         if(method!="RidgeArch"){
-            upperBound <- c(up,log(1e6))
+            upperBound <- c(up,log(10e6))
             lowerBound <- c(low,log(tol))
         }else{
             upperBound <- c(up,1)
@@ -204,7 +204,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         
         
         if(method!="RidgeArch"){
-            upperBound <- log(1e6)
+            upperBound <- log(10e6)
             lowerBound <- log(tol)
         }else{
             upperBound <- 1
