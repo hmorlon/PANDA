@@ -101,7 +101,7 @@ phyl.pca_pl <- function(object, plot=TRUE, ...){
   }
 
   # results
-  res <- list(values=values, scores=S, loadings=L, nodes_scores=Srec, mean=a)
+  res <- list(values=values, scores=S, loadings=L, nodes_scores=Srec, mean=a, vectors=U)
   class(res) <- "pl.phyl.pca"
   invisible(res)
   #return(res) # don't need to return for plot only?
