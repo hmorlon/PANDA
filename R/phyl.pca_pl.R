@@ -49,7 +49,7 @@ phyl.pca_pl <- function(object, plot=TRUE, ...){
   tree <- object$scaled_tree
   n <- object$n
   p <- object$p
-  Y <- object$Y
+  Y <- as.matrix(object$Y)
   covR <- object$R$R
   
   # optional arguments
@@ -101,7 +101,8 @@ phyl.pca_pl <- function(object, plot=TRUE, ...){
   }
 
   # results
-  res <- list(values=values, scores=S, loadings=L, nodes_scores=Srec)
+  res <- list(values=values, scores=S, loadings=L, nodes_scores=Srec, mean=a)
+  class(res) <- "pl.phyl.pca"
   invisible(res)
   #return(res) # don't need to return for plot only?
 }

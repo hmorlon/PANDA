@@ -30,6 +30,7 @@ Options to be passed through. (e.g., axes=c(1,2), col, pch, cex, mode="cov" or "
   \item{scores}{the PC scores}
   \item{loadings}{the component loadings}
   \item{nodes_scores}{the scores for the ancestral states at the nodes (projected on the space of the tips)}
+  \item{mean}{the mean/ancestral value used to center the data}
   }
 
 \details{
