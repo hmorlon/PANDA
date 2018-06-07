@@ -90,7 +90,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     }
     
     # Warning for rotation invariance
-    if(method=="LASSO" | method=="LASSOapprox" | targM=="Variance") warning("The LASSO penalty and \"Variance\" target are not rotation-invariant (see Clavel et al. 2018 for further details on applicability)")
+    if(method=="LASSO" | method=="LASSOapprox" | targM=="Variance") warning("The LASSO penalty and \"Variance\" target should not be used on rotated data (see Clavel et al. 2018 for further details on applicability)")
     
     # Identifying tips values
     tipsIndices <- which(  tree$edge[, 2] <= Ntip(tree))
