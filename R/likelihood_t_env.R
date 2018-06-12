@@ -132,7 +132,7 @@ likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
    
  
     # Compute the log-likelihood
-    LL<-mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=par$check, mu=par$mu, sigma=1))$logl
+    LL <- mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=par$check, mu=par$mu, sigma=1))$logl
 
 
 if(is.na(LL) | is.infinite(LL)){
