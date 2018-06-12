@@ -23,7 +23,7 @@ A named vector of phenotypic trait values.
 Environmental data, given as a time continuous function (see, e.g. splinefun) or a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
 }
   \item{error}{
-A named vector with standard error for each species. Default is NULL, if NA, then the SE is estimated from the data.
+A named vector with standard error (SE) for each species. Default is NULL, if NA, then the SE is estimated from the data.
 }
   \item{model}{
 The model describing the functional form of variation of the evolutionary rate \eqn{\sigma^2} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used (forward in time).
@@ -57,6 +57,7 @@ Arguments to be passed to the function. See details.
   \item{env_func}{the environmental function}
   \item{tot_time}{the root age of the tree}
   \item{model}{the fitted model (default models or user specified)}
+  \item{SE}{the estimated SE for species mean when "error=NA"}
 }
 
 \details{

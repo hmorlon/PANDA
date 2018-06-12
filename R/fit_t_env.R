@@ -176,7 +176,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
    
    # Number of parameters (fixed up to now)
    if(!is.function(model)){
-       nparam = 3 # 3 parameters: sig2, beta, mu
+       nparam = 3 + error_param*1 # 3 parameters: sig2, beta, mu
    }else{
        nparam = length(par$param)+1 # number of parameters + mu
    }
@@ -228,7 +228,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         root<-return_root(estim$par,tot_time,times,env_data,model,n,is_error)
         
         # Error value
-        if(error_param) error_value = estim$par[length(estim$par)] else error_value = NA
+        if(error_param) error_value = sqrt(estim$par[length(estim$par)]*estim$par[length(estim$par)]) else error_value = NA
         
         
     if(is.function(model)){
