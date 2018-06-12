@@ -182,7 +182,6 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
    }
    
     # Optimization
-    #estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo, data, par=list(param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, mtot=tot_time, subdivisions=subdivisions), model)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
      estim<-optim(par=startval,fn=function(x){likelihood_t_env(phylo=phylo, data=data, model=model, param=x, fun=env_data, times=times, mu=NULL, check=FALSE, error=error, index_error=index_error, error_param=error_param, mtot=tot_time, subdivisions=subdivisions, maxdiff=maxdiff)},control=control, hessian=TRUE, method=method, lower=par$lower, upper=par$upper)
     
     ## Results
@@ -201,7 +200,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         LL = -estim$value
         
         # AIC
-        AIC = -2*estim$value+2*nparam
+        AIC = -2*LL+2*nparam
         
         # AICc
         AICc = AIC+((2*nparam*(nparam+1))/(n-nparam-1))
