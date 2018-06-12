@@ -73,7 +73,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     if(!is.null(error)){
       index_error<-sapply(1:n, function(x){ which(phylo$edge[,2]==x)})
       # reorder the trait vector according to the tree
-      if(!is.na(error)){
+      if(!any(is.na(error))){
           if(is.null(names(error))){
               stop("You should provide a named vector for \"error\" ")
           }else{
@@ -197,11 +197,11 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         }
 
     
-        # Loglik
-        LL = estim$value
+        # Loglik (we minimize the negative log-likelihood)
+        LL = -estim$value
         
         # AIC
-        AIC = -2*LL+2*nparam
+        AIC = -2*estim$value+2*nparam
         
         # AICc
         AICc = AIC+((2*nparam*(nparam+1))/(n-nparam-1))
