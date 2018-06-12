@@ -232,7 +232,9 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         
     if(is.function(model)){
         # If the model is defined by the user we return a customized result
-        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = estim$par, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, SE=error_value)
+        estimated_param <- estim$par
+        if(error_param) estimated_param=estimated_param[-length(estimated_param)]
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = estimated_param, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, SE=error_value)
         
     }else if(model=="EnvExp"){
         

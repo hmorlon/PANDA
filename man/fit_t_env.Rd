@@ -167,7 +167,7 @@ trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp",
 
   # We define the function for the model
   my_fun<-function(t, env_cont, param){ 
-      exp(param[1])*exp(param[2]*env_cont(t))
+      param[1]*exp(param[2]*env_cont(t))
   }
   
   res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun, 
