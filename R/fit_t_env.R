@@ -75,10 +75,10 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
       # reorder the trait vector according to the tree
       if(!is.na(error)){
           if(is.null(names(error))){
-          stop("You should provide a named vector for \"error\" ")
-        }else{
-          error<-error[phylo$tip.label]
-        }
+              stop("You should provide a named vector for \"error\" ")
+          }else{
+              error<-error[phylo$tip.label]
+          }
         error_param <- FALSE
       }else{
         error_param <- TRUE
@@ -87,7 +87,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     }else{
       index_error<-NULL
       is_error<-FALSE
-      error_param <- TRUE
+      error_param <- FALSE
     }
     
     ## Transform a time-serie dataset in a function
