@@ -23,7 +23,7 @@ A named vector of phenotypic trait values.
 Environmental data, given as a time continuous function (see, e.g. splinefun) or a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
 }
   \item{error}{
-A named vector with standard error for each species.
+A named vector with standard error for each species. Default is NULL, if NA, then the SE is estimated from the data.
 }
   \item{model}{
 The model describing the functional form of variation of the evolutionary rate \eqn{\sigma^2} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used (forward in time).
@@ -102,7 +102,7 @@ e.g.:
 
 The various options are passed through "...". 
 
--param: The starting values used for the model. Must match the total number of parameters of the specified models.
+-param: The starting values used for the model. Must match the total number of parameters of the specified models. If "error=NA", a starting value for the SE to be estimated must be provided with user-defined models.
 
 -scale: scale the amplitude of the environmental curve between 0 and 1. This may improve the parameters search in some situations.
 
