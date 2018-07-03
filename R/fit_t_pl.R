@@ -28,7 +28,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     
     # Preliminary checks
     if(missing(tree)) stop("Please provide a phylogenetic tree of class \"phylo\" ")
-    if(!is.ultrametric(tree) & model=="OU") stop("The method is not currently working with non-ultrametric trees")
+    if(!is.ultrametric(tree) & model[1]=="OU") stop("The method is not currently working with non-ultrametric trees")
     if(nrow(Y) != Ntip(tree)) stop("Length of phenotypic and phylogenetic data do not match")
     if (all(rownames(Y) %in% tree$tip.label)){
         Y <- Y[tree$tip.label,]
