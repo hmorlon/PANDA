@@ -11,11 +11,21 @@
     \item{\code{co2}}{a numeric vector corresponding to the estimated co2 at that age}
   }
 }
+
+\source{
+Steeman ME et al.(2009) Radiation of extant cetaceans driven by restructuring of the oceans, \emph{Syst Biol} 58:573-585
+}
+
 \references{
-Hansen, J., Sato, M., Russell, G., Kharecha, P. (2013) Climate sensitivity, sea level and atmospheric carbon dioxide \emph{Philosophoical Transactions of the Royal Society A \emph{371:2001}
+Steeman ME et al.(2009) Radiation of extant cetaceans driven by restructuring of the oceans \emph{Syst Biol} 58:573-585
+
+Morlon, H., Parsons, T.L., Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
+
+Condamine, F.L., Rolland, J., Morlon, H. (2013) Macroevolutionary perspectives to environmental change \emph{Eco Lett} 16: 72-85
 }
 \examples{
-data(co2_res)
-plot(co2_res)
+data(Cetacea)
+print(Cetacea)
+plot(Cetacea)
 }
 \keyword{datasets}

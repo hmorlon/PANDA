@@ -2,8 +2,8 @@ fit_t_comp_subgroup<-function(full.phylo,ana.events,clado.events,stratified=FALS
 
 	if(is.null(names(data))){stop("data missing taxa names")}
 	if(!is.null(dim(data))){stop("data needs to be a single trait")}
-	is_tip <- phylo$edge[,2] <= length(phylo$tip.label)
-	if(sum(diff(phylo$edge[is_tip, 2])<0)>0){ stop('fit_t_comp_subgroup cannot be used with ladderized phylogenies')}
+	is_tip <- full.phylo$edge[,2] <= length(full.phylo$tip.label)
+	if(sum(diff(full.phylo$edge[is_tip, 2])<0)>0){ stop('fit_t_comp_subgroup cannot be used with ladderized full.phylogenies')}
 	
 	if(is.null(bounds[["lower"]]) & is.null(bounds[["upper"]])){
         bounds$lower = -Inf

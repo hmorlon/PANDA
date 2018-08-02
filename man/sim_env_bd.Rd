@@ -8,13 +8,12 @@ Simulate birth-death tree dependent on an environmental curve
 Simulates a birth-death tree (starting with one lineage) with speciation and/or extinction rate that varies as a function of an input environmental curve. Notations follow Morlon et al. PNAS 2011 and Condamine et al. ELE 2013.
 }
 \usage{
-sim_env_bd(env_data,f.lamb,f.mu,lamb_par,mu_par,df=NULL,time.stop=0,return.all.extinct=TRUE,prune.extinct=TRUE)
+sim_env_bd(env_data, f.lamb, f.mu, lamb_par, mu_par, df=NULL, time.stop=0, 
+			return.all.extinct=TRUE, prune.extinct=TRUE)
 }
 
 \arguments{
-  \item{phylo}{
-an object of type 'phylo' (see ape documentation)
-}
+
   \item{env_data}{
 environmental data, given as a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
 }
