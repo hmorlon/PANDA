@@ -81,7 +81,6 @@ Clavel, J., Aristide, L., Morlon, H., 2018. A Penalized Likelihood framework for
 
 \examples{
 \donttest{
-require(mvMORPH)
 set.seed(123)
 n <- 32 # number of species
 p <- 2 # number of traits

@@ -176,5 +176,5 @@ gic_criterion <- function(Y, tree, model="BM", method=c("RidgeAlt","RidgeArch","
 # Extractor for fit_pl.rpanda 'class'
 GIC.fit_pl.rpanda <- function(object, ...){
   if(!inherits(object,"fit_pl.rpanda")) stop("only works with \"fit_pl.rpanda\" class objects")
-  gic_criterion(Y=object$Y, tree=object$corrstruct$phy, model=object$model, method=object$method, targM=object$targM, param=object$model.par, tuning=object$gamma, REML=object$REML, corrstruct=object$corrstruct, SE=object$SE)
+  gic_criterion(Y=object$variables$Y, tree=object$variables$tree, model=object$model, method=object$method, targM=object$targM, param=object$model.par, tuning=object$gamma, REML=object$REML, corrstruct=object$corrstruct, SE=object$SE)
 }

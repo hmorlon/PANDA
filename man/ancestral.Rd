@@ -52,7 +52,6 @@ Martins E.P., Hansen T.F. 1997. Phylogenies and the comparative method: a genera
 
 \examples{
 \donttest{
-require(mvMORPH)
 set.seed(1)
 n <- 32 # number of species
 p <- 31 # number of traits

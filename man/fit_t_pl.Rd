@@ -76,7 +76,7 @@ Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
   \item{targM}{the target used for Ridge Penalization}
   \item{R}{a list with the estimated evolutionary covariance matrix and it's inverse}
   \item{REML}{logical indicating if the REML (TRUE) or ML (FALSE) method has been used}
-  \item{Y}{the input dataset}
+  \item{variables}{\code{Y} is the input dataset and \code{tree} is the input phylogenetic tree}
   \item{SE}{the estimated standard error}
 }
 
@@ -104,7 +104,6 @@ Clavel, J., Aristide, L., Morlon, H., 2018. A Penalized Likelihood framework for
 
 \examples{
 \donttest{
-require(mvMORPH)
 set.seed(1)
 n <- 32 # number of species
 p <- 31 # number of traits

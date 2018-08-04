@@ -21,7 +21,7 @@
 # starting = starting values for the parameter search. Must be a vector likes: c(model, regularization)
 
 
-#require(mvMORPH)    # >= 1.0.9
+#require(mvMORPH)    # >= 1.1.0
 #require(glassoFast) # https://github.com/JClavel/glassoFast
 
 fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeAlt","RidgeArch","RidgeAltapprox","LASSO","LASSOapprox"), targM=c("null","Variance","unitVariance"), REML=TRUE, up=NULL, low=NULL, tol=NULL, starting=NULL, SE=NULL, scale.height=TRUE, ...){
@@ -220,7 +220,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
                })
                
                
-               ll <- 0.5 * (n*p*log(2*pi) + p*corrstruct$det + sum(llik))
+               ll <- 0.5 * (n*p*log(2*pi) + p*corrstruct$det + n*mean(llik))
            },
            "RidgeArch"={
                # Regularization parameter
@@ -246,7 +246,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
                    log(1 - beta*rk) + (rk/(1 - beta*rk))
                })
                
-               ll <- 0.5 * (n*p*log(2*pi) + p*corrstruct$det + n*sum(2*log(diag(Gi))) + sum(llik))
+               ll <- 0.5 * (n*p*log(2*pi) + p*corrstruct$det + n*sum(2*log(diag(Gi))) + n*mean(llik))
            },
            "RidgeAlt"={
                # Regularization parameter
@@ -272,7 +272,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
                
                if(inherits(llik, 'try-error')) return(1e6)
                # det of the phylo matrix
-               ll <- 0.5 * (n*p*log(2*pi) + p*corrstruct$det + sum(llik))
+               ll <- 0.5 * (n*p*log(2*pi) + p*corrstruct$det + n*mean(llik))
            },
            "RidgeAltapprox"={
                # Regularization parameter
@@ -429,12 +429,12 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         matMeth <- "RidgeAlt"
     }
     regularizedEstimates <- .covPenalized(S=Snew, method=matMeth, targM=targM, tuning=gamma)
-    
+    variables <- list(Y=Y, tree=tree)
     # End
     if(echo==TRUE) message("Done in ", estimModel$count[1]," iterations.")
     
     # return the results
-    results <- list(loocv=estimModel$value, model.par=model.par, gamma=gamma, corrstruct=corrstruct, model=model, method=method, p=p, n=nO, targM=targM, R=regularizedEstimates, REML=REML, Y=Y, SE=SE)
+    results <- list(loocv=estimModel$value, model.par=model.par, gamma=gamma, corrstruct=corrstruct, model=model, method=method, p=p, n=nO, targM=targM, R=regularizedEstimates, REML=REML, SE=SE, variables=variables)
     class(results) <- "fit_pl.rpanda"
     return(results)
 }
@@ -604,6 +604,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     switch(model,
     "OU"={
         param = exp(param)
+      if(param!=0){
         D = numeric(n)
         
         # check first for ultrametric tree (see Ho & Ane 2014 - Systematic Biology; R code based on "phylolm" package implementation. Courtesy of L. Ho and C. Ane)
@@ -636,6 +637,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         
         # Adjust errors
         if(!is.null(mserr)) mserr = mserr*exp(-2*param*D[descendent[extern]])
+      }
     },
     "EB"={
         if (param!=0){
@@ -658,10 +660,10 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     })
     
     # Add measurment error
-    if(!is.null(mserr)) phy$edge.length[extern] = phy$edge.length[extern] + mserr
+    if(is.numeric(mserr)) phy$edge.length[extern] = phy$edge.length[extern] + mserr
     
     # Check for negative values
-    if(any(phy$edge.length<=0)) return(list(phy = phy, diagWeight = Inf, X=Inf, Y=Inf, Xw=Inf, Yw=Inf, det=Inf))
+    if(any(phy$edge.length<0)) return(list(phy = phy, diagWeight = Inf, X=Inf, Y=Inf, Xw=Inf, Yw=Inf, det=Inf))
     
     # Compute the independent contrasts scores
     C <- pruning(phy, trans=FALSE)
