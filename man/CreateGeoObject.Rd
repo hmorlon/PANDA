@@ -62,7 +62,8 @@ CreateGeoObject(Anolis.data$phylo,map=Anolis.map)
 require(phytools)
 geo<-c(rep("cuba",7),rep("hispaniola",9),"puerto_rico")
 names(geo)<-Anolis.data$phylo$tip.label
-stochastic.map<-make.simmap(Anolis.data$phylo,geo, model="ER", nsim=1)
+stochastic.map<-phytools::make.simmap(Anolis.data$phylo, 
+							geo, model="ER", nsim=1)
 CreateGeoObject(Anolis.data$phylo,map=stochastic.map)
 
 }

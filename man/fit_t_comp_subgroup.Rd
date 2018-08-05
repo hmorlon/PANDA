@@ -113,7 +113,7 @@ dummy.group<-c(rep("B",3),rep("A",12),rep("B",2),rep("A",6),rep("B",5),rep("A",6
 names(dummy.group)<-Canidae.phylo$tip.label
 
 
-Canidae.simmap<-make.simmap(Canidae.phylo,dummy.group)
+Canidae.simmap<-phytools::make.simmap(Canidae.phylo,dummy.group)
 
 set.seed(123)
 Canidae.data<-rnorm(length(Canidae.phylo$tip.label))
