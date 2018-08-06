@@ -20,7 +20,7 @@ Imports:
     pvclust,
     corpcor,
     phytools,
-    mvMORPH,
+    mvMORPH (>= 1.1.0),
     stats,
     graphics,
     grDevices,
