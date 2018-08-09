@@ -30,15 +30,15 @@ fit_env <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
     index <- 1 + as.integer( (t - a) * n / (b - a))
     return(env_tabulated[index])
   }
-  f.lamb.env <- function(t,y){ f.lamb(t, env_func_tab(t), y)}
-  f.mu.env <- function(t,y){ f.mu(t, env_func_tab(t), y)}
+  f.lamb.env <- function(t,y){f.lamb(t, env_func_tab(t), y)}
+  f.mu.env <- function(t,y){f.mu(t, env_func_tab(t), y)}
   res <- fit_bd(phylo, tot_time, f.lamb.env, f.mu.env, lamb_par, mu_par, f,
            meth, cst.lamb, cst.mu, expo.lamb, expo.mu, fix.mu, dt, cond)
   res$model <- "environmental birth death"
-  res$f.lamb <- function(t){ f.lamb(t, env_func_tab(t), res$lamb_par)}
+  res$f.lamb <- function(t){ abs(f.lamb(t, env_func_tab(t), res$lamb_par))}
   if (fix.mu==FALSE)
   {
-    res$f.mu <- function(t){ f.mu(t, env_func_tab(t), res$mu_par)}
+    res$f.mu <- function(t){ abs(f.mu(t, env_func_tab(t), res$mu_par))}
   }
   class(res) <- "fit.env"
   return(res)
