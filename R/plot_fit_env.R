@@ -18,6 +18,7 @@ plot_fit_env <- function(fit.env, env_data, tot_time)
     # Attribute f.mu ==> not fixed extinction
     dev.new()
     plot(-t, fit.env$f.mu(t), type='l', xlab="time", ylab="extinction rate", main="Fitted extinction rate")
+    dev.new()
     plot(env_func(t), fit.env$f.mu(t), type='l', xlab="Environmental data", ylab="extinction rate", main="Fitted extinction rate")
     r <- function(t) {fit.env$f.lamb(t) - fit.env$f.mu(t)}
     dev.new()
