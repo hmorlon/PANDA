@@ -13,6 +13,13 @@ fit_t_comp_subgroup<-function(full.phylo,ana.events,clado.events,stratified=FALS
 	GeoByClassObject<-CreateGeobyClassObject(full.phylo,map,trim.class,ana.events,clado.events,stratified=stratified)
 
 	phylo<-GeoByClassObject$map
+	
+	root.trimmed.phylo<-max(nodeHeights(phylo))
+	root.data<-max(nodeHeights(drop.tip.simmap(phylo,phylo$tip.label[which(!phylo$tip.label%in%names(data))])))
+	
+	if(round(root.trimmed.phylo,5)!=round(root.data,5)){stop("error where root of trimmed simmap and root of target clade don't match")}
+	#if this above error is triggered, need to use scripts written by JPD using JC mvMORPH approach in summer 2018
+	
 	if(!is.null(phylo$node.label)){phylo$node.label<-NULL}
 	geo.object<-GeoByClassObject$geo.object
 	#geo.sorted<-.resortGeoObject(phylo,geo.object) 
