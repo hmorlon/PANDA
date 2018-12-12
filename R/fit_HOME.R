@@ -1,7 +1,7 @@
 fit_HOME <-
 function(index,name,nb_tree,lambda,nb_cores,raref=FALSE,...){ 
   print(paste("Index: ",index,sep=""))
-  if (!file.exists("data/data_model_",name,"_",index,".RData",sep="")) stop("Please start by running the previous steps of HOME (prepare_data_HOME...)")
+  if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (prepare_data_HOME...)")
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
   if (N_variant>0){
     output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=5,tol=0.05,name=name,index=index,sequences=variant_sequences) 

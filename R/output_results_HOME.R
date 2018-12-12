@@ -2,7 +2,7 @@ output_results_HOME <-
 function(iter,name,name_index,lambda,nb_tree,empirical,randomize,raref,...){
   index <- name_index[iter]
   if (empirical==F){load(file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}
-  if (!file.exists("data/data_model_",name,"_",index,".RData",sep="")) stop("Please start by running the previous steps of HOME (fit_HOME...)")
+  if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (fit_HOME...)")
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
   if (N_variant>0){
     if (empirical==F){ksi <- simul[iter]
