@@ -8,7 +8,7 @@ function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8
   setwd(path)
   
   if (!exists("path_alignment")){ path_alignment <- path}
-  if (!exists("host_tree")){write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))}
+  if (exists("host_tree")){write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))}
   if (!file.exists(paste("host_tree_",name,".tre",sep=""))) stop("Please provide the host tree (format .tre) in the working directory")
   if (!is.binary(read.tree(paste("host_tree_",name,".tre",sep="")))) stop("Please provide a binary host tree")
   if (!is.rooted(read.tree(paste("host_tree_",name,".tre",sep="")))) stop("Please provide a rooted host tree")
