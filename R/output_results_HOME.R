@@ -4,6 +4,8 @@ function(iter,name,name_index,lambda,nb_tree,empirical,randomize,raref,...){
   if (empirical==F){load(file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (fit_HOME...)")
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
+  if(!exists("path")) {path <- getwd()}
+  setwd(path)
   if (N_variant>0){
     if (empirical==F){ksi <- simul[iter]
     indep <- (simul[iter]=="indep")}

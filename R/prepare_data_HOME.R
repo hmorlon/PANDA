@@ -59,8 +59,8 @@ function(iter,name,name_index,path,...){
     Q <- -Q/Q[4,4] 
     eigQ <- eigen(Q)
     ivp <- solve(eigQ$vectors)
-    save(host_tree,variant_sequences,selected_model,n,r,N,N_invariant,N_variant,PI,Q,ivp,eigQ,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
-  }else{save(host_tree,n,N,N_invariant,N_variant,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
+    save(host_tree,variant_sequences,selected_model,n,r,N,N_invariant,N_variant,PI,Q,ivp,eigQ,path,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
+  }else{save(host_tree,n,N,N_invariant,N_variant,path,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
     write.table(c("NO VARIATION WITHIN ALIGNMENT",N_variant),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
     write.table(c("NO VARIATION WITHIN ALIGNMENT",N_variant),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)}
 }
