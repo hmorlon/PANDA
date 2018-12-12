@@ -1,5 +1,5 @@
 sim_microbiota <-
-function(name, name_index,simul, path,mu=1, n=20, seed=1,nb_cores=1,N=300,proportion_variant=0.1,model="uniform",...){
+function(name, name_index,simul, mu=1, n=20, seed=1,nb_cores=1,N=300,proportion_variant=0.1,model="uniform",...){
   #facultative host_tree
   if(!exists("name")) stop("Please provide the name of the simulations")
   if(!exists("simul")) {simul  <- c(rep(0,5),rep(1,5),rep(3,5),rep(5,5),rep(10,5),rep("indep",5))}
