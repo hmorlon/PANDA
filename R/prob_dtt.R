@@ -203,7 +203,9 @@ prob_dtt<- function(fit.bd, tot_time, time, N0, l=N0, f = l/N0, m = seq(N0), met
       stop("object \"fit.bd\" is not of class \"fit.bd\"")
     if ("f.mu" %in% attributes(fit.bd)$names==FALSE) {
       f.mu <- function(t){0}
-    }
+    }else{
+      f.mu <- function(t) abs(fit.bd$f.mu(tot_time-t))}
+      f.lamb <- function(t) abs(fit.bd$f.lamb(tot_time-t))
     
     if(type == "crown"){
       m <- m[m > 1] 
