@@ -7,7 +7,7 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
     simulated_traceable_ksi <- simul[iter]
     ksi <- 0
     indep_tree <- pbtree(n=n)
-    indep_tree$tip.label <- sample(paste(rep("H",n),1:n,sep=""))
+    indep_tree$tip.label <- sample(host_tree$tip.label)
     indep_tree$edge.length <- indep_tree$edge.length/sum(indep_tree$edge.length)  #host tree scaled with total branch length=1
     write.tree(indep_tree,file=paste("independent_tree_",name,"_",index,".tre",sep=""))
     tree <- host_tree <- indep_tree
