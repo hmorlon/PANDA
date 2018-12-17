@@ -11,7 +11,7 @@ This function runs HOME for all the different OTUs (called "index"") on the host
 }
 
 \usage{
-HOME_model(name, name_index, host_tree, nb_tree=5000, lambda=seq(1,25),
+HOME_model(name, name_index, provided_tree, nb_tree=5000, lambda=seq(1,25),
 raref=FALSE, empirical=TRUE, randomize=TRUE, nb_random=10, path, path_alignment, seed=3, nb_cores=1)
 }
 
@@ -23,7 +23,7 @@ the name of the run
 a vector with the names of the different symbionts (e.g. name of the OTUs)
 }
 
-\item{host_tree}{
+\item{provided_tree}{
 optional - the host tree of your study. It can also be provided as saved in the working directory (see details).
 }
 
