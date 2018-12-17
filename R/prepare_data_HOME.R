@@ -15,7 +15,10 @@ function(iter,name,name_index,...){
   if (!exists("path_alignment")){ path_alignment <- path}
   
   #### Step 1 : Load the host tree ####
-  if (exists("host_tree")){write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))}
+  if (exists("provided_tree")){
+    host_tree <- provided_tree
+    if (!file.exists(paste("host_tree_",name,".tre",sep=""))){ write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))}}
+  
   if (!file.exists(paste("host_tree_",name,".tre",sep=""))) stop("Please provide the host tree (format .tre) in the working directory")
   if (!is.binary(read.tree(paste("host_tree_",name,".tre",sep="")))) stop("Please provide a binary host tree")
   if (!is.rooted(read.tree(paste("host_tree_",name,".tre",sep="")))) stop("Please provide a rooted host tree")
