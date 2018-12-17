@@ -1,5 +1,6 @@
 prepare_data_HOME <-
-function(iter,name,name_index,path,...){ 
+function(iter,name,name_index,...){ 
+  if(!exists("path")) {path <- getwd()}
   dir.create(file.path(path, "results/"), showWarnings = FALSE)
   dir.create(file.path(path, "data/"), showWarnings = FALSE)
   dir.create(file.path(path, "simulated_trees/"), showWarnings = FALSE)

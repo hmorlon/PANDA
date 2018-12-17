@@ -1,5 +1,5 @@
 output_results_HOME <-
-function(iter,name,name_index,lambda,nb_tree,empirical,randomize,raref,...){
+function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_tree=10000,empirical,randomize,raref,...){
   index <- name_index[iter]
   if (empirical==F){load(file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (fit_HOME...)")

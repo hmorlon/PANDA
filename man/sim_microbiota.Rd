@@ -10,8 +10,7 @@ This function simulates microbial alignments according to different models of ho
 }
 
 \usage{
-sim_microbiota(name, mu=1, n=20, seed=1,nb_cores=1,name_index,
-simul,N=300,proportion_variant=0.1,path,provided_tree,...)}
+sim_microbiota(name, name_index, simul, provided_tree, n=20, mu=1, N=300, proportion_variant=0.1, seed=1, nb_cores=1, path,...)}
 
 \arguments{
 \item{name}{
@@ -21,36 +20,48 @@ the name of the run
 \item{name_index}{
 a vector with the names of the different symbionts (e.g. name of the OTUs) to simulate
 }
-\item{path}{
-the path to the working directory
+
+\item{simul}{
+a vector of scenarii for each simulated alignment ("0" for strict vertical transmission, any positive integer for the number of host-switches transmissions, and "indep" to simulate independent evolutions and environmental acquisitions). This vector must have the same length as "name_index"
 }
 
-\item{nb_cores}{
-a number of cores to run the analyses
+\item{provided_tree}{
+optional - the n-tips, binary, rooted, and ultrametric host tree to simulate the alignments on it (by default a pure-birth host tree is simulated)}
+
+\item{n}{
+optional - a positive integer value representing the number of tips of the host tree to simulate (need to be provided if you do not already provide a host tree)
+}
+
+\item{mu}{
+a positive value representing the simulated substitution rate. 
+}
+
+\item{N}{
+a positive integer value representing the total number of nucleotides (variable and unvariable nucleotides)
+}
+
+\item{proportion_variant}{
+a value between 0 and 1 representing the proportion of variable nucleotides among N
 }
 
 \item{seed}{
 a seed to assure the reproducibility
 }
 
-\item{simul}{
-a vector of scenarii for each simulated alignment ("0" for strict vertical transmission, any positive integer for the number of host-switches transmissions, and "indep" to simulate independent evolutions and environmental acquisitions). This vector must have the same length as "name_index"
-}
-\item{N}{
-a positive integer value representing the total number of nucleotides (variant and invariant nucleotides)
-}
-\item{proportion_variant}{
-a value between 0 and 1 representing the proportion of variant nucleotides among N
+\item{nb_cores}{
+a number of cores to run the analyses
 }
 
-\item{provided_tree}{
-optional - the n-tips, binary, rooted, and ultrametric host tree to simulate the alignments on it (by default a pure-birth host tree is simulated)}
+
+\item{path}{
+optional - the path to the working directory
+}
 
 }
 
 
 \value{
-The function outputs microbial nucleotidic alignments according to different models of Host-Microbiota evolution. Data are well-formatted to then directly run the HOME inference (\emph{HOME_model}).
+The function outputs microbial nucleotidic alignments according to different models of Host-Microbiota evolution. Data are well-formatted to then directly run HOME (\emph{HOME_model}).
 
 }
 \details{
@@ -69,13 +80,14 @@ Perez-Lamarque, B. and Morlon, H. (in. prep.) Characterizing symbiont inheritanc
 
 # Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches and 1 is environmentally acquired)
 
-sim_microbiota(name="example_simulation", mu=1, n=10,
-name_index=c("Simul_1","Simul_2","Simul_3"), simul=c(0,5,"indep"), 
+sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+simul=c(0,5,"indep"), n=10, mu=1, 
 N=300, proportion_variant=0.1)
 
 # Run HOME (parameters estimations and model selections)
 
-#HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"), nb_tree=1000,lambda=seq(1,15), empirical=FALSE, nb_random=10)
+#HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"), nb_tree=1000, lambda=seq(1,25), empirical=FALSE, nb_random=10)
+
 
 }
 

@@ -17,7 +17,7 @@ the name of the run
 }
 
 \item{path}{
-the path to the working directory
+optional - the path to the working directory
 }
 }
 
@@ -35,37 +35,8 @@ example_great_apes_microbiota(name="great_apes")
 
 # Run HOME (parameters estimations and model selections)
 
-#HOME_model(name="great_apes", name_index=c("OTU0001","OTU0002","OTU0003"), nb_tree=500, lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25), nb_random=10)
+#HOME_model(name="great_apes", name_index=c("OTU0001","OTU0002","OTU0003"), nb_tree=500, lambda=seq(1,25), nb_random=10)
 
 # NB: this should be run on a larger number of tree!
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

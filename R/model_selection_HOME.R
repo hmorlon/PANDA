@@ -1,5 +1,5 @@
 model_selection_HOME <-
-function(index,name,nb_tree,lambda,nb_cores,seed,nb_random=10,...){
+function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_cores=1,seed=1,nb_random=10,...){
   print(noquote(paste("Index: ",index,sep="")))
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (fit_HOME...)")
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))

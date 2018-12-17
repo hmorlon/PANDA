@@ -2,15 +2,15 @@
 \alias{prepare_data_HOME}
 
 \title{
-Prepare the data for the HOME inference
+Prepare the data for running HOME 
 }
 
 \description{
-Prepare the data for the inference (format data, run the model of nucleotidic evolution...) of the HOME model. 
+This function prepares the data for the inference of HOME (format data, run the model of nucleotidic evolution...). 
 
 }
 
-\usage{prepare_data_HOME(iter,name,name_index,path,host_tree...)
+\usage{prepare_data_HOME(iter, name, name_index, host_tree, path...)
 }
 
 \arguments{
@@ -23,12 +23,13 @@ the number of iteration of a particular index from name_index
 \item{name_index}{
 a vector with the names of the different symbionts (e.g. name of the OTUs)
 }
-\item{path}{
-the path to the working directory
-}
 \item{host_tree}{
-the host tree of your study. It can also be provided in the working directory (see details).
+optional - the host tree of your study. It can also be provided in the working directory (see details).
 }
+\item{path}{
+optional - the path to the working directory
+}
+
 
 }
 
@@ -63,54 +64,25 @@ name="example_simulation"
 name_index=c("Simul_1","Simul_2","Simul_3")
 path=getwd()
 
-sim_microbiota(name, mu=1, n=10,name_index, simul=c(0,5,"indep"), N=300, proportion_variant=0.1)
+sim_microbiota(name, name_index, simul=c(0,5,"indep"), n=10, mu=1, N=300, proportion_variant=0.1)
 
 # Inference
 
 # Prepare the data (format, substitution model...)
-for (i in 1:3){prepare_data_HOME(iter=i,name,name_index,path)}
+for (i in 1:3){prepare_data_HOME(iter=i,name,name_index)}
 
 # Simulate the bank of trees
-for (ksi in 1:length(seq(1,15))){simul_bank_tree(ksi,name,nb_tree=1000,lambda=seq(1,15),seed=1)}
+for (ksi in 1:length(seq(1,25))){simul_bank_tree(ksi,name,nb_tree=1000,lambda=seq(1,15),seed=1)}
 
 # Infer the parameters
-#for (i in 1:3){fit_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,15),nb_cores=1)}
+#for (i in 1:3){fit_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1)}
 
 # Plot the first outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,15),nb_tree=1000,empirical=FALSE,randomize=FALSE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=FALSE,raref=FALSE)}
 
 # Perform the model selection
-#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,15),nb_cores=1,seed=1)}
+#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1,seed=1)}
 
 # Plot the final outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,15),nb_tree=1000,empirical=FALSE,randomize=TRUE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=TRUE,raref=FALSE)}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

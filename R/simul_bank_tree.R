@@ -1,5 +1,5 @@
 simul_bank_tree <-
-function(nb_ksi,name,nb_tree,lambda,seed=1){
+function(nb_ksi,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),seed=1){
   if (!file.exists(paste("host_tree_",name,".tre",sep=""))) stop("Please provide the host tree (format .tre) in the working directory")
   tree <- read.tree(paste("host_tree_",name,".tre",sep=""))
   tree$edge.length <- tree$edge.length/sum(tree$edge.length)
