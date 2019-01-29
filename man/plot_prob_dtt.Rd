@@ -8,14 +8,17 @@
   Plots confidence intervals of the estimated number of species through time using a matrix of probabilities given by the function 'prob_dtt'. 
 }
 \usage{
-  plot_prob_dtt(mat, grain =0.1, plot.prob = TRUE, plot.mean = TRUE, plot.bound=FALSE, int = TRUE, conf = 0.95, add = FALSE, col.mean = "red", col.bound = "blue", lty="solid")
+  plot_prob_dtt(mat, grain =0.1, plot.prob = TRUE, 
+                plot.mean = TRUE, int = TRUE, plot.bound=FALSE,
+                conf = 0.95, add = FALSE, col.mean = "red", col.bound = "blue",
+                lty="solid", lwd=1)
 }
 
 \arguments{
   \item{mat}{
     matrix of probabilities, with species numbers as rows and times as columns with rownames and colnames set to the values of each. 
 }
-  \item{grain}
+  \item{grain}{
     the upper limit of a range of probabilities plotted in a gray scale (lower limit is zero). Higher probabilities are plotted in black. Default value is 0.1.
 }
   \item{plot.prob}{
@@ -45,7 +48,10 @@
   \item{lty}{
     style of the line for the mean (if added on a current plot)
 }
-
+  \item{lwd}{
+    the line width, a positive number (default to 1)
+}
+}
 \value{
   Plot representing how the estimated number of species vary through time with confidence intervals. The darker is the plot, the higher is the probability.
 }
@@ -88,3 +94,4 @@ colSums(prob)
 
 # Plot Diversity through time
 plot_prob_dtt(prob)
+}

@@ -8,7 +8,8 @@
   Returns a matrix of probabilities to have 'm' species at a given time 't' with 'n' observed extant species (complete sampling or not) and 's' species at the root of the phylogeny (s=1 if the tree has a stem, otherwise s=2)
 }
 \usage{
-  prob_dtt(fit.bd, tot_time, time, N0, l=N0, f = l/N0, m = seq(N0), method="simple", lin = FALSE,
+  prob_dtt(fit.bd, tot_time, time, N0, l=N0, f = l/N0, 
+            m = seq(N0), method="simple", lin = FALSE,
            prec = 1000, type = "stem",logged = TRUE)
 }
 
@@ -92,3 +93,4 @@ prob <- prob_dtt(result, tot_time, 1:tot_time, N0=9, type="crown")
 
 # Check that the sums of probabilities are equal to 1
 colSums(prob)
+}
