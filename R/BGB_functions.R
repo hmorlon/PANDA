@@ -95,7 +95,7 @@
             }
         }
     }
-    tmp_classes = cls.df(dtf)
+    tmp_classes = .cls.df(dtf)
     dtf_classes$newclasses = tmp_classes[, ncol(tmp_classes)]
     if (printout) {
         cat("\n")
