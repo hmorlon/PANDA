@@ -12,8 +12,8 @@ Implements macroevolutionary analyses on phylogenetic trees
 \tabular{ll}{
 Package: \tab RPANDA\cr
 Type: \tab Package\cr
-Version: \tab 1.3\cr
-Date: \tab 2017-04-07\cr
+Version: \tab 1.5\cr
+Date: \tab 2018-01-29\cr
 License: \tab GPL (>= 2)\cr
 }
 
@@ -49,10 +49,13 @@ Lewitus, E., Morlon, H. (2016) Characterizing and comparing phylogenies from the
 
 Drury, J., Clavel, J., Manceau, M., Morlon, H. (2016) Estimating the Effect of Competition on Trait Evolution Using Maximum Likelihood Inference, Syst Biol 65: 700-710
 
-Manceau, M., Lambert, A., Morlon, H. (2016) A Unifying Comparative Phylogenetic Framework Including Traits Coevolving Across Interacting Lineages, Syst Biol doi: 10.1093/sysbio/syw115
+Manceau, M., Lambert, A., Morlon, H. (2017) A Unifying Comparative Phylogenetic Framework Including Traits Coevolving Across Interacting Lineages, Syst Biol 66: 551-568
 
-Clavel, J., Morlon, H., (2017) Accelerated body size evolution during cold climatic periods in the Cenozoic, Proc Nat Acad Sci doi: 10.1073/pnas.1606868114
+Clavel, J., Morlon, H. (2017) Accelerated body size evolution during cold climatic periods in the Cenozoic, Proc Nat Acad Sci 114: 4183-4188
 
+Drury, J., Tobias, J., Burns, K., Mason, N., Shultz, A., and Morlon, H. (2018) Contrasting impacts of competition on ecological and social trait evolution in songbirds. PLOS Biolog 16: e2003563
+
+Clavel, J., Aristide, L., Morlon, H. (2019). A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst Biol 68: 93-116
 }
 %\keyword{ phylogeny }
 
