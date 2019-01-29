@@ -17,6 +17,8 @@ Date: \tab 2018-01-29\cr
 License: \tab GPL (>= 2)\cr
 }
 
+More informations on the RPANDA package and worked examples can be found in \href{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12526}{Morlon et al. (2016)}
+
 }
 \author{
 Hélène Morlon <morlon@biologie.ens.fr>
