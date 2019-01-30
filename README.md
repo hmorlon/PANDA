@@ -17,7 +17,7 @@ You can install RPANDA directly from gitHub with devtools:
 ```
 library(devtools)
 
-install_github("hmorlon/PANDA")
+install_github("hmorlon/PANDA", dependencies = TRUE)
 
 ```
 
