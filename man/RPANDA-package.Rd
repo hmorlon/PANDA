@@ -17,7 +17,7 @@ Date: \tab 2018-01-29\cr
 License: \tab GPL (>= 2)\cr
 }
 
-More informations on the RPANDA package and worked examples can be found in \href{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12526}{Morlon et al. (2016)}
+More information on the RPANDA package and worked examples can be found in \href{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12526}{Morlon et al. (2016)}
 
 }
 \author{
@@ -29,9 +29,11 @@ Fabien Condamine <fabien.condamine@gmail.com>
 
 Jonathan Drury <jonathan.p.drury@gmail.com>
 
-Eric Lewitus <lewitus@biologie.ens.fr>
+Eric Lewitus <elewitus@hivresearch.org>
 
-Marc Manceau <manceau@biologie.ens.fr>
+Marc Manceau <marc.manceau@gmail.com>
+  
+Olivier Billaud <olivier.billaud@agroparistech.fr>
 }
 
 \references{
@@ -48,6 +50,8 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 Manceau, M., Lambert, A., Morlon, H. (2015) Phylogenies support out-of-equilibrium models of biodiversity, Eco Lett 18: 347-356
 
 Lewitus, E., Morlon, H. (2016) Characterizing and comparing phylogenies from their Laplacian spectrum, Syst Biol 65: 495-507
+
+Morlon, H., Lewitus, E., Condamine, F.L., Manceau, M., Clavel, J., Drury, J. (2016) RPANDA: an R package for macroevolutionary analyses on phylogenetic trees, MEE 7: 589-597
 
 Drury, J., Clavel, J., Manceau, M., Morlon, H. (2016) Estimating the Effect of Competition on Trait Evolution Using Maximum Likelihood Inference, Syst Biol 65: 700-710
 
