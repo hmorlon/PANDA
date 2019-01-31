@@ -5,6 +5,7 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (fit_HOME...)")
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
   if(!exists("path")) {path <- getwd()}
+  if(!is.character(path)) {path <- getwd()}
   setwd(path)
   if (N_variant>0){
     if (empirical==F){ksi <- simul[iter]

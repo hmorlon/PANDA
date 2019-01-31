@@ -4,7 +4,7 @@ function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8
   if(!exists("name")) stop("Please provide the name of the dataset ")
   if(!exists("name_index")) stop("Please provide the name of the different OTU alignments ")
   if(!exists("path")) {path <- getwd()}
-  
+  if(!is.character(path)) {path <- getwd()}
   setwd(path)
   
   if (!exists("path_alignment")){ path_alignment <- path}

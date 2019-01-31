@@ -1,6 +1,7 @@
 plot_simulated_switches <-
 function(n,host_tree,name,index,switches,...){ 
   if(!exists("path")) {path <- getwd()}
+  if(!is.character(path)) {path <- getwd()}
   setwd(path)
   pdf(paste(path,"/figures/host_tree_switches_",name,"_",index,".pdf",sep=""))
   tree <- ladderize(host_tree)

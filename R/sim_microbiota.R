@@ -5,7 +5,7 @@ function(name, name_index,simul, mu=1, n=20, seed=1,nb_cores=1,N=300,proportion_
   if(!exists("simul")) {simul  <- c(rep(0,5),rep(1,5),rep(3,5),rep(5,5),rep(10,5),rep("indep",5))}
   if(!exists("name_index")) {name_index  <- sapply(1:length(simul), function(i) paste("S",i,sep=""))}
   if(!exists("path")) {path <- getwd()}
-  
+  if(!is.character(path)) {path <- getwd()}
   setwd(path)
   
   dir.create(file.path(path, "simulations/"), showWarnings = FALSE)
