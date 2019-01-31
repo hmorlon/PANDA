@@ -26,7 +26,7 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
     tree$edge.length <- tree$edge.length/sum(tree$edge.length) # scaled only for the traceable switches research 
     tips_alignment <- host_tree$tip.label
     tree <- read.tree(file=paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
-    invisible(capture.output(plot_simulated_switches(n=n,host_tree=host_tree,name=name,index=index,switches=switches,path=path)))
+    invisible(capture.output(plot_simulated_switches(n=n,host_tree=host_tree,name=name,index=index,switches=switches)))
     switches[1,] <- as.character(switches[1,])
     switches[2,] <- as.character(switches[2,])
     write.table(switches, paste("simulations/simulated_switches_",name,"_",index,".txt",sep=""),col.names=F,row.names = F) 
