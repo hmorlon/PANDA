@@ -7,7 +7,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
     output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=5,tol=0.05,name=name,index=index,sequences=variant_sequences) 
     results <- cbind(0,output$minimum,output$objective)
     colnames(results) <- c("ksi","mu","minloglik")
-    write.table(results, paste("results/results_",name,"_",index,".txt",sep=""), row.names=F,quote = F,sep="\t")
+    write.table(results, paste("results/results_",name,"_",index,".txt",sep=""), append=FALSE, col.names=T, row.names=F,quote = F,sep="\t")
     
     inference_ksi <- function(ksi){
       print(paste("Number of switch(es): ",ksi,sep=""))
@@ -22,7 +22,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
       if (is.finite(minloglik)){
         results <- rbind(results,c(ksi,mu,minloglik))
         colnames(results) <- c("ksi","mu","minloglik")
-        write.table(results, paste("results/results_",name,"_",index,".txt",sep=""), row.names=F,quote = F,sep="\t")}
+        write.table(results, paste("results/results_",name,"_",index,".txt",sep=""),append=TRUE, col.names=FALSE, row.names=F,quote = F,sep="\t")}
       
       if (raref==T){ #####   rarefactions
         list <- seq(1,nb_tree,nb_tree/10)
