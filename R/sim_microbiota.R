@@ -1,5 +1,5 @@
 sim_microbiota <-
-function(name, name_index,simul, mu=1, n=20, seed=1,nb_cores=1,N=300,proportion_variant=0.1,model="uniform",...){
+function(name, name_index,simul, mu=1, n=20, seed=1,nb_cores=1,N=300,proportion_variant=0.1,provided_tree=NULL,model="uniform",...){
   #facultative host_tree
   if(!exists("name")) stop("Please provide the name of the simulations")
   if(!exists("simul")) {simul  <- c(rep(0,5),rep(1,5),rep(3,5),rep(5,5),rep(10,5),rep("indep",5))}
@@ -12,7 +12,8 @@ function(name, name_index,simul, mu=1, n=20, seed=1,nb_cores=1,N=300,proportion_
   dir.create(file.path(path, "data/"), showWarnings = FALSE)
   dir.create(file.path(path, "figures/"), showWarnings = FALSE)
   
-  if (!exists("provided_tree")){
+  #if (!exists("provided_tree")){
+  if (is.null(provided_tree)){
     print("Simulation of an host tree")
     host_tree <- pbtree(n=n)
     host_tree$tip.label <- sample(paste(rep("H",n),1:n,sep=""))}else{

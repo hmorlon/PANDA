@@ -20,7 +20,8 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
       minloglik <- output$objective
       
       if (is.finite(minloglik)){
-        results <- rbind(results,c(ksi,mu,minloglik))
+        #results <- rbind(results,c(ksi,mu,minloglik))
+        results <- cbind(ksi,mu,minloglik)
         colnames(results) <- c("ksi","mu","minloglik")
         write.table(results, paste("results/results_",name,"_",index,".txt",sep=""),append=TRUE, col.names=FALSE, row.names=F,quote = F,sep="\t")}
       
