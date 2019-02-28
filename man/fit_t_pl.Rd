@@ -81,7 +81,7 @@ Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
 }
 
 \details{
-\code{fit_t_pl} allows fitting various multivariate evolutionary models to high-dimensional datasets (where the number of variables \emph{p} is larger than \emph{n}). Models estimates are more accurate than maximum likelihood methods. Models fit can be compared using the GIC criterion (see ?GIC). Details about the methods are described in \emph{Clavel et al. (2018)}.
+\code{fit_t_pl} allows fitting various multivariate evolutionary models to high-dimensional datasets (where the number of variables \emph{p} is larger than \emph{n}). Models estimates are more accurate than maximum likelihood methods. Models fit can be compared using the GIC criterion (see ?GIC). Details about the methods are described in \emph{Clavel et al. (2019)}.
 }
 
 \note{
@@ -89,7 +89,7 @@ Options to be passed through. (e.g., echo=FALSE to stop printing messages)}
 	The Ridge penalties with "null" or "unitVariance" targets are rotation invariants.}
 \references{
 
-Clavel, J., Aristide, L., Morlon, H., 2018. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Systematic Biology DOI:10.1093/sysbio/syy045.
+Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst. Biol. 68: 93-116.
 }
 
 \author{J. Clavel}

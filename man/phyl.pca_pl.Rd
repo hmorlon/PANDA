@@ -41,10 +41,11 @@ Ploting options, the number of axes to display (\code{axes=c(1,2)} is the defaul
 
 \note{
 	Contrary to conventional PCA, the principal axes of the phylogenetic PCA are not orthogonal, they represent the main axes of (independent) evolutionary changes.}
+
 \references{
 Revell, L.J., 2009. Size-correction and principal components for intraspecific comparative studies. Evolution, 63:3258-3268.
 
-Clavel, J., Aristide, L., Morlon, H., 2018. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Systematic Biology DOI:10.1093/sysbio/syy045.
+Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst. Biol. 68: 93-116.
 
 }
 

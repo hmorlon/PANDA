@@ -33,7 +33,7 @@ A model fit object obtained by the \code{fit_t_XX} class of functions.
 	The function is used internally in \code{phyl.pca_pl}.}
 \references{
 
-Clavel, J., Aristide, L., Morlon, H., 2018. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Systematic Biology DOI:10.1093/sysbio/syy045.
+Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst. Biol. 68: 93-116.
 
 Cunningham C.W., Omland K.E., Oakley T.H. 1998. Reconstructing ancestral character states: a critical reappraisal. Trends Ecol. Evol. 13:361-366.
 

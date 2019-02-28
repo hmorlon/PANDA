@@ -140,6 +140,6 @@ mu_par <-c(0.005)
 
 # Find the best model
 #index <- which.min(c(result_cst$aicc, result_exp$aicc, result_lin$aicc,result_bexp_dcst$aicc))
-#rbind(result_exp, result_lin, result_cst, result_bexp_dcst)[index,]
+#rbind(result_cst, result_exp, result_lin, result_bexp_dcst)[index,]
 
 }
