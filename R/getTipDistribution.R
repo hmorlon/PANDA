@@ -5,6 +5,13 @@ setGeneric(
 )
 
 setClass("PhenotypicModel")
+setClass("PhenotypicACDC")
+setClass("PhenotypicBM")
+setClass("PhenotypicDD")
+setClass("PhenotypicGMM")
+setClass("PhenotypicADiag")
+setClass("PhenotypicPM")
+setClass("PhenotypicOU")
 
 setMethod(
     f="getTipDistribution",
