@@ -1,9 +1,3 @@
-setGeneric(
-    name="getTipDistribution",
-    def=function(object="PhenotypicModel", params="numeric", v="boolean")
-    standardGeneric("getTipDistribution")
-)
-
 #The superclass
 setClass(
   Class = "PhenotypicModel",
@@ -230,6 +224,11 @@ setMethod(
 )
 
 
+setGeneric(
+  name="getTipDistribution",
+  def=function(object="PhenotypicModel", params="numeric", v="boolean")
+    standardGeneric("getTipDistribution")
+)
 
 setMethod(
     f="getTipDistribution",
