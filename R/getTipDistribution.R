@@ -4,6 +4,7 @@ setGeneric(
     standardGeneric("getTipDistribution")
 )
 
+setClass("PhenotypicModel")
 
 setMethod(
     f="getTipDistribution",
