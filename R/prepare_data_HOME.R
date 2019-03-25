@@ -29,6 +29,9 @@ function(iter,name,name_index,...){
   host_tree <- ladderize(host_tree)
   host_tree$edge.length <- host_tree$edge.length/sum(host_tree$edge.length)  #host tree scaled with total branch length=1
   
+  if (length(which(host_tree$edge.length==0))>0) stop("Please provide an host tree with positive branch lengths")
+  
+  
   #### Step 2 : Load the symbiont sequences ####
   if (!file.exists(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""))) stop(paste("Please provide an nucleotidic alignment (format .fas) in path_alignment/ for the index",index,sep=""))
   variant_sequences <-  read.dna(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""),format="fasta",as.character=T)
