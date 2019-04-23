@@ -1,5 +1,4 @@
-#library(RPANDA)
-#library(igraph)
+
 
 spectR<-function (phylo, method = c("standard")) 
 			{

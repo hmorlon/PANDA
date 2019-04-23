@@ -19,3 +19,5 @@
 ^R/mcmc.*
 ^R/birthdeath\.tree\.rateshift\.R
 ^R/Vraisemblance-mort-IMACS\.R
+^.*\.Rproj$
+^\.Rproj\.user$
