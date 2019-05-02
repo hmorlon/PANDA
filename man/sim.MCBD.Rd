@@ -45,7 +45,8 @@ sim.MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,I
 
 }
 \details{
- It might be difficult to find parameter settings that would be sensitive. If trees produced are too big, simulation can become too slow to ever finish. It is recommended to use the parameter settings of the examples as a staring point and from there modify them to understand the behaviour of the model.
+It might be difficult to find parameter combinations that would be sensitive. It is recommended to use the parameter settings of the examples as a staring point and from there modify them to understand the behaviour of the model.
+If trees produced are too big, simulation can become too slow to ever finish. 
 }
 \value{
 returns a list with the following elements:
@@ -108,6 +109,7 @@ res <- sim.MCBD(pars, age.max=30, step.size=0.01, bounds=c(-10,Inf))
 pars <- c(lambda1, tau0, beta, mu0, mubg, mui0, muibg, alpha, sig2=0, m)
 res <- sim.MCBD(pars, age.max=30)
 
+plot(res$gsp_extant$tree)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
