@@ -205,7 +205,6 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   lin_length <- round(lineages[,4] - lineages[,3],2)
   tree <- list(edge = edges_mat, edge.length = lin_length, Nnode = (n_tips-1), tip.label = paste("t", as.character(1:n_tips), sep="") )
   class(tree) <- "phylo"
-  tree <- read.tree(text=write.tree(tree)) #to get internal order as commonly expected
   #traits
   tip_values = NULL
   tip_values <- sapply(traits[active_lineages], function(x)(x[length(x)]))
@@ -215,7 +214,6 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   isp_todrop <- c(which(lineages[,5]==-1),which(lineages[,5]==-2&is.na(lineages[,7]))) 
   tip_ids <- edges_mat[isp_todrop,2]
   tree_gsp_fossil <- drop.tip(tree, tip = tip_ids)
-  tree_gsp_fossil <- read.tree(text=write.tree(tree_gsp_fossil))
   #traits
   tip_values_gsp_fossil <- tip_values[names(tip_values) %in% tree_gsp_fossil$tip.label]
   
@@ -228,10 +226,15 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
     extinct_todrop <- c(which(lineages[,5]==-1),which(lineages[,5]==-2))
     tip_ext_ids <- edges_mat[extinct_todrop,2]
     tree_gsp_extant <- drop.tip(tree, tip = tip_ext_ids)
-    tree_gsp_extant <- read.tree(text=write.tree(tree_gsp_extant))
     #traits
     tip_values_gsp_extant <- tip_values[names(tip_values) %in% tree_gsp_extant$tip.label]
   }
+  
+  #to get internal order of trees as commonly expected
+  tree <- read.tree(text=write.tree(tree))
+  tree_gsp_fossil <- read.tree(text=write.tree(tree_gsp_fossil))
+  tree_gsp_extant <- read.tree(text=write.tree(tree_gsp_extant))
+  
   
   res <- list(all=list(tree=tree, tips=tip_values),
               gsp_fossil=list(tree=tree_gsp_fossil,tips=tip_values_gsp_fossil), 
