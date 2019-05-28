@@ -87,11 +87,11 @@ A 'list' object with fields :
 \item{relToAbs }{A function mapping the relative changes in speciation rates to the absolute speciation rates for the object \code{phylo}, used internally.}
 }
 \references{
-Ter Braak, C. J. 2006. A markov chain monte carlo version of the genetic algorithm dierential
+Ter Braak, C. J. 2006. A markov chain monte carlo version of the genetic algorithm differential
 evolution: easy bayesian computing for real parameter spaces. \emph{Statistics and Computing 16:239-
 249}.
 
-ter Braak, C. J. and J. A. Vrugt. 2008. Dierential evolution markov chain with snooker updater
+ter Braak, C. J. and J. A. Vrugt. 2008. Differential evolution markov chain with snooker updater
 and fewer chains. \emph{Statistics and Computing 18:435-446}.
 
 Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
