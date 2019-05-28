@@ -104,17 +104,16 @@ O. Maliet
 }
 \examples{
 \dontrun{
-data("Caprimulgidae_ClaDS2")
+data("Caprimulgidae")
 
-tree = Caprimulgidae_ClaDS2$tree
-sample_fraction = Caprimulgidae_ClaDS2$sample_fraction
+sample_fraction = 0.61
 
-sampler = fit_ClaDS(tree, sample_fraction, 1000, thin = 50, 
+sampler = fit_ClaDS(Caprimulgidae, sample_fraction, 1000, thin = 50, 
           file_name = NULL, model_id="ClaDS2", nCPU = 1)
 plot_ClaDS_chains(sampler)
 
 # continue the same run 
-sampler = fit_ClaDS(tree, sample_fraction, 50, mcmcSampler = sampler)
+sampler = fit_ClaDS(Caprimulgidae, sample_fraction, 50, mcmcSampler = sampler)
 
 
 

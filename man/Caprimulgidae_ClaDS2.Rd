@@ -14,6 +14,7 @@ A list object with fields :
 \describe{
 \item{\code{tree}}{The \emph{Caprimulgidae} phylogeny on which we ran the model.}
 \item{\code{sample_fraction}}{The sample fraction for the clade.}
+\item{\code{sampler}}{The chains obtained by running ClaDS2 on the \emph{Caprimulgidae} phylogeny.}
 }
 }
 \details{
