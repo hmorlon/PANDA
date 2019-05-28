@@ -1,7 +1,7 @@
 \name{plot_ClaDS_phylo}
 \alias{plot_ClaDS_phylo}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Plot a phylogeny with painted branches
+\title{Plot a phylogeny with branch-specific values
 }
 \description{
 Plot a phylogeny with branches colored according to branch-specific rate values
