@@ -46,5 +46,5 @@ the largest y-axis value of the spectral density profile}
 \examples{
 tr<-rtree(10)
 dat<-runif(10,1,2)
-trait_spectR(tr,dat,draw=T)
+trait_spectR(tr,dat,draw=TRUE)
 }
