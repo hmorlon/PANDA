@@ -52,5 +52,5 @@ the position of the largest difference between eigenvalues, giving the number of
 
 \examples{
 data(Cetacea)
-spectR(Cetacea,meth="standard",zero_bound=F)
+spectR(Cetacea,meth="standard",zero_bound=FALSE)
 }
