@@ -1,4 +1,4 @@
-library(RPANDA)
+#library(RPANDA)
 library(igraph)
 spectR<-function (phylo, meth = c("standard"), zero_bound=F) 
 			{

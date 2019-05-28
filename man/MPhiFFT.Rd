@@ -11,6 +11,6 @@ Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for esti
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{createLikelihood_ClaDS1}}, \code{\link{createLikelihood_ClaDS2}}
+\code{\link{fit_ClaDS}}
 }
 

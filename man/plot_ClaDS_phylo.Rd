@@ -1,5 +1,5 @@
-\name{plot_ClaDS}
-\alias{plot_ClaDS}
+\name{plot_ClaDS_phylo}
+\alias{plot_ClaDS_phylo}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Plot a phylogeny with painted branches
 }
@@ -7,7 +7,8 @@
 Plot a phylogeny with branches colored according to branch-specific rate values
 }
 \usage{
-plot_ClaDS(phylo, rates, rates2 = NULL, same.scale = T, main = NULL, lwd = 2, log = T)
+plot_ClaDS_phylo(phylo, rates, rates2 = NULL, 
+                same.scale = T, main = NULL, lwd = 2, log = T)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -42,8 +43,8 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 
-plot_ClaDS(tree,speciation_rates, lwd = 4, log = FALSE)
+plot_ClaDS_phylo(tree,speciation_rates, lwd = 4, log = FALSE)
 
 }

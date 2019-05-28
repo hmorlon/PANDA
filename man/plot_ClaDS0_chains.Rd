@@ -1,5 +1,5 @@
-\name{plotChains_ClaDS0}
-\alias{plotChains_ClaDS0}
+\name{plot_ClaDS0_chains}
+\alias{plot_ClaDS0_chains}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Plot the MCMC chains obtained when infering ClaDS0 parameters
@@ -8,7 +8,8 @@ Plot the MCMC chains obtained when infering ClaDS0 parameters
 Plot the MCMC chains obtained with run_ClaDS0.
 }
 \usage{
-plotChains_ClaDS0(sampler, burn = 1/2, thin = 1, param = c("sigma", "alpha", "l_0", "LP"))
+plot_ClaDS0_chains(sampler, burn = 1/2, thin = 1, 
+                  param = c("sigma", "alpha", "l_0", "LP"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,12 +34,12 @@ Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for esti
 O. Maliet
 }
 \seealso{
-  \code{\link{run_ClaDS0}}, \code{\link{getMAPS_ClaDS0}}, \code{\link{plotChains_ClaDS}}
+  \code{\link{fit_ClaDS0}}, \code{\link{getMAPS_ClaDS0}}, \code{\link{plot_ClaDS_chains}}
 }
 \examples{
 data("ClaDS0_example")
 
-plotChains_ClaDS0(ClaDS0_example$Cl0_chains)
-plotChains_ClaDS0(ClaDS0_example$Cl0_chains, param = paste0("lambda_", c(1,10,5)))
+plot_ClaDS0_chains(ClaDS0_example$Cl0_chains)
+plot_ClaDS0_chains(ClaDS0_example$Cl0_chains, param = paste0("lambda_", c(1,10,5)))
 
 }

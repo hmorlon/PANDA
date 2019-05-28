@@ -32,7 +32,7 @@ Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for esti
 O. Maliet
 }
 \seealso{
-  \code{\link{run_ClaDS}}, \code{\link{plotChains_ClaDS}}, \code{\link{getMAPS_ClaDS0}}
+  \code{\link{fit_ClaDS}}, \code{\link{plot_ClaDS_chains}}, \code{\link{getMAPS_ClaDS0}}
 }
 \examples{
 data("Caprimulgidae_ClaDS2")
@@ -41,6 +41,6 @@ maps = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 1)
 
 print(paste0("sigma = ", maps[1], " ; alpha = ", 
   maps[2], " ; epsilon = ", maps[3], " ; l_0 = ", maps[4] ))
-plot_ClaDS(Caprimulgidae_ClaDS2$tree, maps[-(1:4)])
+plot_ClaDS_phylo(Caprimulgidae_ClaDS2$tree, maps[-(1:4)])
 
 }

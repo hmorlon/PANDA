@@ -1,5 +1,5 @@
-\name{run_ClaDS0}
-\alias{run_ClaDS0}
+\name{fit_ClaDS0}
+\alias{fit_ClaDS0}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Infer ClaDS0's parameter on a phylogeny}
@@ -7,7 +7,7 @@ Infer ClaDS0's parameter on a phylogeny}
 Infer branch-specific speciation rates and the model's hyper parameters for the pure-birth model
 }
 \usage{
-run_ClaDS0(tree, name, pamhLocalName = "pamhLocal",  
+fit_ClaDS0(tree, name, pamhLocalName = "pamhLocal",  
             iteration = 1e+07, thin = 20000, update = 1000, 
             adaptation = 10, seed = NULL, nCPU = 3)
 }
@@ -55,7 +55,7 @@ Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for esti
 O. Maliet
 }
 \seealso{
-   \code{\link{getMAPS_ClaDS0}}, \code{\link{plotChains_ClaDS0}}, \code{\link{run_ClaDS}}
+   \code{\link{getMAPS_ClaDS0}}, \code{\link{plot_ClaDS0_chains}}, \code{\link{fit_ClaDS}}
 }
 \examples{
 \dontrun{
@@ -74,9 +74,9 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 
-sampler = run_ClaDS0(tree=tree,        
+sampler = fit_ClaDS0(tree=tree,        
               name="ClaDS0_example.Rdata",      
               nCPU=1,               
               pamhLocalName = "local",

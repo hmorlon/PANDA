@@ -36,7 +36,7 @@ O. Maliet
 }
 
 \seealso{
-  \code{\link{run_ClaDS0}}, \code{\link{plotChains_ClaDS0}}, \code{\link{getMAPS_ClaDS}}
+  \code{\link{fit_ClaDS0}}, \code{\link{plot_ClaDS0_chains}}, \code{\link{getMAPS_ClaDS}}
 }
 \examples{
 set.seed(1)
@@ -61,7 +61,7 @@ MAPS = getMAPS_ClaDS0(ClaDS0_example$tree,
 
 # plot the simulated (on the left) and inferred speciation rates (on the right)
 # on the same color scale
-plot_ClaDS(ClaDS0_example$tree, 
+plot_ClaDS_phylo(ClaDS0_example$tree, 
           ClaDS0_example$speciation_rates, 
           MAPS[-(1:3)])
 }

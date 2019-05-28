@@ -48,7 +48,5 @@ exportMethods("print", "show", "[", "getTipDistribution", "getDataLikelihood", "
 export(fit_t_comp,likelihood_t_MC,likelihood_t_MC_geog,likelihood_t_DD,likelihood_t_DD_geog,sim_t_comp,CreateGeoObject,sim.divergence.geo,sim.convergence.geo, CreateGeoObject_BioGeoBEARS)
 export(fit_t_comp_subgroup,CreateClassObject,CreateGeobyClassObject,likelihood_subgroup_model)
 export(plot_prob_dtt, prob_dtt)
-useDynLib(RPANDA, relToAbs)
-export(plot_ClaDS, sim_ClaDS, run_ClaDS0, plotChains_ClaDS0, getMAPS_ClaDS0,
-       plotChains_ClaDS, getMAPS_ClaDS,prepare_ClaDS, get_rates,
-       createLikelihood_ClaDS1, createLikelihood_ClaDS2, run_ClaDS, add_iter_ClaDS)
+export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_chains,
+       getMAPS_ClaDS, getMAPS_ClaDS0, fit_ClaDS)

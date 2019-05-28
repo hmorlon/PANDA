@@ -49,7 +49,7 @@ Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email =
 	person("Marc", "Manceau", role = c("aut", "cph")),
 	person("Julien", "Clavel", role = c("aut", "cph")),
 	person("Jonathan", "Drury", role = c("aut", "cph")),
-    	person("Olivier", "Billaud", role = c("aut", "cph")))
+  person("Olivier", "Billaud", role = c("aut", "cph")),
 	person("Odile", "Maliet", role = c("aut", "cph")))
 Maintainer: Hélène Morlon <morlon@biologie.ens.fr>
 Description: Implements macroevolutionary analyses on phylogenetic trees. See
