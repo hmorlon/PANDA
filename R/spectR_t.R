@@ -1,4 +1,4 @@
-trait_spectR<-function(phylo,dat,draw=F){
+spectR_t<-function(phylo,dat,draw=F){
 	if (length(phylo$tip.label)!=length(dat)) 
         stop("dat do not match phylo")
        
