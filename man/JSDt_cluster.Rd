@@ -1,5 +1,5 @@
-\name{JSDcluster_t}
-\alias{JSDcluster_t}
+\name{JSDt_cluster}
+\alias{JSDt_cluster}
 
 \title{
 Clustering on the Jensen-Shannon distance between phylogenetic trait data
@@ -10,7 +10,7 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDcluster_t(phylo,mat,plot=F)
+JSDt_cluster(phylo,mat,plot=F)
 }
 
 \arguments{
@@ -48,5 +48,5 @@ data(Cetacea)
 n<-length(Cetacea$tip.label)
 mat<-replicate(20, rnorm(n)) 
 colnames(mat)<-1:dim(mat)[2]
-JSDcluster_t(Cetacea,mat)
+JSDt_cluster(Cetacea,mat)
 }
