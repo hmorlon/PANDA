@@ -1,15 +1,15 @@
-\name{trait_spectR}
-\alias{trait_spectR}
+\name{spectR_t}
+\alias{spectR_t}
 
 \title{
-Spectral density plot of phylogeny trait data
+Spectral density plot of phylogenetic trait data
 }
 
 \description{
 Computes the spectra of eigenvalues for the modified graph Laplacian of a phylogenetic tree with associated tip data, convolves the eigenvalues with a Gaussian kernel and plots the density profile of eigenvalues, and estimates the summary statistics of the profile.}
 
 \usage{
-trait_spectR(phylo, dat, draw=F)
+spectR_t(phylo, dat, draw=F)
 }
 
 \arguments{
@@ -37,7 +37,7 @@ the largest y-axis value of the spectral density profile}
 
 
 \references{
-	Lewitus, E., Morlon, H. (2015) Characterizing and comparing phylogenies from their Laplacian spectrum, Systematic Biology, 65(3):495-507}
+	Lewitus, E., Morlon, H. (2019) Characterizing and comparing phylogenetic trait data from their normalized Laplacian spectrum, bioRxiv doi: https://doi.org/10.1101/654087}
 
 
 \author{E Lewitus}
@@ -46,5 +46,5 @@ the largest y-axis value of the spectral density profile}
 \examples{
 tr<-rtree(10)
 dat<-runif(10,1,2)
-trait_spectR(tr,dat,draw=TRUE)
+spectR_t(tr,dat,draw=TRUE)
 }
