@@ -1,8 +1,8 @@
-\name{trait_JSDcluster}
-\alias{trait_JSDcluster}
+\name{JSDcluster_t}
+\alias{JSDcluster_t}
 
 \title{
-Clustering on the Jensen-Shannon distance between phylogenies
+Clustering on the Jensen-Shannon distance between phylogenetic trait data
 }
 
 \description{
@@ -10,7 +10,7 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-trait_JSDcluster(phylo,mat,plot=F)
+JSDcluster_t(phylo,mat,plot=F)
 }
 
 \arguments{
@@ -34,12 +34,12 @@ an object of type 'phylo' (see ape documentation)}
 \author{E Lewitus}
 
 \references{
-	Lewitus, E., Morlon, H. (2015) Characterizing and comparing phylogenies from their Laplacian spectrum, Systematic Biology, 65(3):495-507}
+	Lewitus, E., Morlon, H. (2019) Characterizing and comparing phylogenetic trait data from their normalized Laplacian spectrum, bioRxiv doi: https://doi.org/10.1101/654087}
 
 
 
 \seealso{
-\code{\link{trait_spectR}}
+\code{\link{spectR_t}}
 }
 
 
@@ -48,5 +48,5 @@ data(Cetacea)
 n<-length(Cetacea$tip.label)
 mat<-replicate(20, rnorm(n)) 
 colnames(mat)<-1:dim(mat)[2]
-trait_JSDcluster(Cetacea,mat)
+JSDcluster_t(Cetacea,mat)
 }
