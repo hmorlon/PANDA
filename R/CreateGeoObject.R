@@ -1,5 +1,5 @@
 CreateGeoObject<-function(phylo,map){
-	if(any(grepl("___",phylo$tip.label, fixed=TRUE))|any(grepl("-",phylo$tip.label, fixed=TRUE))|any(grepl("*",phylo$tip.label, fixed=TRUE))|any(grepl("/",phylo$tip.label, fixed=TRUE))|any(grepl("^",phylo$tip.label, fixed=TRUE))|any(grepl("+",phylo$tip.label, fixed=TRUE))){stop("script will not work with '___', '-', '+', '*','/', or '^' in any tip labels; remove these characters")}
+  	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
 	paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS
 	nodeDist<-vector(mode = "numeric", length = phylo$Nnode)

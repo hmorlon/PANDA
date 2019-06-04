@@ -56,7 +56,7 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 }
 
 \author{
-	J.P. Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}
+	J.P. Drury \href{mailto:jonathan.p.drury@gmail.com}{jonathan.p.drury@gmail.com}
 }
 
 \seealso{

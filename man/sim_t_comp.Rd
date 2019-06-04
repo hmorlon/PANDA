@@ -52,7 +52,7 @@ should be much smaller than the smallest branch (\code{min(phylo$edge.length)}).
 	Weir, J. & Mursleen, S. 2012. Diversity-dependent cladogenesis and trait evolution in the adaptive radiation of the auks (Aves: Alcidae). \emph{Evolution} 67:403-416.
 }
 
-\author{J Drury \href{mailto:drury@biologie.ens.fr}{drury@biologie.ens.fr}}
+\author{J Drury \href{mailto:jonathan.p.drury@gmail.com}{jonathan.p.drury@gmail.com}}
 
 \seealso{
 \code{\link{fit_t_comp}}

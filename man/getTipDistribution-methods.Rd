@@ -55,4 +55,3 @@ Manceau M., Lambert A., Morlon H. (2017) A unifying comparative phylogenetic fra
 }
 
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

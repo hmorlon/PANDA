@@ -1,6 +1,6 @@
 Package: RPANDA
-Version: 1.3
-Date: 2017-04-03
+Version: 1.6
+Date: 2019-06-04
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
@@ -20,35 +20,47 @@ Imports:
     pvclust,
     corpcor,
     phytools,
-    mvMORPH,
+    mvMORPH (>= 1.1.0),
     stats,
     graphics,
     grDevices,
     utils,
-    BioGeoBEARS,
-    mvtnorm
+    geiger,
+    mvtnorm,
+    Matrix,
+    pracma,
+    glassoFast,
+    Rmpfr,
+    fields, 
+    coda,
+    parallel
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],
 	Fabien Condamine [aut, cph],
 	Marc Manceau [aut, cph],
 	Julien Clavel [aut, cph],
-	Jonathan Drury [aut, cph]
+	Jonathan Drury [aut, cph],
+   	Olivier Billaud [aut, cph],
+	Odile Maliet [aut, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"),
 	person("Eric", "Lewitus", role = c("aut", "cph")),
 	person("Fabien", "Condamine", role = c("aut", "cph")),
 	person("Marc", "Manceau", role = c("aut", "cph")),
 	person("Julien", "Clavel", role = c("aut", "cph")),
-	person("Jonathan", "Drury", role = c("aut", "cph")))
+	person("Jonathan", "Drury", role = c("aut", "cph")),
+  person("Olivier", "Billaud", role = c("aut", "cph")),
+	person("Odile", "Maliet", role = c("aut", "cph")))
 Maintainer: Hélène Morlon <morlon@biologie.ens.fr>
 Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Morlon et al. (2010) <DOI:10.1371/journal.pbio.1000493>, Morlon et al. (2011)
-    <DOI:10.1073/pnas.1102543108>, Condamine et al. (2013) <DOI:10.1111/ele.12062>,
-    Morlon et al. (2014) <DOI:10.1111/ele.12251>, Manceau et al. (2015) <DOI:
-    10.1111/ele.12415>, Lewitus & Morlon (2016) <DOI:10.1093/sysbio/syv116>, Drury
-    et al. (2016) <DOI:10.1093/sysbio/syw020>, Manceau et al. (2016) <DOI:10.1093/sysbio/syw115>,
-    and Clavel & Morlon (2017) <DOI:10.1073/pnas.1606868114>.
+    <DOI:10.1073/pnas.1102543108>, Condamine et al. (2013) <DOI:10.1111/ele.12062>, 
+    Morlon et al. (2014) <DOI:10.1111/ele.12251>, Manceau et al. (2015) <DOI:10.1111/ele.12415>,
+    Lewitus & Morlon (2016) <DOI:10.1093/sysbio/syv116>, Drury et al. (2016) <DOI:10.1093/sysbio/syw020>,
+    Manceau et al. (2016) <DOI:10.1093/sysbio/syw115>, Morlon et al. (2016) <DOI:10.1111/2041-210X.12526>, Clavel & Morlon (2017) <DOI:10.1073/pnas.1606868114>, 
+    Drury et al. (2017) <DOI:10.1093/sysbio/syx079>, Lewitus & Morlon (2017) <DOI:10.1093/sysbio/syx095>, 
+    Drury et al. (2018) <DOI:10.1371/journal.pbio.2003563>, Clavel et al. (2019) <DOI:10.1093/sysbio/syy045> and Maliet et al. (2019) <DOI:10.1038/s41559-019-0908-0> 
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
 Repository: CRAN
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.1

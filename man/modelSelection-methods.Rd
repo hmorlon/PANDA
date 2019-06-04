@@ -14,4 +14,3 @@ This is the only method available for this function. Same behaviour for any Phen
 }
 }}
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

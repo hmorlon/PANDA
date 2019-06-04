@@ -95,54 +95,59 @@ sim.divergence.geo<-function(phylo,pars, Nsegments=2500, plot=FALSE, geo.object)
         if (i == 1){
           traitMat[,1] = root.value
         }else{
-          traitMat[,1] = masterbranch[[i-1]][mappings[[i]],(segmentSize[i-1]+1)] #added +1 here since segmentSize[i-1] is penultimate column, not the last one
+          traitMat[,1] = masterbranch[[i-1]][mappings[[i]],(segmentSize[i-1]+1)]
         }
         
-        tempInd<- 1:branchesPresent[i] # hack to have fast selection of not k, seemed to be faster than a call to which()
-        
+        tempInd<- 1:branchesPresent[i] 
+        flagged=FALSE
         for(k in 1:segmentSize[i]){        
           	for(j in 1:branchesPresent[i]){
-	          	elms<-which(geography.object[[timecount]][match(unlist(nat[[i]])[j],rownames(geography.object[[timecount]])),]==1)##these are elements that are equal to 1 (sympatric lineages);if length(elms)=0 the repulsion component just falls out
+	          	elms<-which(geography.object[[timecount]][match(unlist(nat[[i]])[j],rownames(geography.object[[timecount]])),]==1)
 	            diffMeOthers <- traitMat[j,k] - traitMat[elms[which(elms!=j)],k]
-	            sign1<-sign(diffMeOthers) ##Alternative: sign1<-ifelse(diffMeOthers>0,1,-1), but diff seems to be faster
+	            sign1<-sign(diffMeOthers) 
 	            temp1 = max *segsize #old version:temp1 = 1/(length(elms)) * max *segsize 
       		    temp2 = sqrt(sig2*segsize)
 	            if(any(sign1==0)){
 	            	no.eq<-which(traitMat[,k] ==traitMat[j,k])
 					if(j==min(no.eq)){
-						sign1<-sign(rnorm(1))
+						flagsign<-sign(rnorm(1)) 
+						sign1[which(sign1==0)]<-flagsign
 	            		traitMat[j,k+1]<-traitMat[j,k] +psi*(theta-traitMat[j,k])*segsize + temp1 * sum(sign1*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2)
 					} else{
-						minn<-min(no.eq)
-						sign2<-sign(traitMat[minn,k+1]-traitMat[minn,k])
-	            		traitMat[j,k+1]<-traitMat[j,k] +psi*(theta-traitMat[j,k])*segsize + temp1 * sum(-sign2*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2)
+						sign1[which(sign1==0)]<--flagsign
+						flagged=TRUE
+	            		traitMat[j,k+1]<-traitMat[j,k] +psi*(theta-traitMat[j,k])*segsize + temp1 * sum(sign1*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2)
 					}			
-	            } else{ # this is necessary because without this, if lineages have identical trait values, they do not have repulsion (instead repulsion should be strongest when lineages are equal). Also, ifelse approach provides one sign value for all identical matches, which could be fine but this randomly chooses sign for each 0.
+	            } else{ 
 	            	traitMat[j,k+1]<-traitMat[j,k] + psi*(theta-traitMat[j,k])*segsize + temp1 * sum(sign1*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2)
               	}
 				if((k!=segmentSize[i])&&(j==branchesPresent[i])){timecount= ifelse(round(((k*segsize)+nodeDist[i]),8)>=round(newDist[timecount+1],8),timecount+1,timecount)}
-					###loop for last segment size (to preserve exact branch lengths)
 					if(k==segmentSize[i] && nodeDiff[i]%%segsize!=0){
 						segsizeT= nodeDiff[i]%%segsize
 	            		diffMeOthers <- traitMat[j,k] - traitMat[elms[which(elms!=j)],k]
 						temp1B =  max *segsizeT #old version 1/length(elms) * max *segsizeT 
 	        			temp2B = sqrt(sig2*segsizeT)
-	            		sign1<-sign(diffMeOthers) # Alternative: sign1<-ifelse(diffMeOthers>0,1,-1), but diff seems to be faster
+	            		sign1<-sign(diffMeOthers)
 	            		if(any(sign1==0)){
 	            			no.eq<-which(traitMat[,k] ==traitMat[j,k])
 							if(j==min(no.eq)){
-								sign1<-sign(rnorm(1))
+								flagsign<-sign(rnorm(1))
+								sign1[which(sign1==0)]<-flagsign
 	            				traitMat[j,k+1]<-traitMat[j,k] + psi*(theta-traitMat[j,k])*segsizeT +temp1B * sum(sign1*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2B)
 							} else{
-								minn<-min(no.eq)
-								sign2<-sign(traitMat[minn,k+1]-traitMat[minn,k])
-	            				traitMat[j,k+1]<-traitMat[j,k] + psi*(theta-traitMat[j,k])*segsizeT +temp1B * sum(-sign2*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2B)
+								sign1[which(sign1==0)]<--flagsign
+								flagged=TRUE
+	            				traitMat[j,k+1]<-traitMat[j,k] + psi*(theta-traitMat[j,k])*segsizeT +temp1B * sum(sign1*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2B)
 							}			
-	            		} else{ # this is necessary because without this, if lineages have identical trait values, they do not have repulsion (instead repulsion should be strongest when lineages are equal). Also, ifelse approach provides one sign value for all identical matches, which could be fine but this randomly chooses sign for each 0.
+	            		} else{ 
 	            		traitMat[j,k+1]<-traitMat[j,k] + psi*(theta-traitMat[j,k])*segsizeT + temp1B * sum(sign1*exp(-alpha*(diffMeOthers)^2)) +rnorm(1,0,temp2B)
 						}
 					 	if(j==branchesPresent[i]){timecount= ifelse(round((((k-1)*segsize)+nodeDist[i]+segsizeT),8)>=round(newDist[timecount+1],8),timecount+1,timecount)}
 						}           
+	        	if(flagged==TRUE){
+	        			flagsign<-NULL
+	        			flagged<-FALSE
+	        		}
 	        	}
     	}
     	

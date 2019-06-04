@@ -5,7 +5,7 @@
 Maximum likelihood fit of the environmental model of trait evolution
 }
 \description{
-Fits model of trait evolution for which evolutionary rates depends on an environmental function.
+Fits model of trait evolution for which evolutionary rates depends on an environmental function, or more generally a time varying function.
 }
 \usage{
 
@@ -23,7 +23,7 @@ A named vector of phenotypic trait values.
 Environmental data, given as a time continuous function (see, e.g. splinefun) or a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
 }
   \item{error}{
-A named vector with standard error for each species.
+A named vector with standard error (SE) for each species. Default is NULL, if NA, then the SE is estimated from the data.
 }
   \item{model}{
 The model describing the functional form of variation of the evolutionary rate \eqn{\sigma^2} with time and the environmental variable. Default models are "EnvExp" and "EnvLin" (see details). An user defined function of any functional form may be used (forward in time).
@@ -57,6 +57,7 @@ Arguments to be passed to the function. See details.
   \item{env_func}{the environmental function}
   \item{tot_time}{the root age of the tree}
   \item{model}{the fitted model (default models or user specified)}
+  \item{SE}{the estimated SE for species mean when "error=NA"}
 }
 
 \details{
@@ -70,7 +71,7 @@ defined below.
 \code{EnvLin}:
 \deqn{\sigma^2 (t)  =  \sigma_0^2 + \beta T(t)}{sigma^2(t) = sigma^2 + beta * T(t)}
 
-Users defined models should have the following form:
+Users defined models should have the following form (see also examples below):
 
 \code{fun <- function(t, env, param){ param*env(t)}}
 
@@ -102,7 +103,7 @@ e.g.:
 
 The various options are passed through "...". 
 
--param: The starting values used for the model. Must match the total number of parameters of the specified models.
+-param: The starting values used for the model. Must match the total number of parameters of the specified models. If "error=NA", a starting value for the SE to be estimated must be provided with user-defined models.
 
 -scale: scale the amplitude of the environmental curve between 0 and 1. This may improve the parameters search in some situations.
 
@@ -115,14 +116,16 @@ The various options are passed through "...".
 -sig2: can be used instead of param to define the starting sigma value only
 
 -beta: can be used instead of param to define the beta starting value only
+
+-maxdiff: difference in time between tips and present day for phylogenetic trees with no contemporaneous species (default is 0)
 }
 
 \note{
-	The users defined function is evaluated forward in time i.e.: from the root to the tips.
+	The users defined function is evaluated forward in time i.e.: from the root to the tips (time = 0 at the (present) tips).
 	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
-Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, doi: 10.1073/pnas.1606868114
+Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, 114(16): 4183-4188.
 }
 
 \author{J. Clavel}
@@ -164,7 +167,7 @@ trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp",
 
   # We define the function for the model
   my_fun<-function(t, env_cont, param){ 
-      exp(param[1])*exp(param[2]*env_cont(t))
+      param[1]*exp(param[2]*env_cont(t))
   }
   
   res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun, 
@@ -190,5 +193,23 @@ require(pspline)
 ## Various parameterization (box constraints, df, scaling of the curve...) example
  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", 
  			scale=TRUE, lower=-30, upper=20, df=10)
+
+
+## A very general model...
+
+# We define the function for the Early-Burst/AC model:
+maxtime = max(branching.times(Cetacea))
+
+# sigma^2*e^(r*t)
+my_fun_ebac <- function(t, env_cont, param){
+    time = (maxtime - t)
+    param[1]*exp(param[2]*time)
+}
+
+res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun_ebac,
+                param=c(0.1,0), scale=TRUE)
+res # note that "r" is positive: it's the AC model (~OU model on ultrametric tree)
+
+
  }
 }

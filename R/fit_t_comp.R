@@ -4,6 +4,9 @@ fit_t_comp<-function(phylo,data,model=c("MC","DDexp","DDlin"),pars=NULL,geograph
 if(length(data)!=length(phylo$tip.label)){stop("length of data does not match length of tree")}
 if(is.null(names(data))){stop("data missing taxa names")}
 if(!is.null(dim(data))){stop("data needs to be a single trait")}
+is_tip <- phylo$edge[,2] <= length(phylo$tip.label)
+if(sum(diff(phylo$edge[is_tip, 2])<0)>0){ stop('fit_t_comp cannot be used with ladderized phylogenies')}
+
 if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),0)}
 params0<-c(0,pars)
 

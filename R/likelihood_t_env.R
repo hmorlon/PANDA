@@ -97,6 +97,13 @@ likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
         is_error<-TRUE
     }
 
+# Check if measurment error is estimated
+    if(is.null(par[["error_param"]])){
+      error_param<-FALSE
+    }else{
+      error_param<-par$error_param
+    }
+
 # Control for the integrate function: number of subdivisions
     if(is.null(par[["subdivisions"]])){
         subdivisions<-200L
@@ -116,12 +123,16 @@ likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
    
     # Add measurement error
     if(is_error){
-        phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$error^2 # assume the "se" are provided in the error vector
+        if(error_param){
+            phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$param[length(par$param)]*par$param[length(par$param)] # estimate the error
+        }else{
+            phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$error^2 # assume the "se" are provided in the error vector
+        }
     }
    
  
     # Compute the log-likelihood
-    LL<-mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=par$check, mu=par$mu, sigma=1))$logl
+    LL <- mvLL(phylo,data,method="pic",param=list(estim=FALSE, check=par$check, mu=par$mu, sigma=1))$logl
 
 
 if(is.na(LL) | is.infinite(LL)){

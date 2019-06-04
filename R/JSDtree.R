@@ -104,7 +104,9 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 		treeLaplacian <- lapply(treeGraphs,graph.laplacian,
 					normalized=F)			
 		treeEigen <- lapply(treeLaplacian,eigen,
-				symmetric=TRUE,only.values=TRUE)	
+				symmetric=TRUE,only.values=TRUE)
+	m<-c()
+	d<-c()	
 		for(i in 1:length(treeEigen)){
 			m[[i]]<-subset(treeEigen[[i]]$values,
 				treeEigen[[i]]$values>=0)
