@@ -39,8 +39,8 @@ data("Caprimulgidae_ClaDS2")
 # plot the mcmc chains
 plot_ClaDS_chains(Caprimulgidae_ClaDS2$sampler)
 
-# extrac the Maxima A Posteriori for each parameter
-maps = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 1)
+# extract the Maxima A Posteriori for each parameter
+maps = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 5)
 print(paste0("sigma = ", maps[1], " ; alpha = ", 
   maps[2], " ; epsilon = ", maps[3], " ; l_0 = ", maps[4] ))
   
