@@ -37,10 +37,11 @@ O. Maliet
 \examples{
 data("Caprimulgidae_ClaDS2")
 
-maps = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 5)
+\donttest{
+maps = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 1)
 
 print(paste0("sigma = ", maps[1], " ; alpha = ", 
   maps[2], " ; epsilon = ", maps[3], " ; l_0 = ", maps[4] ))
 plot_ClaDS_phylo(Caprimulgidae_ClaDS2$tree, maps[-(1:4)])
-
+}
 }

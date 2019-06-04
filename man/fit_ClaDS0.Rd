@@ -58,7 +58,7 @@ O. Maliet
    \code{\link{getMAPS_ClaDS0}}, \code{\link{plot_ClaDS0_chains}}, \code{\link{fit_ClaDS}}
 }
 \examples{
-\dontrun{
+\donttest{
 
 set.seed(1)
 
