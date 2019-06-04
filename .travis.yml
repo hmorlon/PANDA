@@ -4,6 +4,8 @@ r:
   - 3.7
   - release
   - devel
+apt_packages:
+  - libmagick++-dev
 script:
   - R CMD build . --compact-vignettes=gs+qpdf
   - R CMD check *tar.gz --as-cran
