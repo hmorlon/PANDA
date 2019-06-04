@@ -48,7 +48,7 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 
 
 x<-lapply(1:dim(mat)[2],function(l){
-	trait_spectR(phylo,mat[,l])$eigenvalues
+	spectR_t(phylo,mat[,l])$eigenvalues
 	} )
 
 d<-c()
