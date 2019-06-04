@@ -21,6 +21,8 @@ addons:
        - r-cran-rgdal
        - libfftw3-dev
        - cargo
+       - libmpfr-dev
+  
 
 script:
   - R CMD build . --compact-vignettes=gs+qpdf
