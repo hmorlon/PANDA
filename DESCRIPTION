@@ -41,7 +41,7 @@ Author: Hélène Morlon [aut, cre, cph],
 	Marc Manceau [aut, cph],
 	Julien Clavel [aut, cph],
 	Jonathan Drury [aut, cph],
-   	Olivier Billaud [aut, cph]
+   	Olivier Billaud [aut, cph],
 	Odile Maliet [aut, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"),
 	person("Eric", "Lewitus", role = c("aut", "cph")),
