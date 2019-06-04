@@ -2,6 +2,7 @@ language: r
 r:
   - release
   - devel
+cache: packages
 
 # need libmagick++dev and all prereqs...
 addons:
