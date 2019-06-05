@@ -5,7 +5,7 @@
 An example run of ClaDS0.
 }
 \description{
-An example of the run on the inference of ClaDS0 on a simulated phylogeny.}
+An example of the run on the inference of ClaDS0 on a simulated phylogeny, thinned every 10 iterations.}
 \usage{data("ClaDS0_example")}
 \format{
 A list object with fields :

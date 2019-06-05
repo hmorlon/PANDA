@@ -118,7 +118,7 @@ sampler = fit_ClaDS(Caprimulgidae, sample_fraction, 50, mcmcSampler = sampler)
 
 
 
-# plot the result of the analysis (saved in "Caprimulgidae_ClaDS2")
+# plot the result of the analysis (saved in "Caprimulgidae_ClaDS2", after thinning)
 
 data("Caprimulgidae_ClaDS2")
 

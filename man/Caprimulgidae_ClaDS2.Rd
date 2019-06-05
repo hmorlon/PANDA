@@ -5,7 +5,7 @@
 An example run of ClaDS2.
 }
 \description{
-An example of the run on the inference of ClaDS2 on the \emph{Caprimulgidae} phylogeny.
+An example of the run on the inference of ClaDS2 on the \emph{Caprimulgidae} phylogeny, thinned every 10 iterations.
 }
 \usage{data("Caprimulgidae_ClaDS2")}
 \format{
