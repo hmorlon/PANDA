@@ -25,7 +25,7 @@ Jetz, W., G. Thomas, J. Joy, K. Hartmann, and A. Mooers. 2012. The global divers
 space and time. \emph{Nature 491:444.}
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \author{
 O. Maliet

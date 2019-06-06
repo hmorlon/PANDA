@@ -49,7 +49,8 @@ To monitor convergence, 3 independant MCMC chains are run simultaneously and the
 A mcmc.list object with the three MCMC chains.
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
+
 }
 \author{
 O. Maliet

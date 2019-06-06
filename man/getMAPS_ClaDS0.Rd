@@ -29,7 +29,7 @@ Thinning parameter, one iteration out of "thin" is kept to compute the MAPs.
 A vector containing the MAPs for the marginal posterior distribution for each of the model's parameters.
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \author{
 O. Maliet

@@ -21,7 +21,7 @@ plot_ClaDS_phylo(phylo, rates, rates2 = NULL,
   \item{log}{A boolean specifying whether the rates values are plotted on a log scale. Default to TRUE.}
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \author{
 O. Maliet}
