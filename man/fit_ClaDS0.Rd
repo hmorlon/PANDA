@@ -85,4 +85,11 @@ sampler = fit_ClaDS0(tree=tree,
               thin=2000,
               update=1000, adaptation=5) 
               
+# extract the Maximum A Posteriori for each of the parameters
+MAPS = getMAPS_ClaDS0(tree, sampler, thin = 10)
+
+# plot the simulated (on the left) and inferred speciation rates (on the right)
+# on the same color scale
+plot_ClaDS_phylo(tree, speciation_rates, MAPS[-(1:3)])
+              
 }}
