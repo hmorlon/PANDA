@@ -23,7 +23,11 @@ Thinning parameter, one iteration out of "thin" is kept to compute the MAPs.
 }
 
 \value{
-A vector containing the MAPs for the marginal posterior distribution for each of the model's parameters.
+A vector MAPS containing the MAPs for the marginal posterior distribution for each of the model's parameters.
+
+MAPS[1:4] are the estimated hyperparameters, with MAPS[1] the sigma parameter (new rates stochasticity), MAPS[2] the alpha parameter (new rates trend),  MAPS[3] the turnover rate epsilon, and MAPS[4] the initial speciation rate lambda_0. 
+
+MAPS[-(1:4)] are the estimated branch-specific speciation rates, given in the same order as the edges of the phylogeny on which the inference was performed.
 }
 \references{
 Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
@@ -38,10 +42,10 @@ O. Maliet
 data("Caprimulgidae_ClaDS2")
 
 \donttest{
-maps = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 1)
+MAPS = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 1)
 
-print(paste0("sigma = ", maps[1], " ; alpha = ", 
-  maps[2], " ; epsilon = ", maps[3], " ; l_0 = ", maps[4] ))
-plot_ClaDS_phylo(Caprimulgidae_ClaDS2$tree, maps[-(1:4)])
+print(paste0("sigma = ", MAPS[1], " ; alpha = ", 
+  MAPS[2], " ; epsilon = ", MAPS[3], " ; l_0 = ", MAPS[4] ))
+plot_ClaDS_phylo(Caprimulgidae_ClaDS2$tree, MAPS[-(1:4)])
 }
 }
