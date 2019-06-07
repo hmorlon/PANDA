@@ -5,13 +5,13 @@ import(glassoFast)
 importFrom(picante, node.age)
 importFrom(deSolve, ode)
 importFrom(mvtnorm, rmvnorm)
+importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap)
 importFrom(igraph, graph.adjacency, graph.laplacian)
 importFrom(TESS, tess.sim.age, tess.likelihood)
 importFrom(fpc,pamk)
 importFrom(cluster,pam)
 importFrom(geiger, drop.extinct, is.extinct)
 importFrom(pvclust,pvclust,pvrect)
-importFrom(phytools,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap)
 importFrom(corpcor,pseudoinverse)
 importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun, 
            as.dist, bw.nrd0, dnorm, heatmap, kmeans, na.omit, pnorm, predict, 
@@ -48,5 +48,6 @@ exportMethods("print", "show", "[", "getTipDistribution", "getDataLikelihood", "
 export(fit_t_comp,likelihood_t_MC,likelihood_t_MC_geog,likelihood_t_DD,likelihood_t_DD_geog,sim_t_comp,CreateGeoObject,sim.divergence.geo,sim.convergence.geo, CreateGeoObject_BioGeoBEARS)
 export(fit_t_comp_subgroup,CreateClassObject,CreateGeobyClassObject,likelihood_subgroup_model)
 export(plot_prob_dtt, prob_dtt)
+useDynLib(RPANDA, relToAbs, relToAbsSum, absToRel, absToRelSum, loglik)
 export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_chains,
        getMAPS_ClaDS, getMAPS_ClaDS0, fit_ClaDS)

@@ -94,7 +94,7 @@ evolution: easy bayesian computing for real parameter spaces. \emph{Statistics a
 ter Braak, C. J. and J. A. Vrugt. 2008. Differential evolution markov chain with snooker updater
 and fewer chains. \emph{Statistics and Computing 18:435-446}.
 
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \author{
 O. Maliet
@@ -118,7 +118,7 @@ sampler = fit_ClaDS(Caprimulgidae, sample_fraction, 50, mcmcSampler = sampler)
 
 
 
-# plot the result of the analysis (saved in "Caprimulgidae_ClaDS2")
+# plot the result of the analysis (saved in "Caprimulgidae_ClaDS2", after thinning)
 
 data("Caprimulgidae_ClaDS2")
 

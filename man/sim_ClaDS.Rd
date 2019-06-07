@@ -120,7 +120,7 @@ A list with :
 
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 
 Beaulieu, J. M. and B. C. O'Meara. 2015. Extinction can be estimated from moderately sized
 molecular phylogenies. \emph{Evolution} 69:1036-1043.

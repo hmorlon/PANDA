@@ -49,7 +49,8 @@ To monitor convergence, 3 independant MCMC chains are run simultaneously and the
 A mcmc.list object with the three MCMC chains.
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
+
 }
 \author{
 O. Maliet
@@ -83,5 +84,12 @@ sampler = fit_ClaDS0(tree=tree,
               iteration=500000,
               thin=2000,
               update=1000, adaptation=5) 
+              
+# extract the Maximum A Posteriori for each of the parameters
+MAPS = getMAPS_ClaDS0(tree, sampler, thin = 10)
+
+# plot the simulated (on the left) and inferred speciation rates (on the right)
+# on the same color scale
+plot_ClaDS_phylo(tree, speciation_rates, MAPS[-(1:3)])
               
 }}

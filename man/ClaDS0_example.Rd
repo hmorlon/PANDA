@@ -5,7 +5,7 @@
 An example run of ClaDS0.
 }
 \description{
-An example of the run on the inference of ClaDS0 on a simulated phylogeny.}
+An example of the run on the inference of ClaDS0 on a simulated phylogeny, thinned every 10 iterations.}
 \usage{data("ClaDS0_example")}
 \format{
 A list object with fields :
@@ -19,7 +19,7 @@ A list object with fields :
 \seealso{\code{\link{fit_ClaDS0}}}
 
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \examples{
 data(ClaDS0_example)
