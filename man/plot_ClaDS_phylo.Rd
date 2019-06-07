@@ -8,7 +8,7 @@ Plot a phylogeny with branches colored according to branch-specific rate values
 }
 \usage{
 plot_ClaDS_phylo(phylo, rates, rates2 = NULL, 
-                same.scale = T, main = NULL, lwd = 2, log = T)
+                same.scale = TRUE, main = NULL, lwd = 2, log = TRUE, show.tip.label = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,6 +19,8 @@ plot_ClaDS_phylo(phylo, rates, rates2 = NULL,
   \item{main}{A title for the plot.}
   \item{lwd}{Width of the tree branch lengths. Default to 2.}
   \item{log}{A boolean specifying whether the rates values are plotted on a log scale. Default to TRUE.}
+  \item{show.tip.label}{A boolean specifying whether to plot tip labels. Default to FALSE.}
+  \item{...}{other optional arguments to be passed to \code{\link{plot.phylo}.}}
 }
 \references{
 Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
