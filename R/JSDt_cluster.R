@@ -66,11 +66,8 @@ Ds<-c()
 	#cluster on k-medoids
 	clustersMedoid <- pamk(JSD)
 	
-	#write table for divergence matrix
-	write.table(JSD,file='JSD_divergenceMatrix.txt')
-	
-	#write table for clusters with silhouette widths
-	write.table(clustersMedoid[[1]]$silinfo$widths[,c(1,3)],file='JSD_divergenceMatrix_clusters.txt')
+	#return list of divergence matrix table, clusters with silhouette widths 
+	ret<-list(JSD,clustersMedoid[[1]]$clusinfo,clustersMedoid[[1]]$silinfo$widths[,c(1,3)])
 	
 	if(plot==T){
 	#plot heatmap
@@ -80,8 +77,8 @@ Ds<-c()
 	clustersHierarchy <- pvclust(JSD,r=seq(0.5,1.5,0.2))
 	plot(clustersHierarchy,cex=0.3)
 	pvrect(clustersHierarchy,alpha=0.9)
-	return(clustersMedoid[[1]]$clusinfo)
+	return(ret)
 	}
-	else{return(clustersMedoid[[1]]$clusinfo)}
+	else{return(ret)}
 }	
 	
