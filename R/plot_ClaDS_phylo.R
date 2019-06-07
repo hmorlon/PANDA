@@ -1,11 +1,12 @@
 
-plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,log=T){
+plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,log=T,show.tip.label= F, ...){
   Colors = colorRampPalette(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4"))( 100 ) 
+
   if(is.null(rates2)){
     if(log) rates=log(rates)
     if(isTRUE(all.equal(rep(as.numeric(rates[1]),length(rates)),as.numeric(rates)))){
       col=rep(1,length(rates))
-      plot(phylo, edge.color = Colors[col], show.tip.label = F,main=main,edge.width =lwd)
+      plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,main=main,edge.width =lwd, ...)
       if(log){
         image.plot(z = c(exp(rates[1]),2*exp(rates[1])),col = Colors, horizontal=T,legend.only = T)
       }else{
@@ -13,7 +14,7 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
       }
     }else{
       col = round( (rates - min(rates)) / diff(range(rates))*99   )+1
-      plot(phylo, edge.color = Colors[col], show.tip.label = F,main=main,edge.width =lwd)
+      plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,main=main,edge.width =lwd, ...)
       if(log){
         min=min(rates)
         max=max(rates)
@@ -42,9 +43,9 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
       max=max(max(rates),max(rates2))
       par(mfrow=c(1,2))
       col = round(( (rates - min) / (max-min))*99   )+1
-      plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd)
+      plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
       col = round(( (rates2 - min) / (max-min))*99   )+1
-      plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd)
+      plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
       par(mfrow=c(1,1))
       if(log){
         m10=floor(min/log(10))
@@ -66,7 +67,7 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
       par(mfrow=c(1,2))
       if(isTRUE(all.equal(rep(rates[1],length(rates)),rates))){
         col=rep(1,length(rates))
-        plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd)
+        plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
         if(log){
           
           image.plot(z = c(exp(rates[1]),2*exp(rates[1])),col = Colors, horizontal=T,legend.only = T)
@@ -75,7 +76,7 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
         }
       }else{
         col = round(( (rates - min(rates)) / (max(rates)-min(rates)))*99   )+1
-        plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd)
+        plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
         if(log){
           min=min(rates)
           max=max(rates)
@@ -96,7 +97,7 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
       }
       if(isTRUE(all.equal(rep(rates2[1],length(rates2)),rates2))){
         col=rep(1,length(rates2))
-        plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd)
+        plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
         if(log){
           image.plot(z = c(exp(rates2[1]),2*exp(rates2[1])),col = Colors, horizontal=T,legend.only = T)
         }else{
@@ -104,7 +105,7 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
         }
       }else{
         col = round(( (rates2 - min(rates2)) / (max(rates2)-min(rates2)))*99   )+1
-        plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd)
+        plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
         if(log){
           min=min(rates2)
           max=max(rates2)
