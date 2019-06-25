@@ -10,14 +10,16 @@ Computes the spectra of eigenvalues for the modified graph Laplacian of a phylog
 }
 
 \usage{
-spectR(phylo, method=c("standard"))
+spectR(phylo, meth=c("standard"),zero_bound=F)
 }
 
 \arguments{
   \item{phylo}{
 an object of type 'phylo' (see ape documentation)}
-  \item{method}{
+  \item{meth}{
 the method used to compute the spectral density, which can either be "standard" or "normal". If set to "standard", computes the unnormalized version of the spectral density. If set to "normal", computes the spectral density normalized to the degree matrix (see the associated paper for an explanation)}
+ \item{zero_bound}{
+   	if false, eigenvalues less than one are discarded}	
 }
 
 \value{
@@ -50,5 +52,5 @@ the position of the largest difference between eigenvalues, giving the number of
 
 \examples{
 data(Cetacea)
-spectR(Cetacea,method="standard")
+spectR(Cetacea,meth="standard",zero_bound=FALSE)
 }

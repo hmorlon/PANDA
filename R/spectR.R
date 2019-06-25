@@ -1,7 +1,6 @@
 #library(RPANDA)
-#library(igraph)
-
-spectR<-function (phylo, method = c("standard")) 
+library(igraph)
+spectR<-function (phylo, meth = c("standard"), zero_bound=F) 
 			{
 #define skewness function				
 skewness <- function(x, na.rm = FALSE) {
@@ -73,14 +72,17 @@ integr <- function(x, f)
        # print definite integral
        return(integral)
 }
- if (method == "standard") {
+ if (meth == "standard") {
 e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)), 
             weighted = T), normalized = F), symmetric = T, only.values = T)
-	x = subset(e$values, e$values >= 1)
+	if(zero_bound==T){
+		x = subset(e$values,e$values > 0)}
+	 else{
+	x = subset(e$values, e$values >= 1)}
 	d = dens(log(x))
 	dsc = d$y/(integr(d$x,d$y))
 	principal_eigenvalue <- max(x)
-	skewness <- skewness(dsc)
+	skewness <- skewness(x)
     peak_height <- max(dsc)
 	gaps<-abs(diff(x))
         gapMat <- as.matrix(gaps)
@@ -90,14 +92,14 @@ e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)),
 	res<-list(eigenvalues=x,principal_eigenvalue=principal_eigenvalue, 
             asymmetry=skewness, peakedness=peak_height,eigengap= eigenGap[,1])   
 	}
- if (method == "normal") {
+ if (meth == "normal") {
 e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)), 
             weighted = T), normalized = T), symmetric = T, only.values = T)
 	x = subset(e$values, e$values >= 0)
 	d = dens(log(x))
 	dsc = d$y/(integr(d$x,d$y))
 	principal_eigenvalue <- max(x)
-	skewness <- skewness(dsc)
+	skewness <- skewness(x)
     peak_height <- max(dsc)
 	gaps <- abs(diff(x))
         gapMat <- as.matrix(gaps)
