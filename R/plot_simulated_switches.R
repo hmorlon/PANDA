@@ -1,17 +1,22 @@
 plot_simulated_switches <-
-function(n,host_tree,name,index,switches,...){ 
+function(n,host_tree,name,index,switches){ 
   if(!exists("path")) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
-  pdf(paste(path,"/figures/host_tree_switches_",name,"_",index,".pdf",sep=""))
+  
   tree <- ladderize(host_tree)
   for(i in 1:n){tree$tip.label[i] <- paste("    ",tree$tip.label[i],sep="")}
+  
+  pdf(paste("figures/host_tree_switches_",name,"_",index,".pdf",sep=""),width = (10+Ntip(host_tree))/2 ,height = (10+Ntip(host_tree))/2 )
+  
   print(plot(tree,edge.width=4))
-  nodes <- 1:(2*n-2)
-  for (i in 1:length(nodes)){nodes[i] <- paste(rep("0",nchar(nodes[length(nodes)])-nchar(nodes[i])),nodes[i],sep="")}
+  nodes <- as.character(1:(2*n-2))
+  for (i in 1:length(nodes)){nodes[i] <- paste(paste(rep("0",nchar(nodes[length(nodes)])-nchar(nodes[i])),collapse = ""),nodes[i],sep="")}
   edgelabels(nodes,frame="circle",col="#78281f",bg="#f39c12")
   add.scale.bar()
+  
   lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+  
   for (i in 1:ncol(switches)){
     b0=as.numeric(switches[1,i])
     b1=as.numeric(switches[2,i])

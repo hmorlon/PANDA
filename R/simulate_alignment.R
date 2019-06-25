@@ -1,5 +1,9 @@
 simulate_alignment <-
-function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,...){
+function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=getwd(),...){
+  if(!exists("path")) {path <- getwd()}
+  if(!is.character(path)) {path <- getwd()}
+  setwd(path)
+  
   set.seed(seed+iter)
   index <- name_index[iter]
   
@@ -18,19 +22,22 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
   if ((simul[iter]!="indep")&(ksi==0)){
     tree <- host_tree
     simulated_traceable_ksi <- ksi}
+  
   if ((simul[iter]!="indep")&(ksi>0)){
-    if (model=="uniform") {output <- tree_change(host_tree,ksi,maxlen)}
+    output <- tree_change(host_tree,ksi,maxlen)
+    
     tree <- output[[1]]
     switches <- output[[2]]
     write.tree(tree,file=paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
-    tree$edge.length <- tree$edge.length/sum(tree$edge.length) # scaled only for the traceable switches research 
-    tips_alignment <- host_tree$tip.label
+    
     tree <- read.tree(file=paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
     invisible(capture.output(plot_simulated_switches(n=n,host_tree=host_tree,name=name,index=index,switches=switches)))
+    
     switches[1,] <- as.character(switches[1,])
     switches[2,] <- as.character(switches[2,])
     write.table(switches, paste("simulations/simulated_switches_",name,"_",index,".txt",sep=""),col.names=F,row.names = F) 
   }
+  
   maxlen <- max(node.depth.edgelength(tree))
   a <- 1
   b <- 4
@@ -38,12 +45,14 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
   d <- 1
   e <- 4
   f <- 1
-  PI <- c(0.25,0.25,0.25,0.25)
-  Q <-  (as.matrix(rbind(c(0,a,b,c)*t(PI),c(a,0,d,e)*t(PI),c(b,d,0,f)*t(PI),c(c,e,f,0)*t(PI))))
+  propinv <- c(0.25,0.25,0.25,0.25)
+  Q <-  (as.matrix(rbind(c(0,a,b,c)*t(propinv),c(a,0,d,e)*t(propinv),c(b,d,0,f)*t(propinv),c(c,e,f,0)*t(propinv))))
   diag(Q) <- - apply(Q,1,sum)
-  Q <- -Q/Q[4,4] 
+  Q <- -Q/Q[4,4]
   eigQ <- eigen(Q)
-  ivp <- solve(eigQ$vectors)
+  eig_val <- eigen(Q)$values
+  eig_vect <- eigen(Q)$vectors
+  ivp <- solve(eig_vect)
   nodes<-order(node.depth.edgelength(tree),decreasing=F)[-1]
   original_sequences <-  matrix(0,nrow=n,ncol=N)
   for (nu in 1:N){
@@ -71,13 +80,8 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
   N_variant <- ncol(variant_sequences)
   variant_sequences <-  variant_sequences[,colSums(variant_sequences=='-') < n-1,drop=F]
   variant_sequences <- variant_sequences[tree$tip.label,,drop=F]
-  variant_sequences <- rbind(variant_sequences, rep(0, ncol(variant_sequences)))
-  duplicated <- duplicated(variant_sequences, MARGIN = 2)
-  for (i in which(!duplicated)) {variant_sequences[n+1,i] <- sum(apply(variant_sequences, 2, identical, variant_sequences[,i]))}
-  variant_sequences <- variant_sequences[,!duplicated,drop=F]
-  variant_sequences <- rbind(variant_sequences[tree$tip.label,,drop=F], variant_sequences[n+1,])
-  nodes <- n+order(node.depth.edgelength(tree)[(n+1):(2*n-1)],decreasing =T)
-  simulated_likelihood <- LL(mu=mu,symbiont_tree=tree,nodes=nodes,Nd=ncol(variant_sequences),n=n,eigQ=eigQ,ivp=ivp,sequences=variant_sequences,PI=PI)
-  simulated_likelihood <- simulated_likelihood + sum(as.numeric(variant_sequences[nrow(variant_sequences),]))*log(1-exp(-mu*sum(tree$edge.length)))
-  save(simulated_likelihood,simulated_mu,seed,simul,proportion_variant,file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))
-}
+  
+  if (N_variant>0){
+    simulated_likelihood <- LL_tree(mu,tree,variant_sequences,n=nrow(variant_sequences),N=ncol(variant_sequences),eig_val, eig_vect, ivp, propinv)
+    save(simulated_likelihood,simulated_mu,seed,simul,proportion_variant,file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))
+  }else{save(simulated_mu,seed,simul,proportion_variant,file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}}

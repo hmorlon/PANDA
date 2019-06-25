@@ -1,13 +1,17 @@
 output_results_HOME <-
-function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_tree=10000,empirical,randomize,raref,...){
+function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_tree=10000,empirical,randomize,raref,...){ 
+  
   index <- name_index[iter]
   if (empirical==F){load(file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}
-  if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop("Please start by running the previous steps of HOME (fit_HOME...)")
+  if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop(print("Please start by running the previous steps of HOME (fit_HOME...)"))
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
   if(!exists("path")) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
-  if (N_variant>0){
+  
+
+  if (N_variant>0&!is.na(N_variant)){
+    
     if (empirical==F){ksi <- simul[iter]
     indep <- (simul[iter]=="indep")}
     
@@ -34,8 +38,8 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       tree <- host_tree
       for(i in 1:n){tree$tip.label[i] <- paste("    ",tree$tip.label[i],sep="")}
       plot(tree,edge.width=4)
-      nodes <- 1:(2*n-2)
-      for (i in 1:length(nodes)){nodes[i] <- paste(rep("0",nchar(nodes[length(nodes)])-nchar(nodes[i])),nodes[i],sep="")}
+      nodes <- as.character(1:(2*n-2))
+      for (i in 1:length(nodes)){if (nchar(nodes[length(nodes)])>nchar(nodes[i])){nodes[i] <- paste(paste(rep("0",nchar(nodes[length(nodes)])-nchar(nodes[i])),collapse=""),nodes[i],sep="")}}
       edgelabels(nodes,frame="circle",col="#78281f",bg="#f39c12")
       add.scale.bar()
       dev.off()
@@ -70,6 +74,21 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       pdf(paste("figures/profil_model_switches_mu_",name,"_",index,".pdf",sep=""),width=5,height=4) 
       print(p)
       dev.off()
+      
+      # Plot loglikelihood distibution
+      if (est_ksi!=0){
+        results_ll <- read.table(paste("results/optim_ll_",name,"_",index,"_",est_ksi,".txt",sep=""),header=F)
+        if (empirical==F){p <- ggplot(results_ll, aes(x=V1))+
+          geom_violin(alpha=0.5, aes(y=V2),fill="#d35400", colour="#d35400",size=1.5,trim=T)+
+          geom_hline(yintercept = simulated_likelihood,color="#154360",linetype="dashed", size=1)+
+          labs(x = "Simulated trees (nb switches)", y="-log(Likelihood)")+transparent_theme_y_only+scale_x_continuous(breaks=c())
+        }else{p <- ggplot(results_ll, aes(x=V1))+
+          geom_violin(alpha=0.5, aes(y=V2),fill="#d35400", colour="#d35400",size=1.5,trim=T)+
+          labs(x = "Simulated trees (nb switches)", y="-log(Likelihood)")+transparent_theme_y_only+scale_x_continuous(breaks=c())
+        }
+        pdf(paste("figures/profil_ll_",name,"_",index,"_",est_ksi,".pdf",sep=""),width=5,height=4)
+        print(p)
+        dev.off()}
     }
     
     #Plot vertical transmission
@@ -96,6 +115,8 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       results_randomize <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
       ksi_randomize <- length(which(results_randomize$ksi<=est_ksi))/length(results_randomize$ksi)
       mu_randomize <- length(which(round(results_randomize$mu,digits=10)<=round(est_mu,digits=10)))/length(results_randomize$mu)
+      #ksi_randomize <- length(which(results_randomize$ksi<est_ksi))/length(results_randomize$ksi)
+      #mu_randomize <- length(which(round(results_randomize$mu,digits=10)<round(est_mu,digits=10)))/length(results_randomize$mu)
       write.table(rbind(c("Distribution_test","p-value"),c("Empirical_ranking_(ksi_distribution)",round(c(ksi_randomize),4)),c("Empirical_ranking_(mu_distribution)",round(c(mu_randomize),4))), paste("results/model_selection_independent_stats_",name,"_",index,".txt",sep=""), row.names=F,col.names=F,quote = F,sep="\t")
       results_ll <- results[which.min(results$minloglik),]
       results_ll$replicate <- 0
@@ -111,53 +132,43 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
     
     #Rarefactions
     if (raref==T){
-      table <- seq(1,nb_tree,nb_tree/10)
-      list_file <- list.files(path=paste(path,"/rarefactions/",sep=""), pattern=paste("loglik_rarefaction_",name,"_",index,"_",sep=""))
-      for (file in 1:length(list_file)){table <- cbind(table,as.numeric(read.table(paste("rarefactions/",list_file[which(order(as.character(lambda))==file)],sep=""),dec=".",header=F)[,2]))}
+      table <- seq(1,nb_tree,nb_tree/20)
+      table <- cbind(table,rep(results$minloglik[which(results$ksi==0)],20))
+      for (ksi in lambda){
+        table <- cbind(table,as.numeric(read.table(paste(path,"/rarefactions/loglik_rarefaction_",name,"_",index,"_",ksi,".txt",sep=""))[,2]))
+      }
+      table <- rbind(table,c(nb_tree,results$minloglik))
       table <- data.frame(table)
-      colnames(table) <- c("table",lambda)
+      colnames(table) <- c("table","0",lambda)
       table <- melt(table, id.vars=c("table"))
-      p <- ggplot(table,aes(x=table,col=variable))+geom_line(aes(y=value),size=1.25) +labs(x = "Number of simulated trees", y="-log(Likelihood)")+transparent_theme
+      colnames(table) <- c("table","ksi","value")
+      p <- ggplot(table,aes(x=table,col=ksi))+geom_line(aes(y=value),size=1.25) +labs(x = "Number of simulated trees", y="-log(Likelihood)")+transparent_theme
       pdf(paste("figures/rarefactions_",name,"_",index,".pdf",sep=""),width=8,height=5) 
       print(p)
       dev.off()
     }
     
     ###### File resume ##
-    if (empirical==F){
-      if(randomize==T){
-        write.table(cbind(index,ksi),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
-        write.table(cbind("est_mu",est_mu),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind("est_ksi",est_ksi),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind(selected_model,Q[1,3]),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind("strict-vertical",as.numeric(results_vertical[1,3])),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind("indep-ksi",ksi_randomize),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind("indep-mu",mu_randomize),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-      }else{
-        write.table(cbind(index,ksi),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
-        write.table(cbind("est_mu",est_mu),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind("est_ksi",est_ksi),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind(selected_model,Q[1,3]),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        write.table(cbind("strict-vertical",as.numeric(results_vertical[1,3])),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-      }}else{
-        if(randomize==T){
-          write.table(cbind("name",index),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
-          write.table(cbind("n-host",n),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("N_variant",N_variant),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("est_mu",est_mu),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("est_ksi",est_ksi),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind(selected_model,Q[1,3]),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("strict-vertical",as.numeric(results_vertical[1,3])),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("indep-ksi",ksi_randomize),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("indep-mu",mu_randomize),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        }else{
-          write.table(cbind("name",index),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
-          write.table(cbind("N_variant",N_variant),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("est_mu",est_mu),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("est_ksi",est_ksi),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind(selected_model,Q[1,3]),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-          write.table(cbind("strict-vertical",as.numeric(results_vertical[1,3])),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
-        }}
+    #if (empirical==F){
+    if(randomize==T){
+      write.table(cbind("name",index),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
+      write.table(cbind("n-host",n),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("N_variant",N_variant),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_mu",est_mu),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_ksi",est_ksi),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind(selected_model,Q[1,3]),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("strict-vertical",as.numeric(results_vertical[1,3])),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("indep-ksi",ksi_randomize),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("indep-mu",mu_randomize),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+    }else{
+      write.table(cbind("name",index),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
+      write.table(cbind("n-host",n),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("N_variant",N_variant),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_mu",est_mu),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_ksi",est_ksi),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind(selected_model,Q[1,3]),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("strict-vertical",as.numeric(results_vertical[1,3])),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+    }
     
     HTMLStart(outdir=paste(path,"/figures/",sep=""), file=paste("report_",name,"_",index,sep=""), extension="html", echo=FALSE, HTMLframe=T)
     HTML.title(paste("Results",name,index,sep=" "), HR=1)
@@ -165,8 +176,8 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
     if (empirical==F){
       HTML(rbind(c("Number of symbiont-host association:",n),
                  c("Simulated substitution rate:",simulated_mu), 
-                 c("Number of simulated switches:",ksi),
-                 c("Seed for simulations:",seed), 
+                 c("Number of simulated switches:",ksi),   ## ONLY SIMULATIONS
+                 c("Seed for simulations:",seed),   ## ONLY SIMULATIONS
                  c("Sequences length:",N),
                  c("Probability variant sites:",proportion_variant),
                  c("Number of invariant sites:",N_invariant),
@@ -182,25 +193,26 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       HTML.title("Summary of the most likely scenario:", HR=2)
       table <- read.table(paste("results/results_",name,"_",index,".txt",sep=""),header=T)
       if ((empirical==F)&(randomize==F)){
-        HTML(rbind(c("Simulated substitution rate:",round(simulated_mu,4)),   
-                   c("Original likelihood:",round(simulated_likelihood,4)),  
-                   c("Substitution model:",selected_model),
-                   c("Transition/Transversion ratio:",round(Q[1,3],4)),
-                   c("Estimated substitution rate:",round(est_mu,4)),
-                   c("Estimated number of switches:",round(est_ksi,4)),
-                   c("Associated likelihood:",round(table$minloglik[which.min(table$minloglik)],4)),
-                   c("Strict vertical transmission:",round(as.numeric(results_vertical[1,3]),4))))}
+        HTML(rbind(c("Substitution model:",selected_model),
+          c("Transition/Transversion ratio:",round(Q[1,3],4)),
+          c("Estimated substitution rate:",round(est_mu,4)),
+          c("Estimated number of switches:",round(est_ksi,4)),
+          c("Associated likelihood:",round(table$minloglik[which.min(table$minloglik)],4)),
+          c("p-value: Strict vertical transmission:",round(as.numeric(results_vertical[1,3]),4))))}
       if ((empirical==F)&(randomize==T)){
         HTML(rbind(c("Substitution model:",selected_model),
-                   c("Transition/Transversion ratio:",round(Q[1,3],4)),
-                   c("Estimated substitution rate:",round(est_mu,4)),
-                   c("Estimated number of switches:",round(est_ksi,4)),
-                   c("Associated likelihood:",round(table$minloglik[which.min(table$minloglik)],4)),
-                   c("p-value: Strict vertical transmission:",round(as.numeric(results_vertical[1,3]),4)),
-                   c("p-value: Independent evolutions (nb switches):",round(ksi_randomize,4)),
-                   c("p-value: Independent evolutions (subs. rate)",round(mu_randomize,4))))}
+          #c("Transition/Transversion ratio:",round(Q[1,3],4)),
+          c("Transition/Transversion ratio:",round(Q[1,3],4)),
+          c("Estimated substitution rate:",round(est_mu,4)),
+          c("Estimated number of switches:",round(est_ksi,4)),
+          c("Associated likelihood:",round(table$minloglik[which.min(table$minloglik)],4)),
+          c("p-value: Strict vertical transmission:",round(as.numeric(results_vertical[1,3]),4)),
+          c("p-value: Independent evolutions (nb switches):",round(ksi_randomize,4)),
+          c("p-value: Independent evolutions (subs. rate)",round(mu_randomize,4))))}
       if ((empirical==F)&(randomize==F)){
-        HTML(rbind(c("Substitution model:",selected_model),
+        HTML(rbind(c("Simulated substitution rate:",round(simulated_mu,4)),
+                   c("Original likelihood:",round(simulated_likelihood,4)),
+                   c("Substitution model:",selected_model),
                    c("Transition/Transversion ratio:",round(Q[1,3],4)),
                    c("Estimated substitution rate:",round(est_mu,4)),
                    c("Estimated number of switches:",round(est_ksi,4)),
@@ -238,7 +250,6 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       HTMLInsertGraph(paste("profil_model_switches_",name,"_",index,".pdf",sep=""),WidthHTML=400, Caption="", GraphBorder=0,Align="center")
       HTML.title("Estimated substitution rate as a function of the number of switches.",HR=4)
       HTMLInsertGraph(paste("profil_model_switches_mu_",name,"_",index,".pdf",sep=""),WidthHTML=400, Caption="", GraphBorder=0,Align="center")
-      
       HTML.title("Strict vertical transmission model (rejected if p-value < 0.05):", HR=2)
       table <- read.table(paste("results/model_selection_vertical_",name,"_",index,".txt",sep=""),header=T)
       HTML(rbind(c("Ratio log(Likelihood)","df","p-value"),round(as.numeric(table[1,1:3]),4)))
@@ -256,36 +267,57 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       HTML.title("Estimated rate matrix:", HR=3)
       HTML(cbind(c(" ","A","C","G","T"),rbind(c("A","C","G","T"),round(Q,2))))
       HTML.title("Nucleotide frequencies:", HR=3)
-      HTML(rbind(c("A","C","G","T"),round(PI,2)))
+      HTML(rbind(c("A","C","G","T"),round(propinv,2)))
       
       if (empirical==F){if (indep==F){if (as.numeric(ksi)>0){
-        HTML.title("Switches estimation", HR=2)
+        HTML.title("Estimated switches", HR=2)
         HTML.title("Simulated switches:",HR=3)
         table <- read.table(paste("simulations/simulated_switches_",name,"_",index,".txt",sep=""),header=F)
         table <- cbind(c("Branch origin","Branch arrival","Absolute position"),table)
         colnames(table) <- c("Simulated switch(es):",as.factor(c(1:(ncol(table)-1))))
-        HTML(table,row.names=FALSE)}}}
-      
-      if (file.exists(paste(path,"/figures/host_tree_switches_",name,"_",index,".pdf",sep=""))){HTMLInsertGraph(paste("host_tree_switches_",name,"_",index,".pdf",sep=""),WidthHTML=600, Caption="", GraphBorder=0,Align="center")
-      }else{HTMLInsertGraph(paste("host_tree_",name,"_",index,".pdf",sep=""),WidthHTML=600, Caption="", GraphBorder=0,Align="center")}
-      
-      if (raref==T){
-        HTML.title("Rarefactions:", HR=2)
-        HTML.title(c("-log(Likelihood) as a function of the number of simulated trees"),align="center",HR=4)
-        HTMLInsertGraph(paste("rarefactions_",name,"_",index,".pdf",sep=""),WidthHTML=600, Caption="", GraphBorder=0,Align="center")
-      } 
-      HTML.title("More detailed table:", HR=3)
-      HTML.title("Host switches inference:")
-      results <- read.table(paste("results/results_",name,"_",index,".txt",sep=""),header=T)
-      HTML(round(results[order(results$ksi),],4),row.names=FALSE)
-      
-      if(randomize==T){
-        HTML.title("Independent evolution results:", HR=3)
-        results <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
-        HTML(round(results,4),row.names=FALSE)
+        HTML(table,row.names=FALSE)}}
+        
+        if (file.exists(paste(path,"/figures/host_tree_switches_",name,"_",index,".pdf",sep=""))){HTMLInsertGraph(paste("host_tree_switches_",name,"_",index,".pdf",sep=""),WidthHTML=600, Caption="", GraphBorder=0,Align="center")
+        }else{HTMLInsertGraph(paste("host_tree_",name,"_",index,".pdf",sep=""),WidthHTML=600, Caption="", GraphBorder=0,Align="center")}
+        
+        if (raref==T){
+          HTML.title("Rarefactions:", HR=2)
+          HTML.title(c("-log(Likelihood) as a function of the number of simulated trees"),align="center",HR=4)
+          HTMLInsertGraph(paste("rarefactions_",name,"_",index,".pdf",sep=""),WidthHTML=600, Caption="", GraphBorder=0,Align="center")
+        } 
+        HTML.title("More detailed table:", HR=3)
+        HTML.title("Host switches inference:")
+        results <- read.table(paste("results/results_",name,"_",index,".txt",sep=""),header=T)
+        HTML(round(results[order(results$ksi),],4),row.names=FALSE)
+        
+        if(randomize==T){
+          HTML.title("Independent evolution results:", HR=3)
+          results <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
+          HTML(round(results,4),row.names=FALSE)
+        }
       }
+      
+      HTMLStop()
+      file.remove(file=paste(path,"/figures/","report_",name,"_",index,".html",sep=""))
+      file.remove(file=paste(path,"/figures/","report_",name,"_",index,"_menu.html",sep=""))
+      
+    }}else{ ### NO VARTIATION WITHIN ALIGNMENT
+      write.table(cbind("name",index),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
+      write.table(cbind("n-host",n),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("N_variant",N_variant),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_mu",NA),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_ksi",NA),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind(NA,NA),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("strict-vertical",NA),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("indep-ksi",NA),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("indep-mu",NA),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      
+      write.table(cbind("name",index),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
+      write.table(cbind("n-host",n),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("N_variant",N_variant),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_mu",NA),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("est_ksi",NA),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind(NA,NA),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
+      write.table(cbind("strict-vertical",NA),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=TRUE)
     }
-    
-    HTMLStop()
-  }
 }
