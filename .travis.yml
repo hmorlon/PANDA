@@ -1,24 +1,30 @@
-# There is no R support.  Use a fake language
-language: c
-env:
-  global:
-    - R_LIBS_USER=~/R
-before_install:
-#  We want R 3.0 packages, official Travis images only provide 2.14
-  - sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/"
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - sudo apt-get update
-  - sudo apt-get install r-base-dev r-recommended qpdf
-  - test -d $R_LIBS_USER || mkdir $R_LIBS_USER
-install:
-  - R --version
-  - R -e '.libPaths(); sessionInfo()'
-#  CRAN packages required by RPANDA
-  - grep ^Imports DESCRIPTION | sed -e 's/Imports. //' -e 's/,/ /g' -e 's/$//' | xargs Rscript -e  'install.packages(append(commandArgs(TRUE), "picante"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
-#  CRAN packages required by RPANDA tests
-  - Rscript -e 'install.packages(c("testthat", "vegan", "permute", "lattice", "nlme"), dep = TRUE, repos = c("http://cran.rstudio.com", "http://cran.r-project.org"))'
-script:
-  - R CMD build --no-manual .
-  - R CMD INSTALL *gz
-  - cd tests && Rscript -e 'library(methods);library(testthat);library(RPANDA); test_check("RPANDA")'
+language: r
+r:
+  - release
+  - devel
+cache: packages
 
+# need libmagick++dev and all prereqs...
+addons:
+   apt:
+     update: true
+     sources:
+       - sourceline: 'ppa:opencpu/imagemagick'
+       - sourceline: 'ppa:ubuntugis/ppa'
+     packages:
+       - libmagick++-dev
+       - librsvg2-dev
+       - libwebp-dev
+       - libpoppler-cpp-dev
+       - libtesseract-dev
+       - libleptonica-dev
+       - tesseract-ocr-eng
+       - r-cran-rgdal
+       - libfftw3-dev
+       - cargo
+       - libmpfr-dev
+  
+
+script:
+  - R CMD build . --compact-vignettes=gs+qpdf
+  - R CMD check *tar.gz --as-cran
