@@ -2,7 +2,7 @@ independent_evolution <-
 function(replicate,name,index,seed,nb_tree,lambda,nb_cores){
   set.seed(seed+replicate)
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
-  index_randomize <- sample(rownames(variant_sequences)[1:n])
+  index_randomize <- sample(rownames(variant_sequences))
   index_randomize <- rbind(rownames(variant_sequences),index_randomize)
   rownames(index_randomize)[1] <- "original_index"
   rownames(variant_sequences) <- index_randomize[2,]
@@ -16,7 +16,7 @@ function(replicate,name,index,seed,nb_tree,lambda,nb_cores){
   
   inference_ksi_indep <- function(ksi){
     load(file=paste("simulated_trees/simulated_trees_",name,"_",ksi,".RData",sep=""))
-    if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,names(variant_sequences))
+    if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,rownames(variant_sequences))
     for(i in 1:nb_tree){for (missing in missing_symbiont){list_tree[[i]] <- drop.tip(list_tree[[i]], tip=missing)}}}
     
     output <- optimize(f=inference_switches, lower=0.0001, upper=50,tol=0.05,randomize=T,ksi=ksi,name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)

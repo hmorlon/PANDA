@@ -72,8 +72,8 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
   
   ####  compute simulated likelihood 
   variant_sequences <-  read.dna(paste("alignment_",name,"_",index,".fas",sep=""),format="fasta",as.character=T)
-  row.names(variant_sequences) <- gsub(" ","",row.names(variant_sequences))
-  for (missing in setdiff(tree$tip.label,row.names(variant_sequences))){tree <-drop.tip(tree,missing)}
+  rownames(variant_sequences) <- gsub(" ","",rownames(variant_sequences))
+  for (missing in setdiff(tree$tip.label,rownames(variant_sequences))){tree <-drop.tip(tree,missing)}
   n <- nrow(variant_sequences)
   for (i in N:1) {if (length(unique(variant_sequences[,i]))==1){variant_sequences<-variant_sequences[,-i,drop=F]}}
   N_invariant <- N - ncol(variant_sequences)

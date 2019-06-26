@@ -17,7 +17,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         print(paste("Number of switch(es): ",ksi,sep=""))
         load(file=paste("simulated_trees/simulated_trees_",name,"_",ksi,".RData",sep=""))
         
-        if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,names(variant_sequences))
+        if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,rownames(variant_sequences))
         for(i in 1:nb_tree){for (missing in missing_symbiont){list_tree[[i]] <- drop.tip(list_tree[[i]], tip=missing)}}}
         
         output <- optimize(f=inference_switches, lower=0.0001, upper=50,tol=0.05,ksi=ksi, randomize=F, name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)

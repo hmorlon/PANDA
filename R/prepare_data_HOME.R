@@ -50,7 +50,7 @@ function(iter,name,name_index,provided_tree=NULL,...){
         write.dna(variant_sequences,paste("data/alignment_variant_",name,"_",index,".fas",sep=""), format = "fasta",nbcol = -1,colsep="",colw=N)
         
         #### Step 3 : Order the host tree ####
-        for (missing in setdiff(host_tree$tip.label,row.names(variant_sequences))){host_tree <-drop.tip(host_tree,missing)}  #row.names(variant_sequences)[1:n]
+        for (missing in setdiff(host_tree$tip.label,rownames(variant_sequences))){host_tree <-drop.tip(host_tree,missing)}  
         r <- n+1 # root
         
         #### Step 4 : Substitution model ####
