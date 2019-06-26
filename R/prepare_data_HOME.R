@@ -66,6 +66,8 @@ function(iter,name,name_index,provided_tree=NULL,...){
         eig_vect <- eigen(Q)$vectors
         ivp <- solve(eig_vect)
         
+        save(host_tree,variant_sequences,selected_model,n,r,N,N_invariant,N_variant,propinv,Q,eig_val,eig_vect,ivp,path,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
+        
       }else{save(host_tree,n,N,N_invariant,N_variant,path,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
         write.table(c("NO VARIATION WITHIN ALIGNMENT",N_variant),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
         write.table(c("NO VARIATION WITHIN ALIGNMENT",N_variant),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)}
