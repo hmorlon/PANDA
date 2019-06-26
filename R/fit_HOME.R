@@ -8,6 +8,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
     if (N_variant>0){
       
       print("test")
+      Sys.sleep(10)
       
       output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=50,tol=0.05,name=name,index=index,sequences=variant_sequences) 
       
