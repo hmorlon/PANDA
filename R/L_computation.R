@@ -4,6 +4,9 @@ function(k,mu,n_tree,sequences,n, nodes, edges, el, eig_val, eig_vect, ivp, prop
   if ("-" %in% n_seq){
     gaps <- which(n_seq=='-')
     n_tree <- drop.tip(n_tree,tip=rownames(n_seq)[gaps])
+    nodes <- unique(n_tree$edge[, 1]) - 1
+    edges <- n_tree$edge[, 2] -1
+    el <- n_tree$edge.length
     n_seq <- n_seq[-gaps,]
     n <- Ntip(n_tree)}
   L = matrix(0,nrow=(2*n-1),ncol=4)
