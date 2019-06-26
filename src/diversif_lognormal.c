@@ -27,28 +27,6 @@ SEXP relToAbs(SEXP lambda, SEXP parents, SEXP length){
     
 }
 
-SEXP relToAbsSum(SEXP lambda, SEXP parents, SEXP length){
-    int len, i;
-    
-    
-    len=INTEGER(length)[0];
-    PROTECT(lambda = coerceVector(lambda,REALSXP));
-    PROTECT(parents = coerceVector(parents,INTSXP));
-    SEXP lambda2 = PROTECT(allocVector(REALSXP,len));
-    
-    // pointers pour les objets SEXP
-    double *lamb2 = REAL(lambda2), *lamb = REAL(lambda);
-    int *paren = INTEGER(parents);
-    
-    lamb2[0]=lamb[0];
-    for(i = 1; i < len; i ++){
-        lamb2[i]=lamb2[paren[i-1]]+lamb[i];
-    }
-    
-    UNPROTECT(3);
-    return lambda2;
-    
-}
 
 SEXP absToRel(SEXP lambda, SEXP parents, SEXP length){
     int len, i;
