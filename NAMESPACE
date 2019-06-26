@@ -56,8 +56,5 @@ export(fit_t_comp,likelihood_t_MC,likelihood_t_MC_geog,likelihood_t_DD,likelihoo
 export(fit_t_comp_subgroup,CreateClassObject,CreateGeobyClassObject,likelihood_subgroup_model)
 export(plot_prob_dtt, prob_dtt)
 useDynLib(RPANDA, relToAbs, relToAbsSum, absToRel, absToRelSum, loglik)
-useDynLib(llpruning,vmult,vvmult,vvvmult)
-exportPattern("^[[:alpha:]]+")
-
 export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_chains,
        getMAPS_ClaDS, getMAPS_ClaDS0, fit_ClaDS)
