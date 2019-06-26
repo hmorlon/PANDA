@@ -51,29 +51,6 @@ SEXP absToRel(SEXP lambda, SEXP parents, SEXP length){
      
 }
 
-SEXP absToRelSum(SEXP lambda, SEXP parents, SEXP length){
-    int len, i;
-    
-    
-    len=INTEGER(length)[0];
-    PROTECT(lambda = coerceVector(lambda,REALSXP));
-    PROTECT(parents = coerceVector(parents,INTSXP));
-    SEXP lambda2 = PROTECT(allocVector(REALSXP,len));
-    
-    // pointers pour les objets SEXP
-    double *lamb2 = REAL(lambda2), *lamb = REAL(lambda);
-    int *paren = INTEGER(parents);
-    
-    lamb2[0]=lamb[0];
-    for(i = 1; i < len; i ++){
-        lamb2[i]=lamb[i]-lamb[paren[i-1]];
-    }
-    
-    UNPROTECT(3);
-    return lambda2;
-     
-}
-
 SEXP loglik(SEXP lambda, SEXP lambda2, SEXP sigma, SEXP alpha, SEXP times, SEXP internalAndRoots, SEXP nNodes, SEXP root_depth){
     int n, i;
     double pi=3.141593;
