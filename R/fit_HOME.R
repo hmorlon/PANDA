@@ -7,7 +7,11 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
     load(paste("data/data_model_",name,"_",index,".RData",sep=""))
     if (N_variant>0){
       
+      print("test")
+      
       output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=50,tol=0.05,name=name,index=index,sequences=variant_sequences) 
+      
+      print("test_end")
       
       results <- cbind(0,output$minimum,output$objective)
       colnames(results) <- c("ksi","mu","minloglik")
