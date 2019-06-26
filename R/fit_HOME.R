@@ -7,12 +7,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
     load(paste("data/data_model_",name,"_",index,".RData",sep=""))
     if (N_variant>0){
       
-      print("test")
-      Sys.sleep(10)
-      
-      #output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=50,tol=0.05,name=name,index=index,sequences=variant_sequences) 
-      
-      print("test_end")
+      output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=50,tol=0.05,name=name,index=index,sequences=variant_sequences) 
       
       results <- cbind(0,output$minimum,output$objective)
       colnames(results) <- c("ksi","mu","minloglik")
@@ -25,7 +20,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,rownames(variant_sequences))
         for(i in 1:nb_tree){for (missing in missing_symbiont){list_tree[[i]] <- drop.tip(list_tree[[i]], tip=missing)}}}
         
-        #output <- optimize(f=inference_switches, lower=0.0001, upper=50,tol=0.05,ksi=ksi, randomize=F, name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
+        output <- optimize(f=inference_switches, lower=0.0001, upper=50,tol=0.05,ksi=ksi, randomize=F, name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
         
         mu <- output$minimum
         minloglik <- output$objective
