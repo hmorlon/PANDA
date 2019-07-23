@@ -36,6 +36,9 @@ function(iter,name,name_index,provided_tree=NULL,...){
   variant_sequences <-  read.dna(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""),format="fasta",as.character=T)
   if (length(which(!rownames(variant_sequences) %in% host_tree$tip.label))>0) stop(print(paste("Please provide an nucleotidic alignment with names of sequences matching the names of the tips of the host tree for the index",index,sep="")))
   
+  # replace "n" nucleotides by gaps
+  variant_sequences[which(!variant_sequences %in% c("a","t","g","c","-"))] <- "-"
+  
   n <- nrow(variant_sequences)
   if (n>=5){
     N <- ncol(variant_sequences)
