@@ -8,9 +8,10 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   mubg = pars[5]
   mui0 = pars[6]
   muibg = pars[7]
-  alpha = pars[8]
-  sig2 = pars[9]
-  m = pars[10]
+  alpha1 = pars[8]
+  alpha2 = pars[9]
+  sig2 = pars[10]
+  m = pars[11]
   
   s = sqrt(sig2 * step.size)
   m = m * step.size
@@ -55,7 +56,7 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
       bound_effect <- 3 * sum(sign(dist_bounds)*exp(-2*(dist_bounds)^2)) #repulsion of bounds
       #update trait value
       traits[[active_lineages[i]]][4+step_count] <- traits[[active_lineages[i]]][3+step_count] + 
-        alpha * m * sum(signs_me * exp(-alpha * (diff_me[[active_lineages[i]]])^2)) +
+        alpha2 * m * sum(signs_me * exp(-alpha2 * (diff_me[[active_lineages[i]]])^2)) +
         rnorm(1, 0, s) + bound_effect 
     }
     
@@ -73,7 +74,7 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
         #sp completion rate depends on distance w/parent
         lambda2 = tau0 * exp(beta * (diff_trait_isp)^2)
         #extinction rate depends on distance with all lineages, same as trait evolution
-        mui = alpha * mui0 * sum(exp(-alpha * (diff_me[[i]])^2)) + muibg 
+        mui = alpha1 * mui0 * sum(exp(-alpha1 * (diff_me[[i]])^2)) + muibg 
         
         probs_i = c(lambda2/(mui+lambda2), mui/(mui+lambda2))
         if (runif(1) <= (lambda2 + mui) * step.size) {
@@ -123,7 +124,7 @@ sim.MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
       #if lineage is good
       if (lineages[i,5] == 1) {
         #extinction rate depends on distance with all lineages, same function as trait evolution
-        mu = alpha * mu0 * sum(exp(-alpha * (diff_me[[i]])^2)) + mubg
+        mu = alpha1 * mu0 * sum(exp(-alpha1 * (diff_me[[i]])^2)) + mubg
         #captures the case when there's only one lineage alive & extinction is activated
         if (mu0!=0 & mu==0){
           mu = 0.02 * mu0 #when alone, a lineage has basal extinction rate (equal to having infinite distance with neighbors)
