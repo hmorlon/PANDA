@@ -29,11 +29,13 @@ sim.MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,I
     
     \code{pars[7]} corresponds to \eqn{muibg}, the background incipient species extinction rate
     
-    \code{pars[8]} corresponds to \eqn{alpha}, the competition strength
+    \code{pars[8]} corresponds to \eqn{alpha1}, the competition effect on extinction (competition strength)
     
-    \code{pars[9]} corresponds to \eqn{sig2}, the variance (rate) of the Brownian motion
+    \code{pars[9]} corresponds to \eqn{alpha1}, the competition effect on trait evolution (competition strength)
     
-    \code{pars[10]} corresponds to \eqn{m}, the relative contribution of character displacement (competition) with respect to stochastic (brownian) evolution
+    \code{pars[10]} corresponds to \eqn{sig2}, the variance (rate) of the Brownian motion
+    
+    \code{pars[11]} corresponds to \eqn{m}, the relative contribution of character displacement (competition) with respect to stochastic (brownian) evolution
 }
 \item{root.value}{the starting trait value}
 \item{age.max}{maximum time for the simulation (if the process doesn't go extinct)}
@@ -45,7 +47,7 @@ sim.MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,I
 
 }
 \details{
-It might be difficult to find parameter combinations that would be sensitive. It is recommended to use the parameter settings of the examples as a staring point and from there modify them to understand the behaviour of the model.
+It might be difficult to find parameter combinations that are sensitive. It is recommended to use the parameter settings of the examples as a staring point and from there modify them to understand the behaviour of the model.
 If trees produced are too big, simulation can become too slow to ever finish. 
 }
 \value{
@@ -74,7 +76,7 @@ Lineage number (same as row number in lin_mat), status (as in lin_mat), sister l
 Leandro Aristide (leandroaristi@gmail.com)
 }
 \references{
-Aristide, L., and Morlon, H. 2019 Understanding the effect of competition during evolutionary radiations: an integrated model of phenotypic and species diversification
+Aristide, L., and Morlon, H. 2019. Understanding the effect of competition during evolutionary radiations: an integrated model of phenotypic and species diversification
 }
 \note{
 %%  ~~further notes~~
@@ -93,11 +95,11 @@ mu0 = 0.5
 mubg = 0.01
 mui0 = 0.8
 muibg = 0.02
-alpha = 0.04
+alpha1 = alpha2 = 0.04
 sig2 = 0.5
 m = 20
 
-pars <- c(lambda1, tau0, beta, mu0, mubg,mui0, muibg, alpha, sig2, m)
+pars <- c(lambda1, tau0, beta, mu0, mubg,mui0, muibg, alpha1, alpha2, sig2, m)
 
 #3000 steps, unbounded
 res <- sim.MCBD(pars, age.max=30, step.size=0.01) 
@@ -106,7 +108,7 @@ res <- sim.MCBD(pars, age.max=30, step.size=0.01)
 res <- sim.MCBD(pars, age.max=30, step.size=0.01, bounds=c(-10,Inf)) 
 
 #only deterministic component
-pars <- c(lambda1, tau0, beta, mu0, mubg, mui0, muibg, alpha, sig2=0, m)
+pars <- c(lambda1, tau0, beta, mu0, mubg, mui0, muibg, alpha1, alpha2, sig2=0, m)
 res <- sim.MCBD(pars, age.max=30)
 
 plot(res$gsp_extant$tree)
