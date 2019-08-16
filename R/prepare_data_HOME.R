@@ -32,9 +32,9 @@ function(iter,name,name_index,provided_tree=NULL,...){
   if (length(which(host_tree$edge.length==0))>0) stop(print("Please provide an host tree with positive branch lengths"))
   
   #### Step 2 : Load the symbiont sequences ####
-  if (!file.exists(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""))) stop(print(paste("Please provide an nucleotidic alignment (format .fas) in path_alignment/ for the index",index,sep="")))
+  if (!file.exists(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""))) stop(print(paste("Please provide an nucleotidic alignment (format .fas) in the working directory (or in path_alignment/) for the index ",index,sep="")))
   variant_sequences <-  read.dna(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""),format="fasta",as.character=T)
-  if (length(which(!rownames(variant_sequences) %in% host_tree$tip.label))>0) stop(print(paste("Please provide an nucleotidic alignment with names of sequences matching the names of the tips of the host tree for the index",index,sep="")))
+  if (length(which(!rownames(variant_sequences) %in% host_tree$tip.label))>0) stop(print(paste("Please provide an nucleotidic alignment with names of sequences matching the names of the tips of the host tree for the index ",index,sep="")))
   
   # replace "n" nucleotides by gaps
   variant_sequences[which(!variant_sequences %in% c("a","t","g","c","-"))] <- "-"
