@@ -1,7 +1,8 @@
 library(RPANDA)
 library(coda)
 load("ClaDS2_Cetacea.Rdata")
-
+nedges = nrow(tree$edge)
+ntips = tree$Nnode + 1
 
 #the results are given as :
 # the mcmc chains in coda_chain
@@ -11,7 +12,10 @@ load("ClaDS2_Cetacea.Rdata")
 #     MAPS[2] is the alpha parameter (trend)
 #     MAPS[3] is the epsilon parameter (turnover)
 #     MAPS[4] is the lambda_0 parameter (initial speciation rate)
-#     MAPS[5:npar] are the branch-specific speciation rates
+#     MAPS[5:npar] are the branch-specific speciation rates (npar = nedges + 4)
+#     MAPS[(nedges+5):(nedges+4+ntips)] are the branch-specific speciation rates at tips
+#             (same order as tree$tip.labels)
+#     MAPS[(nedges+5+ntips):length(MAPS)] number a alive species at given times in the augmented tree 
 
 plot_ClaDS_phylo(tree, MAPS[5:npar], log = T, lwd = 3)
 title(main = paste0("sigma = ", round(MAPS[1],2), " ; alpha = ", round(MAPS[2],2),
