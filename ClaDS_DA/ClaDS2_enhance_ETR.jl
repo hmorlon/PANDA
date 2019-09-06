@@ -1,0 +1,366 @@
+function init_edge_tree_rates(tree, rates)
+    bl = extract_branch_lengths(tree)
+    edge_trees = Array{EdgeTreeRates,1}(undef,0)
+
+    for i in 2:tree.n_nodes
+        push!(edge_trees, EdgeTreeRates(Tree(Array{Tree,1}(undef,0), bl[i], rates[i]), 1, rates[i], [rates[i]]))
+    end
+    return edge_trees
+end
+
+function change_edge_trees_rates!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths ; do_tips = true, max_try = 1_000, max_node_number = 50, keep_if_any = true)
+    trial = 0
+
+    daughter_rates = get_daughter_rates(tree, edge_id)
+
+    if isnan(daughter_rates[1])
+        if do_tips
+            int_tree = Tree()
+            while trial < max_try
+                trial += 1
+
+                int_tree, unsampled, n_alive = sim_ClaDS2_time_unsampled(branch_lengths[edge_id], σ, α, ε, rates[edge_id],return_if_sampled = true,
+                max_node_number = max_node_number, not_sampled = false, sampling_proba = f, return_if_extinct = false, make_tree = false)
+                if unsampled
+                    edge_trees[edge_id] = EdgeTreeRates(int_tree, 1, rates[edge_id], [rates[edge_id]])
+                    return edge_trees[edge_id]
+                end
+            end
+        end
+        return edge_trees[edge_id]
+    else
+        log_α = log(α)
+        node_depth = get_node_depth(tree, edge_id)
+        if keep_if_any
+            if edge_trees[edge_id].tree.n_nodes < 2
+                former_parent_rate = rates[edge_id]
+            else
+                edge_tree_tip_rates = extract_tip_rates(edge_trees[edge_id].tree, return_extinct = false)
+                former_parent_rate = edge_tree_tip_rates[edge_trees[edge_id].tip_id]
+            end
+
+            former_lik = 0. #-
+                #((log(former_parent_rate) + log_α - log(daughter_rates[1]))^2 + (log(former_parent_rate) + log_α - log(daughter_rates[2]))^2)/(2 * σ^2) + log(former_parent_rate)
+        else
+            former_lik = (log(daughter_rates[1]) + log(daughter_rates[1]))/2 -log_α+(σ^2)/2
+        end
+
+        sum_rates = 0.
+        ratio = former_parent_rate / edge_trees[edge_id].rate
+        function nu(former_rate, former_ratio)
+            if isnan(former_rate)
+                return 0.
+            end
+            fr = former_rate*former_ratio
+            log_fr = log(fr)
+            return fr * exp((-(log_fr + log_α - log(daughter_rates[1]))^2 - (log_fr + log_α - log(daughter_rates[2]))^2)/(2 * σ^2))
+        end
+
+        for r in edge_trees[edge_id].rates
+            sum_rates += nu(r, ratio)
+        end
+        former_lik += + log(sum_rates)
+
+        while trial < max_try
+            trial += 1
+
+            int_tree, int_tip_rates =
+                sim_ClaDS2_time(branch_lengths[edge_id], σ, α, ε, rates[edge_id],prune_extinct = false,
+                max_node_number = max_node_number, return_if_extinct = false, make_tree = true, return_if_max = false, return_na = true)
+            nalive = n_extant_tips(int_tree)
+            sampled = []
+            tip_trees = []
+            graft_tips = []
+            keep = false
+            keep_tip = false
+            add_to_tip_id = 0
+            new_tip_id = NaN
+            new_lik = 0.
+            new_parent_rate = 0.
+             any_kept = false
+            if (0 < nalive) & (int_tree.branch_length >= 0)
+                #int_tip_rates = extract_tip_rates(int_tree, return_extinct = false)
+                #println(int_tip_rates)
+                w = Array{Float64,1}(undef,length(int_tip_rates))
+                Ws = 0.
+                for r in 1:length(int_tip_rates)
+                    w[r] = nu(int_tip_rates[r],1.)
+                    Ws += w[r]
+                end
+                for new_tip in sample(1:(length(int_tip_rates)), Weights(w))
+                    #println(w)
+                    #println("$Ws $sum_rates")
+                    #println(new_tip)
+                    k = 0
+                    sampled = []
+                    tip_trees = []
+                    graft_tips = []
+                    keep = false
+                    keep_tip = false
+                    add_to_tip_id = 0
+                    new_tip_id = NaN
+                    new_lik = 0.
+                    new_parent_rate = 0.
+
+                    for i in 1:length(int_tip_rates)
+                        if ! isnan(int_tip_rates[i])
+                            k += 1
+                            if i == new_tip
+                                new_parent_rate = int_tip_rates[i]
+                                new_lik = 0. + log(Ws)
+                                #- ((log(new_parent_rate) +
+                                    #log_α - log(daughter_rates[1]))^2 + (log(new_parent_rate) +
+                                    #log_α - log(daughter_rates[2]))^2)/(2 * σ^2)  +log(new_parent_rate) + log(nalive)
+                                u = rand()
+                                keep = log(u) < new_lik - former_lik
+                                #println("$σ $((Ws)) $sum_rates $keep $ratio")
+                                keep_tip = deepcopy(keep)
+                                new_tip_id = i
+                            end
+                        end
+                    end
+
+                    if keep | keep_if_any
+                        keep = true
+                        k = 0
+                        i = 0
+                        while (keep) & (i < length(int_tip_rates))
+                            i += 1
+                            if ! isnan(int_tip_rates[i])
+                                k += 1
+                                if i != new_tip
+                                    tip_tree, unsampled, n_alive = sim_ClaDS2_time_unsampled(node_depth, σ, α, ε, int_tip_rates[i],
+                                        max_node_number = max_node_number, not_sampled = true, sampling_proba = f, return_if_sampled = true, make_tree = true)
+                                    if unsampled
+                                        push!(tip_trees, tip_tree)
+                                        push!(graft_tips, i)
+                                        if i < new_tip_id
+                                            add_to_tip_id += n_tip(tip_tree) - 1
+                                        end
+                                    else
+                                        keep = false
+                                    end
+                                end
+                            end
+                        end
+                    end
+
+                    if keep & keep_tip
+                        edge_trees[edge_id] = EdgeTreeRates(graft_to_tips(int_tree, [Tree(Array{Tree,1}(undef,0),0., [0.], 0, true); tip_trees],
+                            [new_tip_id; graft_tips]), new_tip_id + add_to_tip_id, int_tip_rates[new_tip], int_tip_rates)
+
+                        return  edge_trees[edge_id]
+                    elseif keep & keep_if_any
+
+                        return  edge_trees[edge_id]
+                    end
+                end
+            end
+        end
+        println(trial)
+    end
+end
+
+function change_edge_trees_rateMH!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths ; do_tips = true, max_try = 1_000, max_node_number = 50, keep_if_any = true)
+    trial = 0
+
+    daughter_rates = get_daughter_rates(tree, edge_id)
+
+    if isnan(daughter_rates[1])
+        if do_tips
+            int_tree = Tree()
+            n_alive = edge_trees[edge_id].tip_id#n_extant_tips(edge_trees[edge_id].tree)
+            if n_alive == 0
+                former_lik = -Inf
+            elseif n_alive == 1
+                former_lik = log(f)
+            else
+                former_lik = log(n_alive) + log(f) + (n_alive - 1) * log(1-f)
+            end
+            while trial < 1#max_try
+                trial += 1
+
+                int_tree, unsampled, n_alive, tip_rates = sim_ClaDS2_time_unsampled_rates(branch_lengths[edge_id], σ, α, ε,
+                    rates[edge_id],return_if_sampled = true,
+                    max_node_number = max_node_number, not_sampled = false,
+                    sampling_proba = f, return_if_extinct = false, make_tree = false)
+                if n_alive == 0 #| (int_tree.branch_length <=0)
+                    #log_sampling_proba = -Inf
+                    return edge_trees[edge_id]
+                elseif n_alive == 1
+                    log_sampling_proba = log(f)
+                else
+                    log_sampling_proba = log(n_alive) + log(f) + (n_alive - 1) * log(1-f)
+                end
+                u = log(rand())
+                unsampled = u < (log_sampling_proba-former_lik)
+                if unsampled
+                    edge_trees[edge_id] = EdgeTreeRates(int_tree, n_alive, rates[edge_id], tip_rates)
+                    return edge_trees[edge_id]
+                end
+            end
+        end
+        return edge_trees[edge_id]
+    else
+        log_α = log(α)
+        node_depth = get_node_depth(tree, edge_id)
+        if keep_if_any
+            if edge_trees[edge_id].tree.n_nodes < 2
+                former_parent_rate = rates[edge_id]
+            else
+                edge_tree_tip_rates = extract_tip_rates(edge_trees[edge_id].tree, return_extinct = false)
+                former_parent_rate = edge_tree_tip_rates[edge_trees[edge_id].tip_id]
+            end
+
+            former_lik = 0. #-
+                #((log(former_parent_rate) + log_α - log(daughter_rates[1]))^2 + (log(former_parent_rate) + log_α - log(daughter_rates[2]))^2)/(2 * σ^2) + log(former_parent_rate)
+        else
+            former_lik = (log(daughter_rates[1]) + log(daughter_rates[1]))/2 -log_α+(σ^2)/2
+        end
+
+        sum_rates = 0.
+        ratio = former_parent_rate / edge_trees[edge_id].rate
+        function nu(former_rate, former_ratio)
+            if isnan(former_rate)
+                return 0.
+            end
+            fr = former_rate*former_ratio
+            log_fr = log(fr)
+            return fr * exp((-(log_fr + log_α - log(daughter_rates[1]))^2 - (log_fr + log_α - log(daughter_rates[2]))^2)/(2 * σ^2))
+        end
+
+        for r in edge_trees[edge_id].rates
+            sum_rates += nu(r, ratio)
+        end
+        former_lik += + log(sum_rates)
+
+        while trial < max_try
+            trial += 1
+            int_tree, int_tip_rates, which_alive =
+                sim_ClaDS2_time_rates(branch_lengths[edge_id], σ, α, ε, rates[edge_id],prune_extinct = false,
+                max_node_number = max_node_number, make_tree = true, return_if_max = true, return_na = true)
+
+            nalive = length(int_tip_rates)
+            sampled = []
+            tip_trees = []
+            graft_tips = []
+            keep = false
+            keep_tip = false
+            add_to_tip_id = 0
+            new_tip_id = NaN
+            new_lik = 0.
+            new_parent_rate = 0.
+            any_kept = false
+            if int_tree.branch_length<=0
+                return  edge_trees[edge_id]
+
+           elseif (0 < nalive) #& (int_tree.branch_length >= 0)
+               #int_tip_rates = extract_tip_rates(int_tree, return_extinct = false)
+               #println(int_tip_rates)
+               w = Array{Float64,1}(undef,0)
+               Ws = 0.
+               for r in 1:length(int_tip_rates)
+                   #if !isnan(int_tip_rates[r])
+                   push!(w,nu(int_tip_rates[r],1.))
+                   Ws += w[end]
+                   #end
+               end
+               for new_tip in sample(1:nalive, Weights(w))
+
+                   k = 0
+                   sampled = []
+                   tip_trees = []
+                   graft_tips = []
+                   keep = false
+                   keep_tip = false
+                   add_to_tip_id = 0
+                   new_tip_id = NaN
+                   new_tip_id_rate = NaN
+                   new_lik = 0.
+                   new_parent_rate = 0.
+                   new_lik_rate = 0.
+                  # println(new_tip)
+
+                   for i in 1:length(which_alive)
+                       if which_alive[i]
+                           k += 1
+                           if k == new_tip
+                               new_parent_rate = int_tip_rates[k]
+                               new_lik_rate = 0. + log(Ws)
+                               u = rand()
+                               keep = log(u) < new_lik - former_lik
+                               keep_tip = deepcopy(keep)
+                               new_tip_id = i
+                               new_tip_id_rate = k
+                           end
+                       end
+                   end
+
+                    if true
+                        former_tip_number = n_extant_tips(edge_trees[edge_id].tree) - 1
+                        if former_tip_number == 0
+                            former_lik += 0
+                        else
+                            former_lik += former_tip_number * log(1-f)
+                        end
+                        u = log(rand())
+
+                        keep = true
+                        new_lik = new_lik_rate
+                        keep = u < (new_lik-former_lik)
+
+                        k = 0
+                        i = 0
+                        ntips = 0
+                        n_alive = 0
+                        while (keep) & (i < length(which_alive))
+                            i += 1
+                            if which_alive[i]
+                                k += 1
+                                if k != new_tip
+                                    tip_tree = sim_ClaDS2_time(node_depth, σ, α, ε, int_tip_rates[k],
+                                        max_node_number = max_node_number)
+                                    if tip_tree.branch_length < 0
+                                        n_alive = Inf
+                                    else
+                                        n_alive = n_extant_tips(tip_tree)
+                                    end
+                                    if true#unsampled
+                                        ntips += n_alive
+                                        if ntips == 0
+                                            new_lik = 0
+                                        elseif ntips == Inf
+                                            new_lik = -Inf
+                                        else
+                                            new_lik = new_lik_rate + ntips * log(1-f)
+                                        end
+                                        keep = u < (new_lik-former_lik)
+                                        push!(tip_trees, tip_tree)
+                                        push!(graft_tips, i)
+                                        if i < new_tip_id
+                                            add_to_tip_id += n_tip(tip_tree) - 1
+                                        end
+                                    else
+                                        keep = false
+                                    end
+                                end
+                            end
+                        end
+
+                    end
+
+                    if keep #& keep_tip
+                        edge_trees[edge_id] = EdgeTreeRates(graft_to_tips(int_tree, [Tree(Array{Tree,1}(undef,0),0., [0.], 0, true); tip_trees],
+                            [new_tip_id; graft_tips]), new_tip_id + add_to_tip_id, int_tip_rates[new_tip_id_rate], int_tip_rates)
+
+                        return  edge_trees[edge_id]
+                    elseif true #& keep_if_any
+
+                        return  edge_trees[edge_id]
+                    end
+                end
+            end
+        end
+        println(trial)
+    end
+end
