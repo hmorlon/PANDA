@@ -52,3 +52,4 @@ useDynLib(RPANDA, relToAbs)
 export(plot_ClaDS, sim_ClaDS, run_ClaDS0, plotChains_ClaDS0, getMAPS_ClaDS0,
        plotChains_ClaDS, getMAPS_ClaDS,prepare_ClaDS, get_rates,
        createLikelihood_ClaDS1, createLikelihood_ClaDS2, run_ClaDS, add_iter_ClaDS)
+export(sim_MCBD)
