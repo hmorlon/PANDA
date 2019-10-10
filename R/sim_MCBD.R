@@ -257,9 +257,10 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
         min_trait <- c(min_trait, min(traitmat[[i]][-(1:3)], na.rm = T))
       }
       if (is.null(ylims)){
-        plot(1, type="n",xlim=c(1,steps), ylim = c(min(min_trait),max(max_trait)))
+        plot(1, type="n",xlim=c(1,steps), ylim = c(min(min_trait),max(max_trait)), ylab = "trait value",
+             xlab = "Time")
       }
-      else{plot(1, type="n",xlim=c(1,steps), ylim = ylims)}
+      else{plot(1, type="n",xlim=c(1,steps), ylim = ylims, ylab = "trait value", xlab = "Time")}
       completion <- linmat[,6]
       #handle and plot each possibility
       for (i in 1:length(completion)){
