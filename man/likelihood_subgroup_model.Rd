@@ -91,7 +91,7 @@ names(dummy.group)<-Canidae.phylo$tip.label
 
 \donttest{
 
-Canidae.simmap<-make.simmap(Canidae.phylo, dummy.group)
+Canidae.simmap<-phytools::make.simmap(Canidae.phylo, dummy.group)
 
 set.seed(123)
 Canidae.data<-rnorm(length(Canidae.phylo$tip.label))

@@ -96,7 +96,7 @@ Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,simmap=Can
 trim.class="A",ana.events=BGB.examples$Canidae.ana.events, 
 clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
 	
-plotSimmap(Canidae.geobyclass.object$map)
+phytools::plotSimmap(Canidae.geobyclass.object$map)
 }
 
 }

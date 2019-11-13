@@ -1,5 +1,5 @@
-\name{run_ClaDS0}
-\alias{run_ClaDS0}
+\name{fit_ClaDS0}
+\alias{fit_ClaDS0}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Infer ClaDS0's parameter on a phylogeny}
@@ -7,7 +7,7 @@ Infer ClaDS0's parameter on a phylogeny}
 Infer branch-specific speciation rates and the model's hyper parameters for the pure-birth model
 }
 \usage{
-run_ClaDS0(tree, name, pamhLocalName = "pamhLocal",  
+fit_ClaDS0(tree, name, pamhLocalName = "pamhLocal",  
             iteration = 1e+07, thin = 20000, update = 1000, 
             adaptation = 10, seed = NULL, nCPU = 3)
 }
@@ -49,16 +49,17 @@ To monitor convergence, 3 independant MCMC chains are run simultaneously and the
 A mcmc.list object with the three MCMC chains.
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
+
 }
 \author{
 O. Maliet
 }
 \seealso{
-   \code{\link{getMAPS_ClaDS0}}, \code{\link{plotChains_ClaDS0}}, \code{\link{run_ClaDS}}
+   \code{\link{getMAPS_ClaDS0}}, \code{\link{plot_ClaDS0_chains}}, \code{\link{fit_ClaDS}}
 }
 \examples{
-\dontrun{
+\donttest{
 
 set.seed(1)
 
@@ -74,14 +75,21 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 
-sampler = run_ClaDS0(tree=tree,        
+sampler = fit_ClaDS0(tree=tree,        
               name="ClaDS0_example.Rdata",      
               nCPU=1,               
               pamhLocalName = "local",
               iteration=500000,
               thin=2000,
               update=1000, adaptation=5) 
+              
+# extract the Maximum A Posteriori for each of the parameters
+MAPS = getMAPS_ClaDS0(tree, sampler, thin = 10)
+
+# plot the simulated (on the left) and inferred speciation rates (on the right)
+# on the same color scale
+plot_ClaDS_phylo(tree, speciation_rates, MAPS[-(1:3)])
               
 }}

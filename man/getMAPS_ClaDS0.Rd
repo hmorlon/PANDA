@@ -26,17 +26,21 @@ Thinning parameter, one iteration out of "thin" is kept to compute the MAPs.
 }
 
 \value{
-A vector containing the MAPs for the marginal posterior distribution for each of the model's parameters.
+A vector MAPS containing the MAPs for the marginal posterior distribution for each of the model's parameters.
+
+MAPS[1:3] are the estimated hyperparameters, with MAPS[1] the sigma parameter (new rates stochasticity), MAPS[2] the alpha parameter (new rates trend), and MAPS[3] the initial speciation rate lambda_0. 
+
+MAPS[-(1:3)] are the estimated branch-specific speciation rates, given in the same order as the \code{phylo$edges}.
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \author{
 O. Maliet
 }
 
 \seealso{
-  \code{\link{run_ClaDS0}}, \code{\link{plotChains_ClaDS0}}, \code{\link{getMAPS_ClaDS}}
+  \code{\link{fit_ClaDS0}}, \code{\link{plot_ClaDS0_chains}}, \code{\link{getMAPS_ClaDS}}
 }
 \examples{
 set.seed(1)
@@ -61,7 +65,7 @@ MAPS = getMAPS_ClaDS0(ClaDS0_example$tree,
 
 # plot the simulated (on the left) and inferred speciation rates (on the right)
 # on the same color scale
-plot_ClaDS(ClaDS0_example$tree, 
+plot_ClaDS_phylo(ClaDS0_example$tree, 
           ClaDS0_example$speciation_rates, 
           MAPS[-(1:3)])
 }

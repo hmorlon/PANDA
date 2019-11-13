@@ -1,13 +1,14 @@
-\name{plot_ClaDS}
-\alias{plot_ClaDS}
+\name{plot_ClaDS_phylo}
+\alias{plot_ClaDS_phylo}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Plot a phylogeny with painted branches
+\title{Plot a phylogeny with branch-specific values
 }
 \description{
 Plot a phylogeny with branches colored according to branch-specific rate values
 }
 \usage{
-plot_ClaDS(phylo, rates, rates2 = NULL, same.scale = T, main = NULL, lwd = 2, log = T)
+plot_ClaDS_phylo(phylo, rates, rates2 = NULL, 
+                same.scale = T, main = NULL, lwd = 2, log = T, show.tip.label = F, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,9 +19,11 @@ plot_ClaDS(phylo, rates, rates2 = NULL, same.scale = T, main = NULL, lwd = 2, lo
   \item{main}{A title for the plot.}
   \item{lwd}{Width of the tree branch lengths. Default to 2.}
   \item{log}{A boolean specifying whether the rates values are plotted on a log scale. Default to TRUE.}
+  \item{show.tip.label}{A boolean specifying whether the labels of the phylogeny should be displayed. Default to FALSE.}
+  \item{...}{Optional arguments for \code{plot.phylo}.}
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 }
 \author{
 O. Maliet}
@@ -42,8 +45,8 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 
-plot_ClaDS(tree,speciation_rates, lwd = 4, log = FALSE)
+plot_ClaDS_phylo(tree,speciation_rates, lwd = 4, log = FALSE)
 
 }

@@ -129,26 +129,6 @@ reflect <- function(param, min_val, max_val){
     return(param)
 }
 
-
-
-# Geometric Brownian motion expectation - eq. 10 in Guindon 2013 - Systematic Biology
-geometricBM <- function(par, parents, times, sigma, len){
-  results <- .Call("geometricExpectation", lambda=par, parents=as.integer(parents), length=as.integer(len), sigma=sigma, brlength=times)
-  return(results)
-}
-
-# Geometric Brownian motion from a Gamma distribution parameterized by the moments - eq. 10, 24 in Guindon 2013 - Systematic Biology
-geometricBMGibbs <- function(par, parents, times, sigma, len){
-  results <- .Call("geometricExpectationGibbs", lambda=par, parents=as.integer(parents), length=as.integer(len), sigma=sigma, brlength=times)
-  return(results)
-}
-
-# Arithmetic average of nodes-rates; e.g. Kishino et al. 2001
-arithmeticBM <- function(par, parents, len){
-  results <- .Call("arithmetic", lambda=par, parents=as.integer(parents), length=as.integer(len))
-  return(results)
-}
-
 # Simulate a normal bactrian variate (Yang & Rodriguez 2013 - PNAS)
 
 rbactrian <- function(n, m=0.95){

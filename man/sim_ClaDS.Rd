@@ -120,7 +120,7 @@ A list with :
 
 }
 \references{
-Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution} in press
+Maliet O., Hartig F. and Morlon H. 2019, A model with many small shifts for estimating species-specific diversificaton rates, \emph{Nature Ecology and Evolution}, doi 10.1038/s41559-019-0908-0
 
 Beaulieu, J. M. and B. C. O'Meara. 2015. Extinction can be estimated from moderately sized
 molecular phylogenies. \emph{Evolution} 69:1036-1043.
@@ -130,7 +130,7 @@ molecular phylogenies. \emph{Evolution} 69:1036-1043.
 O. Maliet
 }
 \seealso{
-\code{\link{plot_ClaDS}}
+\code{\link{plot_ClaDS_phylo}}
 }
 \examples{
 # Simulation of a ClaDS2 phylogeny
@@ -148,7 +148,7 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 
 
 # Simulation of a phylogeny with constant extinction rate and speciation 
@@ -168,7 +168,7 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 
 
 
@@ -190,5 +190,5 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
-plot_ClaDS(tree,speciation_rates)
+plot_ClaDS_phylo(tree,speciation_rates)
 }
