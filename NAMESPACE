@@ -13,7 +13,7 @@ importFrom(cluster,pam)
 importFrom(geiger, drop.extinct, is.extinct)
 importFrom(pvclust,pvclust,pvrect)
 importFrom(corpcor,pseudoinverse)
-importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun, 
+importFrom(stats, as.dendrogram, as.hclust, ecdf, fisher.test, is.leaf, order.dendrogram, rnorm, runif, optim, integrate, smooth.spline, splinefun, 
            as.dist, bw.nrd0, dnorm, heatmap, kmeans, na.omit, pnorm, predict, 
            sd, var, reorder, rexp, cov2cor, rlnorm, density, fft, optimize, dist)
 importFrom(graphics, lines, mtext, par, plot, matplot, matlines, abline, text, points, polygon)
