@@ -45,7 +45,7 @@ setMethod(
 		  			options(show.error.messages=FALSE)
 					IV=try(solve(V))
 		  			options(show.error.messages=op)
-		  			if(class(IV)=="try-error"){
+		  			if(inherits(IV,"try-error")){
 		    			IV=pseudoinverse(V) 
 		  				if(max(IV)==0){return(Inf)}
 		  			}
@@ -85,7 +85,7 @@ setMethod(
 		  	options(show.error.messages=FALSE)
 			IV=try(solve(V))
 		  	options(show.error.messages=op)
-		  	if(class(IV)=="try-error"){
+		  	if(inherits(IV,"try-error")){
 		    	IV=pseudoinverse(V) 
 		  		if(max(IV)==0){return(Inf)}
 		  	}
