@@ -5,7 +5,7 @@ likelihood_t_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
   	sig2<-exp(par[1]) 
 	sterm<-par[2]
 	V<-try(.VCV.rescale(phylo,sig2,0,sterm))
-	if(class(V)=="try-error"){return(Inf)}
+	if(inherits(V, "try-error")){return(Inf)}
 	if(any(is.na(V))){
 		return(Inf)
 	} else{
@@ -13,7 +13,7 @@ likelihood_t_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
   	options(show.error.messages=FALSE)
 	IV=try(solve(V))
   	options(show.error.messages=op)
-  if(class(IV)=="try-error"){
+  if(inherits(IV, "try-error")){
     IV=corpcor::pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }

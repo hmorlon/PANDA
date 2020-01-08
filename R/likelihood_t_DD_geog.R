@@ -12,7 +12,7 @@ likelihood_t_DD_geog<-function(phylo,data,par,geo.object,model=c("DDlin","DDexp"
 	else if(model=="DDexp"){
 		try(V<-.VCV.rescale.DDexp_geog(phylo,sig2,rate,geo.object,check=FALSE))
 	}
-	if(class(V)=="try-error"){return(Inf)}
+	if(inherits(V, "try-error")){return(Inf)}
 	if(any(is.na(V))){
 		return(Inf)
 	} else{
@@ -20,7 +20,7 @@ likelihood_t_DD_geog<-function(phylo,data,par,geo.object,model=c("DDlin","DDexp"
   	options(show.error.messages=FALSE)
 	IV=try(solve(V))
   	options(show.error.messages=op)
-  if(class(IV)=="try-error"){
+  if(inherits(IV, "try-error")){
     IV=corpcor::pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
