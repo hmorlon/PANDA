@@ -34,6 +34,8 @@ Eric Lewitus <elewitus@hivresearch.org>
 Marc Manceau <marc.manceau@gmail.com>
   
 Olivier Billaud <olivier.billaud@agroparistech.fr>
+  
+Odile Maliet <maliet@biologie.ens.fr>
 }
 
 \references{
@@ -62,6 +64,8 @@ Clavel, J., Morlon, H. (2017) Accelerated body size evolution during cold climat
 Drury, J., Tobias, J., Burns, K., Mason, N., Shultz, A., and Morlon, H. (2018) Contrasting impacts of competition on ecological and social trait evolution in songbirds. PLOS Biolog 16: e2003563
 
 Clavel, J., Aristide, L., Morlon, H. (2019). A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst Biol 68: 93-116
+  
+Maliet, O., Hartig, F., Morlon, H. (2019). A model with many small shifts for estimating species-specific diversification rates. Nature Ecol Evol 3: 1086-1092
 }
 %\keyword{ phylogeny }
 
