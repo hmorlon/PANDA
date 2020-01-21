@@ -3,7 +3,8 @@ JSDtree_cluster <- function(JSDtree,alpha=0.9,draw=T)
 
 
 #cluster JSD matrix on medoids
-clustersMedoid <- pamk(JSDtree)
+maxCluster<-dim(JSDtree)[1]-1
+clustersMedoid <- pamk(JSDtree,k=1:maxCluster)
 clustersMedoidSupport <- pam(JSDtree,clustersMedoid$nc)
 
 if(draw == T){
@@ -15,10 +16,6 @@ heatmap(JSDtree,symm=T)
 	clustersHierarchy <- pvclust(JSDtree)
 	plot(clustersHierarchy,cex=0.3)
 	pvrect(clustersHierarchy,alpha=alpha)
-	
-#cluster JSD matrix on medoids
-clustersMedoid <- pamk(JSDtree)
-clustersMedoidSupport <- pam(JSDtree,clustersMedoid$nc)
 }
 else{}
 
