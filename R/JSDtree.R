@@ -45,7 +45,7 @@ JSDist <- function(x,y) sqrt(dist.JSD(x,y))
 	
 #compute eigenvalues for phylogenies and convolve with Gaussian kernel	
 	if(meth=="standard"){
-		treeNodes <- lapply(trees,dist.nodes)	 
+		treeNodes <- lapply(phylo,dist.nodes)	 
 		treeMats <- lapply(treeNodes,data.matrix)
 		treeGraphs <- lapply(treeMats,graph.adjacency,weighted=T)
 		treeLaplacian <- lapply(treeGraphs,graph.laplacian,
