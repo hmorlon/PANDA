@@ -20,14 +20,14 @@ function(tree,z1,b,bs,node_length){
     n_tree$edge[index,2] <- a2
     n_tree$edge.length[index] <- z1 - node_length[a1]
     b3 <- setdiff(tree$edge[which(tree$edge[,1]==a2),2],b2)
-    index <- which(tree$edge[,2]==b3)
+    index <- which(tree$edge[,2]==b3) #bt
     a0 <- tree$edge[which(tree$edge[,2]==a2),1]
     n_tree$edge[index,1] <- a0
     n_tree$edge.length[index] <- node_length[b3]-node_length[a0] 
   }
   if((a1!=a2)&(a2==r)){ # (a2 - b3) -> (a1 - a2')  and Re-rooting in b3 (index a2 <-> b3)
     b3 <- setdiff(tree$edge[which(tree$edge[,1]==a2),2],b2)
-    index <- which(tree$edge[,2]==b3)
+    index <- which(tree$edge[,2]==b3) #bt
     n_tree$edge[index,1] <- a1
     n_tree$edge[index,2] <- a2
     n_tree$edge.length[index] <- z1-node_length[a1]

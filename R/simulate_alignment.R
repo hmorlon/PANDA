@@ -1,5 +1,5 @@
 simulate_alignment <-
-function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=getwd(),...){
+function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=getwd(),mean=0.5,sd=0.01,host_signal=10,geo_signal=0,stochastic_map=NULL,...){
   if(!exists("path")) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
@@ -24,7 +24,10 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
     simulated_traceable_ksi <- ksi}
   
   if ((simul[iter]!="indep")&(ksi>0)){
-    output <- tree_change(host_tree,ksi,maxlen)
+    if (model=="uniform") {output <- tree_change(host_tree,ksi,maxlen)}
+    if (model=="temporal") {output <- tree_change_temporal(host_tree,ksi,maxlen,mean=maxlen*mean,sd)}
+    if (model=="host_dependent") {output <- tree_change_host_dependent(name,index,host_tree,ksi,maxlen,host_signal)}
+    if (model=="geo_dependent") {output <- tree_change_geo_dependent(name,index,host_tree,ksi,geo_signal,stochastic_map)}
     
     tree <- output[[1]]
     switches <- output[[2]]

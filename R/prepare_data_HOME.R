@@ -36,7 +36,7 @@ function(iter,name,name_index,provided_tree=NULL,...){
   variant_sequences <-  read.dna(paste(path_alignment,"/alignment_",name,"_",index,".fas",sep=""),format="fasta",as.character=T)
   if (length(which(!rownames(variant_sequences) %in% host_tree$tip.label))>0) stop(print(paste("Please provide an nucleotidic alignment with names of sequences matching the names of the tips of the host tree for the index ",index,sep="")))
   
-  # replace "n" nucleotides by gaps
+  # replace "n" nucleotide by gaps
   variant_sequences[which(!variant_sequences %in% c("a","t","g","c","-"))] <- "-"
   
   n <- nrow(variant_sequences)
@@ -53,7 +53,7 @@ function(iter,name,name_index,provided_tree=NULL,...){
         write.dna(variant_sequences,paste("data/alignment_variant_",name,"_",index,".fas",sep=""), format = "fasta",nbcol = -1,colsep="",colw=N)
         
         #### Step 3 : Order the host tree ####
-        for (missing in setdiff(host_tree$tip.label,rownames(variant_sequences))){host_tree <-drop.tip(host_tree,missing)}  
+        for (missing in setdiff(host_tree$tip.label,rownames(variant_sequences))){host_tree <-drop.tip(host_tree,missing)}  #row.names(variant_sequences)[1:n]
         r <- n+1 # root
         
         #### Step 4 : Substitution model ####
@@ -79,7 +79,7 @@ function(iter,name,name_index,provided_tree=NULL,...){
     save(host_tree,n,N,N_invariant,N_variant,path,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
     write.table(c("NO VARIATION WITHIN ALIGNMENT",0),paste("figures/results_randomize_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)
     write.table(c("NO VARIATION WITHIN ALIGNMENT",0),paste("figures/results_",name,"_",index,".csv",sep=""),col.names=F,row.names=F,sep=";",quote=F,append=F)}
-  }else{    
+  }else{#save(host_tree,n,path,file=paste("data/data_model_",name,"_",index,".RData",sep=""))
     N <- NA
     N_invariant <- NA
     N_variant <- NA
