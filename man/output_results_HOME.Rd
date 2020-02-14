@@ -11,7 +11,7 @@ This function outputs all the results of HOME into a HTML file with figures and 
 }
 
 \usage{output_results_HOME(iter, name, name_index, nb_tree=10000, lambda=seq(1,25),
-empirical,randomize, raref, nb_cores...)}
+empirical,randomize, raref, nb_cores, nb_random=10, figure=FALSE,...)}
 
 \arguments{
 \item{iter}{
@@ -21,7 +21,7 @@ the number of iteration of a particular index from name_index
 the name of the run
 }
 \item{nb_tree}{
-a number of tree for Monte-Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
+a number of tree for Monte Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
 }
 \item{lambda}{
 a vector integer values of number of switches to test during estimations
@@ -40,6 +40,14 @@ if TRUE rarefactions on the number of trees have been performed (i.e. to test if
 \item{nb_cores}{
 a number of cores to run the analyses
 }
+
+\item{nb_random}{
+a integer value of the number of randomizations (R) performed during the model selection testing independent evolutions.
+}
+
+\item{figure}{
+indicates whether it automatically outputs figures (default: FALSE).  
+} 
 
 }
 

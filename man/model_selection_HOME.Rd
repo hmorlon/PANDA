@@ -10,7 +10,7 @@ This function performs the model selections of HOME testing the null hypotheses 
 
 }
 
-\usage{model_selection_HOME(index, name, nb_tree=10000, lambda=seq(1,25), nb_random=10, seed=1, nb_cores=1...)
+\usage{model_selection_HOME(index, name, nb_tree=10000, lambda=seq(1,25), nb_random=10, seed=1, nb_cores=1, overwrite=TRUE,...)
 }
 
 \arguments{
@@ -23,7 +23,7 @@ the name of the run
 }
 
 \item{nb_tree}{
-a number of tree for Monte-Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
+a number of tree for Monte Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
 }
 
 \item{nb_random}{
@@ -41,6 +41,9 @@ a seed to assure the reproducibility
 a number of cores to run the analyses (ideally, it should be equal to the length of lambda for an optimal speed)
 }
 
+\item{overwrite}{
+indicates whether the any previous results should be overwritten by the current run (default: TRUE).  
+}
 
 }
 

@@ -12,7 +12,7 @@ This function runs HOME for all the different OTUs (called "index"") on the host
 
 \usage{
 HOME_model(name, name_index, provided_tree, nb_tree=5000, lambda=seq(1,25),
-raref=FALSE, empirical=TRUE, randomize=TRUE, nb_random=10, path, path_alignment, seed=3, nb_cores=1)
+raref=FALSE, empirical=TRUE, randomize=TRUE, nb_random=10, path, path_alignment, seed=3, nb_cores=1, overwrite=FALSE,figure=FALSE)
 }
 
 \arguments{
@@ -48,7 +48,7 @@ a integer value of the number of randomizations (R) to perform during the model 
 }
 
 \item{path}{
-optional - the path to the working directory
+optional - the path to the working directory (by default, the current working directory)
 }
 \item{path_alignment}{
 optional - the path toward the folder containing the different OTU alignments (by default, the working directory)
@@ -58,6 +58,12 @@ a seed to assure the reproducibility
 }
 \item{nb_cores}{
 a number of cores to run the analyses (ideally, it should be equal to the length of lambda for an optimal speed)
+}
+\item{overwrite}{
+indicates whether the any previous results should be overwritten by the current run (default: TRUE).  
+}
+\item{figure}{
+indicates whether it automatically outputs figures at the end of the run (default: FALSE).  
 }
 }
 

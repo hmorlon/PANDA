@@ -10,7 +10,11 @@ This function simulates microbial alignments according to different models of ho
 }
 
 \usage{
-sim_microbiota(name, name_index, simul, provided_tree, n=20, mu=1, N=300, proportion_variant=0.1, seed=1, nb_cores=1, path,...)}
+sim_microbiota(name, name_index, simul, provided_tree, n=20, mu=1, N=300, proportion_variant=0.1, seed=1, nb_cores=1, path,...)
+
+sim_microbiota(name, name_index, simul, provided_tree=NULL, n=20, mu=1, N=300, proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10, geo_signal=0, stochastic_map=NULL, path=getwd(), seed=1, nb_cores=1,...)
+
+}
 
 \arguments{
 \item{name}{
@@ -42,6 +46,30 @@ a positive integer value representing the total number of nucleotides (variable 
 
 \item{proportion_variant}{
 a value between 0 and 1 representing the proportion of variable nucleotides among N
+}
+
+\item{model}{
+Several ways to simulate host-switches on the host phylogeny are  available: "model=uniform" simulates host-switches uniformly on the host phylogeny, "model=temporal" simulates host-switches preferentially at a given time in the past, "model=host_dependent" simulates host-switches preferentially between closely related hosts lineages, and "model=geo_dependent" simulates host-switches preferentially between host lineages sharing the same geographic area. (default="uniform").
+}
+
+\item{mean}{
+optional – for "model=temporal", the host-switches are simulated at a particular time in the past. The temporal distribution of host-switches follows a normal distribution centered on the "mean" and with a standard deviation "sd". "mean" must be a number between 0 and 1 indicating at what time in the past host-switches are more likely: "means=0" simulates host-switches closed to the root of the host phylogeny, whereas "means=1" simulates host-switches closed to the tips.
+}
+
+\item{sd}{
+optional – for "model=temporal", the host-switches are simulated at a particular time in the past. The temporal distribution of host-switches follows a normal distribution centered on the "mean" and with a standard deviation "sd" ("sd" must be positive).
+}
+
+\item{host_signal}{
+optional – for "model= host_dependent", the host-switches are preferentially simulated between host lineages that are closely related. "host_signal" must be a positive number. If "host_signal=0", switches are uniformly distributed, whereas the phylogenetically preference increases with the "host_signal" value.
+}
+
+\item{geo_signal}{
+optional – for "model=geo_dependent", the host-switches are preferentially simulated between host lineages sharing the same geographic area. "geo_signal" must be between 0 and 1, it indicates the probability for a switch to occur between areas divided by the probability for a switch to occur within an area. If "geo_signal"=1, switches are uniformly distributed, whereas if "geo_signal"=0, switches can only happen between host lineages sharing the same geographic area. 
+}
+
+\item{stochastic_map}{
+optional – for "model=geo_dependent", the host-switches are preferentially simulated between host lineages sharing the same geographic area. "stochastic_map" represents a stochastic mapping that indicates the ancestral biogeography of the host lineages (it indicates which host lineages occupied which geographic areas at a given time, and thus indicates which lineages are sharing the same vs. different areas). "stochastic_map" must be an A object of class "simmap" (R-package phytools, Revell, 2012).
 }
 
 \item{seed}{
