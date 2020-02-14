@@ -1,5 +1,5 @@
 HOME_model <-
-function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,overwrite=FALSE,...){
+function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,overwrite=FALSE,figure=FALSE,...){
   
   if(!exists("name")) stop(print("Please provide the name of the dataset "))
   if(!exists("name_index")) stop(print("Please provide the name of the different OTU alignments "))
@@ -27,13 +27,13 @@ function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8
   for (index in name_index){output <- fit_HOME(index=index,name=name,nb_tree=nb_tree,lambda=lambda,nb_cores=nb_cores,raref=raref)}
   
   print("Initial output:")
-  output <- mclapply(1:length(name_index), output_results_HOME, mc.cores=nb_cores,name=name,name_index=name_index,lambda=lambda,nb_tree=nb_tree,empirical=empirical,randomize=F,raref=raref)
+  output <- mclapply(1:length(name_index), output_results_HOME, mc.cores=nb_cores,name=name,name_index=name_index,lambda=lambda,nb_tree=nb_tree,empirical=empirical,randomize=F,raref=raref, figure=figure)
   
   if (randomize==T){
     print("Model selection:")
     for (index in name_index){output <- model_selection_HOME(index=index,name=name,nb_tree=nb_tree,lambda=lambda,nb_cores=nb_cores,seed=seed,nb_random=nb_random, overwrite=overwrite)}
     
     print("Output:")
-    output <- mclapply(1:length(name_index), output_results_HOME, mc.cores=nb_cores,name=name,name_index=name_index,lambda=lambda,nb_tree=nb_tree,empirical=empirical,randomize=T,raref=raref)
+    output <- mclapply(1:length(name_index), output_results_HOME, mc.cores=nb_cores,name=name,name_index=name_index,lambda=lambda,nb_tree=nb_tree,empirical=empirical,randomize=T,raref=raref, figure=figure)
   }
 }
