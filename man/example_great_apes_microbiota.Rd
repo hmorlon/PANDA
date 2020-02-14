@@ -22,7 +22,7 @@ optional - the path to the working directory
 }
 
 \references{
-Perez-Lamarque, B. and Morlon, H. (in. prep.) Characterizing symbiont inheritance during host-microbiota evolution : application to the great apes microbiota
+Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
 }
 \author{Benoît Perez-Lamarque}
 \seealso{

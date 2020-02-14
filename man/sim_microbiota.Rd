@@ -98,7 +98,7 @@ If you provide a binary rooted ultrametric host tree, it must be in Newick forma
 
 }
 \references{
-Perez-Lamarque, B. and Morlon, H. (in. prep.) Characterizing symbiont inheritance during host-microbiota evolution : application to the great apes microbiota
+Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
 }
 \author{Benoît Perez-Lamarque}
 \seealso{
@@ -106,15 +106,52 @@ Perez-Lamarque, B. and Morlon, H. (in. prep.) Characterizing symbiont inheritanc
 }
 \examples{
 
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (uniformly distributed) and 1 is environmentally acquired)
 
 sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
-simul=c(0,5,"indep"), n=10, mu=1, 
-N=300, proportion_variant=0.1)
+               simul=c(0,5,"indep"), n=10, mu=1, 
+               N=300, proportion_variant=0.1)
+
 
 # Run HOME (parameters estimations and model selections)
 
 #HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"), nb_tree=1000, lambda=seq(1,25), empirical=FALSE, nb_random=10)
+
+
+# Non-uniform types of host-switches: 
+
+# host-phylogenetic dependency
+# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (with host-phylogenetic dependency) and 1 is environmentally acquired)
+
+sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+               simul=c(0,5,"indep"), n=10, mu=1, 
+               N=300, proportion_variant=0.1, model="host_dependent",
+               host_signal = 10)
+
+# geographic dependency
+# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (with geographic dependency) and 1 is environmentally acquired)
+
+set.seed(3)
+host_tree <- phytools::pbtree(n=20) # simulate host phylogeny
+
+geo <- sample(size = Ntip(host_tree),c("Area_1","Area_2","Area_3","Area_4"), replace=T) # simulate area distribution of the host lineages
+names(geo) <- host_tree$tip.label
+
+stochastic_map <- phytools::make.simmap(host_tree, geo, model="SYM", nsim=1)
+
+sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+               simul=c(0,5,"indep"), mu=1, provided_tree = host_tree,
+               N=300, proportion_variant=0.1, model="geo_dependent",
+               geo_signal = 0.25, stochastic_map = stochastic_map)
+
+
+# temporal dependency
+# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (with temporal dependency) and 1 is environmentally acquired)
+
+sim_microbiota(name = "example_simulation", name_index = c("Simul_1","Simul_2","Simul_3"),
+               simul = c(0,5,"indep"), n = 10, mu = 1, 
+               N = 300, proportion_variant = 0.1, model = "temporal",
+               mean = 0.5, sd = 0.1)
 
 
 }

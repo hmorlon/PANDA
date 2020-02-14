@@ -21,7 +21,7 @@ the name of the run
 }
 
 \item{nb_tree}{
-a number of tree for Monte-Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
+a number of tree for Monte Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
 }
 
 \item{lambda}{
@@ -48,7 +48,7 @@ See reference for more details.
 
 }
 \references{
-Perez-Lamarque, B. and Morlon, H. (in. prep.) Characterizing symbiont inheritance during host-microbiota evolution : application to the great apes microbiota
+Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
 }
 \author{Benoît Perez-Lamarque}
 \seealso{

@@ -43,7 +43,7 @@ See reference for more details.
 
 }
 \references{
-Perez-Lamarque, B. and Morlon, H. (in. prep.) Modeling host-microbiota evolution for characterizing symbiont inheritance – application to the great apes microbiota
+Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
 }
 \author{Benoît Perez-Lamarque}
 \seealso{
