@@ -85,7 +85,7 @@ function(name,index,est_ksi,est_mu, nb_tree, host_tree, geo=FALSE, host=FALSE, s
         
         compute_host_relatedness <- function(switch){
           sliced_tree <- host_tree
-          sliced_sub_trees <- treeSlice(sliced_tree,slice=table_inferred_switches$position[switch], trivial=TRUE)
+          sliced_sub_trees <- phytools::treeSlice(sliced_tree,slice=table_inferred_switches$position[switch], trivial=TRUE)
           for (i in 1:length(sliced_sub_trees)){if (Ntip(sliced_sub_trees[[i]])>1){
             sliced_tree <- drop.tip(sliced_tree,tip=sliced_sub_trees[[i]]$tip.label[2:Ntip(sliced_sub_trees[[i]])])}}
           for (i in which(node.depth.edgelength(sliced_tree)>table_inferred_switches$position[switch])){sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)] <- sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)]-(maxlen-table_inferred_switches$position[switch])}
@@ -174,7 +174,7 @@ function(name,index,est_ksi,est_mu, nb_tree, host_tree, geo=FALSE, host=FALSE, s
       
       compute_host_relatedness <- function(switch){
         sliced_tree <- host_tree
-        sliced_sub_trees <- treeSlice(sliced_tree,slice=table_inferred_switches$position[switch], trivial=TRUE)
+        sliced_sub_trees <- phytools::treeSlice(sliced_tree,slice=table_inferred_switches$position[switch], trivial=TRUE)
         for (i in 1:length(sliced_sub_trees)){if (Ntip(sliced_sub_trees[[i]])>1){
           sliced_tree <- drop.tip(sliced_tree,tip=sliced_sub_trees[[i]]$tip.label[2:Ntip(sliced_sub_trees[[i]])])}}
         for (i in which(node.depth.edgelength(sliced_tree)>table_inferred_switches$position[switch])){sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)] <- sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)]-(maxlen-table_inferred_switches$position[switch])}
