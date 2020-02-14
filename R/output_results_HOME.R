@@ -90,7 +90,9 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
             labs(x = "Simulated trees (nb switches)", y="-log(Likelihood)")+transparent_theme_y_only#+scale_x_continuous(breaks=c())
           }
           pdf(paste("figures/profil_ll_",name,"_",index,"_",est_ksi,".pdf",sep=""),width=5,height=4)
+          print("test1")
           print(p)
+          print("test2")
           dev.off()}
       }
       
