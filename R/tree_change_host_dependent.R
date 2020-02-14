@@ -7,7 +7,6 @@ function(name, index,host_tree,ksi,maxlen,host_signal){
   for (position_branch in position_cood){
     sliced_tree <- host_tree
     if (position_branch<maxlen){
-      #sliced_sub_trees <- phytools::treeSlice(sliced_tree,slice=position_branch, trivial=TRUE)
       sliced_sub_trees <- tree_slice(sliced_tree,slice=position_branch)
       for (i in 1:length(sliced_sub_trees)){if (Ntip(sliced_sub_trees[[i]])>1){
         sliced_tree <- drop.tip(sliced_tree,tip=sliced_sub_trees[[i]]$tip.label[2:Ntip(sliced_sub_trees[[i]])])}}
@@ -53,7 +52,6 @@ function(name, index,host_tree,ksi,maxlen,host_signal){
       sliced_tree <- read.tree(paste0("tree",name,index,".tre"))
       file.remove(paste0("tree",name,index,".tre"))
       
-      #sliced_sub_trees <- phytools::treeSlice(sliced_tree,slice=i, trivial=TRUE)
       sliced_sub_trees <- tree_slice(sliced_tree,slice=i)
       for (j in 1:length(sliced_sub_trees)){if (Ntip(sliced_sub_trees[[j]])>1){
         for (dropped_tip in sliced_sub_trees[[j]]$tip.label[2:Ntip(sliced_sub_trees[[j]])]){sliced_tree <- drop.tip(sliced_tree,tip=dropped_tip)}}}

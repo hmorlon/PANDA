@@ -64,7 +64,6 @@ function(name,est_ksi,nb_tree, host_tree, geo=FALSE, host=FALSE, stochastic_map=
       
       compute_host_relatedness_uniform <- function(switch){
         sliced_tree <- host_tree
-        #sliced_sub_trees <- phytools::treeSlice(sliced_tree,slice=table_simul_switches$position[switch], trivial=TRUE)
         sliced_sub_trees <- tree_slice(sliced_tree,slice=table_simul_switches$position[switch])
         for (i in 1:length(sliced_sub_trees)){if (Ntip(sliced_sub_trees[[i]])>1){
           sliced_tree <- drop.tip(sliced_tree,tip=sliced_sub_trees[[i]]$tip.label[2:Ntip(sliced_sub_trees[[i]])])}}

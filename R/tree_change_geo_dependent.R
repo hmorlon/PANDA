@@ -38,7 +38,7 @@ function(name, index,host_tree,ksi,geo_signal,stochastic_map){
       
       geo_branches <- c() # geography on each branch
       for (branch in branches){
-        geo_branches <- c(geo_branches, names(stochastic_map$maps[[branch]])[min(which(cumsum(stochastic_map$maps[[branch]])>z[ind_ksi]-node.depth.edgelength(host_tree)[host_tree$edge[branch,1]]))])
+        geo_branches <- c(geo_branches, names(stochastic_map$maps[[branch]])[min(which(cumsum(stochastic_map$maps[[branch]])>(z[ind_ksi]-node.depth.edgelength(host_tree)[host_tree$edge[branch,1]])))])
       }
       names(geo_branches) <- branches
       
