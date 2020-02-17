@@ -61,8 +61,10 @@ END_RCPP
 }
 
 RcppExport SEXP absToRel(SEXP, SEXP, SEXP);
+RcppExport SEXP absToRelSum(SEXP, SEXP, SEXP);
 RcppExport SEXP loglik(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP relToAbs(SEXP, SEXP, SEXP);
+RcppExport SEXP relToAbsSum(SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RPANDA_vmult", (DL_FUNC) &_RPANDA_vmult, 2},
@@ -70,8 +72,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPANDA_vvvmult", (DL_FUNC) &_RPANDA_vvvmult, 2},
     {"_RPANDA_llpruning", (DL_FUNC) &_RPANDA_llpruning, 8},
     {"absToRel", (DL_FUNC) &absToRel, 3},
+	{"absToRelSum", (DL_FUNC) &absToRel, 3},
     {"loglik",   (DL_FUNC) &loglik,   8},
     {"relToAbs", (DL_FUNC) &relToAbs, 3},
+	{"relToAbsSum", (DL_FUNC) &relToAbs, 3},
     {NULL, NULL, 0}
 };
 
