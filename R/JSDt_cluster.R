@@ -64,7 +64,8 @@ Ds<-c()
 	else{JSD<-as.matrix(JSDist(Ds))}	
 	
 	#cluster on k-medoids
-	clustersMedoid <- pamk(JSD)
+	maxCluster=dim(mat)[2]-1
+	clustersMedoid <- pamk(JSD,k=1:maxCluster)
 	
 	#return list of divergence matrix table, clusters with silhouette widths 
 	ret<-list(JSD,clustersMedoid[[1]]$clusinfo,clustersMedoid[[1]]$silinfo$widths[,c(1,3)])
