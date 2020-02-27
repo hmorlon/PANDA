@@ -9,13 +9,6 @@
 
 fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), method="Nelder-Mead", control=list(maxit=20000), ...){
     
-    
-    
-    if (max(node.age(phylo)$ages) > max(env_data[,1]))
-  {
-    stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
-  }
-    
     ## Use ellipsis for param arguments
     par<-list(...)
     
@@ -104,6 +97,9 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         stop("Please provide a time-function or a time-serie dataset for the environmental changes; see ?fit_t_env")
     }else if(!is.function(env_data)){
         
+       # We check first that the climatic curve matches the phylogeny
+       if(max(node.age(phylo)$ages) > max(env_data[,1])) stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
+       
        # env_data is a dataframe with two columns: 1) is time; 2) is datapoints
        if(is.null(par[["df"]])){
        par$df <- smooth.spline(env_data[,1], env_data[,2])$df
