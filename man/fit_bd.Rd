@@ -92,7 +92,7 @@ this is that negative speciation/extinction rates estimates can be returned. The
 \author{H Morlon}
 
 \seealso{
-\code{\link{plot_fit_bd}}, \code{\link{plot_dtt}}, \code{\link{likelihood_bd}, \link{fit_env}}}
+\code{\link{plot_fit_bd}}, \code{\link{plot_dtt}}, \code{\link{likelihood_bd}, \link{fit_env}}
 }
 
 \examples{
