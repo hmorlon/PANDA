@@ -54,7 +54,8 @@ should be the log(sqrt()) of the desired sig2 starting value.
 }
 
 \references{
-	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020
+	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. 
+\emph{Systematic Biology} 65:700-710
 
 	Nuismer, S. & Harmon, L. 2015. Predicting rates of interspecific interaction from phylogenetic trees. \emph{Ecology Letters} 18:17-27.
 	
@@ -73,6 +74,7 @@ should be the log(sqrt()) of the desired sig2 starting value.
 \code{\link{likelihood_t_MC_geog}}
 \code{\link{likelihood_t_DD}}
 \code{\link{likelihood_t_DD_geog}}
+\code{\link{fit_t_comp_subgroup}}	
 }
 
 \note{
