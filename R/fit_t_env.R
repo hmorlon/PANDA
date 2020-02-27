@@ -98,7 +98,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
     }else if(!is.function(env_data)){
         
        # We check first that the climatic curve matches the phylogeny
-       if(max(node.age(phylo)$ages) > max(env_data[,1])) stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
+       if(max(nodeHeights(phylo)) > max(env_data[,1])) stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
        
        # env_data is a dataframe with two columns: 1) is time; 2) is datapoints
        if(is.null(par[["df"]])){
