@@ -101,6 +101,8 @@ Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phyloge
 Condamine, F.L., Rolland, J., and Morlon, H. (2013) Macroevolutionary perspectives to environmental change, Eco Lett 16: 72-85
 
 Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett, 17:508-525
+
+Morlon, H., Rolland, J. and Condamine, F. (2020) Response to Technical Comment ‘A cautionary note for users of linear diversification dependencies’, Eco Lett
 }
 
 \author{H Morlon and F Condamine}
