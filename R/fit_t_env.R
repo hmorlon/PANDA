@@ -9,6 +9,13 @@
 
 fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin"), method="Nelder-Mead", control=list(maxit=20000), ...){
     
+    
+    
+    if (max(node.age(phylo)$ages) > max(env_data[,1]))
+  {
+    stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
+  }
+    
     ## Use ellipsis for param arguments
     par<-list(...)
     
