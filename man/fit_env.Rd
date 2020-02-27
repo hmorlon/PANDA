@@ -89,7 +89,7 @@ conditioning to use to fit the model:
 %env_data.
 %Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present.
 Note that abs(f.lamb) and abs(f.mu) are used in the likelihood computation as speciation and extinction rates should always be positive. A consequence of 
-this is that negative speciation/extinction rates estimates can be returned. They should be interpreted in aboslute terms. See Morlon et al. 2020 for a more detailed explanation.}
+this is that negative speciation/extinction rates estimates can be returned. They should be interpreted in aboslute terms. See Morlon et al. 2020 for a more detailed explanation.
 }
 
 \note{
