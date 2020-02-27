@@ -2,6 +2,9 @@ fit_env <- function (phylo, env_data, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
            meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
            expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown")
 {
+  if (tot_time > max(env_data[1,]))
+             stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
+   
   # first a spline is used to build the approximation model Env(t)
   if (is.null(df))
   {
