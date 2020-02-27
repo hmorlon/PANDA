@@ -79,18 +79,20 @@ conditioning to use to fit the model:
 
 \details{
 The lengths of lamb_par and mu_par are used to compute the total number of parameters in the model, so to fit a model with constant speciation rate (for example), lamb_par should be a vector of length 1. Otherwise aic values will be wrong. In the f.lamb and f.mu functions, the first argument (time) runs from the present to the past. Hence, if the parameter controlling the variation of \eqn{\lambda} with time is estimated to be positive (for example), this means that the speciation rate decreases from past to present. Note that abs(f.lamb) and abs(f.mu) are used in the likelihood computation as speciation and extinction rates should always be positive. A consequence of 
-this is that negative speciation/extinction rates estimates can be returned. They should be interpreted in aboslute terms.}
+this is that negative speciation/extinction rates estimates can be returned. They should be interpreted in aboslute terms. See Morlon et al. 2020 for a more detailed explanation.}
 
 \references{
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
 	
 	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 17:508-525
+
+	Morlon, H., Rolland, J. and Condamine, F. (2020) Response to Technical Comment ‘A cautionary note for users of linear diversification dependencies’, Eco Lett
 }
 
 \author{H Morlon}
 
 \seealso{
-\code{\link{plot_fit_bd}}, \code{\link{plot_dtt}}, \code{\link{likelihood_bd}}
+\code{\link{plot_fit_bd}}, \code{\link{plot_dtt}}, \code{\link{likelihood_bd}, \link{fit_env_bd}}}
 }
 
 \examples{
@@ -121,7 +123,7 @@ mu_par<-c()
 # Fit the pure birth model (no extinction) with linear variation of
 # the speciation rate with time
 f.lamb <-function(t,y){abs(y[1] + y[2] * t)}
-# alternative formulation depending on the choice made to avoid negative rates: f.lamb <-function(t,y){max(0,y[1] + y[2] * t)}
+# alternative formulation depending on the choice made to avoid negative rates: f.lamb <-function(t,y){max(0,y[1] + y[2] * t)}, see Morlon et al. (2020)
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09, 0.001)
 mu_par<-c()
