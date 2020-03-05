@@ -51,8 +51,8 @@ Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email =
 	person("Julien", "Clavel", role = c("aut", "cph")),
 	person("Jonathan", "Drury", role = c("aut", "cph")),
   	person("Olivier", "Billaud", role = c("aut", "cph")),
-	person("Odile", "Maliet", role = c("aut", "cph"))),
-	person("Leandro", "Aristide", role = c("aut", "cph")))
+	person("Odile", "Maliet", role = c("aut", "cph")),
+	person("Leandro", "Aristide", role = c("aut", "cph"))
 Maintainer: Hélène Morlon <helene.morlon@bio.ens.psl.eu>
 Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Morlon et al. (2010) <DOI:10.1371/journal.pbio.1000493>, Morlon et al. (2011)
