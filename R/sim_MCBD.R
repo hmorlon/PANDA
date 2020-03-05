@@ -105,7 +105,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
                 while(T){
                   if(node_parent==anc_node){break}
                   else if(node_parent<anc_node){possible<-possible[possible!=lin]; break}
-                  node_parent <- lineages[which(lineages[,2]==node_parent)]
+                  node_parent <- lineages[which(lineages[,2]==node_parent),1]
                 }
               }
               if (length(possible)>0){
