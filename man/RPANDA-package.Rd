@@ -36,6 +36,8 @@ Marc Manceau <marc.manceau@gmail.com>
 Olivier Billaud <olivier.billaud@agroparistech.fr>
   
 Odile Maliet <maliet@biologie.ens.fr>
+
+Leandro Aristide <aristide@biologie.ens.fr>
 }
 
 \references{
