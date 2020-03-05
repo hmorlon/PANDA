@@ -51,3 +51,4 @@ export(fit_t_comp_subgroup,CreateClassObject,CreateGeobyClassObject,likelihood_s
 export(plot_prob_dtt, prob_dtt)
 export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_chains,
        getMAPS_ClaDS, getMAPS_ClaDS0, fit_ClaDS)
+export(sim_MCBD)
