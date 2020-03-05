@@ -13,7 +13,7 @@ Implements macroevolutionary analyses on phylogenetic trees
 Package: \tab RPANDA\cr
 Type: \tab Package\cr
 Version: \tab 1.7\cr
-Date: \tab 2018-01-29\cr
+Date: \tab 2020-01-09\cr
 License: \tab GPL (>= 2)\cr
 }
 
