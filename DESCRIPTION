@@ -1,6 +1,6 @@
 Package: RPANDA
-Version: 1.7
-Date: 2020-01-01
+Version: 1.8
+Date: 2020-03-05
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
@@ -43,15 +43,17 @@ Author: Hélène Morlon [aut, cre, cph],
 	Jonathan Drury [aut, cph],
    	Olivier Billaud [aut, cph],
 	Odile Maliet [aut, cph]
+	Leandro Aristide [aut, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"),
 	person("Eric", "Lewitus", role = c("aut", "cph")),
 	person("Fabien", "Condamine", role = c("aut", "cph")),
 	person("Marc", "Manceau", role = c("aut", "cph")),
 	person("Julien", "Clavel", role = c("aut", "cph")),
 	person("Jonathan", "Drury", role = c("aut", "cph")),
-  person("Olivier", "Billaud", role = c("aut", "cph")),
-	person("Odile", "Maliet", role = c("aut", "cph")))
-Maintainer: Hélène Morlon <morlon@biologie.ens.fr>
+  	person("Olivier", "Billaud", role = c("aut", "cph")),
+	person("Odile", "Maliet", role = c("aut", "cph"))),
+	person("Leandro", "Aristide", role = c("aut", "cph")))
+Maintainer: Hélène Morlon <helene.morlon@bio.ens.psl.eu>
 Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Morlon et al. (2010) <DOI:10.1371/journal.pbio.1000493>, Morlon et al. (2011)
     <DOI:10.1073/pnas.1102543108>, Condamine et al. (2013) <DOI:10.1111/ele.12062>, 
@@ -59,7 +61,7 @@ Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Lewitus & Morlon (2016) <DOI:10.1093/sysbio/syv116>, Drury et al. (2016) <DOI:10.1093/sysbio/syw020>,
     Manceau et al. (2016) <DOI:10.1093/sysbio/syw115>, Morlon et al. (2016) <DOI:10.1111/2041-210X.12526>, Clavel & Morlon (2017) <DOI:10.1073/pnas.1606868114>, 
     Drury et al. (2017) <DOI:10.1093/sysbio/syx079>, Lewitus & Morlon (2017) <DOI:10.1093/sysbio/syx095>, 
-    Drury et al. (2018) <DOI:10.1371/journal.pbio.2003563>, Clavel et al. (2019) <DOI:10.1093/sysbio/syy045> and Maliet et al. (2019) <DOI:10.1038/s41559-019-0908-0>.
+    Drury et al. (2018) <DOI:10.1371/journal.pbio.2003563>, Clavel et al. (2019) <DOI:10.1093/sysbio/syy045>, Maliet et al. (2019) <DOI:10.1038/s41559-019-0908-0>, Billaud et al. (2019) <DOI:10.1093/sysbio/syz057>, Lewitus et al. (2019) <DOI:10.1093/sysbio/syz061>, and Aristide & Morlon (2019) <DOI:10.1111/ele.13385>.
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
 Repository: CRAN
