@@ -21,13 +21,13 @@ More information on the RPANDA package and worked examples can be found in \href
 
 }
 \author{
-Hélène Morlon <morlon@biologie.ens.fr>
+Hélène Morlon <helene.morlon@bio.ens.psl.eu>
 
-Julien Clavel <clavel@biologie.ens.fr>
+Julien Clavel <julien.clavel@univ-lyon1.fr>
 
 Fabien Condamine <fabien.condamine@gmail.com>
 
-Jonathan Drury <jonathan.p.drury@gmail.com>
+Jonathan Drury <jonathan.p.drury@durham.ac.uk>
 
 Eric Lewitus <elewitus@hivresearch.org>
 
@@ -66,6 +66,14 @@ Drury, J., Tobias, J., Burns, K., Mason, N., Shultz, A., and Morlon, H. (2018) C
 Clavel, J., Aristide, L., Morlon, H. (2019). A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst Biol 68: 93-116
   
 Maliet, O., Hartig, F., Morlon, H. (2019). A model with many small shifts for estimating species-specific diversification rates. Nature Ecol Evol 3: 1086-1092
+
+Condamine, F.L., Rolland, J., Morlon, H. (2019) Assessing the causes of diversification slowdowns: temperature-dependent and diversity-dependent models receive equivalent support Ecology Letters 22: 1900-1912
+
+Aristide, L., Morlon, H. (2019) Understanding the effect of competition during evolutionary radiations: an integrated model of phenotypic and species diversification Ecology Letters 22: 2006-2017
+  
+Billaud, O., Moen, D. S., Parsons, T. L., Morlon, H. (2019) Estimating Diversity Through Time using Molecular Phylogenies: Old and Species-Poor Frog Families are the Remnants of a Diverse Past Systematic Biology 69: 363–383
+
+Lewitus, E., Aristide, L., Morlon, H. (2019) Characterizing and Comparing Phylogenetic Trait Data from Their Normalized Laplacian Spectrum Systematic Biology 69: 234–248
 }
 %\keyword{ phylogeny }
 
