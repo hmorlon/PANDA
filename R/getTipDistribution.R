@@ -1,6 +1,6 @@
 setGeneric(
-  name="getTipDistribution",
-  def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution")}
+    name="getTipDistribution",
+    def=function(object="PhenotypicModel", params="numeric", v="boolean"){standardGeneric("getTipDistribution")}
 )
 
 setMethod(
