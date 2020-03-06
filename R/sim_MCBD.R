@@ -1,5 +1,6 @@
 
-sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-Inf,Inf), plot=T, ylims=NULL, full.sim=F){   
+sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-Inf,Inf),
+                      plot=TRUE, ylims=NULL, full.sim=FALSE){   
 
   lambda1 = pars[1]
   tau0 = pars[2]
