@@ -8,7 +8,8 @@ Simulation of macroevolutionary diversification under the integrated model descr
 Simulates the joint diversification of species and a continuous trait, where changes in both dimensions are interlinked through competitive interactions.
 }
 \usage{
-sim_MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,Inf), plot = TRUE, ylims=NULL, full.sim = FALSE)
+sim_MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,Inf),
+         plot = TRUE, ylims=NULL, full.sim = FALSE)
 }
 
 \arguments{
@@ -78,15 +79,6 @@ Leandro Aristide (leandroaristi@gmail.com)
 \references{
 Aristide, L., and Morlon, H. 2019. Understanding the effect of competition during evolutionary radiations: an integrated model of phenotypic and species diversification
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 lambda1 = 0.25
 tau0 = 0.01
@@ -101,15 +93,15 @@ m = 20
 
 pars <- c(lambda1, tau0, beta, mu0, mubg,mui0, muibg, alpha1, alpha2, sig2, m)
 
-#3000 steps, unbounded
-res <- sim_MCBD(pars, age.max=30, step.size=0.01) 
+#1000 steps, unbounded
+res <- sim_MCBD(pars, age.max=10, step.size=0.01) 
 
 #asymmetric bounds
-res <- sim_MCBD(pars, age.max=30, step.size=0.01, bounds=c(-10,Inf)) 
+res <- sim_MCBD(pars, age.max=10, step.size=0.01, bounds=c(-10,Inf)) 
 
 #only deterministic component
 pars <- c(lambda1, tau0, beta, mu0, mubg, mui0, muibg, alpha1, alpha2, sig2=0, m)
-res <- sim_MCBD(pars, age.max=30)
+res <- sim_MCBD(pars, age.max=10)
 
 plot(res$gsp_extant$tree)
 
