@@ -8,7 +8,8 @@ Simulation of macroevolutionary diversification under the integrated model descr
 Simulates the joint diversification of species and a continuous trait, where changes in both dimensions are interlinked through competitive interactions.
 }
 \usage{
-sim_MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,Inf), plot = TRUE, ylims=NULL, full.sim = FALSE)
+sim_MCBD(pars, root.value = 0, age.max = 50, step.size = 0.01, bounds = c(-Inf,Inf),
+         plot = TRUE, ylims=NULL, full.sim = FALSE)
 }
 
 \arguments{
