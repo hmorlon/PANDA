@@ -78,15 +78,6 @@ Leandro Aristide (leandroaristi@gmail.com)
 \references{
 Aristide, L., and Morlon, H. 2019. Understanding the effect of competition during evolutionary radiations: an integrated model of phenotypic and species diversification
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 lambda1 = 0.25
 tau0 = 0.01
