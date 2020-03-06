@@ -4,7 +4,7 @@ JSDtree_cluster <- function(JSDtree,alpha=0.9,draw=T)
 
 #cluster JSD matrix on medoids
 maxCluster<-dim(JSDtree)[1]-1
-clustersMedoid <- pamk(JSDtree,k=1:maxCluster)
+clustersMedoid <- pamk(JSDtree,krange=1:maxCluster)
 clustersMedoidSupport <- pam(JSDtree,clustersMedoid$nc)
 
 if(draw == T){
