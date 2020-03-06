@@ -44,7 +44,7 @@ Author: Hélène Morlon [aut, cre, cph],
    	Olivier Billaud [aut, cph],
 	Odile Maliet [aut, cph],
 	Leandro Aristide [aut, cph]
-Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "morlon@biologie.ens.fr"),
+Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "helene.morlon@bio.ens.psl.eu"),
 	person("Eric", "Lewitus", role = c("aut", "cph")),
 	person("Fabien", "Condamine", role = c("aut", "cph")),
 	person("Marc", "Manceau", role = c("aut", "cph")),
