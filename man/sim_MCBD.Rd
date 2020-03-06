@@ -93,15 +93,15 @@ m = 20
 
 pars <- c(lambda1, tau0, beta, mu0, mubg,mui0, muibg, alpha1, alpha2, sig2, m)
 
-#3000 steps, unbounded
-res <- sim_MCBD(pars, age.max=30, step.size=0.01) 
+#1000 steps, unbounded
+res <- sim_MCBD(pars, age.max=10, step.size=0.01) 
 
 #asymmetric bounds
-res <- sim_MCBD(pars, age.max=30, step.size=0.01, bounds=c(-10,Inf)) 
+res <- sim_MCBD(pars, age.max=10, step.size=0.01, bounds=c(-10,Inf)) 
 
 #only deterministic component
 pars <- c(lambda1, tau0, beta, mu0, mubg, mui0, muibg, alpha1, alpha2, sig2=0, m)
-res <- sim_MCBD(pars, age.max=30)
+res <- sim_MCBD(pars, age.max=10)
 
 plot(res$gsp_extant$tree)
 
