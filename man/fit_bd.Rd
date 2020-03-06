@@ -123,7 +123,8 @@ mu_par<-c()
 # Fit the pure birth model (no extinction) with linear variation of
 # the speciation rate with time
 f.lamb <-function(t,y){abs(y[1] + y[2] * t)}
-# alternative formulation depending on the choice made to avoid negative rates: f.lamb <-function(t,y){max(0,y[1] + y[2] * t)}, see Morlon et al. (2020)
+# alternative formulation that can be used depending on the choice made to avoid negative rates: 
+# f.lamb <-function(t,y){max(0,y[1] + y[2] * t)}, see Morlon et al. (2020)
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09, 0.001)
 mu_par<-c()
