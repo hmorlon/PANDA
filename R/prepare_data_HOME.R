@@ -59,7 +59,7 @@ function(iter,name,name_index,provided_tree=NULL,...){
         #### Step 4 : Substitution model ####
         sequences_model <- read.phyDat(paste("data/alignment_variant_",name,"_",index,".fas",sep=""),format="fasta")
         model_test <- modelTest(sequences_model,model=c("K80","F81","HKY"),G=F,I=F) #JC 
-        model_evo <- eval(get(model_test$Model[which.min(model_test$BIC)], attr(model_test, "env")), env=attr(model_test, "env"))
+        model_evo <- eval(get(model_test$Model[which.min(model_test$BIC)], attr(model_test, "env")), envir=attr(model_test, "env"))
         selected_model <- model_test$Model[which.min(model_test$BIC)]
         propinv <- t(as.matrix(model_evo$bf))
         Q <-  matrix(rbind(t(c(0,model_evo$Q[1],model_evo$Q[2],model_evo$Q[3])*t(propinv)),t(c(model_evo$Q[1],0,model_evo$Q[4],model_evo$Q[5])*t(propinv)),t(c(model_evo$Q[2],model_evo$Q[4],0,model_evo$Q[6])*t(propinv)),t(c(model_evo$Q[3],model_evo$Q[5],model_evo$Q[6],0)*t(propinv))),nrow = 4,ncol=4)

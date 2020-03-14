@@ -1,5 +1,5 @@
 HOME_model <-
-function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,overwrite=TRUE,figure=FALSE,...){
+function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,overwrite=TRUE,figure=FALSE,path,path_alignment,...){
   
   if(!exists("name")) stop(print("Please provide the name of the dataset "))
   if(!exists("name_index")) stop(print("Please provide the name of the different OTU alignments "))

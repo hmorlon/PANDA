@@ -177,7 +177,7 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       }
       
       if (figure==TRUE){
-        HTMLStart(outdir=paste(path,"/figures/",sep=""), file=paste("report_",name,"_",index,sep=""), extension="html", echo=FALSE, HTMLframe=T)
+        HTMLStart(outdir=paste(path,"/figures/",sep=""), filename=paste("report_",name,"_",index,sep=""), extension="html", echo=FALSE, HTMLframe=T)
         HTML.title(paste("Results",name,index,sep=" "), HR=1)
         HTML.title("Description of the data", HR=2)
         if (empirical==F){

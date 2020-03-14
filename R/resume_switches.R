@@ -50,7 +50,7 @@ function(name,index,est_ksi,nb_tree,host_tree){
     combinations_order <- combinations[order(deviation_uniform)]
     
     t_col <- function(color, percent = 50, name = NULL) {rgb.val <- col2rgb(color)
-    t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],max = 255,alpha = (100-percent)*255/100,names = name)
+    t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],alpha = (100-percent)*255/100,names = name)
     return(t.col)}
     
     pdf(paste("infer_PHS/host_tree_inferred_switches_uniform_",name,"_",index,".pdf",sep=""),width = (10+Ntip(host_tree))/2 ,height = (10+Ntip(host_tree))/2 )
