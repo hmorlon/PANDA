@@ -17,15 +17,15 @@ function(iter,name,name_index,provided_tree=NULL,...){
   if (!exists("path_alignment")){ path_alignment <- path}
   
   #### Step 1 : Load the host tree ####
-  if (!is.null(provided_tree)){
-    host_tree <- provided_tree
-    if (!file.exists(paste("host_tree_",name,".tre",sep=""))){ write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))}}
-  if (!file.exists(paste("host_tree_",name,".tre",sep=""))) stop(print("Please provide the host tree (format .tre) in the working directory"))
-  if (!is.binary(read.tree(paste("host_tree_",name,".tre",sep="")))) stop(print("Please provide a binary host tree"))
-  if (!is.rooted(read.tree(paste("host_tree_",name,".tre",sep="")))) stop(print("Please provide a rooted host tree"))
-  if (!is.ultrametric(read.tree(paste("host_tree_",name,".tre",sep="")))) stop(print("Please provide an ultrametric host tree"))
+  if (is.null(provided_tree)){
+    if (!file.exists(paste("host_tree_",name,".tre",sep=""))){stop(print("Please provide the host tree (format .tre) in the working directory"))}
+    provided_tree <- read.tree(paste("host_tree_",name,".tre",sep=""))
+  }
+  host_tree <- provided_tree
+  if (!is.binary(host_tree)) stop(print("Please provide a binary host tree"))
+  if (!is.rooted(host_tree)) stop(print("Please provide a rooted host tree"))
+  if (!is.ultrametric(host_tree)) stop(print("Please provide an ultrametric host tree"))
   
-  host_tree <- read.tree(paste("host_tree_",name,".tre",sep=""))
   host_tree <- ladderize(host_tree)
   host_tree$edge.length <- host_tree$edge.length/sum(host_tree$edge.length)  #host tree scaled with total branch length=1
   

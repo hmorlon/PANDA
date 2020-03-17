@@ -1,5 +1,5 @@
 HOME_model <-
-function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,overwrite=TRUE,figure=FALSE,path,path_alignment,...){
+function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,overwrite=TRUE,figure=FALSE,path=getwd(),path_alignment=getwd(),...){
   
   if(!exists("name")) stop(print("Please provide the name of the dataset "))
   if(!exists("name_index")) stop(print("Please provide the name of the different OTU alignments "))
@@ -8,14 +8,15 @@ function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8
   setwd(path)
   
   if (!exists("path_alignment")){ path_alignment <- path}
-  if (!is.null(provided_tree)){
-    host_tree <- provided_tree
-    if (!file.exists(paste("host_tree_",name,".tre",sep=""))){ write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))}}
-  if (!file.exists(paste("host_tree_",name,".tre",sep=""))) stop(print("Please provide the host tree (format .tre) in the working directory"))
-  if (!is.binary(read.tree(paste("host_tree_",name,".tre",sep="")))) stop(print("Please provide a binary host tree"))
-  if (!is.rooted(read.tree(paste("host_tree_",name,".tre",sep="")))) stop(print("Please provide a rooted host tree"))
-  if (!is.ultrametric(read.tree(paste("host_tree_",name,".tre",sep="")))) stop(print("Please provide an ultrametric host tree"))
-  host_tree <- paste("host_tree_",name,".tre",sep="")
+  
+  if (is.null(provided_tree)){
+    if (!file.exists(paste("host_tree_",name,".tre",sep=""))){stop(print("Please provide the host tree (format .tre) in the working directory"))}
+    provided_tree <- read.tree(paste("host_tree_",name,".tre",sep=""))
+  }
+  host_tree <- provided_tree
+  if (!is.binary(host_tree)) stop(print("Please provide a binary host tree"))
+  if (!is.rooted(host_tree)) stop(print("Please provide a rooted host tree"))
+  if (!is.ultrametric(host_tree)) stop(print("Please provide an ultrametric host tree"))
   
   print("Data preparation:")
   output <- mclapply(1:length(name_index), prepare_data_HOME, mc.cores=nb_cores,name=name,name_index=name_index,provided_tree=host_tree,path=path,path_alignment=path_alignment)

@@ -13,6 +13,13 @@ function(name,index,est_ksi,est_mu, nb_tree, host_tree, geo=FALSE, host=FALSE, s
     ratio_simul_geo <- c()
     mean_simul_host <- c()
     
+    eig_val <- NULL
+    eig_vect <- NULL
+    eig_val <- NULL
+    ivp <- NULL
+    propinv <- NULL
+    list_switches <- NULL
+    
     for (replicate in 1:100){
       set.seed(seed+replicate)
       load(paste("data/data_model_",name,"_",index,".RData",sep=""))

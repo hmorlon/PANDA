@@ -13,6 +13,10 @@ function(name,index,est_ksi,nb_tree,host_tree){
     trees_ll <- read.table(paste("results/optim_ll_",name,"_",index,"_",est_ksi,".txt",sep=""))
     trees_ll <- cbind(1:length(trees_ll$V1),trees_ll$V1)
     colnames(trees_ll) <- c("index","minloglik")
+    
+    list_switches <- NULL
+    position <- NULL
+    
     load(file=paste("simulated_trees/simulated_switches_",name,"_",est_ksi,".RData",sep=""))
     
     max_likelihood <- max(-trees_ll$minloglik)

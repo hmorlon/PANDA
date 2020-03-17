@@ -1,7 +1,16 @@
 simul_bank_tree <-
-function(nb_ksi,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),seed=1){
-  if (!file.exists(paste("host_tree_",name,".tre",sep=""))) stop("Please provide the host tree (format .tre) in the working directory")
-  tree <- read.tree(paste("host_tree_",name,".tre",sep=""))
+function(nb_ksi,name, provided_tree=NULL,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),seed=1){
+  
+  if (is.null(provided_tree)){
+    if (!file.exists(paste("host_tree_",name,".tre",sep=""))){stop(print("Please provide the host tree (format .tre) in the working directory"))}
+    provided_tree <- read.tree(paste("host_tree_",name,".tre",sep=""))
+  }
+  tree <- provided_tree
+  if (!is.binary(tree)) stop(print("Please provide a binary host tree"))
+  if (!is.rooted(tree)) stop(print("Please provide a rooted host tree"))
+  if (!is.ultrametric(tree)) stop(print("Please provide an ultrametric host tree"))
+  
+  
   tree$edge.length <- tree$edge.length/sum(tree$edge.length)
   set.seed(seed+1)
   ksi <- lambda[nb_ksi]

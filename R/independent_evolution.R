@@ -1,6 +1,13 @@
 independent_evolution <-
 function(replicate,name,index,seed,nb_tree,lambda,nb_cores){
   set.seed(seed+replicate)
+  
+  n <- NULL
+  eig_val <- NULL
+  eig_vect <- NULL
+  ivp <- NULL
+  propinv <- NULL
+  
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
   index_randomize <- sample(rownames(variant_sequences))
   index_randomize <- rbind(rownames(variant_sequences),index_randomize)

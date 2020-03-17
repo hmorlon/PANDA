@@ -5,6 +5,9 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop(print("Please start by running the previous steps of HOME (fit_HOME...)"))
   
   if (file.exists(paste("data/alignment_variant_",name,"_",index,".fas",sep=""))){
+    
+    N_variant <- NULL
+
     load(paste("data/data_model_",name,"_",index,".RData",sep=""))
     if (N_variant>0){
       output <- selection_vertical_transmission(name,index)
