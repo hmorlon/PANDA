@@ -2,9 +2,6 @@ output_results_HOME <-
 function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_tree=10000,empirical,randomize,raref,nb_random=10,figure=FALSE,...){ 
 
   index <- name_index[iter]
-  if (empirical==F){load(file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}
-  if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop(print("Please start by running the previous steps of HOME (fit_HOME...)"))
-  
   
   N_variant <- NULL
   simul <- NULL
@@ -21,6 +18,9 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
   proportion_variant <- NULL
   N_invariant <- NULL
   propinv <- NULL
+  
+  if (empirical==F){load(file=paste("data/simulation_data_",name,"_",index,".RData",sep=""))}
+  if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop(print("Please start by running the previous steps of HOME (fit_HOME...)"))
   
   load(paste("data/data_model_",name,"_",index,".RData",sep=""))
   if(!exists("path")) {path <- getwd()}
@@ -97,21 +97,20 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       
       # Plot loglikelihood distibution
       if (est_ksi!=0){
+        V1 <- NULL
         results_ll <- read.table(paste("results/optim_ll_",name,"_",index,"_",est_ksi,".txt",sep=""),header=F)
         if (figure==TRUE){
           if (empirical==F){p <- ggplot(results_ll, aes(x=""))+
-            geom_violin(alpha=0.5, aes(y=results_ll$V1),fill="#d35400", colour="#d35400",size=1.5,trim=T)+
+            geom_violin(alpha=0.5, aes(y=V1),fill="#d35400", colour="#d35400",size=1.5,trim=T)+
             geom_hline(yintercept = simulated_likelihood,color="#154360",linetype="dashed", size=1)+
             labs(x = "Simulated trees", y="-log(Likelihood)")+transparent_theme#_y_only#+scale_x_continuous(breaks=c())
           }else{p <- ggplot(results_ll, aes(x=""))+
-            geom_violin(alpha=0.5, aes(y=results_ll$V1),fill="#d35400", colour="#d35400",size=1.5,trim=T)+
+            geom_violin(alpha=0.5, aes(y=V1),fill="#d35400", colour="#d35400",size=1.5,trim=T)+
             labs(x = "Simulated trees", y="-log(Likelihood)")+transparent_theme#_y_only#+scale_x_continuous(breaks=c())
           }
-          print("test1")
           pdf(paste("figures/profil_ll_",name,"_",index,"_",est_ksi,".pdf",sep=""),width=5,height=4)
           print(p)
           dev.off()
-          print("test2")
           }
       }
       
@@ -119,10 +118,11 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       results_vertical <- read.table(paste("results/model_selection_vertical_",name,"_",index,".txt",sep=""),header=T)
       if (is.finite(results_vertical[1,1])){ 
         x <- seq(0.1,max((results_vertical[1,1]+5),10),0.01)
+        proba <- NULL
         chi_square <- data.frame(cbind(x,dchisq(x, df=1)))
         colnames(chi_square) <- c("x","proba")
         p <- ggplot(chi_square, aes(x=x))+ 
-          geom_line(alpha=0.8, aes(y=chi_square$proba), colour="#333333",size=1)+
+          geom_line(alpha=0.8, aes(y=proba), colour="#333333",size=1)+
           geom_vline(xintercept=results_vertical[1,1],linetype="dashed",size=1.5,colour="#d35400")+
           geom_vline(xintercept=qchisq(0.95,df=1),size=0.8,colour="#154360")+
           geom_vline(xintercept=qchisq(0.99,df=1),size=0.8,colour="#5499c7")+

@@ -22,7 +22,7 @@ function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8
   output <- mclapply(1:length(name_index), prepare_data_HOME, mc.cores=nb_cores,name=name,name_index=name_index,provided_tree=host_tree,path=path,path_alignment=path_alignment)
   
   print("Tree bank simulations:")
-  output <- mclapply(1:length(lambda),simul_bank_tree,mc.cores=nb_cores,name=name,nb_tree=nb_tree,lambda=lambda,seed=seed)
+  output <- mclapply(1:length(lambda),simul_bank_tree,mc.cores=nb_cores,name=name,provided_tree=host_tree,nb_tree=nb_tree,lambda=lambda,seed=seed)
   
   print("Global inference:")
   for (index in name_index){output <- fit_HOME(index=index,name=name,nb_tree=nb_tree,lambda=lambda,nb_cores=nb_cores,raref=raref)}
