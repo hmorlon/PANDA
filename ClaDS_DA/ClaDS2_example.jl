@@ -24,7 +24,7 @@ Random.seed!(813)
 n_iter = 400
 
 sample_fraction = 87/89
-sampler = run_ClaDS_LTT(tree, n_iter,plot_tree = Int64(n_iter/4),
+sampler = run_ClaDS2(tree, n_iter,plot_tree = Int64(n_iter/4),
     print_state = Int64(n_iter/4), plot_chain = true,
     f=87/89, ltt_steps = 50)
 #=
