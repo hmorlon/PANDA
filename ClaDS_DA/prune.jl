@@ -22,7 +22,6 @@ function prune_extinct_lineages(tree::Tree)
             combine(aux(subtree.offsprings[1]), aux(subtree.offsprings[2]), subtree.branch_length, subtree.attributes)
         end
     end
-
     aux(tree)
 end
 

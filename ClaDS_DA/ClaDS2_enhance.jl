@@ -398,27 +398,51 @@ function change_edge_trees_MH!(edge_trees, tree, edge_id, σ, α, ε, f, rates, 
     end
 end
 
-function update_edge_trees!(edge_trees, tree, σ, α, ε, fs, rates_all, branch_lengths_all ; do_tips = true, max_try = 1_000, max_node_number = 50, keep_if_any = true, enhance_method = "reject")
+function update_edge_trees!(edge_trees, tree, σ, α, ε, fs, rates_all, branch_lengths_all ; do_tips = true, max_try = 1_000,
+    max_node_number = 50, keep_if_any = true, enhance_method = "reject", rep = 1)
     n_edges = length(edge_trees)
-    rates = rates_all[2:end]
     branch_lengths = branch_lengths_all[2:end]
+    left = n_left(tree)
 
-    for edge_id in n_edges:-1:1
+    for edge_id in 1:n_edges#:-1:1
         f = fs[edge_id]
         if enhance_method == "reject"
+            rates = rates_all[2:end]
             change_edge_trees_rejection!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths,
                 max_try = max_try, max_node_number = max_node_number, keep_if_any = keep_if_any, do_tips = do_tips);
         elseif enhance_method == "MH"
+            rates = rates_all[2:end]
             change_edge_trees_MH!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths,
                 max_try = max_try, max_node_number = max_node_number, keep_if_any = keep_if_any, do_tips = do_tips);
         elseif enhance_method == "rates"
+            rates = rates_all[2:end]
             change_edge_trees_rates!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths,
                 max_try = max_try, max_node_number = max_node_number, keep_if_any = keep_if_any, do_tips = do_tips);
         elseif enhance_method == "MHrates"
-            change_edge_trees_rateMH!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths,
+            rates = rates_all[2:end]
+            change_edge_trees_rrMH_old!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths, left,
+                max_try = max_try, max_node_number = max_node_number, rep = rep);
+        elseif enhance_method == "MHrr_old"
+            change_edge_trees_rrMH_old!(edge_trees, tree, edge_id, σ, α, ε, f, rates_all, branch_lengths,left,
+                max_try = max_try, max_node_number = max_node_number, keep_if_any = keep_if_any, do_tips = do_tips, rep = rep);
+        elseif enhance_method == "MHrr"
+            change_edge_trees_rrMH!(edge_trees, tree, edge_id, σ, α, ε, f, rates_all, branch_lengths,left,
+                max_try = max_try, max_node_number = max_node_number, rep = rep);
+        elseif enhance_method == "rr"
+            change_edge_trees_rr!(edge_trees, tree, edge_id, σ, α, ε, f, rates_all, branch_lengths,left,
+                max_try = max_try, max_node_number = max_node_number, rep = rep);
+
+        elseif enhance_method == "Rrates"
+            rates = rates_all[2:end]
+            change_edge_trees_ratesR!(edge_trees, tree, edge_id, σ, α, ε, f, rates, branch_lengths,
                 max_try = max_try, max_node_number = max_node_number, keep_if_any = keep_if_any, do_tips = do_tips);
         end
+        #update_rates!(tree,rates_all)
 
+    end
+
+    if (enhance_method == "MHrr" || enhance_method == "MHrr_old")
+        update_rates!(tree,rates_all)
     end
 end
 
@@ -430,7 +454,7 @@ function update_edge_trees!(edge_trees, tree, σ, α, ε, fs; max_try = 1_000, m
         max_node_number = max_node_number, keep_if_any = keep_if_any, do_tips = do_tips, enhance_method = enhance_method)
 end
 
-function graft_edge_trees(tree, edge_trees)
+function graft_edge_trees(tree, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}})
 
     function aux(subtree, sub_edge_trees)
         if subtree.n_nodes < 2

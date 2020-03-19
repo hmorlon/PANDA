@@ -5,6 +5,14 @@ load packages and other stuffs
 #=
 first a function to construct the tree from a list of parents and offsprings
 =#
+function sort2!(X)
+    x = pop!(X)
+    if x > X[1]
+        push!(X,x)
+    else
+        pushfirst!(X,x)
+    end
+end
 
 function build_tree(branches::Array{Int64,2}, branch_lengths::Array{Float64,2}, attributes::Array{Array{T2,1},1} ;
     extinct = [], prune_extinct=true, return_void = false, stem_age=0., root_attributes = Array{T2,1}(undef,0)) where {T2<:Number}
@@ -386,7 +394,7 @@ function build_tree(branches::Array{Int64,2}, branch_lengths, attributes::Array{
 end
 
 function ape2Tree(phylo)
-    branches = phylo[:edge]
+    branches = Array{Int64,2}(phylo[:edge])
     branch_lengths = phylo[:edge_length]
     attribute = Array{Float64,1}([1:length(branch_lengths)...])
     tip_labels = phylo[:tip_label]
@@ -411,10 +419,12 @@ function plot_ClaDS(tree::Tree ; id = 1, ln=true, lwd=3, show_labels = false, op
     reval("""
         library(fields)
         library(ape)
+        library(RColorBrewer)
 
         plot_ClaDS=function(phylo,rate1,rate2=NULL,same.scale=T,main=NULL,lwd=1,log=F, show_labels=F,...){
-          Colors = colorRampPalette(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4"))( 100 )
-          if(nrow(phylo[[1]]) <=1){
+            Colors = colorRampPalette(rev(c('darkred',brewer.pal(n = 8, name = "Spectral"),'darkblue')))(100)
+            # Colors = colorRampPalette(c("blue4","steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4"))( 100 )
+         if(nrow(phylo[[1]]) <=1){
             plot(1000,xlim = c(0,1), ylim = c(0,2), axes = F, xlab = "", ylab = "")
             lines(c(0,1), c(1,1), lwd=lwd, col="steelblue2")
           }else{
@@ -567,12 +577,19 @@ function plot_ClaDS(tree::Tree ; id = 1, ln=true, lwd=3, show_labels = false, op
     """)
 end
 
-function plot_ClaDS(tree::Tree, rates ; id = 1, ln=true, lwd=3)
+function plot_ClaDS(tree::Tree, rates ; id = 1, ln=true, lwd=3, round = false)
     plot_tree = Tree(tree.offsprings, 0., tree.attributes, tree.n_nodes)
 
-    reval("""
-    source("/Users/maliet/ownCloud/My_folder/ClaDS_Julia/plot_ClaDS.R")
-    """)
+    if round
+        reval("""
+        source("/Users/maliet/ownCloud/My_folder/ClaDS_Julia/plot_ClaDS_round.R")
+        """)
+    else
+        reval("""
+        source("/Users/maliet/ownCloud/My_folder/ClaDS_Julia/plot_ClaDS.R")
+        """)
+    end
+
     edges, branch_lengths, new_rates = make_ape(plot_tree, id = 1)
     ntip = (tree.n_nodes + 1)/2
 
@@ -680,7 +697,7 @@ function sim_ClaDS2_ntips_aux(n,σ,α,ε,λ0 ; return_if_extinct = false, make_t
             time_int = randexp()/(sum(rates[alive])*(1+ε))
             node_time += time_int
             if time_int==0
-                println("zeror ! $(sum(rates[alive]))")
+                #println("zeror ! $(sum(rates[alive]))")
             end
         end
 
@@ -775,8 +792,9 @@ function sim_ClaDS2_ntips(n,σ,α,ε,λ0 ; return_if_extinct = false,
     N = n*max_time
 
     s = λ0*sed
-
-    while true
+    no_more = 100
+    breaked = 0
+    while breaked < no_more
         #println()
         current_node = 3
         alive = [1,2]
@@ -793,7 +811,8 @@ function sim_ClaDS2_ntips(n,σ,α,ε,λ0 ; return_if_extinct = false,
         while 0 < length(alive) < N
             time_int = randexp()/(sum(rates[alive])*(1+ε))
             if time_int==0
-                println("zeror ! $(sum(rates[alive]))")
+                #println("zeror ! $(sum(rates[alive]))")
+                breaked += 1
                 break
             end
             if length(alive) == n
@@ -865,6 +884,8 @@ function sim_ClaDS2_ntips(n,σ,α,ε,λ0 ; return_if_extinct = false,
             s *=2
         end
     end
+
+    return Tree()
 end
 
 function sim_ClaDS2_time(root_age,σ,α,ε,λ0 ; return_if_extinct = true, max_node_number = Inf, make_tree = true, prune_extinct = false, return_if_max = true)
@@ -892,6 +913,7 @@ function sim_ClaDS2_time(root_age,σ,α,ε,λ0 ; return_if_extinct = true, max_n
         else
                 is_dead = dead()
                 if is_dead
+                    print("dead")
                     return Tree(Array{Tree,1}(undef,0), node_time, [rate], 1, false), n_max + 1
                 else
                     offspring_rates = new_rates(rate)
@@ -936,20 +958,23 @@ function sim_ClaDS2_time(root_age,σ,α,ε,λ0,u,sf,lf ; return_if_extinct = tru
     end
 
     lambda_law = LogNormal(log(α),σ)
-    function new_rates(λ::Float64)
-        X = rand(lambda_law, 2)
-        λ * X
+    function new_rates(λ)
+        λ * rand(lambda_law, 2)
     end
+    #=function new_rates(λ::Float64)
+        X = (rand(lambda_law, 2))
+        λ * X#* sort2!(X)
+    end=#
     #println()
     function aux_ext(time, rate, n_max, s)
         #println(n_max)
         if n_max == 0
             #println("max")
-            return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), 0, -In
+            return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), 0, -Inf
         end
         node_time = randexp()/(rate*(1+ε))
         if node_time <= 0
-            return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), 0
+            return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), 0, -Inf
         end
         if node_time > time
             s += lf
@@ -962,15 +987,16 @@ function sim_ClaDS2_time(root_age,σ,α,ε,λ0,u,sf,lf ; return_if_extinct = tru
             end
         else
                 is_dead = dead()
+                left_time = time - node_time
+                if time == left_time
+                    return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), 0
+                end
                 if is_dead
                     #print("dead")
                     return Tree(Array{Tree,1}(undef,0), node_time, [rate], 1, false), n_max + 1, s
                 else
                     offspring_rates = new_rates(rate)
-                    left_time = time - node_time
-                    if time == left_time
-                        return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), 0
-                    end
+
                     #print("$depth ;")
                     left_tree = aux_ext(left_time, offspring_rates[1], n_max - 1, s)
                     #print(left_tree[2])
@@ -1013,9 +1039,13 @@ function sim_ClaDS2_time_rates(root_age,σ,α,ε,λ0 ; return_if_extinct = true,
     end
 
     lambda_law = LogNormal(log(α),σ)
-    function new_rates(λ::Float64)
+    function new_rates(λ)
         λ * rand(lambda_law, 2)
     end
+    #=function new_rates(λ::Float64)
+        X = (rand(lambda_law, 2))
+        λ * X#* sort2!(X)
+    end=#
     if return_na
         function aux_na(time, rate, n_max, rates, live)
             #println(n_max)
@@ -1124,10 +1154,13 @@ function sim_ClaDS2_time_rates_tip(root_age,σ,α,ε,λ0,u,sf,fl ; return_if_ext
     end
 
     lambda_law = LogNormal(log(α),σ)
-    function new_rates(λ::Float64)
-        X = (rand(lambda_law, 2))
-        λ * X
+    function new_rates(λ)
+        λ * rand(lambda_law, 2)
     end
+    #=function new_rates(λ::Float64)
+        X = (rand(lambda_law, 2))
+        λ * X#* sort2!(X)
+    end=#
     if return_na
     else
         function aux_ext(time, rate, n_max, rates, s ,n)
@@ -1187,11 +1220,11 @@ function sim_ClaDS2_time_rates_tip(root_age,σ,α,ε,λ0,u,sf,fl ; return_if_ext
         rates = Array{Float64,1}(undef,0)
 
         tree = aux_ext(root_age, λ0, max_node_number, rates,fl,0)
-        if ((tree[1].n_nodes == -1) & return_if_max) | (tree[4] == 0) | (u > tree[3])
-            return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), Array{Float64,1}(undef,0)
-        else
-            return tree[1], rates
-        end
+        #if ((tree[1].n_nodes == -1) & return_if_max) | (tree[4] == 0) | (u > tree[3])
+        #    return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), Array{Float64,1}(undef,0)
+        #else
+        return tree[1], rates, tree[3]
+        #end
     end
 
 end
@@ -1275,20 +1308,22 @@ function sim_ClaDS2_time_unsampled_rates(root_age,σ,α,ε,λ0 ;
 end
 
 function sim_ClaDS2_time_unsampled_rates(root_age,σ,α,ε,λ0, u,fl ;
-    sampling_proba = 1., return_if_sampled = false, return_if_extinct = true, max_node_number = 1_000, not_sampled = true,
+    sampling_proba = 1., return_if_extinct = true, max_node_number = 1_000,
     make_tree = false, prune_extinct = false)
 
     while true
-        tree, rates = sim_ClaDS2_time_rates_tip(root_age,σ,α,ε,λ0,u,sampling_proba,fl,
+        tree, rates, s = sim_ClaDS2_time_rates_tip(root_age,σ,α,ε,λ0,u,sampling_proba,fl,
             return_if_extinct = true, max_node_number = max_node_number,
             prune_extinct = false)
         if tree.n_nodes == -1
-            if return_if_sampled
-                return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), false, Inf, rates
-            end
+            return Tree(Array{Tree,1}(undef,0), -1., [-1], -1, false), false, Inf, rates
         else
             n_alive = length(rates)
-            return tree, true, n_alive, rates
+            if s < u
+                return tree, false, n_alive, rates
+            else
+                return tree, true, n_alive, rates
+            end
         end
     end
 end

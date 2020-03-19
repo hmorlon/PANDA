@@ -47,7 +47,6 @@ function Tree(offsprings::Array{Tree,1}, branch_length::Float64, attributes)
 end
 
 function Tree(offsprings::Array{Tree,1}, branch_length::Float64, attributes, label::String)
-    #print("here")
     n_nodes = length(branch_length)
     extant = false
     for i in offsprings
@@ -176,6 +175,37 @@ function tips(tree::Tree)
     x = Array{Bool,1}(undef,0)
     aux(tree, x)
     return x
+end
+
+
+function add_extinct(tree::Tree ; tol = 0.0001)
+    function max_depth(tr)
+        if length(tr.offsprings) == 0
+            return tr.branch_length
+        else
+            return tr.branch_length + max(max_depth(tr.offsprings[2]),max_depth(tr.offsprings[1]))
+        end
+    end
+
+    rd = max_depth(tree)
+    function aux(tr,depth)
+        if length(tr.offsprings) == 0
+            if (depth + tr.branch_length) >= (rd * (1-tol))
+                return Tree(tr.offsprings, tr.branch_length, tr.attributes, tr.n_nodes,
+                    true, tr.label)
+            else
+                return Tree(tr.offsprings, tr.branch_length, tr.attributes, tr.n_nodes,
+                    false, tr.label)
+            end
+        else
+            t1 = aux(tr.offsprings[1], depth + tr.branch_length)
+            t2 = aux(tr.offsprings[2], depth + tr.branch_length)
+            return Tree([t1,t2], tr.branch_length, tr.attributes, tr.n_nodes,
+                tr.label)
+        end
+    end
+
+    aux(tree,0.)
 end
 
 function extant_tips(tree::Tree)
@@ -352,8 +382,6 @@ function get_parent_rate(tree::Tree, edge_id::Int64, edge_trees::Union{Array{Edg
             return edge_trees[parent_edge].tree.attributes[1]
         else
             return extract_tip_rates(edge_trees[parent_edge].tree, edge_trees[parent_edge].tip_id)
-            #tip_rates = extract_tip_rates(edge_trees[parent_edge].tree)
-            #return tip_rates[edge_trees[parent_edge].tip_id]
         end
     end
 end
@@ -367,8 +395,6 @@ function get_parent_rate(tree::Tree, edge_id::Int64, edge_trees::Union{Array{Edg
             return rates[parent_edge+1]#
         else
             return extract_tip_rates(edge_trees[parent_edge].tree, edge_trees[parent_edge].tip_id)
-            #tip_rates = extract_tip_rates(edge_trees[parent_edge].tree)
-            #return tip_rates[edge_trees[parent_edge].tip_id]
         end
     end
 end
@@ -425,15 +451,13 @@ function extract_relative_rates(tree::Tree; id = 1)
     return x
 end
 
-function extract_relative_rates(tree::Tree, edge_trees, rates; id = 1)
+function extract_relative_rates(tree::Tree, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}}, rates; id = 1)
     function aux(subtree, parent_rate, x)
         if subtree.n_nodes == 0
         elseif length(subtree.offsprings) == 0
-            #print("  $(log(subtree.attributes[id]) - parent_rate)  ")
             pushfirst!(x,log(subtree.attributes[id]) - parent_rate)
         else
             log_rate = deepcopy(log(subtree.attributes[id]))
-            #print("  $log_rate  ")
             aux(subtree.offsprings[2], log_rate, x)
             aux(subtree.offsprings[1], log_rate, x)
             pushfirst!(x,log(subtree.attributes[id]) - parent_rate)
@@ -443,26 +467,41 @@ function extract_relative_rates(tree::Tree, edge_trees, rates; id = 1)
     relative_rates = []
     for edge_id in 1:length(edge_trees)
         parent_rate = log(get_parent_rate(tree, edge_id, edge_trees))
-        #print("  ; $edge_id  $parent_rate  $(length(relative_rates))")
         r = log(rates[edge_id+1]) - parent_rate
-        #print(" $r ")
         if isnan(r) || r == -Inf
             println("$edge_id, $r, $(rates[edge_id+1]), $(get_parent_rate(tree, edge_id, edge_trees))")
         end
         if edge_trees[edge_id].tree.n_nodes == 1
-            #print("go to 1")
             pushfirst!(relative_rates,r)
         else
-            #print("go to 2")
             aux(edge_trees[edge_id].tree,parent_rate, relative_rates)
         end
     end
     return relative_rates
 end
 
-function extract_relative_rates(tree::Tree, edge_trees; id = 1)
+function extract_relative_rates(tree::Tree, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}}; id = 1)
     rates = extract_rates(tree)
     extract_relative_rates(tree, edge_trees, rates, id = id)
+end
+
+function extract_partial_relative_rates(tree::Tree, edge_trees, rates; id = 1)
+
+    relative_rates = []
+    for edge_id in 1:length(edge_trees)
+        parent_rate = log(get_parent_rate(tree, edge_id, edge_trees))
+        r = log(rates[edge_id+1]) - parent_rate
+        if isnan(r) || r == -Inf
+            println("$edge_id, $r, $(rates[edge_id+1]), $(get_parent_rate(tree, edge_id, edge_trees))")
+        end
+        pushfirst!(relative_rates,r)
+    end
+    return relative_rates
+end
+
+function extract_partial_relative_rates(tree::Tree, edge_trees; id = 1)
+    rates = extract_rates(tree)
+    extract_partial_relative_rates(tree, edge_trees, rates, id = id)
 end
 
 function make_ape(tree::Tree ; id = 1)
@@ -776,7 +815,6 @@ end
 function extract_tip_rates(tree::Tree, tip_id::Int64 ; id = 1, return_extinct = true)
 
     function aux(subtree, tip)
-        #println(tip)
         if subtree.n_nodes == 0
         elseif length(subtree.offsprings) == 0
             if subtree.extant || return_extinct
@@ -785,10 +823,8 @@ function extract_tip_rates(tree::Tree, tip_id::Int64 ; id = 1, return_extinct = 
                 return NaN
             end
         elseif ((subtree.offsprings[1].n_nodes+1)/1) >= tip
-            #println(" $((subtree.offsprings[1].n_nodes+1)/2) $tip $(tip - (subtree.offsprings[1].n_nodes+1)/2) go1")
             aux(subtree.offsprings[1], tip)
         else
-            #println(" $((subtree.offsprings[1].n_nodes+1)/2) $tip $(tip - (subtree.offsprings[1].n_nodes+1)/2) go2")
             aux(subtree.offsprings[2], tip - (subtree.offsprings[1].n_nodes+1)/1)
         end
     end

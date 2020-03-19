@@ -17,7 +17,7 @@ function draw_σ(relative_rates, α ; α0 = 1., β0 = 0.01)
     n = length(relative_rates)
     m = mean(relative_rates)
     α_n = α0 + n/2
-    log_α = m #log(m)
+    log_α = log(α)#m #log(m)
     β_n = β0
 
     for rate in relative_rates
@@ -25,7 +25,7 @@ function draw_σ(relative_rates, α ; α0 = 1., β0 = 0.01)
     end
 
     if isnan(β_n)
-        println("inv gam $α_n , $β_n ;    ")
+        println("inv gam $α0 $β0; $α_n , $β_n ;    ")
         print(relative_rates)
     end
     sqrt(rand(InverseGamma(α_n,β_n)))
@@ -41,7 +41,12 @@ function draw_α(relative_rates, σ ; α_0 = 0., σ_0 = 1)
     σ_n = sqrt((σ^2 * σ_0^2)/(σ^2 + n * σ_0^2))
     α_n = (α_0 * σ^2 + σ_0^2 * sum(relative_rates))/(σ^2 + n * σ_0^2)
 
-    exp(rand(Normal(α_n, σ_n)))
+
+    a = exp(rand(Normal(α_n, σ_n)))
+    if a==0
+        println("$α_n , $σ_n, $α_0 ; $σ ; $relative_rates")
+    end
+    return a
 end
 
 function draw_ε_crown(branch_lengths::Array{T,1}, rates::Array{T,1}, n_extinct::Int64, n_cond::Int64 ; n_it = 10) where {T<:Number}
@@ -105,12 +110,9 @@ function draw_ε_crown(tree::Tree, edge_trees::Union{Array{EdgeTree,1},Array{Edg
     if tree.offsprings[2].n_nodes > 1
         n_cond += 1
     end
-    #print(bl)
     for edge in 1:2
-        #print(crown_edges)
         if edge_trees[crown_edges[edge]].tree.n_nodes > 1
             ltt = LTT(edge_trees[crown_edges[edge]].tree)
-            #println(ltt)
             for e in 1:length(ltt[2])
                 if ltt[1][e] >= bl[edge]
                     break
@@ -121,7 +123,6 @@ function draw_ε_crown(tree::Tree, edge_trees::Union{Array{EdgeTree,1},Array{Edg
             end
         end
     end
-    #print(n_cond)
     return draw_ε_crown(enhanced_branch_lengths[2:end], enhanced_rates[2:end], n_extinct, n_cond)
 end
 
@@ -288,7 +289,7 @@ function draw_λ0!(tree::Tree, ε, edge_trees)
 end
 
 
-function draw_λi_slicing!(rates, edge_trees, i, σ::Float64, α::Float64, ε::Float64, tree, lefts; n_it = 5, bounds = 20)
+function draw_λi_slicing!(rates, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}}, i, σ::Float64, α::Float64, ε::Float64, tree, lefts; n_it = 5, bounds = 20)
     if i==0
         parent_λ = NaN
         daughter_λ = map(log,get_daughter_rates(tree, i, edge_trees, rates, lefts))
@@ -345,27 +346,6 @@ function draw_λi_slicing!(rates, edge_trees, i, σ::Float64, α::Float64, ε::F
 
         u = fλ * rand()
 
-        #=
-        for k in 1:10
-            λ = best_λi + (k^2)*(bounds/100) * σ_eff
-            fλ = fx(λ)
-            if fλ < u
-                max_eff = λ
-                #print("max $k ;")
-                break
-            end
-        end
-        for k in 1:10
-            λ = best_λi - (k^2)*(bounds/100) * σ_eff
-            fλ = fx(λ)
-            if fλ < u
-                min_eff = λ
-                #print("max $k ;")
-                break
-            end
-        end
-        =#
-
         reject = true
 
         if u < 1
@@ -378,7 +358,6 @@ function draw_λi_slicing!(rates, edge_trees, i, σ::Float64, α::Float64, ε::F
                     break
                 end
                 fλ = fx(λ)
-                #print("$fλ $u $max_f $(max_eff - min_eff); ")
                 reject = (fλ < u)
                 if reject
                     if λ < best_λi
@@ -389,7 +368,6 @@ function draw_λi_slicing!(rates, edge_trees, i, σ::Float64, α::Float64, ε::F
                 end
 
             end
-            #println("li $n_iter ")
         else
             λ = best_λi
         end
@@ -397,12 +375,11 @@ function draw_λi_slicing!(rates, edge_trees, i, σ::Float64, α::Float64, ε::F
 
     new_λ = exp(λ)
     if isnan(new_λ) || new_λ <= 0
-        println("$i : $(rates[i + 1]) , $new_λ , $best_λi")
+        println("it's here $i : $(rates[i + 1]) , $new_λ , $best_λi, $a, $t_eff, $x0_eff, $bl_eff ; $(log(α)), $α")
         new_λ = rates[i + 1]#exp(best_λi)
     end
     if i>0
         edge_trees[i].tree.attributes[1] = new_λ
-        #edge_trees[i] = (Tree(sub_tree.offsprings, sub_tree.branch_length, [new_λ], sub_tree.n_nodes, sub_tree.extant), edge_trees[i][2], edge_trees[i].n)#, new_λ * edge_trees[i].n / rates[i + 1])
     end
     rates[i + 1] = new_λ
 
@@ -413,7 +390,6 @@ end
 
 function draw_λi_rel!(rates::Array{Float64,1}, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}}, i::Int64,
     σ::Float64, α::Float64, ε::Float64, tree::Tree, lefts::Array{Int64,1}, parents::Array{Int64,1}; n_it = 5, bounds = 10)
-    #println("in")
     former_λ = rates[i+1]
 
     if i==0
@@ -489,14 +465,12 @@ function draw_λi_rel!(rates::Array{Float64,1}, edge_trees::Union{Array{EdgeTree
                     end
 
                 end
-                #println("lr $n_iter ")
             else
                 λ = best_λi
             end
         end
     else
         λ = log(former_λ)
-        #new_λ = former_λ
     end
 
     new_λ = exp(λ)
@@ -513,9 +487,212 @@ function draw_λi_rel!(rates::Array{Float64,1}, edge_trees::Union{Array{EdgeTree
     return new_λ
 end
 
+
+function slicing(x0_eff, σ_eff, bl_eff, n, former_λ ; n_it = 5, bounds = 5)
+    a = x0_eff + n * σ_eff^2
+    t_eff = bl_eff * σ_eff^2
+
+    if (exp(a) * t_eff) < 10000
+        best_λi = a - newton_LambertW(t_eff * exp(a), rel_tol=0.000001)
+    else
+        lt = log(t_eff) + a
+        best_λi = a - lt + log(lt) - (log(lt)/lt)
+    end
+    max_λi = best_λi + bounds * σ_eff
+    min_λi = best_λi - bounds * σ_eff
+    extant_λi = max_λi - min_λi
+
+    max_f = n * best_λi - bl_eff * exp(best_λi) - (best_λi - x0_eff)^2/(2 * σ_eff^2)
+    j = 1.
+    function fx(x ; bl = bl_eff, ne = n, x0 = x0_eff, s = 2*σ_eff^2)
+         exp(x * ne - bl * exp(x) - (x-x0)^2/s - max_f)
+     end
+
+    λ = best_λi
+    fλ = fx(λ)
+
+    if -1e10 < max_f < 1e10
+        for j in 1:n_it
+            min_eff = min_λi
+            max_eff = max_λi
+
+            u = fλ * rand()
+            reject = true
+            if u < 1
+                n_iter = 0
+                while reject
+                    n_iter += 1
+                    λ = rand() * (max_eff - min_eff) + min_eff
+                    fλ = fx(λ)
+                    reject = (fλ < u)
+                    if reject
+                        if λ < best_λi
+                            min_eff = λ
+                        else
+                            max_eff = λ
+                        end
+                    end
+
+                end
+            else
+                λ = best_λi
+            end
+        end
+    else
+        λ = log(former_λ)
+        #new_λ = former_λ
+    end
+
+    new_λ = exp(λ)
+    if isnan(new_λ) || new_λ <= 0.
+        new_λ = former_λ#rates[i + 1]
+    end
+
+    return new_λ
+end
+
+function slicing0(S, n_events, former_λ0 ; n_it = 5, bounds = 5)
+
+    best_λ0 = log(n_events/S)
+    max_λ0 = best_λ0+20
+    min_λ0 = best_λ0-20
+    extant_λ0 = max_λ0 - min_λ0
+
+    max_f = n_events * (best_λ0 - 1)
+
+    function fx(x ; ne = n_events, s = S)
+         exp(x * ne - s * exp(x) - max_f)
+     end
+
+    λ = best_λ0
+    fλ = fx(λ)
+
+    if -1e10 < max_f < 1e10
+        for j in 1:n_it
+            min_eff = min_λ0
+            max_eff = max_λ0
+
+            u = fλ * rand()
+            reject = true
+            if u < Inf
+                while reject
+                    λ = rand() * (max_eff - min_eff) + min_eff
+                    if max_eff - min_eff <= 0
+                        println(" oh oh $j, $(max_eff - min_eff), $fλ, $u, $max_f, $min_eff, $max_eff, $best_λ0, $min_λ0, $max_λ0")
+                        break
+                    end
+                    fλ = fx(λ)
+                    reject = fλ < u
+                    if reject
+                        if λ < best_λ0
+                            min_eff = λ
+                        else
+                            max_eff = λ
+                        end
+                    end
+
+                end
+            else
+                λ = log(former_λ0)
+            end
+        end
+    else
+        new_λ = former_λ0
+    end
+
+    new_λ0 = exp(λ)
+
+    if isnan(new_λ0) || new_λ0 <= 0.
+        new_λ0 = former_λ0#rates[i + 1]
+    end
+
+    return new_λ0
+end
+
+function draw_λi_quad!(rates::Array{Float64,1}, edge_trees::Array{EdgeTreeRates,1},
+    σ::Float64, α::Float64, ε::Float64, tree::Tree, lefts::Array{Int64,1}, parents::Array{Int64,1}; n_it = 5, bounds = 10)
+
+    function aux(subtree, id, parent_rate, sampled_rates)
+        if subtree.n_nodes < 2
+            former_λ = subtree.attributes[1]
+            x0_eff = parent_rate+log(α)
+            σ_eff = σ
+            n = 0
+            bl_eff = 0.
+            if id>0
+                if edge_trees[id].tree.n_nodes > 1
+                    n += edge_trees[id].tree.n_nodes - n_extant_tips(edge_trees[id].tree)
+                    branch_length = extract_branch_lengths(edge_trees[id].tree)
+                    bl_eff = sum(branch_length .* extract_rates(edge_trees[id].tree)) * (1 + ε)
+                else
+                    bl_eff = subtree.branch_length *former_λ * (1 + ε)
+                end
+            end
+            λ = slicing(x0_eff, σ_eff, bl_eff/former_λ, n, former_λ)
+            pushfirst!(sampled_rates, λ)
+            return  n, bl_eff*λ/former_λ
+        else
+            tip_λ = subtree.attributes[1]
+            if id>0
+                edge_tree_tip_rates = extract_tip_rates(edge_trees[id].tree, return_extinct = false)
+                tip_λ = edge_tree_tip_rates[edge_trees[id].tip_id]
+                #tip_λ = edge_trees[id].rate #??
+            end
+            tip_λ = log(tip_λ)
+            n_right, bl_right = aux(subtree.offsprings[2], id + 1 + lefts[id+1], tip_λ, sampled_rates)
+            n_left, bl_left = aux(subtree.offsprings[1], id + 1, tip_λ, sampled_rates)
+            former_λ = subtree.attributes[1]
+
+            x0_eff = parent_rate + log(α)
+            σ_eff = σ
+            n = n_left + n_right
+            bl_eff = bl_right + bl_left
+            λ = 0.
+            if id>0
+                if edge_trees[id].tree.n_nodes > 1
+                    n += edge_trees[id].tree.n_nodes - n_extant_tips(edge_trees[id].tree) + 1.
+                    branch_length = extract_branch_lengths(edge_trees[id].tree)
+                    bl_eff += sum(branch_length .* extract_rates(edge_trees[id].tree)) * (1 + ε)
+                else
+                    bl_eff += subtree.branch_length * (1 + ε) *former_λ
+                    n += 1
+                end
+                λ = slicing(x0_eff, σ_eff, bl_eff/former_λ, n, former_λ)
+
+            else
+                λ = slicing0(bl_eff/former_λ, n, former_λ)
+
+            end
+
+            for k in 1:(subtree.n_nodes - 1)
+                sampled_rates[k] *= λ/former_λ
+            end
+            pushfirst!(sampled_rates, λ)
+            return  n, bl_eff*λ/former_λ
+        end
+    end
+
+    r = Array{Float64,1}(undef,0)
+    aux(tree, 0, 0., r);
+    rates[1] = r[1]
+
+    for i in 1:length(edge_trees)
+        λ_ratio = r[i+1] / edge_trees[i].tree.attributes[1]
+        update_rates!(edge_trees[i].tree,λ_ratio)
+        rates[i+1] = r[i+1]
+    end
+
+    update_rates!(tree,rates)
+end
+
 function draw_λi_slicing!(rates, edge_trees, i, σ::Float64, α::Float64, ε::Float64, tree; n_it = 5, bounds = 10)
     lefts = n_left(tree)
     draw_λi_slicing!(rates, edge_trees, i, σ, α, ε, tree, lefts, n_it = n_it, bounds = bounds)
+end
+
+function draw_λi_quad!(rates, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}}, σ::Float64, α::Float64, ε::Float64, tree; n_it = 5, bounds = 10)
+    lefts = n_left(tree)
+    draw_λi_quad!(rates, edge_trees, σ, α, ε, tree, lefts, n_it = n_it, bounds = bounds)
 end
 
 function draw_λi_rel!(rates::Array{Float64,1}, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}}, i::Int64, σ::Float64,

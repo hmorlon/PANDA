@@ -11,32 +11,64 @@ function MCMClist(chains::Array{Array{Array{Float64,1},1},1})
     MCMClist(chain1, chain2, chain3)
 end
 
-function chains_to_R_coda(chains ; save_chain = false, file = "coda_chain.Rdata", max_it_number = Inf)
+function chains_to_R_coda(chains ; save_chain = false, file = "coda_chain.Rdata", max_it_number = Inf, burn = 0)
     @rput chains
     @rput save_chain
     @rput file
     @rput max_it_number
+    @rput burn
 
     reval("""
         library(coda)
+        N = length(chains)
         it_number = length(chains[[1]][[1]])
-        if(it_number > max_it_number){
-            rows = unique(floor(seq(1,it_number,length.out = max_it_number)))
+        n_start = 1 + floor(burn * it_number)
+        if(((1-burn) * it_number) > max_it_number){
+            rows = unique(floor(seq(n_start,it_number,length.out = max_it_number)))
         }else{
-            rows = 1:it_number
+            rows = n_start:it_number
         }
-        coda_chain = mcmc.list(lapply(1:3, function(i){
+        coda_chain = mcmc.list(lapply(1:N, function(i){
             mcmc(sapply(1:length(chains[[1]]), function(j){
                 chains[[i]][[j]][rows]
             }))}))
 
         if(save_chain){
-            save(coda_chain, it_number, file = file)
+            save(coda_chain, it_number, file = file, compress = "xz")
             }
     """)
 end
 
-function R_coda_to_chains(file)
+function mrchains_to_R_coda(chains ; save_chain = false, file = "mr_chain.Rdata", max_it_number = Inf, burn = 0)
+    @rput chains
+    @rput save_chain
+    @rput file
+    @rput max_it_number
+    @rput burn
+
+    reval("""
+        library(coda)
+        N = length(chains)
+        it_number = length(chains[[1]])
+        n_start = 1 + floor(burn * it_number)
+        if(((1-burn) * it_number) > max_it_number){
+            rows = unique(floor(seq(n_start,it_number,length.out = max_it_number)))
+        }else{
+            rows = n_start:it_number
+        }
+        print(rows)
+        mr_chain = mcmc.list(lapply(1:N, function(i){
+            mcmc(sapply(rows, function(j){
+                chains[[i]][[j]]
+            }))}))
+
+        if(save_chain){
+            save(mr_chain, it_number, file = file, compress = "xz")
+            }
+    """)
+end
+
+function R_coda_to_chains(file::String)
     @rput file
 
     reval("""
@@ -50,8 +82,52 @@ function R_coda_to_chains(file)
     """)
 
     @rget list
-    chains = Array{Array{Array{Float64,1},1},1}(undef,3)
-    for i in 1:3
+    N = length(list)
+    chains = Array{Array{Array{Float64,1},1},1}(undef,N)
+    for i in 1:N
+        chains[i] = [list[i][j] for j in 1:length(list[i])]
+    end
+    return chains
+end
+
+function R_coda_to_chains(coda_chain)
+    @rput coda_chain
+
+    reval("""
+        library(coda)
+        list = lapply(coda_chain, function(a){
+            lapply(1:ncol(a), function(i){
+                a[,i]
+            })
+        })
+    """)
+
+    @rget list
+    N = length(list)
+    chains = Array{Array{Array{Float64,1},1},1}(undef,N)
+    for i in 1:N
+        chains[i] = [list[i][j] for j in 1:length(list[i])]
+    end
+    return chains
+end
+
+function R_coda_to_mrchains(file)
+    @rput file
+
+    reval("""
+        library(coda)
+        load(file)
+        list = lapply(mr_chain, function(a){
+            lapply(1:ncol(a), function(i){
+                a[,i]
+            })
+        })
+    """)
+
+    @rget list
+    N = length(list)
+    chains = Array{Array{Array{Float64,1},1},1}(undef,N)
+    for i in 1:N
         chains[i] = [list[i][j] for j in 1:length(list[i])]
     end
     return chains
@@ -68,13 +144,14 @@ function sampler_to_Rdata(tree, sampler, file ; sample_fraction = 1., max_it_num
     @rput ntip
     @rput tip_labels
     reval("""
-        tree = list(edge = edges, Nnode = ntip - 1, edge.lengths = branch_lengths, tip.labels = tip_labels)
+        tree = list(edge = edges, Nnode = ntip - 1, edge.length = branch_lengths, tip.label = tip_labels)
         class(tree) = "phylo"
     """)
 
     chains = sampler[1][1]
     MAPS = sampler[2]
     npar = tree.n_nodes + 3
+    mr = sampler[1][8]
 
     @rput chains
     @rput file
@@ -82,21 +159,23 @@ function sampler_to_Rdata(tree, sampler, file ; sample_fraction = 1., max_it_num
     @rput npar
     @rput sample_fraction
     @rput max_it_number
+    @rput mr
 
     reval("""
         library(coda)
+        N = length(chains)
         it_number = length(chains[[1]][[1]])
         if(it_number > max_it_number){
             rows = unique(floor(seq(1,it_number,length.out = max_it_number)))
         }else{
             rows = 1:it_number
         }
-        coda_chain = mcmc.list(lapply(1:3, function(i){
+        coda_chain = mcmc.list(lapply(1:N, function(i){
             mcmc(sapply(1:length(chains[[1]]), function(j){
                 chains[[i]][[j]][rows]
             }))}))
         MAPS[4:(npar+ntip)] = exp(MAPS[4:(npar+ntip)])
-        save(tree, coda_chain, MAPS, npar, sample_fraction, it_number, file = file)
+        save(tree, coda_chain, MAPS, npar, sample_fraction, it_number, mr, file = file)
     """)
 end
 
@@ -106,7 +185,7 @@ function add_to_chain!(chain, param)
     end
 end
 
-function initialize_ClaDS2_LTT(tree::Tree ; ini_par = [], initialize_rates = 0, ltt_steps = 10, enhance_method = "reject") where {N}
+function initialize_ClaDS2_LTT(tree::Tree ; ini_par = [], initialize_rates = 0, ltt_steps = 10, enhance_method = "reject", n_chains = 3) where {N}
 
     new_tree = Tree(deepcopy(tree.offsprings), 0., deepcopy(tree.attributes))
 
@@ -116,16 +195,18 @@ function initialize_ClaDS2_LTT(tree::Tree ; ini_par = [], initialize_rates = 0, 
     ltt_times = [0:ltt_steps...] * root_depth/ltt_steps
     ltt_extant = LTT(tree,ltt_times)
     if length(ini_par) == 0
-        ini_par = [[[10. ^(1-i),1,0.5];fill(0.000001, tree.n_nodes); fill(0.000001, Int64((tree.n_nodes+1)/2));[0, n_extant_tips(tree)] ; ltt_extant[2]] for i in 1:3]
+        ini_par = [[[10. ^(1-i),1,0.5];fill(0.000001, tree.n_nodes); fill(0.000001, Int64((tree.n_nodes+1)/2));[0, n_extant_tips(tree)] ; ltt_extant[2]] for i in 1:n_chains]
     end
 
-    if (enhance_method == "rates") || (enhance_method == "MHrates")
-        edge_trees_s = [init_edge_tree_rates(update_rates(new_tree, ini_par[i][4:(tree.n_nodes + 3)]), ini_par[i][4:(end-2)]) for i in 1:3]
+    if (enhance_method == "rates") || (enhance_method == "MHrates") || (enhance_method == "Rrates" || (enhance_method == "MHrr_old"))
+        edge_trees_s = [init_edge_tree_rates(update_rates(new_tree, ini_par[i][4:(tree.n_nodes + 3)]), ini_par[i][4:(end-2)]) for i in 1:n_chains]
+    elseif (enhance_method == "MHrr") || (enhance_method == "rr")
+        edge_trees_s = [init_edge_tree_rates2(update_rates(new_tree, ini_par[i][4:(tree.n_nodes + 3)]), ini_par[i][4:(end-2)]) for i in 1:n_chains]
     else
-        edge_trees_s = [init_edge_tree(update_rates(new_tree, ini_par[i][4:(tree.n_nodes + 3)]), ini_par[i][4:(end-2)]) for i in 1:3]
+        edge_trees_s = [init_edge_tree(update_rates(new_tree, ini_par[i][4:(tree.n_nodes + 3)]), ini_par[i][4:(end-2)]) for i in 1:n_chains]
     end
 
-    for i in 1:3
+    for i in 1:n_chains
         new_tree = Tree(deepcopy(tree.offsprings), 0., deepcopy(tree.attributes))
         update_rates!(new_tree, ini_par[i][4:(tree.n_nodes + 3)])
 
@@ -141,22 +222,22 @@ function initialize_ClaDS2_LTT(tree::Tree ; ini_par = [], initialize_rates = 0, 
         ini_par[i][4:(tree.n_nodes + 3)] = rates
         ini_par[i][3] = ε
         edge_trees_s[i] = edge_trees
-        relative_rates = extract_relative_rates(tree, edge_trees, rates)[2:end]
     end
 
     extant_branch_lengths = extract_branch_lengths(tree)
-    trees = [deepcopy(update_rates(new_tree, ini_par[i][4:end])) for i in 1:3]
-    chains = [[[deepcopy(ini_par[i][j])] for j in 1:length(ini_par[1])] for i in 1:3]
+    trees = [deepcopy(update_rates(new_tree, ini_par[i][4:end])) for i in 1:n_chains]
+    chains = [[[deepcopy(ini_par[i][j])] for j in 1:length(ini_par[1])] for i in 1:n_chains]
     param = deepcopy(ini_par)
-
+    mean_rates_chains = [[time_rates(tree,ini_par[i][4:(tree.n_nodes+3)],ltt_times)] for i in 1:n_chains]
     println(" ")
-    return chains, param, edge_trees_s, trees, extant_branch_lengths, ltt_times, live_nd
+    return chains, param, edge_trees_s, trees, extant_branch_lengths, ltt_times, live_nd, mean_rates_chains
 end
 
 function add_iter_ClaDS2_LTT(sampler, n_reccord::Int64; thin = 1, fs = 1., plot_tree = 0, print_state = 0,
     max_node_number = 1_000, max_try = 100_000, it_edge_tree = 1, print_all = false, it_rates = 1, enhance_method = "reject")
     chain_s, param_s, edge_trees_s, tree_s, extant_branch_lengths, ltt_times, live_nd = sampler
 
+    n_chains = length(chain_s)
     tips_id = tips(tree_s[1])[2:end]
     lefts = n_left(tree_s[1])
     ntips = Int64((tree_s[1].n_nodes+1)/2)
@@ -164,7 +245,7 @@ function add_iter_ClaDS2_LTT(sampler, n_reccord::Int64; thin = 1, fs = 1., plot_
         R"par(mfrow=c(3,4), mar=c(5,2,2,2))"
     end
     n_par = tree_s[1].n_nodes + 3
-    for k in 1:3
+    for k in 1:n_chains
         chain = chain_s[k]
         tree = tree_s[k]
 
@@ -179,14 +260,20 @@ function add_iter_ClaDS2_LTT(sampler, n_reccord::Int64; thin = 1, fs = 1., plot_
         parents = get_parent_edges(tree)
         for i in 1:n_reccord
             for j in 1:thin
+                #print("$σ ")
                 for l in 1:it_edge_tree
                     update_edge_trees!(edge_trees, tree, σ, α, ε, fs, rates, extant_branch_lengths, enhance_method= enhance_method,
                         max_node_number = max_node_number, max_try = max_try, keep_if_any = true,
                         do_tips = (l==1))
+
+                    ε = draw_ε_crown(tree, edge_trees, lefts)
+                    relative_rates = extract_relative_rates(tree, edge_trees, rates)[2:end]
+                    σ = draw_σ(relative_rates, α, β0 = 0.05, α0 = 0.2)
+                    α = draw_α(relative_rates, σ,  α_0 = -(σ^2/2), σ_0 = 0.5)
                 end
 
                 if it_rates > 0
-                    ε, σ, α = update_edges!(tree, edge_trees, σ, α, ε, rates, parents, with_ε = true, it_rates = it_rates )
+                    ε, σ, α = update_edges_quad_hp!(tree, edge_trees, σ, α, ε, rates, parents,it_rates = it_rates )
                 end
 
                 if plot_tree>0
@@ -202,6 +289,7 @@ function add_iter_ClaDS2_LTT(sampler, n_reccord::Int64; thin = 1, fs = 1., plot_
                     end
                 end
             end
+            #println("$σ ")
 
             tip_rates = extract_tip_rates(tree, edge_trees, tips_id, rates)
             param_s[k][1] = σ
@@ -224,21 +312,23 @@ function add_iter_ClaDS2_LTT(sampler, n_reccord::Int64; thin = 1, fs = 1., plot_
 end
 
 
-function plot_coda(sampler ; burn = 0, thin = 1, id_par = [1:4...])
+function plot_coda(sampler ; burn = 0, thin = 1, id_par = [1:4...], smooth = false)
     chains = sampler[1]
     @rput chains
     @rput thin
     @rput burn
     @rput id_par
+    @rput smooth
 
     reval("""
         require(coda)
+        N = length(chains)
         n_row = length(chains[[1]][[1]])
         ini = floor(burn * n_row)
         if(ini == 0) ini = 1
             it = seq(ini, n_row, thin)
 
-        plot_chains = mcmc.list(lapply(1:3, function(i){
+        plot_chains = mcmc.list(lapply(1:N, function(i){
         mcmc(sapply((id_par), function(j){
         if(j<4) {
             chains[[i]][[j]][it]
@@ -247,7 +337,7 @@ function plot_coda(sampler ; burn = 0, thin = 1, id_par = [1:4...])
         }
         }))}))
 
-        plot(plot_chains)
+        plot(plot_chains, smooth = smooth)
     """)
 end
 
@@ -274,7 +364,7 @@ function R_gelman(sampler ; burn = 0, thin = 1)
             }
           }))}))
 
-        gelman = try(gelman.diag(gelman_chains))
+        gelman = try(gelman.diag(gelman_chains, autoburnin = F, multivariate = F))
         if (inherits(gelman, "try-error")){
             id_gelman = 1
             gelman = 10
@@ -303,6 +393,32 @@ function sample_fractions(tree, sampling_at_tips)
             s_right = aux(subtree.offsprings[1], sub_sampling,x)
             n_right = (subtree.offsprings[1].n_nodes+1)/2
             s = (n_left + n_right)/(n_left/s_left + n_right/s_right)
+            pushfirst!(x,s)
+
+            return s
+        end
+    end
+
+    fs = Array{Float64,1}(undef,0)
+    aux(tree, deepcopy(sampling_at_tips), fs)
+    return fs
+end
+
+function sample_fractions_allDeep(tree, sampling_at_tips)
+    function aux(subtree, sub_sampling, x)
+        if subtree.n_nodes < 2
+            s = pop!(sub_sampling)
+            pushfirst!(x,s)
+            return s
+        else
+            s_left = aux(subtree.offsprings[2], sub_sampling,x)
+            n_left = (subtree.offsprings[2].n_nodes+1)/2
+            s_right = aux(subtree.offsprings[1], sub_sampling,x)
+            n_right = (subtree.offsprings[1].n_nodes+1)/2
+            s = 1.
+            if n_right == n_left
+                s = (n_left + n_right)/(n_left/s_left + n_right/s_right)
+            end
             pushfirst!(x,s)
 
             return s

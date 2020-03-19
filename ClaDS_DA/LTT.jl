@@ -1,4 +1,4 @@
-function node_depths_base(tree)
+function node_depths_base(tree::Tree)
     function aux(subtree, node_times, current_depth)
         if subtree.n_nodes < 2
             pushfirst!(node_times, current_depth)
@@ -15,7 +15,28 @@ function node_depths_base(tree)
     return node_times
 end
 
-function node_depths(tree)
+function node_depths_base(tree::Tree, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}})
+    function aux(subtree, node_times, current_depth)
+        if subtree.n_nodes < 2
+            pushfirst!(node_times, current_depth)
+        else
+            aux(subtree.offsprings[2],node_times, current_depth + subtree.branch_length)
+            aux(subtree.offsprings[1],node_times, current_depth + subtree.branch_length)
+            pushfirst!(node_times,current_depth)
+        end
+    end
+
+    node_times = node_depths_base(tree)
+
+    node_times_full = Array{Float64,1}(undef,0)
+    for i in length(edge_trees):-1:1
+        aux(edge_trees[i].tree, node_times_full, node_times[i])
+    end
+    #pushfirst!(node_times,0.)
+    return node_times_full
+end
+
+function node_depths(tree::Tree)
     function aux(subtree, node_times, current_depth)
         if subtree.n_nodes < 2
             pushfirst!(node_times, current_depth + subtree.branch_length)
@@ -30,6 +51,27 @@ function node_depths(tree)
     aux(tree, node_times, 0.)
     #pushfirst!(node_times,0.)
     return node_times
+end
+
+function node_depths(tree::Tree, edge_trees::Union{Array{EdgeTree,1},Array{EdgeTreeRates,1}})
+    function aux(subtree, node_times, current_depth)
+        if subtree.n_nodes < 2
+            pushfirst!(node_times, current_depth + subtree.branch_length)
+        else
+            aux(subtree.offsprings[2],node_times, current_depth + subtree.branch_length)
+            aux(subtree.offsprings[1],node_times, current_depth + subtree.branch_length)
+            pushfirst!(node_times,current_depth+ subtree.branch_length)
+        end
+    end
+
+    node_times = node_depths_base(tree)
+
+    node_times_full = Array{Float64,1}(undef,0)
+    for i in length(edge_trees):-1:1
+        aux(edge_trees[i].tree, node_times_full, node_times[i])
+    end
+    #pushfirst!(node_times,0.)
+    return node_times_full
 end
 
 function LTT(tree::Tree)
@@ -213,14 +255,20 @@ function plot_LTT_chain(mcmc_sampler, complete_tree::Tree, extant_tree::Tree, y_
         y_lab = y_lab[y_lab<=y_max]
         lines(ltt_times, log(live_ltt), col = "black", lwd = 6, lty = 1)
 
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
+        Ys = c()
         for (i in 1:3){
             for (j in id_plot){
                 y = sapply(id_ltt, function(k){log(chains[[i]][[k]][j])})
+                Ys = rbind(Ys,y)
                 lines(ltt_times, y, col = alpha("deepskyblue2", alpha = alpha_col), lwd = 2)
                 }
             }
+        quant = sapply(1:ncol(Ys), function(i){quantile(Ys[,i], probs = c(0.05,0.95))})
+
+        lines(ltt_times, quant[1,], col = "deepskyblue3", lwd = 2)
+        lines(ltt_times, quant[2,], col = "deepskyblue3", lwd = 2)
         lines(ltt_times, log(sim_ltt), col = "orange1", lwd = 6, lty = 1)
         lines(ltt_times, log(sim_ltt), col = "orange3", lwd = 4, lty = 2)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue1", lwd = 5, lty = 1)
@@ -256,6 +304,7 @@ function plot_LTT_chain_extinct(mcmc_sampler, complete_tree::Tree, extant_tree::
     @rput sim_ltt
     @rput alpha_col
     @rput live_ltt
+    @rput burn
 
     reval("""
         require(coda)
@@ -287,7 +336,7 @@ function plot_LTT_chain_extinct(mcmc_sampler, complete_tree::Tree, extant_tree::
         plot(100000, axes = F, xlim = range(ltt_times), ylim = range(c(-1,y_max, 1.5*(sim_ltt - live_ltt))), xlab = "time", ylab = "n_lineage")
         y_lab = c(2,5,10,50,100,200,500,1000,2000,5000,10000,20000,50000)
         y_lab = y_lab[y_lab<=y_max]
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
         Ys = c()
         for (i in 1:3){
@@ -371,14 +420,20 @@ function plot_LTT_chain(chains, complete_tree::Tree, extant_tree::Tree, y_max::I
         y_lab = y_lab[y_lab<=y_max]
         lines(ltt_times, log(live_ltt), col = "black", lwd = 6, lty = 1)
 
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
+        Ys = c()
         for (i in 1:3){
             for (j in id_plot){
                 y = sapply(id_ltt, function(k){log(chains[[i]][[k]][j])})
+                Ys = rbind(Ys,y)
                 lines(ltt_times, y, col = alpha("deepskyblue2", alpha = alpha_col), lwd = 2)
                 }
             }
+        quant = sapply(1:ncol(Ys), function(i){quantile(Ys[,i], probs = c(0.05,0.95))})
+
+        lines(ltt_times, quant[1,], col = "deepskyblue3", lwd = 2)
+        lines(ltt_times, quant[2,], col = "deepskyblue3", lwd = 2)
         lines(ltt_times, log(sim_ltt), col = "orange1", lwd = 6, lty = 1)
         lines(ltt_times, log(sim_ltt), col = "orange3", lwd = 4, lty = 2)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue1", lwd = 5, lty = 1)
@@ -392,6 +447,11 @@ function plot_LTT_chain(chains, complete_tree::Tree, extant_tree::Tree, y_max::I
 
         #print(log(maps[id_ltt]) - maps_log[id_ltt])
     """)
+
+    #@rget means
+    #@rget id_ltt
+    #println(id_ltt)
+    #return means[id_ltt]
 end
 
 function plot_LTT_chain_extinct(chains, complete_tree::Tree, extant_tree::Tree, y_max::T, ltt_times::Array{Float64,1}, maps::Array{Float64,1} ; n_ltt = 100, alpha_col = 0.05, burn = 0.25, thin = 1)where {T <: Number}
@@ -412,6 +472,7 @@ function plot_LTT_chain_extinct(chains, complete_tree::Tree, extant_tree::Tree, 
     @rput sim_ltt
     @rput alpha_col
     @rput live_ltt
+    @rput burn
 
     reval("""
         require(coda)
@@ -443,7 +504,7 @@ function plot_LTT_chain_extinct(chains, complete_tree::Tree, extant_tree::Tree, 
         plot(100000, axes = F, xlim = range(ltt_times), ylim = range(c(-1,y_max, 1.5*(sim_ltt - live_ltt))), xlab = "time", ylab = "n_lineage")
         y_lab = c(2,5,10,50,100,200,500,1000,2000,5000,10000,20000,50000)
         y_lab = y_lab[y_lab<=y_max]
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
         Ys = c()
         for (i in 1:3){
@@ -515,7 +576,9 @@ function plot_LTT_chain(chains, sim_ltt::Array{Int64,1}, extant_tree::Tree, y_ma
         #maps_log=sapply(1:npar2, function(i){D=density(unlist_chains[,i]);
         #    return(D[[1]][which.max(D[[2]])])})
 
-        means=sapply(1:npar2, function(i){if(i>= npar +3){log(mean(unlist_chains[,i]))}else{mean(unlist_chains[,i])}})
+        #means=sapply(1:npar2, function(i){if(i>= npar +3){log(mean(unlist_chains[,i]))}else{mean(unlist_chains[,i])}})
+        means=sapply(1:npar2, function(i){if(i>= npar +3){(mean(unlist_chains[,i]))}else{mean(unlist_chains[,i])}})
+        means = log(means)
     """)
 
     reval("""
@@ -525,14 +588,20 @@ function plot_LTT_chain(chains, sim_ltt::Array{Int64,1}, extant_tree::Tree, y_ma
         y_lab = y_lab[y_lab<=y_max]
         lines(ltt_times, log(live_ltt), col = "black", lwd = 6, lty = 1)
 
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
+        Ys = c()
         for (i in 1:3){
             for (j in id_plot){
                 y = sapply(id_ltt, function(k){log(chains[[i]][[k]][j])})
+                Ys = rbind(Ys,y)
                 lines(ltt_times, y, col = alpha("deepskyblue2", alpha = alpha_col), lwd = 2)
                 }
             }
+        quant = sapply(1:ncol(Ys), function(i){quantile(Ys[,i], probs = c(0.05,0.95))})
+
+        lines(ltt_times, quant[1,], col = "deepskyblue3", lwd = 2)
+        lines(ltt_times, quant[2,], col = "deepskyblue3", lwd = 2)
         lines(ltt_times, log(sim_ltt), col = "orange1", lwd = 6, lty = 1)
         lines(ltt_times, log(sim_ltt), col = "orange3", lwd = 4, lty = 2)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue1", lwd = 5, lty = 1)
@@ -546,6 +615,7 @@ function plot_LTT_chain(chains, sim_ltt::Array{Int64,1}, extant_tree::Tree, y_ma
 
         #print(log(maps[id_ltt]) - maps_log[id_ltt])
     """)
+
 end
 
 function plot_LTT_chain_extinct(chains, sim_ltt::Array{Int64,1}, extant_tree::Tree, y_max::T, ltt_times::Array{Float64,1}, maps::Array{Float64,1} ; n_ltt = 100, alpha_col = 0.05, burn = 0.25, thin = 1)where {T <: Number}
@@ -565,6 +635,7 @@ function plot_LTT_chain_extinct(chains, sim_ltt::Array{Int64,1}, extant_tree::Tr
     @rput sim_ltt
     @rput alpha_col
     @rput live_ltt
+    @rput burn
 
     reval("""
         require(coda)
@@ -596,7 +667,7 @@ function plot_LTT_chain_extinct(chains, sim_ltt::Array{Int64,1}, extant_tree::Tr
         plot(100000, axes = F, xlim = range(ltt_times), ylim = range(c(-1,y_max, 1.5*(sim_ltt - live_ltt))), xlab = "time", ylab = "n_lineage")
         y_lab = c(2,5,10,50,100,200,500,1000,2000,5000,10000,20000,50000)
         y_lab = y_lab[y_lab<=y_max]
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
         Ys = c()
         for (i in 1:3){
@@ -680,14 +751,20 @@ function plot_LTT_chain(mcmc_sampler, extant_tree::Tree, y_max::T ; n_ltt = 100,
         y_lab = y_lab[y_lab<=y_max]
         lines(ltt_times, log(live_ltt), col = "black", lwd = 6, lty = 1)
 
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
+        Ys = c()
         for (i in 1:3){
             for (j in id_plot){
                 y = sapply(id_ltt, function(k){log(chains[[i]][[k]][j])})
+                Ys = rbind(Ys,y)
                 lines(ltt_times, y, col = alpha("deepskyblue2", alpha = alpha_col), lwd = 2)
                 }
             }
+        quant = sapply(1:ncol(Ys), function(i){quantile(Ys[,i], probs = c(0.05,0.95))})
+
+        lines(ltt_times, quant[1,], col = "deepskyblue3", lwd = 2)
+        lines(ltt_times, quant[2,], col = "deepskyblue3", lwd = 2)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue1", lwd = 5, lty = 1)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue4", lwd = 3, lty = 6)
 
@@ -753,14 +830,20 @@ function plot_LTT_chain(chains, extant_tree::Tree, y_max::T, maps; n_ltt = 100, 
         y_lab = y_lab[y_lab<=y_max]
         lines(ltt_times, log(live_ltt), col = "black", lwd = 6, lty = 1)
 
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
+        Ys = c()
         for (i in 1:3){
             for (j in id_plot){
                 y = sapply(id_ltt, function(k){log(chains[[i]][[k]][j])})
+                Ys = rbind(Ys,y)
                 lines(ltt_times, y, col = alpha("deepskyblue2", alpha = alpha_col), lwd = 2)
                 }
             }
+        quant = sapply(1:ncol(Ys), function(i){quantile(Ys[,i], probs = c(0.05,0.95))})
+
+        lines(ltt_times, quant[1,], col = "deepskyblue3", lwd = 2)
+        lines(ltt_times, quant[2,], col = "deepskyblue3", lwd = 2)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue1", lwd = 5, lty = 1)
         lines(ltt_times, log(maps[id_ltt]), col = "cadetblue4", lwd = 3, lty = 6)
 
@@ -791,6 +874,7 @@ function plot_LTT_chain_extinct(mcmc_sampler, extant_tree::Tree, y_max::T ; n_lt
     @rput y_max
     @rput alpha_col
     @rput live_ltt
+    @rput burn
 
     reval("""
         require(coda)
@@ -822,7 +906,7 @@ function plot_LTT_chain_extinct(mcmc_sampler, extant_tree::Tree, y_max::T ; n_lt
         plot(100000, axes = F, xlim = range(ltt_times), ylim = c(-1,y_max), xlab = "time", ylab = "n_lineage")
         y_lab = c(2,5,10,50,100,200,500,1000,2000,5000,10000,20000,50000)
         y_lab = y_lab[y_lab<=y_max]
-        id_plot = unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
+        id_plot = unique(floor(seq(ini, n_row, length.out = n_ltt)))#unique(floor(seq(2,length(chains[[1]][[1]]), length.out = n_ltt)))
         id_ltt = (npar+3):length(chains[[1]])
         Ys = c()
         for (i in 1:3){
