@@ -4,7 +4,7 @@ require(deSolve)
 
 .VCV.rescale<-function(phylo,sigma,alpha,sterm){
 	if(any(grepl("___",phylo$tip.label))|any(grepl("-",phylo$tip.label))|any(grepl("*",phylo$tip.label))|any(grepl("/",phylo$tip.label))|any(grepl("^",phylo$tip.label))|any(grepl("+",phylo$tip.label))){stop("script will not work with '___', '-', '+', '*','/', or '^' in any tip labels; remove these characters")}
-	if(!is.binary.tree(phylo)){stop("tree must not contain any polytomies")}
+	if(!is.binary.phylo(phylo)){stop("tree must not contain any polytomies")}
 	if(sum(phylo$edge.length<0)>0){stop("tree cannot have negative branch lengths")}
 	if(!is.ultrametric(phylo)){stop("tree must be ultrametric; current verson cannot handle fossil taxa (in development)")}
 	parameters<-c(a=alpha,b=sigma,s=sterm) 
