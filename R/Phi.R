@@ -73,9 +73,13 @@
       Nintervals <- 1 + as.integer((t-s)/dt)
       X <- seq(s, t, length.out = Nintervals + 1)
       r <- function(t){f.lamb(t)-f.mu(t)}
-      r.int <- cumsum(r(X)) * (t - s) / Nintervals
+      #r.int <- cumsum(r(X)) * (t - s) / Nintervals
+      r.int <- cumsum(sapply(unlist(X), function(k) r(k))) * (t - s) / Nintervals
+      
       r.int.0 <- function(y){exp(r.int[1 + as.integer( (y - s) * Nintervals / (t - s))]) * f.lamb(y)}
-      r.int.int.tab <- cumsum(r.int.0(X)) * (t - s) / Nintervals
+      #r.int.int.tab <- cumsum(r.int.0(X)) * (t - s) / Nintervals
+      r.int.int.tab <- cumsum(sapply(unlist(X), function(k) r.int.0(k))) * (t - s) / Nintervals
+      
       r.int.int <- function(x,y)
       {
         indy <- 1 + as.integer( (y - s) * Nintervals / (t - s))
