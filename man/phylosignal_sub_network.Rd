@@ -1,5 +1,5 @@
-\name{phylosignal_network}
-\alias{plot_phylosignal_sub_network}
+\name{phylosignal_sub_network}
+\alias{phylosignal_sub_network}
 
 \title{
 Compute clade-specific phylogenetic signals in a bipartite interaction network

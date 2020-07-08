@@ -2,10 +2,10 @@
 \alias{mycorrhizal_network}
 \docType{data}
 \title{Mycorrhizal network from La Réunion island}
-\description{Mycorrhizal intercation network between orchids and mycorrhizal fungi from La Réunion island (Martos et al., 2012) along with reconstructed phylogenetic trees of orchids and fungal OTS.}
+\description{Mycorrhizal intercation network between orchids and mycorrhizal fungi from La Réunion island (Martos et al., 2012) along with the reconstructed phylogenetic trees of the orchids and the fungal OTUs.}
 \usage{data(mycorrhizal_network)}
 \details{
-These phylogenies were constructed by maximum likelihood inference from four platids genes for the orchids and one nuclear gene for the fungi. See Martos et al. (2012) for details.
+These phylogenies were constructed by maximum likelihood inference from four plastid genes for the orchids and one nuclear gene for the fungi. See Martos et al. (2012) for details.
 }
 
 \source{

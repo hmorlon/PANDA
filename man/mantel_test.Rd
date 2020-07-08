@@ -10,7 +10,8 @@ This function computes a Mantel test between two dissimilarity matrices. The ava
 }
 
 \usage{
-mantel_test(formula = formula(data), data = sys.parent(), nperm = 1000, correlation = "Pearson")
+mantel_test(formula = formula(data), data = sys.parent(), 
+nperm = 1000, correlation = "Pearson")
 }
 
 \arguments{
@@ -58,11 +59,13 @@ Mantel, N. 1967. The detection of disease clustering and a generalized regressio
 \author{Benoît Perez-Lamarque}
 \seealso{
 \code{\link{phylosignal_network}}
+
 \code{\link{phylosignal_sub_network}}
 }
 \examples{
 
-# Measuring phylogenetic signal in species interactions using a Mantel test (do closely related species interact with similar partners?)
+# Measuring phylogenetic signal in species interactions
+# using a Mantel test (do closely related species interact with similar partners?)
 
 library(RPANDA)
 
@@ -78,7 +81,8 @@ ecological_distances <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=F
     
 phylogenetic_distances <- cophenetic.phylo(tree_orchids)
 
-mantel_test(as.dist(ecological_distances) ~ as.dist(phylogenetic_distances), correlation="Pearson",  nperm = 10000)
+mantel_test(as.dist(ecological_distances) ~ as.dist(phylogenetic_distances), 
+correlation="Pearson",  nperm = 10000)
       
 }
 

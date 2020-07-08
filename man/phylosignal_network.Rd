@@ -12,7 +12,9 @@ Mantel tests measuring phylogenetic signal in species interactions can be comput
 }
 
 \usage{
-phylosignal_network(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 10000, correlation = "Pearson", only_A = FALSE)
+phylosignal_network(network, tree_A, tree_B=NULL, 
+method = "Jaccard_weighted", nperm = 10000, 
+correlation = "Pearson", only_A = FALSE)
 }
 
 \arguments{
