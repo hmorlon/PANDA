@@ -90,8 +90,8 @@ plot_phylosignal_sub_network(tree_A = tree_orchids, results_clade_A)
 
 # Clade-specific phylogenetic signal in species interactions in guild B (do closely related species interact with similar partners in sub-clades of guild B?)
 
-results_clade_B <- phylosignal_sub_network(t(network), tree_B = tree_fungi, tree_A = tree_orchids, method = "GUniFrac", correlation = "Pearson")
-plot_phylosignal_sub_network(tree_B = tree_fungi, results_clade_B)
+results_clade_B <- phylosignal_sub_network(t(network), tree_A = tree_fungi, tree_B = tree_orchids, method = "GUniFrac", correlation = "Pearson")
+plot_phylosignal_sub_network(tree_A = tree_fungi, results_clade_B)
 
 }
 
