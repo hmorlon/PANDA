@@ -1,4 +1,4 @@
-mantel <-
+mantel_test <-
 function(formula = formula(data), data = sys.parent(), nperm = 1000, correlation = "Pearson") {
   
   # c("Pearson", "Spearman", "Kendall")
@@ -50,19 +50,11 @@ function(formula = formula(data), data = sys.parent(), nperm = 1000, correlation
     ymat <- (ymat - w1)/w2
     
     if (correlation %in% c("Pearson", "Spearman")){  # sum of the cross products
-      
-      print("delete 2")
-      system.time(1)
-      
       cresults <- .C("permute", as.double(xmat), as.double(ymat), 
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
                      zstats = as.double(zstats), as.double(as.vector(tmat)), 
                      as.integer(rarray),
                      PACKAGE = "RPANDA")
-      
-      print("delete 3")
-      system.time(1)
-      
     }
       
     if (correlation=="Kendall"){
