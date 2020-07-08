@@ -1,4 +1,3 @@
-useDynLib(RPANDA, .registration = TRUE)
 import(ape)
 import(pspline)
 import(methods)
@@ -56,3 +55,4 @@ export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_c
        getMAPS_ClaDS, getMAPS_ClaDS0, fit_ClaDS)
 export(sim_MCBD)
 export(phylosignal_network,phylosignal_sub_network,plot_phylosignal_sub_network)
+useDynLib(RPANDA, .registration = TRUE)
