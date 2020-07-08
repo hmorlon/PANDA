@@ -134,18 +134,18 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
       print("delete 1")
       system.time(1)
       
-      mantel_A <- mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Pearson")
-      if (only_A==FALSE) mantel_B <- mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Pearson")
+      mantel_A <- RPANDA::mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Pearson")
+      if (only_A==FALSE) mantel_B <- RPANDA::mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Pearson")
     }
     
     if (correlation=="Spearman"){
-      mantel_A <- mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Spearman")
-      if (only_A==FALSE) mantel_B <- mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Spearman")
+      mantel_A <- RPANDA::mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Spearman")
+      if (only_A==FALSE) mantel_B <- RPANDA::mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Spearman")
     }
     
     if (correlation=="Kendall"){
-      mantel_A <- mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Kendall")
-      if (only_A==FALSE) mantel_B <- mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Kendall")
+      mantel_A <- RPANDA::mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Kendall")
+      if (only_A==FALSE) mantel_B <- RPANDA::mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Kendall")
     }
     
     if (only_A==TRUE) mantel_B <- c(NA, NA, NA)
