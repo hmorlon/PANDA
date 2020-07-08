@@ -90,7 +90,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     if (!is.null(model_pblm)) {
       results <- c(nb_A, nb_B, model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )
       names(results) <- c("nb_A", "nb_B", "dA", "dB", "MSETotal", "MSEFull", "MSEStar", "MSEBase")
-      return(results)
+      return(unlist(results))
     }else{
       results <- c(nb_A, nb_B, NA, NA, NA, NA, NA, NA)
       names(results) <- c("nb_A", "nb_B", "dA", "dB", "MSETotal", "MSEFull", "MSEStar", "MSEBase")
@@ -111,7 +111,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     }else{
       results <- c(nb_A, nb_B, NA, NA, NA, NA, NA, NA)
       names(results) <- c("nb_A", "nb_B", "dA", "dB", "MSETotal", "MSEFull", "MSEStar", "MSEBase")
-      return(results)}
+      return(unlist(results))}
   }
   
   # Mantel tests
@@ -130,6 +130,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
 
     
     if (correlation=="Pearson"){
+      
+      print("delete 1")
+      
       mantel_A <- mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Pearson")
       if (only_A==FALSE) mantel_B <- mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Pearson")
     }

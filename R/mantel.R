@@ -48,11 +48,17 @@ function (formula = formula(data), data = sys.parent(), nperm = 1000, correlatio
     ymat <- (ymat - w1)/w2
     
     if (correlation %in% c("Pearson", "Spearman")){  # sum of the cross products
+      
+      print("delete 2")
+      
       cresults <- .Call("permute", as.double(xmat), as.double(ymat), 
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
                      zstats = as.double(zstats), as.double(as.vector(tmat)), 
                      as.integer(rarray),
                      PACKAGE = "RPANDA")
+      
+      print("delete 3")
+      
     }
       
     if (correlation=="Kendall"){
