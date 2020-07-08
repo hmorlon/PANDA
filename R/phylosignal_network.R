@@ -94,7 +94,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     }else{
       results <- c(nb_A, nb_B, NA, NA, NA, NA, NA, NA)
       names(results) <- c("nb_A", "nb_B", "dA", "dB", "MSETotal", "MSEFull", "MSEStar", "MSEBase")
-      return(results)}
+      return(unlist(results))}
     }
   
   # PBLM binary
