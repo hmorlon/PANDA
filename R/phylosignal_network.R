@@ -132,6 +132,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     if (correlation=="Pearson"){
       
       print("delete 1")
+      system.time(1)
       
       mantel_A <- mantel(as.dist(eco_A) ~ as.dist(cophe_A),  nperm = nperm, correlation="Pearson")
       if (only_A==FALSE) mantel_B <- mantel(as.dist(eco_B) ~ as.dist(cophe_B),  nperm = nperm, correlation="Pearson")

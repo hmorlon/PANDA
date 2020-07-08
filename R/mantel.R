@@ -50,6 +50,7 @@ function (formula = formula(data), data = sys.parent(), nperm = 1000, correlatio
     if (correlation %in% c("Pearson", "Spearman")){  # sum of the cross products
       
       print("delete 2")
+      system.time(1)
       
       cresults <- .Call("permute", as.double(xmat), as.double(ymat), 
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
@@ -58,6 +59,7 @@ function (formula = formula(data), data = sys.parent(), nperm = 1000, correlatio
                      PACKAGE = "RPANDA")
       
       print("delete 3")
+      system.time(1)
       
     }
       
