@@ -11,6 +11,11 @@ extern SEXP absToRel(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP absToRelSum(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP loglik(SEXP lambda, SEXP lambda2, SEXP sigma, SEXP alpha, SEXP times, SEXP internalAndRoots, SEXP nNodes, SEXP root_depth);
 
+/* .C calls */
+extern void permute(void *, void *, void *, void *, void *, void *, void *, void *);
+extern void permuteKendall(void *, void *, void *, void *, void *, void *, void *, void *);
+
+
 static const R_CallMethodDef CallEntries[] = {
     {"relToAbs",                    (DL_FUNC) &relToAbs,                     3},
     {"relToAbsSum",                 (DL_FUNC) &relToAbsSum,                  3},
@@ -20,8 +25,15 @@ static const R_CallMethodDef CallEntries[] = {
     {NULL, NULL, 0}
 };
 
+static const R_CMethodDef CEntries[] = {
+	{"permute",    (DL_FUNC) &permute,     8},
+	{"permuteKendall",    (DL_FUNC) &permuteKendall,     8},
+    {NULL, NULL, 0}
+};
+
 void R_init_RPANDA(DllInfo *dll)
 {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+	R_registerRoutines(dll, NULL, CEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
