@@ -1,5 +1,7 @@
 mantel <-
-function (formula = formula(data), data = sys.parent(), nperm = 1000, correlation = c("Pearson", "Spearman", "Kendall")) {
+function(formula = formula(data), data = sys.parent(), nperm = 1000, correlation = "Pearson") {
+  
+  # c("Pearson", "Spearman", "Kendall")
   
   m <- match.call(expand.dots = FALSE)
   m2 <- match(c("formula", "data"), names(m), nomatch = 0)
