@@ -54,5 +54,5 @@ export(plot_prob_dtt, prob_dtt)
 export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_chains,
        getMAPS_ClaDS, getMAPS_ClaDS0, fit_ClaDS)
 export(sim_MCBD)
-export(phylosignal_network,phylosignal_sub_network,plot_phylosignal_sub_network, mantel)
+export(phylosignal_network,phylosignal_sub_network,plot_phylosignal_sub_network,mantel)
 useDynLib(RPANDA, .registration = TRUE)
