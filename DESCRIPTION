@@ -9,6 +9,7 @@ Depends:
     methods
 Suggests:
     testthat
+LazyData: true
 Imports:
     ape,
     pspline,
