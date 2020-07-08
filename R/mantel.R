@@ -51,14 +51,16 @@ function (formula = formula(data), data = sys.parent(), nperm = 1000, correlatio
       cresults <- .C("permute", as.double(xmat), as.double(ymat), 
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
                      zstats = as.double(zstats), as.double(as.vector(tmat)), 
-                     as.integer(rarray))
+                     as.integer(rarray),
+                     PACKAGE = "RPANDA")
     }
       
     if (correlation=="Kendall"){
       cresults <- .C("permuteKendall", as.double(xmat), as.double(ymat),
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
                      zstats = as.double(zstats), as.double(as.vector(tmat)), 
-                     as.integer(rarray))
+                     as.integer(rarray),
+                     PACKAGE = "RPANDA")
     }
       
     zstats <- cresults$zstats
