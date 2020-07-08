@@ -52,7 +52,7 @@ function (formula = formula(data), data = sys.parent(), nperm = 1000, correlatio
       print("delete 2")
       system.time(1)
       
-      cresults <- .Call("permute", as.double(xmat), as.double(ymat), 
+      cresults <- .C("permute", as.double(xmat), as.double(ymat), 
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
                      zstats = as.double(zstats), as.double(as.vector(tmat)), 
                      as.integer(rarray),
@@ -64,7 +64,7 @@ function (formula = formula(data), data = sys.parent(), nperm = 1000, correlatio
     }
       
     if (correlation=="Kendall"){
-      cresults <- .Call("permuteKendall", as.double(xmat), as.double(ymat),
+      cresults <- .C("permuteKendall", as.double(xmat), as.double(ymat),
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
                      zstats = as.double(zstats), as.double(as.vector(tmat)), 
                      as.integer(rarray),
