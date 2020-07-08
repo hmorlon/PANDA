@@ -1,6 +1,7 @@
 #include <R.h>
-#include <Rmath.h>
-#include <R_ext/Applic.h> /* for dgemm */
+#include <Rinternals.h>
+#include <Rdefines.h>
+
 
 #define RANDIN  GetRNGstate()
 #define RANDOUT PutRNGstate()
