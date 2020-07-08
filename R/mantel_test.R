@@ -1,5 +1,5 @@
 mantel_test <-
-function(formula = formula(data), data = sys.parent(), nperm = 1000, correlation = "Pearson") {
+function(formula = formula(data), data = sys.parent(), correlation = "Pearson", nperm = 1000) {
   
   # c("Pearson", "Spearman", "Kendall")
   
