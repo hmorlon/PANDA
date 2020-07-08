@@ -1,6 +1,4 @@
 #include <R.h>
-#include <Rinternals.h>
-#include <Rdefines.h>
 #include <Rmath.h>
 #include <R_ext/Applic.h> /* for dgemm */
 
