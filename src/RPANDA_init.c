@@ -33,7 +33,6 @@ static const R_CMethodDef CEntries[] = {
 
 void R_init_RPANDA(DllInfo *dll)
 {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-	R_registerRoutines(dll, NULL, CEntries, NULL, NULL);
+    R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
