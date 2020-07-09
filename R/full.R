@@ -2,7 +2,7 @@ full <-
 function (v) {
   n <- (1 + sqrt(1 + 8 * length(v)))/2
   if (abs(n - round(n)) > 1e-07) 
-    stop("Matrix not square.")
+    stop("Matrix not square.\n")
   n <- round(n)
   full <- matrix(0, n, n)
   full[lower.tri(full)] <- v

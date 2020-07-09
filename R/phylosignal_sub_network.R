@@ -5,16 +5,16 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
   host_tree <- tree_A
   symbiont_tree <- tree_B
   
-  if (!inherits(host_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\""))}
-  if (!inherits(symbiont_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\""))}
-  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals")}
+  if (!inherits(host_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
+  if (!inherits(symbiont_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
+  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals.\n")}
   
-  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop(print("Please provide a network with row names and columns names matching the species names."))}
+  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop(print("Please provide a network with row names and columns names matching the species names.\n"))}
   
-  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.")}
+  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.\n")}
   
-  if (nrow(network)<2){stop(print("Please provide a network with at least 2 species in clade B"))}
-  if (ncol(network)<2){stop(print("Please provide a network with at least 2 species in clade A"))}
+  if (nrow(network)<2){stop(print("Please provide a network with at least 2 species in clade B.\n"))}
+  if (ncol(network)<2){stop(print("Please provide a network with at least 2 species in clade A.\n"))}
   
   host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
   symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])

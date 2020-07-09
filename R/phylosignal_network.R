@@ -3,17 +3,17 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
 
   if (is.null(tree_B)) {only_A <- TRUE} 
   
-  if (!inherits(tree_A, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\""))}
-  if (!is.null(tree_B)) {if (!inherits(tree_B, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\""))}}
+  if (!inherits(tree_A, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
+  if (!is.null(tree_B)) {if (!inherits(tree_B, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}}
   
-  if (is.null(method)) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'")}
-  if (method %in% c("GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary")) {if (is.null(tree_B)) stop("Please provide a phylogenetic tree for guild B")}
-  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'")}
+  if (is.null(method)) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'.\n")}
+  if (method %in% c("GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary")) {if (is.null(tree_B)) stop("Please provide a phylogenetic tree for guild B.\n")}
+  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'.\n")}
   
-  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.")}
+  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.\n")}
   
-  if (nrow(network)<2){stop(print("Please provide a network with at least 2 species in clade B"))}
-  if (ncol(network)<2){stop(print("Please provide a network with at least 2 species in clade A"))}
+  if (nrow(network)<2){stop(print("Please provide a network with at least 2 species in clade B.\n"))}
+  if (ncol(network)<2){stop(print("Please provide a network with at least 2 species in clade A.\n"))}
     
   # A in columns and B in rows
   nb_A <- ncol(network)
@@ -22,10 +22,10 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   names(nb_B) <- "nb_B"
   
   # Check names
-  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop(print("Please provide a network with row names and columns names matching the species names."))}
+  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop(print("Please provide a network with row names and columns names matching the species names.\n"))}
   
-  if (!all(colnames(network) %in% tree_A$tip.label)){stop(print("Please provide a tree for all the species in clade A (in the columns of the intercation network)"))}
-  if (only_A==FALSE) { if (!all(rownames(network) %in% tree_B$tip.label)){stop(print("Please provide a tree for all the species in clade B (in the rows of the intercation network)"))}}
+  if (!all(colnames(network) %in% tree_A$tip.label)){stop(print("Please provide a tree for all the species in clade A (in the columns of the intercation network).\n"))}
+  if (only_A==FALSE) { if (!all(rownames(network) %in% tree_B$tip.label)){stop(print("Please provide a tree for all the species in clade B (in the rows of the intercation network).\n"))}}
   
   tree_A <- drop.tip(tree_A,tip=tree_A$tip.label[which(!tree_A$tip.label %in% colnames(network))])
   if (only_A==FALSE) { tree_B <- drop.tip(tree_B,tip=tree_B$tip.label[which(!tree_B$tip.label %in% rownames(network))])}

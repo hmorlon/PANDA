@@ -95,20 +95,25 @@ tree_fungi <- mycorrhizal_network[[3]] # phylogenetic tree (phylo object)
 
 # Using Mantel tests: 
 
-# Phylogenetic signal in the degree of generalism (do closely related species interact with the same number of partners?)
+# Phylogenetic signal in the degree of generalism 
+# (do closely related species interact with the same number of partners?)
 
-phylosignal_network(network, tree_A = tree_orchids, method = "degree", correlation = "Pearson", nperm = 10000) # for guild A
-phylosignal_network(t(network), tree_A = tree_fungi, method = "degree", correlation = "Pearson", nperm = 10000) # for guild B
-
-
-# Phylogenetic signal in species interactions (do closely related species interact with similar partners?)
-
-phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, method = "GUniFrac", correlation = "Pearson", nperm = 10000) # measured for both guilds
+phylosignal_network(network, tree_A = tree_orchids, method = "degree", 
+correlation = "Pearson", nperm = 10000) # for guild A
+phylosignal_network(t(network), tree_A = tree_fungi, method = "degree", 
+correlation = "Pearson", nperm = 10000) # for guild B
 
 
-# Using PBLM (not recommended)
+# Phylogenetic signal in species interactions 
+# (do closely related species interact with similar partners?)
 
-# phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, method = "PBLM") # very slow 
+phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, 
+method = "GUniFrac", correlation = "Pearson", nperm = 10000) # measured for both guilds
+
+
+# Using PBLM (not recommended) - very slow 
+
+# phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, method = "PBLM") 
 
 }
 

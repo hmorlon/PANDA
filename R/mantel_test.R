@@ -1,7 +1,8 @@
 mantel_test <-
 function(formula = formula(data), data = sys.parent(), correlation = "Pearson", nperm = 1000) {
   
-  # c("Pearson", "Spearman", "Kendall")
+  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop(print("Correlation must be among 'Pearson', 'Spearman', or 'Kendall'.\n"))}
+  if (!is.numeric(nperm)) {stop(print("Please provide a numeric number of permutations (nperm).\n"))}
   
   m <- match.call(expand.dots = FALSE)
   m2 <- match(c("formula", "data"), names(m), nomatch = 0)
