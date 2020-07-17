@@ -12,12 +12,12 @@ function(tree, thresh=97, sequences, method="pi"){
   rownames(bins) <- tree$tip.label
   bins[,2] <- tree$tip.label
   
+  it_OTU <- 0 
   if (N.tip==1){
     print("single")
     sequence<-tree$tip.label
     bins[sequence,1]<-1
   } else {
-    it_OTU <- 0 
     for (i in (N.tip+1):(N.tip+Nnode(tree))){
     extracted_tree <- extract.clade(tree, node = i)
         if (all(bins[extracted_tree$tip.label,1]==0)){
@@ -41,6 +41,7 @@ function(tree, thresh=97, sequences, method="pi"){
         }
       }
   }
+  bins <- data.frame(bins, stringsAsFactors = F)
   colnames(bins) <- c("phylotype", "representative_sequence")
   
   print(paste0("Number phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
