@@ -41,6 +41,7 @@ function(tree, thresh=97, sequences, method="pi"){
           }
         }
       }
-    }
+  }
+  colnames(bins) <- c("phylotype", "representative_sequence")
   return(bins)
 }
