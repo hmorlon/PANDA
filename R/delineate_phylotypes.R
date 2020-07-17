@@ -3,7 +3,7 @@ function(tree, thresh=97, sequences, method="pi"){
   
   if (!inherits(tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
   if (is.rooted(tree)) {stop(print("Please provide a rooted phylogeny"))}
-  if (all(tree$tip.label %in% rownames(sequences))) {stop(print("Please provide a nucleotidic alignment with sequence names matching the tip labels of the phylogenetic tree"))}
+  if (!all(tree$tip.label %in% rownames(sequences))) {stop(print("Please provide a nucleotidic alignment with sequence names matching the tip labels of the phylogenetic tree"))}
   
   if (method %in% c("pi","theta", "mean")){stop(print("Please provide a method among 'pi' or 'theta'"))}
   

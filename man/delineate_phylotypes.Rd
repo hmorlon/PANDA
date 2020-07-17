@@ -23,7 +23,7 @@ a numeric digit between 0 and 100 indicating the minimal average similarity to c
 }
 
 \item{sequences}{
-a nucleotidic alignment of all the sequences present in the phylogenetic tree. 
+a matrix representing the nucleotidic alignment of all the sequences present in the phylogenetic tree. 
 }
 
 \item{method}{
