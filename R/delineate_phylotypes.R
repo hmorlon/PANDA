@@ -32,7 +32,6 @@ function(tree, thresh=97, sequences, method="pi"){
           
           if (mean_dist<(100-thresh)/100){
             it_OTU <- it_OTU + 1
-            print(it_OTU)
             bins[extracted_tree$tip.label,1] <- it_OTU
             
             extracted_sequences <- sequences[which(rownames(sequences) %in% extracted_tree$tip.label),]
@@ -43,5 +42,9 @@ function(tree, thresh=97, sequences, method="pi"){
       }
   }
   colnames(bins) <- c("phylotype", "representative_sequence")
+  
+  print(paste0("Number phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
+  print(paste0("Number phylotypes (excluding singletons): ", it_OTU))
+  print(paste0("Number singletons: ", length(which(bins$phylotype=="0"))))
   return(bins)
 }

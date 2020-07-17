@@ -34,8 +34,7 @@ Ferretti L, Raineri E, Ramos-Onsins S. 2012. Neutrality tests for sequences with
 Perez-Lamarque B, Öpik M, Maliet O, Silva A, Selosse M-A, Martos F, and Morlon H (in prep). Global drivers of obligate mycorrhizal symbionts diversification
 }
 \author{
-Ana Catarina Afonso Silva
-Benoît Perez-Lamarque}
+Ana Catarina Afonso Silva & Benoît Perez-Lamarque}
 \seealso{
 \code{\link{theta_estimator}}
 \code{\link{delineate_phylotypes}}
