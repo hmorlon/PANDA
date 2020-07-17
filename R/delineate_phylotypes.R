@@ -44,8 +44,8 @@ function(tree, thresh=97, sequences, method="pi"){
   bins <- data.frame(bins, stringsAsFactors = F)
   colnames(bins) <- c("phylotype", "representative_sequence")
   
-  print(paste0("Number phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
-  print(paste0("Number phylotypes (excluding singletons): ", it_OTU))
-  print(paste0("Number singletons: ", length(which(bins$phylotype=="0"))))
+  print(paste0("Number of phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
+  print(paste0("Number of phylotypes (excluding singletons): ", it_OTU))
+  print(paste0("Number of singletons: ", length(which(bins$phylotype=="0"))))
   return(bins)
 }
