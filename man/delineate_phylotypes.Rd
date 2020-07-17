@@ -34,7 +34,7 @@ indicates which method to use to compute the average similarity: "mean" computes
 
 
 \value{
-A table with the first column corresponding to the sequence names and the second colums to their respective phylotype assignation. Phylotypes are numbered starting at 1, and all the phylotypes nammed "0" correspond to singletons.
+A table with row names corresponding to the sequence names. The first column to the phylotype assignation and the second colums indicates the name of the representative sequence of each phylotype (longuest sequence available). Phylotypes are numbered starting at 1, and all the phylotypes nammed "0" correspond to singletons.
 }
 
 \references{

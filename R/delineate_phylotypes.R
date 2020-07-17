@@ -9,9 +9,10 @@ function(tree, thresh=97, sequences, method="pi"){
   
   N.tip<-Ntip(tree)
   bins<-matrix(0,nrow=N.tip,ncol=2)
-  rownames(bins)<-tree$tip.label
+  rownames(bins) <- tree$tip.label
+  bins[,2] <- tree$tip.label
   
-  if(N.tip==1){
+  if (N.tip==1){
     print("single")
     sequence<-tree$tip.label
     bins[sequence,1]<-1
@@ -19,7 +20,6 @@ function(tree, thresh=97, sequences, method="pi"){
     it_OTU <- 0 
     for (i in (N.tip+1):(N.tip+Nnode(tree))){
     extracted_tree <- extract.clade(tree, node = i)
-      if (Ntip(extracted_tree)<Ntip(tree)/8){
         if (all(bins[extracted_tree$tip.label,1]==0)){
         
           if (method=="pi") mean_dist <- pi_estimator(sequences[which(rownames(sequences) %in% extracted_tree$tip.label),])
@@ -34,11 +34,13 @@ function(tree, thresh=97, sequences, method="pi"){
             it_OTU <- it_OTU + 1
             print(it_OTU)
             bins[extracted_tree$tip.label,1] <- it_OTU
-            bins[extracted_tree$tip.label,2] <- tree$node.label[i-N.tip]
+            
+            extracted_sequences <- sequences[which(rownames(sequences) %in% extracted_tree$tip.label),]
+            bins[extracted_tree$tip.label,2] <- rownames(extracted_sequences)[which.max(sapply(1:nrow(extracted_sequences), function(k) length(which(!extracted_sequences[k,] %in% c("-", "N", "n")))))]
+            
           }
         }
       }
-    }
     }
   return(bins)
 }
