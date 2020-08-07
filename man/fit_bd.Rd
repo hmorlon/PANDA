@@ -123,15 +123,12 @@ mu_par<-c()
 # Fit the pure birth model (no extinction) with linear variation of
 # the speciation rate with time
 f.lamb <-function(t,y){abs(y[1] + y[2] * t)}
+# alternative formulation that can be used depending on the choice made to avoid negative rates: 
+# f.lamb <-function(t,y){pmax(0,y[1] + y[2] * t)}, see Morlon et al. (2020)
 f.mu<-function(t,y){0}
 lamb_par<-c(0.09, 0.001)
 mu_par<-c()
 #result_lin <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,fix.mu=TRUE,dt=1e-3)
-#result_lin$model <- "pure birth with linear variation in speciation rate"
-
-# alternative formulation that can be used depending on the choice made to avoid negative rates: 
-# f.lamb <-function(t,y){max(0,y[1] + y[2] * t)}, see Morlon et al. (2020)
-#result_lin <- fit_bd(Cetacea,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=87/89,fix.mu=TRUE)
 #result_lin$model <- "pure birth with linear variation in speciation rate"
 
 # Fit a birth-death model with exponential variation of the speciation
