@@ -168,6 +168,7 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
+par(mar=c(1,1,0,0))
 plot_ClaDS_phylo(tree,speciation_rates)
 
 

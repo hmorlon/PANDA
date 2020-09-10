@@ -10,6 +10,7 @@ extern SEXP relToAbsSum(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP absToRel(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP absToRelSum(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP loglik(SEXP lambda, SEXP lambda2, SEXP sigma, SEXP alpha, SEXP times, SEXP internalAndRoots, SEXP nNodes, SEXP root_depth);
+extern SEXP fitnessFunction(SEXP X, SEXP x, SEXP r, SEXP alpha, SEXP Ncol, SEXP D, SEXP dSpace, SEXP Xs, SEXP Ys, SEXP I);
 
 static const R_CallMethodDef CallEntries[] = {
     {"relToAbs",                    (DL_FUNC) &relToAbs,                     3},
@@ -17,6 +18,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"absToRel",                    (DL_FUNC) &absToRel,                     3},
     {"absToRelSum",                 (DL_FUNC) &absToRelSum,                  3},
     {"loglik",                      (DL_FUNC) &loglik,                       8},
+    {"fitnessFunction",             (DL_FUNC) &fitnessFunction,             10},
     {NULL, NULL, 0}
 };
 
