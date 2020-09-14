@@ -5,7 +5,7 @@ Implements fits of diversification and phenotypic evolution models to phylogenet
 
 More information on the RPANDA package and worked examples can be found in [Morlon et al. (2016)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12526)
 
-The current stable version of the RPANDA package (1.8) is available on the CRAN repository.
+The current stable version of the RPANDA package (1.9) is available on the CRAN repository.
 [https://cran.r-project.org/package=RPANDA](https://cran.r-project.org/package=RPANDA)
 
 
