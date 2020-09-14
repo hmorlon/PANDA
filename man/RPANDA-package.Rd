@@ -12,8 +12,8 @@ Implements macroevolutionary analyses on phylogenetic trees
 \tabular{ll}{
 Package: \tab RPANDA\cr
 Type: \tab Package\cr
-Version: \tab 1.8\cr
-Date: \tab 2020-03-05\cr
+Version: \tab 1.9\cr
+Date: \tab 2020-09-14\cr
 License: \tab GPL (>= 2)\cr
 }
 
@@ -76,6 +76,8 @@ Aristide, L., Morlon, H. (2019) Understanding the effect of competition during e
 Billaud, O., Moen, D. S., Parsons, T. L., Morlon, H. (2019) Estimating Diversity Through Time using Molecular Phylogenies: Old and Species-Poor Frog Families are the Remnants of a Diverse Past Systematic Biology 69: 363–383
 
 Lewitus, E., Aristide, L., Morlon, H. (2019) Characterizing and Comparing Phylogenetic Trait Data from Their Normalized Laplacian Spectrum Systematic Biology 69: 234–248
+
+Maliet, O., Loeuille, N., Morlon, H. (2020) An individual-based model for the eco-evolutionary emergence of bipartite interaction networks Ecology Letters 
 }
 %\keyword{ phylogeny }
 
