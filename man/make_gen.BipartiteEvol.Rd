@@ -1,6 +1,5 @@
 \name{make_gen.BipartiteEvol}
 \alias{make_gen.BipartiteEvol}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Compute the genealogies for BipartiteEvol}
 \description{
@@ -9,7 +8,6 @@ Compute the genealogies from a run of BipartiteEvol
 \usage{
 make_gen.BipartiteEvol(out, treeP = NULL, treeH = NULL, verbose = T)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{out}{
 The output of a run of sim.BipartiteEvol
@@ -30,7 +28,7 @@ a list object with
 \item{H}{The genealogy of the clade H}
 }
 \references{
-Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual‐based model for the eco‐evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
+Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
 \author{
 O. Maliet
 }

@@ -55,7 +55,7 @@ On the third line there is, from left to right, the trait distribution within in
 The lower line shows the quantitative interaction network, with species colored according to their mean trait value (for the dimension trait.id).
 }
 \references{
-Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual‐based model for the eco‐evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
+Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
 \author{
 O. Maliet
 }

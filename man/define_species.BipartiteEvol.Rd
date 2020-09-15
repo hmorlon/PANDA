@@ -1,6 +1,5 @@
 \name{define_species.BipartiteEvol}
 \alias{define_species.BipartiteEvol}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Build the phylogenies for BipartiteEvol}
 \description{
@@ -33,7 +32,7 @@ a list with
 \item{Hphylo}{The phylogeny for guild H}
 }
 \references{
-Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual‐based model for the eco‐evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
+Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
 \author{
 O. Maliet
 }
