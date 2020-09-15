@@ -1,7 +1,5 @@
 \name{plot_div.BipartiteEvol}
 \alias{plot_div.BipartiteEvol}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
 Plot the output of BipartiteEvol
 }
 \description{
@@ -11,7 +9,6 @@ Plot the genealogies and phylogenies simulated with BipartiteEvol
 plot_div.BipartiteEvol(gen, spec, trait.id, lwdgen = 1, 
     lwdsp = lwdgen, scale = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
 
   \item{gen}{

@@ -40,7 +40,7 @@ O. Maliet
 \examples{
 # run the model
 set.seed(1)
-mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 1000,
+mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 800,
                         D = 3, muP = 0.1 , muH = 0.1,
                         alphaP = 0.12,alphaH = 0.12,
                         rP = 10, rH = 10,
@@ -67,7 +67,7 @@ plot_net.BipartiteEvol(gen,phy1,trait.id, net,mod, nx = nx, spatial = FALSE)
 seed=as.integer(10)
 set.seed(seed)
 
-mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 1000,
+mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 200,
                         D = 3, muP = 0.1 , muH = 0.1,
                         alphaP = 0.12,alphaH = 0.12,
                         rP = 10, rH = 10,

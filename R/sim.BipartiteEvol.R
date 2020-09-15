@@ -533,14 +533,12 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
       ty=type[ty]                                         # type of tips not in a
       
       if(length(intersect(type[as.integer(a$tip.label)],ty))==0){
-        # seeing how nextNode is built, this should always be the case... Test needed
         n=length(a$tip.label)                             # number of tips in the subtree
         offspring=gen$edge[gen$edge[,1]==i,2]             # offspring nodes of i in the main tree
         offspringSubTree=a$edge[a$edge[,1]==(n+1),2]      # offspring node of i in the subtree
         
         if(length(offspringSubTree)>1){
-          # but it should always be the case... Test needed
-          
+
           for(j in 1:(length(offspringSubTree))){
             
             if(offspringSubTree[j]<=n){

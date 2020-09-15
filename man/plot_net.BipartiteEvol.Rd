@@ -1,6 +1,5 @@
 \name{plot_net.BipartiteEvol}
 \alias{plot_net.BipartiteEvol}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Plot the output of BipartiteEvol
 }
@@ -13,7 +12,6 @@ plot_net.BipartiteEvol(gen, spec, trait.id, link,
     nx = NULL, cor = F, network.method = "bipartite", 
     spatial = F)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{gen}{
 The output of a run of make_gen.BipartiteEvol
