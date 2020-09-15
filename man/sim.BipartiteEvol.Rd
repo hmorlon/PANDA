@@ -80,7 +80,7 @@ a list with
 \item{thin.factor}{The thin value used in the simulation}
 }
 \references{
-Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual‐based model for the eco‐evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
+Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
 \author{
 O. Maliet
 }
