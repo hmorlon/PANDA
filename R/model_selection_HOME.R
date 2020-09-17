@@ -36,7 +36,6 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
           output <- independent_evolution(replicate,name,index,seed,nb_tree,lambda,nb_cores)
         replicate <- replicate + 1
         table <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
-        pvalue <- table$mu
         
         if (replicate>10) {pvalue <- max(c(length(which(table$ksi<=est_ksi))/nb_random, length(which(round(table$mu,digits=10)<=round(est_mu,digits=10)))/nb_random))}
         }
