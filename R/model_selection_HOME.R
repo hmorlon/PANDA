@@ -33,12 +33,12 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         
         while ((replicate<=nb_random)&(pvalue<=0.05)){
           print(noquote(paste("Replicate: ",replicate,sep="")))
-          output <- independent_evolution(replicate,name,index,seed,nb_tree,lambda,nb_cores)}
+          output <- independent_evolution(replicate,name,index,seed,nb_tree,lambda,nb_cores)
         replicate <- replicate + 1
         table <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
         pvalue <- table$mu
         
         pvalue <- max(c(length(which(table$ksi<=est_ksi))/nb_random, length(which(round(table$mu,digits=10)<=round(est_mu,digits=10)))/nb_random))
-        
+        }
       }else{print(noquote("overwrite==FALSE: model selection is not performed again"))}
     }}}
