@@ -42,11 +42,11 @@ A phylogenetic tree with nodes colored according to the clade-specific phylogene
 }
 \details{
 
-See tutorial in XXX. 
+See tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network). 
 
 }
 \references{
-Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Measuring phylogenetic signal in bipartite interaction networks: Do closely related species interact with similar partners?
+Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in ecological networks.
 
 Goslee, S.C. & Urban, D.L. (2007). The ecodist package for dissimilarity-based analysis of ecological data. J. Stat. Softw., 22, 1–19.
 
