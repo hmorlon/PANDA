@@ -138,7 +138,6 @@ function(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),n
       est_mu <- results$mu[which.min(results$minloglik)]
       if(randomize==T){
         results_randomize <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
-        if (nrow(results_randomize)!=nb_random){print(paste0("Problem with number of replicates in randomizations: ", index))}
         ksi_randomize <- length(which(results_randomize$ksi<=est_ksi))/length(results_randomize$ksi)
         mu_randomize <- length(which(round(results_randomize$mu,digits=10)<=round(est_mu,digits=10)))/length(results_randomize$mu)
         write.table(rbind(c("Distribution_test","p-value"),c("Empirical_ranking_(ksi_distribution)",round(c(ksi_randomize),4)),c("Empirical_ranking_(mu_distribution)",round(c(mu_randomize),4))), paste("results/model_selection_independent_stats_",name,"_",index,".txt",sep=""), row.names=F,col.names=F,quote = F,sep="\t")
