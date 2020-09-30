@@ -38,6 +38,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         table <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
         
         if (replicate>10) {pvalue <- max(c(length(which(table$ksi<=est_ksi))/nb_random, length(which(round(table$mu,digits=10)<=round(est_mu,digits=10)))/nb_random))}
+        if ((replicate>50)&(pvalue==0)) {pvalue <- 10} # stop the process
         }
       }else{print(noquote("overwrite==FALSE: model selection is not performed again"))}
     }}}
