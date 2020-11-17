@@ -123,10 +123,18 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
 
     results <- c(nb_A, nb_B, NA, NA, NA, NA, NA, NA)
     names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_high_A","pvalue_low_A", "mantel_cor_B", "pvalue_high_B", "pvalue_low_B")
-    if (length(unique(as.vector(cophe_A)))<3) {return(results)}
-    if (only_A==FALSE) {if (length(unique(as.vector(cophe_B)))<3) {return(results)}}
-    if (length(unique(as.vector(eco_A)))<3) {return(results)}
-    if (only_A==FALSE) {if (length(unique(as.vector(eco_B)))<3) {return(results)}}
+    if (length(unique(as.vector(cophe_A)))<3) {
+      print("The phylogenetic distance matrix of guild A is composed of only 2 different values (because of polytomies?).")
+      return(results)}
+    if (only_A==FALSE) {if (length(unique(as.vector(cophe_B)))<3) {
+      print("The phylogenetic distance matrix of guild B only is composed of only 2 different values (because of polytomies?).")
+      return(results)}}
+    if (length(unique(as.vector(eco_A)))<2) {
+      print("The ecological distance matrix of guild A is composed of only 1 value (identical patterns of interactions across species?).")
+      return(results)}
+    if (only_A==FALSE) {if (length(unique(as.vector(eco_B)))<2) {
+      print("The ecological distance matrix of guild B is composed of only 1 value (identical patterns of interactions across species?).")
+      return(results)}}
 
     
     if (correlation=="Pearson"){
