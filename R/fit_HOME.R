@@ -12,6 +12,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
     ivp <- NULL
     propinv <- NULL
     load(paste("data/data_model_",name,"_",index,".RData",sep=""))
+    if (n>=5){
     if (N_variant>0){
       
       output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=500,tol=0.05,name=name,index=index,sequences=variant_sequences) 
@@ -54,4 +55,4 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
       
       ####  Model selection (vertical transmission) to save time 
       output <- selection_vertical_transmission(name,index)
-    }}}
+    }}}}

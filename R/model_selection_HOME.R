@@ -6,7 +6,9 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
   
   if (file.exists(paste("data/alignment_variant_",name,"_",index,".fas",sep=""))){
     N_variant <- NULL
+    n <- NULL
     load(paste("data/data_model_",name,"_",index,".RData",sep=""))
+    if (n>=5){
     if (N_variant>0){
       
       # strict vertical transmission
@@ -41,4 +43,4 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         if ((replicate>50)&(pvalue==0)) {pvalue <- 10} # stop the process
         }
       }else{print(noquote("overwrite==FALSE: model selection is not performed again"))}
-    }}}
+    }}}}
