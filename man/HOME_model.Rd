@@ -11,8 +11,10 @@ This function runs HOME for all the different OTUs (called "index"") on the host
 }
 
 \usage{
-HOME_model(name, name_index, provided_tree, nb_tree=5000, lambda=seq(1,25),
-raref=FALSE, empirical=TRUE, randomize=TRUE, nb_random=10, path, path_alignment, seed=3, nb_cores=1, overwrite=FALSE,figure=FALSE)
+HOME_model(name,name_index,nb_cores=1,seed=3,nb_tree=5000,
+lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),
+raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,tolerance=0.05,
+overwrite=TRUE,figure=FALSE,path=getwd(),path_alignment=getwd(),...)
 }
 
 \arguments{
@@ -59,11 +61,17 @@ a seed to assure the reproducibility
 \item{nb_cores}{
 a number of cores to run the analyses (ideally, it should be equal to the length of lambda for an optimal speed)
 }
+\item{tol}{
+the desired accuracy of the \emph{optimize} function (to estimate mu). A low value will give a more accurate estimate, but will take more computational time.
+}
 \item{overwrite}{
-indicates whether the any previous results should be overwritten by the current run (default: TRUE).  
+indicates whether the any previous results should be overwritten by the current run (default: TRUE).
 }
 \item{figure}{
-indicates whether it automatically outputs figures at the end of the run (default: FALSE).  
+indicates whether it automatically outputs figures at the end of the run (default: FALSE).
+}
+\item{...}{
+optional - other arguments to be passed.
 }
 }
 
@@ -81,26 +89,31 @@ See reference for more details.
 
 }
 \references{
-Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
+Perez-Lamarque B, Morlon H (2019). Characterizing symbiont inheritance during host-microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19:1659-1671.
 }
-\author{Benoît Perez-Lamarque}
+\author{Benoit Perez-Lamarque}
 \seealso{
 \code{\link{sim_microbiota}}
 }
 \examples{
 # Some examples may take a little bit of time. Be patient!
+\dontshow{.old_wd <- setwd(tempdir())}
 
-### ON SIMULATIONS 
+### ON SIMULATIONS
 
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted, 1 is transmitted with 5 host-switches,
+#  and 1 is environmentally acquired)
+
 
 sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
-simul=c(0,5,"indep"), n=10, mu=1, 
+simul=c(0,5,"indep"), n=10, mu=1,
 N=300, proportion_variant=0.1)
 
 # Run HOME (parameters estimations and model selections)
 
-#HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"), nb_tree=1000, lambda=seq(1,15), empirical=FALSE, nb_random=10)
+#HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+#nb_tree=1000, lambda=seq(1,15), empirical=FALSE, nb_random=10)
 
 
 ### EMPIRICAL APPLICATION: example on the great apes microbiota
@@ -109,38 +122,11 @@ N=300, proportion_variant=0.1)
 example_great_apes_microbiota(name="great_apes")
 
 # Run HOME
-#HOME_model(name="great_apes", name_index=c("OTU0001","OTU0002","OTU0003"), nb_tree=500, lambda=seq(1,25), nb_random=10)
+#HOME_model(name="great_apes", name_index=c("OTU0001","OTU0002","OTU0003"), nb_tree=500,
+#lambda=seq(1,25), nb_random=10)
 
 # NB: this should be run on a larger number of tree!
-
+\dontshow{setwd(.old_wd)}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

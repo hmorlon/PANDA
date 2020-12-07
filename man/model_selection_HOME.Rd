@@ -10,7 +10,9 @@ This function performs the model selections of HOME testing the null hypotheses 
 
 }
 
-\usage{model_selection_HOME(index, name, nb_tree=10000, lambda=seq(1,25), nb_random=10, seed=1, nb_cores=1, overwrite=TRUE,...)
+\usage{model_selection_HOME(index,name,nb_tree=10000,
+lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),
+nb_cores=1,seed=1,nb_random=10,tolerance=0.05,overwrite=TRUE,...)
 }
 
 \arguments{
@@ -40,9 +42,14 @@ a seed to assure the reproducibility
 \item{nb_cores}{
 a number of cores to run the analyses (ideally, it should be equal to the length of lambda for an optimal speed)
 }
-
+\item{tol}{
+the desired accuracy of the \emph{optimize} function (to estimate mu). A low value will give a more accurate estimate, but will take more computational time.
+}
 \item{overwrite}{
-indicates whether the any previous results should be overwritten by the current run (default: TRUE).  
+indicates whether the any previous results should be overwritten by the current run (default: TRUE).
+}
+\item{...}{
+optional - other arguments to be passed.
 }
 
 }
@@ -57,9 +64,9 @@ See reference for more details.
 
 }
 \references{
-Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
+Perez-Lamarque B, Morlon H (2019). Characterizing symbiont inheritance during host-microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19:1659-1671.
 }
-\author{Benoît Perez-Lamarque}
+\author{Benoit Perez-Lamarque}
 \seealso{
 \code{\link{sim_microbiota}},
 \code{\link{prepare_data_HOME}},
@@ -72,7 +79,10 @@ Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during h
 # Some examples may take a little bit of time. Be patient!
 
 
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted, 1 is transmitted with 5 host-switches,
+#  and 1 is environmentally acquired)
+
 
 name="example_simulation"
 name_index=c("Simul_1","Simul_2","Simul_3")
@@ -89,15 +99,19 @@ path=getwd()
 #for (ksi in 1:length(seq(1,25))){simul_bank_tree(ksi,name,nb_tree=1000,lambda=seq(1,25),seed=1)}
 
 # Infer the parameters
-#for (i in 1:3){fit_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1)}
+#for (i in 1:3){fit_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),
+#nb_cores=1)}
 
 # Plot the first outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=FALSE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,
+#empirical=FALSE,randomize=FALSE,raref=FALSE)}
 
 # Perform the model selection
-#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1,seed=1)}
+#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,
+#lambda=seq(1,25),nb_cores=1,seed=1)}
 
 # Plot the final outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=TRUE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,
+#empirical=FALSE,randomize=TRUE,raref=FALSE)}
 }
 

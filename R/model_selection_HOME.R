@@ -1,5 +1,5 @@
 model_selection_HOME <-
-function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_cores=1,seed=1,nb_random=10,overwrite=TRUE,...){
+function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_cores=1,seed=1,nb_random=10,overwrite=TRUE,tolerance=0.05,...){
   
   print(noquote(paste("Index: ",index,sep="")))
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop(print("Please start by running the previous steps of HOME (fit_HOME...)"))
@@ -35,7 +35,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         
         while ((replicate<=nb_random)&(pvalue<=0.05)){
           print(noquote(paste("Replicate: ",replicate,sep="")))
-          output <- independent_evolution(replicate,name,index,seed,nb_tree,lambda,nb_cores)
+          output <- independent_evolution(replicate,name,index,seed,nb_tree,lambda,nb_cores,tolerance=tolerance)
         replicate <- replicate + 1
         table <- read.table(paste("results/model_selection_independent_",name,"_",index,".txt",sep=""),header=T)
         

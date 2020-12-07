@@ -1,5 +1,5 @@
 fit_HOME <-
-function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_cores=1,raref=FALSE,...){ 
+function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),nb_cores=1,raref=FALSE,tolerance=0.05,...){ 
   print(paste("Index: ",index,sep=""))
   if (!file.exists(paste("data/data_model_",name,"_",index,".RData",sep=""))) stop(print("Please start by running the previous steps of HOME (prepare_data_HOME...)"))
   
@@ -15,7 +15,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
     if (n>=5){
     if (N_variant>0){
       
-      output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=500,tol=0.05,name=name,index=index,sequences=variant_sequences) 
+      output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=500,tol=tolerance,name=name,index=index,sequences=variant_sequences) 
       
       results <- cbind(0,output$minimum,output$objective)
       colnames(results) <- c("ksi","mu","minloglik")
@@ -28,7 +28,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
         if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,rownames(variant_sequences))
         for(i in 1:nb_tree){for (missing in missing_symbiont){list_tree[[i]] <- drop.tip(list_tree[[i]], tip=missing)}}}
         
-        output <- optimize(f=inference_switches, lower=0.0001, upper=500,tol=0.05,ksi=ksi, randomize=F, name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
+        output <- optimize(f=inference_switches, lower=0.0001, upper=500,tol=tolerance,ksi=ksi, randomize=F, name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
         
         mu <- output$minimum
         minloglik <- output$objective
@@ -43,7 +43,7 @@ function(index,name,nb_tree=10000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,2
           list_loglik <- vector("numeric",length(list))
           for (i in 1:length(list)) {
             
-            output <- optimize(f=inference_switches, lower=0.0001, upper=500,tol=0.05,ksi=ksi,randomize=T, name=name,index=index,sequences=variant_sequences,nb_tree=list[i],list_tree=list_tree[c(1:list[i])],eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
+            output <- optimize(f=inference_switches, lower=0.0001, upper=500,tol=tolerance,ksi=ksi,randomize=T, name=name,index=index,sequences=variant_sequences,nb_tree=list[i],list_tree=list_tree[c(1:list[i])],eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
             
             list_loglik[i] <- output$objective}
           list_loglik<- cbind(list,as.vector(list_loglik))

@@ -10,10 +10,9 @@ This function simulates microbial alignments according to different models of ho
 }
 
 \usage{
-sim_microbiota(name, name_index, simul, provided_tree, n=20, mu=1, N=300, proportion_variant=0.1, seed=1, nb_cores=1, path,...)
-
-sim_microbiota(name, name_index, simul, provided_tree=NULL, n=20, mu=1, N=300, proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10, geo_signal=0, stochastic_map=NULL, path=getwd(), seed=1, nb_cores=1,...)
-
+sim_microbiota(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300,
+proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10,
+geo_signal=0, stochastic_map=NULL, path=getwd(), seed=1, nb_cores=1, ...)
 }
 
 \arguments{
@@ -37,7 +36,7 @@ optional - a positive integer value representing the number of tips of the host 
 }
 
 \item{mu}{
-a positive value representing the simulated substitution rate. 
+a positive value representing the simulated substitution rate.
 }
 
 \item{N}{
@@ -65,7 +64,7 @@ optional – for "model= host_dependent", the host-switches are preferentially s
 }
 
 \item{geo_signal}{
-optional – for "model=geo_dependent", the host-switches are preferentially simulated between host lineages sharing the same geographic area. "geo_signal" must be between 0 and 1, it indicates the probability for a switch to occur between areas divided by the probability for a switch to occur within an area. If "geo_signal"=1, switches are uniformly distributed, whereas if "geo_signal"=0, switches can only happen between host lineages sharing the same geographic area. 
+optional – for "model=geo_dependent", the host-switches are preferentially simulated between host lineages sharing the same geographic area. "geo_signal" must be between 0 and 1, it indicates the probability for a switch to occur between areas divided by the probability for a switch to occur within an area. If "geo_signal"=1, switches are uniformly distributed, whereas if "geo_signal"=0, switches can only happen between host lineages sharing the same geographic area.
 }
 
 \item{stochastic_map}{
@@ -85,6 +84,10 @@ a number of cores to run the analyses
 optional - the path to the working directory
 }
 
+\item{...}{
+optional - other arguments to be passed.
+}
+
 }
 
 
@@ -98,62 +101,77 @@ If you provide a binary rooted ultrametric host tree, it must be in Newick forma
 
 }
 \references{
-Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
+Perez-Lamarque B, Morlon H (2019). Characterizing symbiont inheritance during host-microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19:1659-1671.
 }
-\author{Benoît Perez-Lamarque}
+\author{Benoit Perez-Lamarque}
 \seealso{
 \code{\link{HOME_model}}
 }
 \examples{
 
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (uniformly distributed) and 1 is environmentally acquired)
+\dontshow{.old_wd <- setwd(tempdir())}
+
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted, 1 is transmitted with 5 host-switches,
+#  and 1 is environmentally acquired)
 
 sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
-               simul=c(0,5,"indep"), n=10, mu=1, 
+               simul=c(0,5,"indep"), n=10, mu=1,
                N=300, proportion_variant=0.1)
 
 
 # Run HOME (parameters estimations and model selections)
 
-#HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"), nb_tree=1000, lambda=seq(1,25), empirical=FALSE, nb_random=10)
+#HOME_model(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+#nb_tree=1000, lambda=seq(1,25), empirical=FALSE, nb_random=10)
 
 
-# Non-uniform types of host-switches: 
+# Non-uniform types of host-switches:
 
 # host-phylogenetic dependency
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (with host-phylogenetic dependency) and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted,
+#  1 is transmitted with 5 host-switches (with host-phylogenetic dependency),
+#  and 1 is environmentally acquired)
 
-sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
-               simul=c(0,5,"indep"), n=10, mu=1, 
-               N=300, proportion_variant=0.1, model="host_dependent",
-               host_signal = 10)
+#sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+#               simul=c(0,5,"indep"), n=10, mu=1,
+#               N=300, proportion_variant=0.1, model="host_dependent",
+#               host_signal = 10)
 
 # geographic dependency
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (with geographic dependency) and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted,
+#  1 is transmitted with 5 host-switches (with geographic dependency),
+#  and 1 is environmentally acquired)
 
 set.seed(3)
 host_tree <- phytools::pbtree(n=20) # simulate host phylogeny
 
-geo <- sample(size = Ntip(host_tree),c("Area_1","Area_2","Area_3","Area_4"), replace=T) # simulate area distribution of the host lineages
+# simulate area distribution of the host lineages
+geo <- sample(size = 20,c("Area_1","Area_2","Area_3","Area_4"), replace=TRUE)
 names(geo) <- host_tree$tip.label
 
-stochastic_map <- phytools::make.simmap(host_tree, geo, model="SYM", nsim=1)
+#stochastic_map <- phytools::make.simmap(host_tree, geo, model="SYM", nsim=1)
 
-sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
-               simul=c(0,5,"indep"), mu=1, provided_tree = host_tree,
-               N=300, proportion_variant=0.1, model="geo_dependent",
-               geo_signal = 0.25, stochastic_map = stochastic_map)
+#sim_microbiota(name="example_simulation", name_index=c("Simul_1","Simul_2","Simul_3"),
+#               simul=c(0,5,"indep"), mu=1, provided_tree = host_tree,
+#               N=300, proportion_variant=0.1, model="geo_dependent",
+#               geo_signal = 0.25, stochastic_map = stochastic_map)
 
 
 # temporal dependency
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches (with temporal dependency) and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted,
+#  1 is transmitted with 5 host-switches (with temporal dependency),
+#  and 1 is environmentally acquired)
 
-sim_microbiota(name = "example_simulation", name_index = c("Simul_1","Simul_2","Simul_3"),
-               simul = c(0,5,"indep"), n = 10, mu = 1, 
-               N = 300, proportion_variant = 0.1, model = "temporal",
-               mean = 0.5, sd = 0.1)
+#sim_microbiota(name = "example_simulation", name_index = c("Simul_1","Simul_2","Simul_3"),
+#               simul = c(0,5,"indep"), n = 10, mu = 1,
+#               N = 300, proportion_variant = 0.1, model = "temporal",
+#               mean = 0.5, sd = 0.1)
 
-
+\dontshow{setwd(.old_wd)}
 }
 
 

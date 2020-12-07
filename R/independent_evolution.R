@@ -1,5 +1,5 @@
 independent_evolution <-
-function(replicate,name,index,seed,nb_tree,lambda,nb_cores){
+function(replicate,name,index,seed,nb_tree,lambda,tolerance=0.05,nb_cores){
   set.seed(seed+replicate)
   
   n <- NULL
@@ -15,7 +15,7 @@ function(replicate,name,index,seed,nb_tree,lambda,nb_cores){
   rownames(variant_sequences) <- index_randomize[2,]
   write.table(index_randomize, paste("model_selection/randomize_indexes_",name,"_",index,"_replicate_",replicate,".txt",sep=""), col.names=F,quote=F)
   
-  output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=500,tol=0.05,name=name,index=index,sequences=variant_sequences)
+  output <- optimize(f=inference_vertical_transmission,lower=0.0001,upper=500,tol=tolerance,name=name,index=index,sequences=variant_sequences)
   
   results <- cbind(0,output$minimum,output$objective)
   colnames(results) <- c("ksi","mu","minloglik")
@@ -26,7 +26,7 @@ function(replicate,name,index,seed,nb_tree,lambda,nb_cores){
     if (n!=Ntip(list_tree[[1]])) {missing_symbiont <- setdiff(list_tree[[1]]$tip.label,rownames(variant_sequences))
     for(i in 1:nb_tree){for (missing in missing_symbiont){list_tree[[i]] <- drop.tip(list_tree[[i]], tip=missing)}}}
     
-    output <- optimize(f=inference_switches, lower=0.0001, upper=500,tol=0.05,randomize=T,ksi=ksi,name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
+    output <- optimize(f=inference_switches, lower=0.0001, upper=500,tol=tolerance,randomize=T,ksi=ksi,name=name,index=index,sequences=variant_sequences,nb_tree=nb_tree,list_tree=list_tree,eig_val=eig_val, eig_vect=eig_vect, ivp=ivp, propinv=propinv)
     
     results <- cbind(ksi,output$minimum,output$objective)
     colnames(results) <- c("ksi","mu","minloglik")

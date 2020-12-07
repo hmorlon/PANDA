@@ -2,15 +2,15 @@
 \alias{prepare_data_HOME}
 
 \title{
-Prepare the data for running HOME 
+Prepare the data for running HOME
 }
 
 \description{
-This function prepares the data for the inference of HOME (format data, run the model of nucleotidic evolution...). 
+This function prepares the data for the inference of HOME (format data, run the model of nucleotidic evolution...).
 
 }
 
-\usage{prepare_data_HOME(iter, name, name_index, host_tree, path...)
+\usage{prepare_data_HOME(iter,name,name_index,provided_tree=NULL,...)
 }
 
 \arguments{
@@ -23,13 +23,12 @@ the number of iteration of a particular index from name_index
 \item{name_index}{
 a vector with the names of the different symbionts (e.g. name of the OTUs)
 }
-\item{host_tree}{
+\item{provided_tree}{
 optional - the host tree of your study. It can also be provided in the working directory (see details).
 }
-\item{path}{
-optional - the path to the working directory
+\item{...}{
+optional - other arguments to be passed.
 }
-
 
 }
 
@@ -43,9 +42,9 @@ See reference for more details.
 
 }
 \references{
-Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
+Perez-Lamarque B, Morlon H (2019). Characterizing symbiont inheritance during host-microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19:1659-1671.
 }
-\author{Benoît Perez-Lamarque}
+\author{Benoit Perez-Lamarque}
 \seealso{
 \code{\link{sim_microbiota}},
 \code{\link{simul_bank_tree}},
@@ -58,7 +57,10 @@ Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during h
 # Some examples may take a little bit of time. Be patient!
 
 
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted, 1 is transmitted with 5 host-switches,
+#  and 1 is environmentally acquired)
+
 
 name="example_simulation"
 name_index=c("Simul_1","Simul_2","Simul_3")
@@ -72,17 +74,21 @@ path=getwd()
 #for (i in 1:3){prepare_data_HOME(iter=i,name,name_index)}
 
 # Simulate the bank of trees
-#for (ksi in 1:length(seq(1,25))){simul_bank_tree(ksi,name,nb_tree=1000,lambda=seq(1,25),seed=1)}
+#for (ksi in 1:length(seq(1,25))){simul_bank_tree(ksi,name,nb_tree=1000,
+#lambda=seq(1,25),seed=1)}
 
 # Infer the parameters
 #for (i in 1:3){fit_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1)}
 
 # Plot the first outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=FALSE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,
+#empirical=FALSE,randomize=FALSE,raref=FALSE)}
 
 # Perform the model selection
-#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1,seed=1)}
+#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,
+#lambda=seq(1,25),nb_cores=1,seed=1)}
 
 # Plot the final outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=TRUE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,
+#empirical=FALSE,randomize=TRUE,raref=FALSE)}
 }

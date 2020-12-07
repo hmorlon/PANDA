@@ -10,8 +10,8 @@ This function outputs all the results of HOME into a HTML file with figures and 
 
 }
 
-\usage{output_results_HOME(iter, name, name_index, nb_tree=10000, lambda=seq(1,25),
-empirical,randomize, raref, nb_cores, nb_random=10, figure=FALSE,...)}
+\usage{output_results_HOME(iter,name,name_index,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),
+nb_tree=10000,empirical,randomize,raref,nb_random=10,figure=FALSE,...)}
 
 \arguments{
 \item{iter}{
@@ -19,6 +19,9 @@ the number of iteration of a particular index from name_index
 }
 \item{name}{
 the name of the run
+}
+\item{name_index}{
+a vector with the names of the different symbionts (e.g. name of the OTUs)
 }
 \item{nb_tree}{
 a number of tree for Monte Carlo estimation of the number of switches (a low value will give inaccurate results whereas a high value will increase the computation time)
@@ -37,17 +40,17 @@ a boolean indicating wheter the model selection testing independent evolutions h
 if TRUE rarefactions on the number of trees have been performed (i.e. to test if nb_tree is large enough) and a separate figure with rarefactions curves will be stored in the folder "figures/"
 }
 
-\item{nb_cores}{
-a number of cores to run the analyses
-}
-
 \item{nb_random}{
 a integer value of the number of randomizations (R) performed during the model selection testing independent evolutions.
 }
 
 \item{figure}{
-indicates whether it automatically outputs figures (default: FALSE).  
-} 
+indicates whether it automatically outputs figures (default: FALSE).
+}
+
+\item{...}{
+optional - other arguments to be passed.
+}
 
 }
 
@@ -61,9 +64,9 @@ See reference for more details.
 
 }
 \references{
-Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during host–microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19: 1659–1671.
+Perez-Lamarque B, Morlon H (2019). Characterizing symbiont inheritance during host-microbiota evolution: Application to the great apes gut microbiota. Molecular Ecology Resources 19:1659-1671.
 }
-\author{Benoît Perez-Lamarque}
+\author{Benoit Perez-Lamarque}
 \seealso{
 \code{\link{sim_microbiota}},
 \code{\link{prepare_data_HOME}},
@@ -76,7 +79,10 @@ Perez‐Lamarque B, Morlon H. 2019. Characterizing symbiont inheritance during h
 # Some examples may take a little bit of time. Be patient!
 
 
-# Simulate 3 microbial alignments on a host tree (1 is vertically transmitted, 1 is transmitted with 5 host-switches and 1 is environmentally acquired)
+# Simulate 3 microbial alignments on a host tree
+# (1 is vertically transmitted, 1 is transmitted with 5 host-switches,
+#  and 1 is environmentally acquired)
+
 
 name="example_simulation"
 name_index=c("Simul_1","Simul_2","Simul_3")
@@ -90,17 +96,21 @@ path=getwd()
 #for (i in 1:3){prepare_data_HOME(iter=i,name,name_index)}
 
 # Simulate the bank of trees
-#for (ksi in 1:length(seq(1,25))){simul_bank_tree(ksi,name,nb_tree=1000,lambda=seq(1,25),seed=1)}
+#for (ksi in 1:length(seq(1,25))){simul_bank_tree(ksi,name,nb_tree=1000,
+#lambda=seq(1,25),seed=1)}
 
 # Infer the parameters
 #for (i in 1:3){fit_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1)}
 
 # Plot the first outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=FALSE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,
+#empirical=FALSE,randomize=FALSE,raref=FALSE)}
 
 # Perform the model selection
-#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,lambda=seq(1,25),nb_cores=1,seed=1)}
+#for (i in 1:3){model_selection_HOME(index=name_index[i],name,nb_tree=1000,
+#lambda=seq(1,25),nb_cores=1,seed=1)}
 
 # Plot the final outputs
-#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,empirical=FALSE,randomize=TRUE,raref=FALSE)}
+#for (i in 1:3){output_results_HOME(iter=i,name,name_index,lambda=seq(1,25),nb_tree=1000,
+#empirical=FALSE,randomize=TRUE,raref=FALSE)}
 }
