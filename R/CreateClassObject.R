@@ -116,9 +116,9 @@ CreateClassObject<-function(simmap,rnd=5){
 						hold.m[m,2]<-names(maps.object[[iden]])[1]
 					} else{					
 						num=1
-						while(round(nodeDist[i+1]-old.Dist[simmap$edge[iden,1]-totlen],5)>round(sum(maps.object[[iden]][1:num]),5)){
+						while((round(nodeDist[i+1]-old.Dist[simmap$edge[iden,1]-totlen],rnd)-round(sum(simmaps.object[[iden]][1:num]),rnd))>(2*(10^-rnd))){
 						num=num+1}
-						hold.m[m,2]<-names(maps.object[[iden]])[num]
+						hold.m[m,2]<-names(simmaps.object[[iden]])[num]
 					}
 				}
 			nat[[i]]<-hold.m
@@ -127,6 +127,6 @@ CreateClassObject<-function(simmap,rnd=5){
 	if(nodeDist[i+1]%in%old.Dist){nodecount=nodecount+1}
 	}	
     }
-      
   return(list(class.object=nat,times=round(nodeDist,8),spans=nodeDiff))
+  
 }
