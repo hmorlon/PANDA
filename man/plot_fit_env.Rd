@@ -42,7 +42,7 @@ data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate
-# with time
+# with temperature. 
 f.lamb <-function(t,x,y){y[1] * exp(y[2] * x)}
 f.mu<-function(t,x,y){0}
 lamb_par<-c(0.10, 0.01)
