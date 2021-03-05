@@ -14,7 +14,7 @@ createModel_MC_twoS_geo <- function(tree,S.object,geo.object){
 
 		smat<-S.object$S.matrix
 
-        periodizing <- periodizeOneTree_geo(tree,S.object) 
+        periodizing <- periodizeOneTree_multigeo(tree,geo.object) 
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(0))) ) 
@@ -76,7 +76,7 @@ isATip <- function(tree, branch_number){
     return(!(tree$edge[branch_number,2] %in% tree$edge[,1]))
 }
 
-periodizeOneTree_geo <- function(tree,S.object){
+periodizeOneTree_multigeo <- function(tree,geo.object){
     # Returns 3 vectors giving 
     # 1) the periods of the tree, 
     # 2) the starting times of all branches in the tree 
