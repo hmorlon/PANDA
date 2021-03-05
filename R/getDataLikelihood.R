@@ -1,6 +1,6 @@
 setGeneric(
     name="getDataLikelihood",
-    def=function(object="PhenotypicModel", data="numeric", params="numeric", v="logical"){standardGeneric("getDataLikelihood")}
+    def=function(object="PhenotypicModel", data="numeric", error=NULL params="numeric", v="logical"){standardGeneric("getDataLikelihood")}
 )
 
 setMethod(
