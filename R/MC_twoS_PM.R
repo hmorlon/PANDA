@@ -31,7 +31,7 @@
         
         constraints <- function(params) return(params[3]<=0 && params[4]<=0)
         
-        model <- new(Class="PhenotypicADiag", name="MC_twoS", period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling,  comment=comment)
+        model <- new(Class="PhenotypicModel", name="MC_twoS", period=periodizing$periods, aAGamma=aAGamma, numbersCopy=eventEndOfPeriods$copy, numbersPaste=eventEndOfPeriods$paste, initialCondition=initialCondition, paramsNames=paramsNames, constraints=constraints, params0=params0, tipLabels=eventEndOfPeriods$labeling,  comment=comment)
 
 
     return(model)
