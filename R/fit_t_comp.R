@@ -14,7 +14,7 @@ if(is.null(error)){
 		params0<-c(0,pars)
 		if(model=="MC"){
 			mc.ob<-.createModel_MC(phylo)
-			opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(mc.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			S<-opt$inferredParams[3]
 			z0<-opt$inferredParams[1]
@@ -23,7 +23,7 @@ if(is.null(error)){
 			}
 		if(model=="DDexp"){
 			ddexp.ob<-.createModel_DDexp(phylo)
-			opt<-fitTipData(ddexp.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddexp.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			r<-opt$inferredParams[3]
 			z0<-opt$inferredParams[1]
@@ -32,7 +32,7 @@ if(is.null(error)){
 			}
 		if(model=="DDlin"){
 			ddlin.ob<-.createModel_DDlin(phylo)
-			opt<-fitTipData(ddlin.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddlin.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			b<-opt$inferredParams[3]
 			z0<-opt$inferredParams[1]
@@ -48,7 +48,7 @@ if(is.null(error)){
 		sgeo<-.resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in Marc code
 		if(model=="MC"){
 			mc.ob<-.createModel_MC_geo(phylo,sgeo)
-			opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(mc.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			S<-opt$inferredParams[3]
 			z0<-opt$inferredParams[1]
@@ -57,7 +57,7 @@ if(is.null(error)){
 			}
 		if(model=="DDexp"){
 			ddexp.ob<-.createModel_DDexp_geo(phylo,sgeo)
-			opt<-fitTipData(ddexp.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddexp.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			r<-opt$inferredParams[3]
 			z0<-opt$inferredParams[1]
@@ -66,7 +66,7 @@ if(is.null(error)){
 			}
 		if(model=="DDlin"){
 			ddlin.ob<-.createModel_DDlin_geo(phylo,sgeo)
-			opt<-fitTipData(ddlin.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddlin.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			b<-opt$inferredParams[3]
 			z0<-opt$inferredParams[1]
@@ -89,7 +89,7 @@ if(is.null(error)){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),-0.1,-0.1)}
 			params0<-c(0,pars)
 			mc.ob<-.createModel_MC_twoS(phylo,S.object=smat)
-			opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(mc.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			S1<-opt$inferredParams[3]
 			S2<-opt$inferredParams[4]
@@ -101,7 +101,7 @@ if(is.null(error)){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),0,0)}
 			params0<-c(0,pars)
 			ddexp.ob<-.createModel_DDexp_multi(phylo,r.object=smat)
-			opt<-fitTipData(ddexp.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddexp.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			r1<-opt$inferredParams[3]
 			r2<-opt$inferredParams[4]
@@ -113,7 +113,7 @@ if(is.null(error)){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),0,0)}
 			params0<-c(0,pars)
 			ddlin.ob<-.createModel_DDlin_multi(phylo,r.object=smat)
-			opt<-fitTipData(ddlin.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddlin.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			b1<-opt$inferredParams[3]
 			b2<-opt$inferredParams[4]
@@ -155,7 +155,7 @@ if(is.null(error)){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),-0.1,-0.1)}
 			params0<-c(0,pars)
 			mc.ob<-.createModel_MC_geo(phylo,geo.object=sgeo,S.object=smat)
-			opt<-fitTipData(mc.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(mc.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			S1<-opt$inferredParams[3]
 			S2<-opt$inferredParams[4]
@@ -167,7 +167,7 @@ if(is.null(error)){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),0,0)}
 			params0<-c(0,pars)
 			ddexp.ob<-.createModel_DDexp_geo(phylo,geo.object=sgeo,r.object=smat)
-			opt<-fitTipData(ddexp.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddexp.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			r1<-opt$inferredParams[3]
 			r2<-opt$inferredParams[4]
@@ -179,7 +179,7 @@ if(is.null(error)){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),0,0)}
 			params0<-c(0,pars)
 			ddlin.ob<-.createModel_DDlin_geo(phylo,geo.object=sgeo,r.object=smat)
-			opt<-fitTipData(ddlin.ob,data,params0=params0,GLSstyle=TRUE)
+			opt<-fitTipData(ddlin.ob,data,error=NULL,params0=params0,GLSstyle=TRUE)
 			sig2<-(exp(opt$inferredParams[2]))^2
 			b1<-opt$inferredParams[3]
 			b2<-opt$inferredParams[4]
