@@ -5,7 +5,7 @@
 #    Bank of Classic 1D Phenotypic Models
 ##################################################
 
-createModel_MC_twoS <- function(tree,S.object){
+.createModel_MC_twoS <- function(tree,S.object){
     
 
         comment <- "Matching competition model with two competitive regimes."
@@ -14,7 +14,7 @@ createModel_MC_twoS <- function(tree,S.object){
 
 		smat<-S.object$S.matrix
 
-        periodizing <- periodizeOneTree_geo(tree,S.object) 
+        periodizing <- periodizeOneTree_smulti(tree,S.object) 
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(0))) ) 
@@ -68,7 +68,7 @@ isATip <- function(tree, branch_number){
     return(!(tree$edge[branch_number,2] %in% tree$edge[,1]))
 }
 
-periodizeOneTree_geo <- function(tree,S.object){
+periodizeOneTree_smulti <- function(tree,S.object){
     # Returns 3 vectors giving 
     # 1) the periods of the tree, 
     # 2) the starting times of all branches in the tree 
