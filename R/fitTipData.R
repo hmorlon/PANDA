@@ -1,12 +1,12 @@
 setGeneric(
     name="fitTipData",
-    def=function(object="PhenotypicModel", data="numeric", error=NULL, params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
+    def=function(object="PhenotypicModel", data="numeric", error="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
 )
 
 setMethod(
     f="fitTipData",
     signature="PhenotypicModel",
-    definition=function(object, data, params0=NULL, GLSstyle=FALSE, v=FALSE){
+    definition=function(object, data, error=NULL, params0=NULL, GLSstyle=FALSE, v=FALSE){
         if(v){
             cat("*** Fit of tip trait data ***\n")
             cat("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
