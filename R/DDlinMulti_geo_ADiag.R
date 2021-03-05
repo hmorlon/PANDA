@@ -86,7 +86,7 @@ periodizeOneTree_multigeo <- function(tree,geo.object){
     
     
     nodetimes=max(branching.times(tree))-sort(branching.times(tree),decreasing=TRUE)
-	extv<-vapply(geo.object$geography.object,function(x)dim(x)[1],1)
+	extv<-vapply(geo.object$S.matrix,function(x)dim(x)[2],1)
 	outv<-c(1)
 	for(i in 2:length(extv)){
 		if(extv[i]!=extv[i-1]){

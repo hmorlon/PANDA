@@ -70,7 +70,7 @@ isATip <- function(tree, branch_number){
     return(!(tree$edge[branch_number,2] %in% tree$edge[,1]))
 }
 
-periodizeOneTree_multigeo <- function(tree,r.object){
+periodizeOneTree_multigeo <- function(tree,geo.object){
     # Returns 3 vectors giving 
     # 1) the periods of the tree, 
     # 2) the starting times of all branches in the tree 
@@ -82,15 +82,15 @@ periodizeOneTree_multigeo <- function(tree,r.object){
     
     
     nodetimes=max(branching.times(tree))-sort(branching.times(tree),decreasing=TRUE)
-	extv<-vapply(r.object$geography.object,function(x)dim(x)[1],1)
+	extv<-vapply(geo.object$S.matrix,function(x)dim(x)[2],1)
 	outv<-c(1)
 	for(i in 2:length(extv)){
 		if(extv[i]!=extv[i-1]){
 			outv<-c(outv,i)
 		}}
 	
-	chg.times=which(!1:length(r.object$times)%in%c(outv,length(r.object$times)))
-	periods=sort(c(r.object$times[chg.times],unique(startingTimes),max(endTimes)))
+	chg.times=which(!1:length(geo.object$times)%in%c(outv,length(geo.object$times)))
+	periods=sort(c(geo.object$times[chg.times],unique(startingTimes),max(endTimes)))
     return(list(periods=periods, startingTimes=startingTimes, endTimes=endTimes))
 }
 

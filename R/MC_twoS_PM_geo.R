@@ -88,15 +88,15 @@ periodizeOneTree_multigeo <- function(tree,geo.object){
     
     
     nodetimes=max(branching.times(tree))-sort(branching.times(tree),decreasing=TRUE)
-	extv<-vapply(S.object$S.matrix,function(x)dim(x)[2],1)
+	extv<-vapply(geo.object$S.matrix,function(x)dim(x)[2],1)
 	outv<-c(1)
 	for(i in 2:length(extv)){
 		if(extv[i]!=extv[i-1]){
 			outv<-c(outv,i)
 		}}
 	
-	chg.times=which(!1:length(S.object$times)%in%c(outv,length(S.object$times)))
-	periods=sort(c(S.object$times[chg.times],unique(startingTimes),max(endTimes)))
+	chg.times=which(!1:length(geo.object$times)%in%c(outv,length(geo.object$times)))
+	periods=sort(c(geo.object$times[chg.times],unique(startingTimes),max(endTimes)))
     return(list(periods=periods, startingTimes=startingTimes, endTimes=endTimes))
 }
 
