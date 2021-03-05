@@ -5,7 +5,7 @@
 #    Bank of Classic 1D Phenotypic Models
 ##################################################
 
-createModel_MC_twoS_geo <- function(tree,S.object,geo.object){
+.createModel_MC_twoS_geo <- function(tree,S.object,geo.object){
     
 
         comment <- "Matching competition model with biogeography and two competitive regimes."
