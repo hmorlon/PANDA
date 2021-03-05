@@ -6,7 +6,7 @@ setGeneric(
 setMethod(
     f="getDataLikelihood",
     signature="PhenotypicModel",
-    definition=function(object, data, params, v=FALSE){
+    definition=function(object, data, error=NULL, params, v=FALSE){
         if(v){
             cat("*** Computing -log( likelihood ) of tip trait data under a given set of parameters ***\n")
             beginning <- Sys.time()
@@ -20,6 +20,11 @@ setMethod(
             n <- length(data)
             tipdistribution <- getTipDistribution(object, params)
             V<-tipdistribution$Sigma
+            if(!is.null(error)){
+            	error<-error[rownames(tipdistribution$Sigma)]
+            	V<- V + diag(error^2) + diag(rep(exp(params[length(params)]),n))
+			}
+            
 			data<-data[rownames(V)]
 	
   			op <- getOption("show.error.messages")
