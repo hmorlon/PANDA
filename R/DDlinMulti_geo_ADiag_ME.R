@@ -10,7 +10,7 @@
         params0 <- c(0,log(1),0,0,log(1))
 
 
-        periodizing <- periodizeOneTree_multigeo(tree,r.object) 
+        periodizing <- periodizeOneTree_multigeo(tree,geo.object) 
         eventEndOfPeriods <- endOfPeriods(periodizing, tree)
         
         initialCondition <- function(params) return( list(mean=c(params[1]), var=matrix(c(0))) )        
