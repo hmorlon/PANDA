@@ -57,7 +57,7 @@ export(plot_dtt, plot_fit_bd, plot_fit_env, plot_spectR, plot_BICompare, sim_sgd
 export(fit_t_env,likelihood_t_env,sim_t_env,plot.fit_t.env,lines.fit_t.env)
 export(fit_t_pl, ancestral, phyl.pca_pl, gic_criterion, Posdef)
 export("createModel", "createModelCoevolution", "getTipDistribution", "getDataLikelihood", "fitTipData", "modelSelection", "simulateTipData")
-export(fit_t_comp,likelihood_t_MC,likelihood_t_MC_geog,likelihood_t_DD,likelihood_t_DD_geog,sim_t_comp,CreateGeoObject,sim.divergence.geo,sim.convergence.geo, CreateGeoObject_BioGeoBEARS)
+export(fit_t_comp,likelihood_t_MC,likelihood_t_MC_geog,likelihood_t_DD,likelihood_t_DD_geog,sim_t_comp,CreateGeoObject,sim.divergence.geo,sim.convergence.geo, CreateGeoObject_BioGeoBEARS,fit_t_standard,sim_t_tworegime)
 export(fit_t_comp_subgroup,CreateClassObject,CreateGeobyClassObject,likelihood_subgroup_model)
 export(plot_prob_dtt, prob_dtt)
 export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_chains,
