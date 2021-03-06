@@ -94,7 +94,7 @@ if(is.null(error)){
 			S1<-opt$inferredParams[3]
 			S2<-opt$inferredParams[4]
 			z0<-opt$inferredParams[1]
-			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*4 - 2*(-opt$value)),", aicc = ",(2*4 - 2*(-opt$value))+((2*4*(4+1))/(length(phylo$tip.label)-4-1)),", free.parameters = 4, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 			return(results)
 			}
 		if(model=="DDexp"){
@@ -106,7 +106,7 @@ if(is.null(error)){
 			r1<-opt$inferredParams[3]
 			r2<-opt$inferredParams[4]
 			z0<-opt$inferredParams[1]
-			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*4 - 2*(-opt$value)),", aicc = ",(2*4 - 2*(-opt$value))+((2*4*(4+1))/(length(phylo$tip.label)-4-1)),", free.parameters = 4, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 			return(results)
 			}
 		if(model=="DDlin"){
@@ -118,7 +118,7 @@ if(is.null(error)){
 			b1<-opt$inferredParams[3]
 			b2<-opt$inferredParams[4]
 			z0<-opt$inferredParams[1]
-			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*4 - 2*(-opt$value)),", aicc = ",(2*4 - 2*(-opt$value))+((2*4*(4+1))/(length(phylo$tip.label)-4-1)),", free.parameters = 4, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 			return(results)
 			}
 	}
@@ -160,7 +160,7 @@ if(is.null(error)){
 			S1<-opt$inferredParams[3]
 			S2<-opt$inferredParams[4]
 			z0<-opt$inferredParams[1]
-			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*4 - 2*(-opt$value)),", aicc = ",(2*4 - 2*(-opt$value))+((2*4*(4+1))/(length(phylo$tip.label)-4-1)),", free.parameters = 4, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 			return(results)
 			}
 		if(model=="DDexp"){
@@ -172,7 +172,7 @@ if(is.null(error)){
 			r1<-opt$inferredParams[3]
 			r2<-opt$inferredParams[4]
 			z0<-opt$inferredParams[1]
-			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*4 - 2*(-opt$value)),", aicc = ",(2*4 - 2*(-opt$value))+((2*4*(4+1))/(length(phylo$tip.label)-4-1)),", free.parameters = 4, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 			return(results)
 			}
 		if(model=="DDlin"){
@@ -184,7 +184,7 @@ if(is.null(error)){
 			b1<-opt$inferredParams[3]
 			b2<-opt$inferredParams[4]
 			z0<-opt$inferredParams[1]
-			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+			eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*4 - 2*(-opt$value)),", aicc = ",(2*4 - 2*(-opt$value))+((2*4*(4+1))/(length(phylo$tip.label)-4-1)),", free.parameters = 4, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 			return(results)
 			}
 	
@@ -301,7 +301,7 @@ if(is.null(geography.object) & !is.null(regime.map)){ #multi-slope version for s
 		S2<-opt$inferredParams[4]
 		nuisance<-exp(opt$inferredParams[5])
 		z0<-opt$inferredParams[1]
-		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*5 - 2*(-opt$value)),", aicc = ",(2*5 - 2*(-opt$value))+((2*5*(5+1))/(length(phylo$tip.label)-5-1)),", free.parameters = 5, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 		return(results)
 		}
 	if(model=="DDexp"){
@@ -314,7 +314,7 @@ if(is.null(geography.object) & !is.null(regime.map)){ #multi-slope version for s
 		r2<-opt$inferredParams[4]
 		nuisance<-exp(opt$inferredParams[5])
 		z0<-opt$inferredParams[1]
-		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*5 - 2*(-opt$value)),", aicc = ",(2*5 - 2*(-opt$value))+((2*5*(5+1))/(length(phylo$tip.label)-5-1)),", free.parameters = 5, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 		return(results)
 		}
 	if(model=="DDlin"){
@@ -327,7 +327,7 @@ if(is.null(geography.object) & !is.null(regime.map)){ #multi-slope version for s
 		b2<-opt$inferredParams[4]
 		nuisance<-exp(opt$inferredParams[5])
 		z0<-opt$inferredParams[1]
-		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*5 - 2*(-opt$value)),", aicc = ",(2*5 - 2*(-opt$value))+((2*5*(5+1))/(length(phylo$tip.label)-5-1)),", free.parameters = 5, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 		return(results)
 		}
 }
@@ -372,7 +372,7 @@ if(!is.null(geography.object) & !is.null(regime.map)){ #multi-slope version with
 		S2<-opt$inferredParams[4]
 		nuisance<-exp(opt$inferredParams[5])
 		z0<-opt$inferredParams[1]
-		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*5 - 2*(-opt$value)),", aicc = ",(2*5 - 2*(-opt$value))+((2*5*(5+1))/(length(phylo$tip.label)-5-1)),", free.parameters = 5, sig2 = ",as.numeric(sig2),", S1_",SMatrix$S1," = ",as.numeric(S1),", S2_",SMatrix$S2," = ",as.numeric(S2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 		return(results)
 		}
 	if(model=="DDexp"){
@@ -385,7 +385,7 @@ if(!is.null(geography.object) & !is.null(regime.map)){ #multi-slope version with
 		r2<-opt$inferredParams[4]
 		nuisance<-exp(opt$inferredParams[5])
 		z0<-opt$inferredParams[1]
-		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*5 - 2*(-opt$value)),", aicc = ",(2*5 - 2*(-opt$value))+((2*5*(5+1))/(length(phylo$tip.label)-5-1)),", free.parameters = 5, sig2 = ",as.numeric(sig2),", r1_",SMatrix$S1," = ",as.numeric(r1),", r2_",SMatrix$S2," = ",as.numeric(r2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 		return(results)
 		}
 	if(model=="DDlin"){
@@ -398,7 +398,7 @@ if(!is.null(geography.object) & !is.null(regime.map)){ #multi-slope version with
 		b2<-opt$inferredParams[4]
 		nuisance<-exp(opt$inferredParams[5])
 		z0<-opt$inferredParams[1]
-		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*3 - 2*(-opt$value)),", aicc = ",(2*3 - 2*(-opt$value))+((2*3*(3+1))/(length(phylo$tip.label)-3-1)),", free.parameters = 3, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
+		eval(parse(text=paste0("results<-list(LH = ",-opt$value,", aic = ",(2*5 - 2*(-opt$value)),", aicc = ",(2*5 - 2*(-opt$value))+((2*5*(5+1))/(length(phylo$tip.label)-5-1)),", free.parameters = 5, sig2 = ",as.numeric(sig2),", b1_",SMatrix$S1," = ",as.numeric(b1),", b2_",SMatrix$S2," = ",as.numeric(b2),", nuisance = ",as.numeric(nuisance),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,")")))
 		return(results)
 		}
 
