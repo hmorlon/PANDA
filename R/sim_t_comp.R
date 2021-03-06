@@ -1,3 +1,4 @@
+
 sim_t_comp<-function(phylo,pars,root.value,Nsegments=1000,model="MC,DDexp,DDlin"){
 #return error if non-ultrametric tree
 if(phylo$Nnode!=(length(phylo$tip.label)-1)){stop("phylo object must be ultrametric")}
@@ -171,4 +172,3 @@ for(i in 1:phylo$Nnode){ ##for each node interval
 		}
 return(sapply(masterbranch[[phylo$Nnode]],tail,n=1))
 }
-
