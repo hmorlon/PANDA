@@ -280,7 +280,6 @@ if(is.null(regime.map)){ 	# single slope version
 
 .fit_t_general <- function(tree, data, fun, class.df, input.times, error=NULL, beta=NULL, sigma=NULL, model=c("exponential","linear"), method=c("L-BFGS-B","BB"), upper=Inf, lower=-Inf, control=list(maxit=20000), diagnostic=TRUE, echo=TRUE, constraint=NULL, return.tree=FALSE) {
   
-  require(mvMORPH)
   if(!inherits(tree,"simmap")==TRUE) stop("For now only simmap-like mapped trees are allowed.","\n")
   old.tree<-tree
   

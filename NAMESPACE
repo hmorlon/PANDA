@@ -21,7 +21,7 @@ importFrom(grDevices, dev.new, rainbow, terrain.colors,
            colorRampPalette, colors, grey)
 importFrom(igraph, graph.adjacency, graph.laplacian)
 importFrom(Matrix, Matrix)
-importFrom(mvMORPH, mvLL, pruning, mvSIM, GIC)
+importFrom(mvMORPH, mvLL, pruning, mvSIM, GIC,mv.Precalc)
 importFrom(mvtnorm, rmvnorm)
 importFrom(parallel, mclapply)
 importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap,reorderSimmap)
