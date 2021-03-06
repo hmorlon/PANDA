@@ -31,6 +31,7 @@ a value specifying the total number of time segments to simulate across for the 
 }
   \item{model}{
 model chosen to fit trait data, \code{"MC"} is the matching competition model, \code{"DDlin"} is the diversity-dependent linear model,  \code{"DDexp"} is the diversity-dependent exponential model, and \code{"EB"} is the early burst model.
+  }
   \item{verbose}{
 if \code{TRUE}, prints the identity of regimes corresponding to each parameter value
 }
