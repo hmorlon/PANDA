@@ -34,6 +34,10 @@ model chosen to fit trait data, \code{"MC"} is the matching competition model, \
   \item{verbose}{
 if \code{TRUE}, prints the identity of regimes corresponding to each parameter value
 }
+  \item{regime.map}{
+a stochastic map of the two regimes stored as a simmap object output from \code{\link{make.simmap}}
+}
+
   \item{rnd}{
   number of digits to round timings to (see \code{\link{round}} (see Details)
 }
