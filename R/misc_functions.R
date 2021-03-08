@@ -200,6 +200,18 @@
              phy <- phy2
              return(phy)
            }
+
+.create.function.list.EB1<-function(geo.simmap){
+	if(is.null(geo.simmap)){stop('provide geo.simmap')}
+	states<-colnames(geo.simmap$mapped.edge)
+	funlist<-list()	
+	for(i in 1:length(states)){
+		eval(parse(text=paste0("funlist[[",i,"]]<-function(x,df,times){;return(x);}")))
+		}
+			
+	return(funlist)
+
+}
            
 .create.function.list.EBmulti<-function(regime.simmap){
 	if(is.null(regime.simmap)){stop('provide regime.simmap')}
@@ -223,7 +235,7 @@
 
 }
 
-.fit_t_EB<-function(phylo,data,regime.map=NULL,error=NULL, beta=NULL, sigma=NULL, method=c("L-BFGS-B","BB","Nelder-Mead"), upper=list(beta=0,sigma=Inf), lower=-Inf, control=list(maxit=20000), diagnostic=FALSE, echo=FALSE){
+.fit_t_EB<-function(phylo,data,regime.map=NULL,error=NULL, beta=NULL, sigma=NULL, method=c("L-BFGS-B","Nelder-Mead"), upper=list(beta=0,sigma=Inf), lower=-Inf, control=list(maxit=20000), diagnostic=FALSE, echo=FALSE){
 	
 	
 if(is.null(regime.map)){ 	# single slope version 
@@ -244,7 +256,7 @@ if(is.null(regime.map)){ 	# single slope version
 		smap$mapped.edge<-new.mapped.edge
 		
 		#create function
-		new_list_function<-create.function.list.EB1(smap)
+		new_list_function<-.create.function.list.EB1(smap)
 
 		#fit model
 		sigma.constraint<-rep(1, dim(smap$mapped.edge)[2])
@@ -252,7 +264,7 @@ if(is.null(regime.map)){ 	# single slope version
 		
 		up=c(rep(upper$beta,length(beta.constraint)),Inf,0)
 				
-		out<-fit_t_general(tree=smap,data=data,fun=new_list_function,class.df=NULL,input.times=NULL,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=up, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))	
+		out<-.fit_t_general(tree=smap,data=data,fun=new_list_function,class.df=NULL,input.times=NULL,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=up, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))	
 
 		
 }  else if (!is.null(regime.map)) { # multi-slope version where rates are reset to root state at beginning of new regime
@@ -278,7 +290,7 @@ if(is.null(regime.map)){ 	# single slope version
 		return(out)
 }
 
-.fit_t_general <- function(tree, data, fun, class.df, input.times, error=NULL, beta=NULL, sigma=NULL, model=c("exponential","linear"), method=c("L-BFGS-B","BB"), upper=Inf, lower=-Inf, control=list(maxit=20000), diagnostic=TRUE, echo=TRUE, constraint=NULL, return.tree=FALSE) {
+.fit_t_general <- function(tree, data, fun, class.df, input.times, error=NULL, beta=NULL, sigma=NULL, model=c("exponential","linear"), method=c("L-BFGS-B"), upper=Inf, lower=-Inf, control=list(maxit=20000), diagnostic=TRUE, echo=TRUE, constraint=NULL, return.tree=FALSE) {
   
   if(!inherits(tree,"simmap")==TRUE) stop("For now only simmap-like mapped trees are allowed.","\n")
   old.tree<-tree
@@ -511,10 +523,7 @@ if(is.null(regime.map)){ 	# single slope version
   
   ##------------------------------------Optimization-------------------------------##
   phyloTrans=NULL
-  if(method=="BB"){
-    require(BB)
-    estim<-spg(par=startval,fn=function(par){clikCLIM(param=par,dat=data,phy,mtot=mtot,times=times,fun=fun,model)},control=control ,method=3, lower=lower, upper=upper)
-  }else if(method=="L-BFGS-B" | method=="Nelder-Mead"){
+  if(method=="L-BFGS-B" | method=="Nelder-Mead"){
     estim<-optim(par=startval,fn=function(par){clikCLIM(param=par,dat=data,phy,mtot=mtot,times=times,fun=fun,model)},control=control, hessian=TRUE, method=method, lower=lower, upper=upper)
     
   }else if(method=="fixed"){
@@ -601,12 +610,7 @@ if(is.null(regime.map)){ 	# single slope version
   }
   
   # Hessian eigen decomposition to check the derivatives
-  if(method=="BB"){
-    require(numDeriv)
-    #hmat<-hessian(x=estim$par, func=function(par){clikCLIM(param=par,dat=data,phy,mtot=mtot,times=times,fun=fun,model)$LL})
-    #hess<-eigen(hmat)$value
-    hess <- 0
-  }else if(method=="L-BFGS-B" | method=="Nelder-Mead"){
+  if(method=="L-BFGS-B" | method=="Nelder-Mead"){
     hess<-eigen(estim$hessian)$values
   }else{
     hess<-0

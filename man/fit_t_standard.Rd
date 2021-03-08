@@ -8,7 +8,8 @@ Fits standard models of trait evolution incorporating known and nuisance measure
 Fits Brownian motion (BM), Ornstein-Uhlenbeck (OU), or early burst (EB) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_standard(phylo, data, model=c("BM","OU","EB"), error, two.regime=FALSE, method="Nelder-Mead", echo=TRUE, ...)
+fit_t_standard(phylo, data, model=c("BM","OU","EB"), error, two.regime=FALSE, 
+		method="Nelder-Mead", echo=TRUE, ...)
 }
 
 \arguments{

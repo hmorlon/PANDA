@@ -1,4 +1,4 @@
-.ReconcileGeoObjectSMatrix<-function(geo.object,S.matrix,phylo=subtree,rnd=5){
+.ReconcileGeoObjectSMatrix<-function(geo.object,S.matrix,phylo,rnd=5){
 
 	geot<-round(geo.object$times,rnd)
 	clat<-round(S.matrix$times,rnd)

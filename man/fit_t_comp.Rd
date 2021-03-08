@@ -8,7 +8,8 @@ Fits models of trait evolution incorporating competitive interactions
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_comp(phylo, data, error=NULL, model=c("MC","DDexp","DDlin"), pars=NULL, geography.object=NULL, regime.map=NULL)
+fit_t_comp(phylo, data, error=NULL, model=c("MC","DDexp","DDlin"), pars=NULL, 
+		geography.object=NULL, regime.map=NULL)
 }
 
 \arguments{
