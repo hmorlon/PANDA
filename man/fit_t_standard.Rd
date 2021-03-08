@@ -68,28 +68,24 @@ Note: if including known measurement error, the model fit incorporates this know
 }
 
 \examples{
-data(Cetacea)
+data(Cetacea_clades)
 
 
 \donttest{
 
-regime<-c(rep("Odontocete",72),rep("Mystecite",15))
-names(regime)<-c("Physeter_catodon","Kogia_breviceps","Kogia_simus","Platanista_gangetica","Platanista_minor","Tasmacetus_shepherdi","Berardius_arnuxii","Berardius_bairdii","Ziphius_cavirostris","Indopacetus_pacificus","Hyperoodon_ampullatus","Hyperoodon_planifrons","Mesoplodon_bidens","Mesoplodon_traversi","Mesoplodon_ginkgodens","Mesoplodon_europaeus","Mesoplodon_mirus","Mesoplodon_bowdoini","Mesoplodon_carlhubbsi","Mesoplodon_layardii","Mesoplodon_hectori","Mesoplodon_densirostris","Mesoplodon_stejnegeri","Mesoplodon_grayi","Mesoplodon_perrini","Mesoplodon_peruvianus","Lipotes_vexillifer","Inia_geoffrensis","Pontoporia_blainvillei","Delphinapterus_leucas","Monodon_monoceros","Neophocaena_phocaenoides","Phocoena_phocoena","Phocoena_dalli","Phocoena_sinus","Phocoena_dioptrica","Phocoena_spinipinnis","Orcinus_orca","Orcaella_brevirostris","Grampus_griseus","Pseudorca_crassidens","Feresa_attenuata","Peponocephala_electra","Globicephala_macrorhynchus","Globicephala_melas","Lagenorhynchus_albirostris","Lagenorhynchus_acutus","Lissodelphis_borealis","Lissodelphis_peronii","Cephalorhynchus_hectori","Cephalorhynchus_commersonii","Cephalorhynchus_eutropia","Lagenorhynchus_obscurus","Lagenorhynchus_obliquidens","Cephalorhynchus_heavisidii","Lagenorhynchus_australis","Lagenorhynchus_cruciger","Steno_bredanensis","Sotalia_fluviatilis","Sotalia_guianensis","Lagenodelphis_hosei","Stenella_longirostris","Stenella_attenuata","Tursiops_aduncus","Tursiops_truncatus","Sousa_chinensis","Stenella_clymene","Stenella_coeruleoalba","Stenella_frontalis","Delphinus_tropicalis","Delphinus_capensis","Delphinus_delphis","Balaena_mysticetus","Eubalaena_australis","Eubalaena_glacialis","Eubalaena_japonica","Caperea_marginata","Eschrichtius_robustus","Balaenoptera_acutorostrata","Balaenoptera_bonaerensis","Balaenoptera_physalus","Megaptera_novaeangliae","Balaenoptera_musculus","Balaenoptera_omurai","Balaenoptera_borealis","Balaenoptera_brydei","Balaenoptera_edeni")
-regime.map<-phytools::make.simmap(Cetacea,regime)
-
-data<-sim_t_tworegime(Cetacea,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="EB",regime.map=regime.map)
-error<-rep(0.05,length(Cetacea$tip.label))
-names(error)<-names(regime)
+data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="EB")
+error<-rep(0.05,length(Cetacea_clades$tip.label))
+names(error)<-Cetacea_clades$tip.label
 
 #Fit single-regime models
-BM1.fit<-fit_t_standard(regime.map,data,model="BM",error,two.regime=FALSE)
-OU1.fit<-fit_t_standard(regime.map,data,model="OU",error,two.regime=FALSE)
-EB1.fit<-fit_t_standard(regime.map,data,model="EB",error,two.regime=FALSE)
+BM1.fit<-fit_t_standard(Cetacea_clades,data,model="BM",error,two.regime=FALSE)
+OU1.fit<-fit_t_standard(Cetacea_clades,data,model="OU",error,two.regime=FALSE)
+EB1.fit<-fit_t_standard(Cetacea_clades,data,model="EB",error,two.regime=FALSE)
 
 #Now fit models that incorporate biogeography, NOTE these models take longer to fit
-BM2.fit<-fit_t_standard(regime.map,data,model="BM",error,two.regime=TRUE)
-OU2.fit<-fit_t_standard(regime.map,data,model="OU",error,two.regime=TRUE)
-EB2.fit<-fit_t_standard(regime.map,data,model="EB",error,two.regime=TRUE)
+BM2.fit<-fit_t_standard(Cetacea_clades,data,model="BM",error,two.regime=TRUE)
+OU2.fit<-fit_t_standard(Cetacea_clades,data,model="OU",error,two.regime=TRUE)
+EB2.fit<-fit_t_standard(Cetacea_clades,data,model="EB",error,two.regime=TRUE)
 }
 
 }

@@ -1,4 +1,6 @@
-sim_t_tworegime<-function(phylo,pars,root.value,Nsegments=2500,model=c("MC","DDexp","DDlin","EB"),regime.map,verbose=TRUE,rnd=6){
+sim_t_tworegime<-function(regime.map,pars,root.value,Nsegments=2500,model=c("MC","DDexp","DDlin","EB"),verbose=TRUE,rnd=6){
+
+phylo<-regime.map
 #return error if non-ultrametric tree
 if(phylo$Nnode!=(length(phylo$tip.label)-1)){stop("phylo object must be ultrametric")}
 if(is.na(match(model,c("MC","DDexp","DDlin","EB")))){stop("model not specified correctly, must be 'MC','DDexp', 'DDlin',or 'EB'")}

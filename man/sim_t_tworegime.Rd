@@ -9,14 +9,14 @@ Simulates datasets for a given phylogeny under two-regime matching competition (
 }
 \usage{
 
-sim_t_tworegime(phylo,pars,root.value,Nsegments=2500,model=c("MC","DDexp","DDlin","EB"),
-		regime.map,verbose=TRUE,rnd=6)
+sim_t_tworegime(regime.map,pars,root.value,Nsegments=2500,model=c("MC","DDexp","DDlin","EB"),
+		,verbose=TRUE,rnd=6)
 
 }
 
 \arguments{
-  \item{phylo}{
-an object of type 'phylo' (see ape documentation)
+  \item{regime.map}{
+a stochastic map of the two regimes stored as a simmap object output from \code{\link{make.simmap}}
 }
   \item{pars}{
 a vector containing the three parameters for the chosen model; all models require \code{sig2}, and additionally, the MC model requires \code{S1} and \code{S2},
@@ -35,9 +35,6 @@ model chosen to fit trait data, \code{"MC"} is the matching competition model, \
   }
   \item{verbose}{
 if \code{TRUE}, prints the identity of regimes corresponding to each parameter value
-}
-  \item{regime.map}{
-a stochastic map of the two regimes stored as a simmap object output from \code{\link{make.simmap}}
 }
 
   \item{rnd}{
@@ -75,24 +72,21 @@ Adjusting \code{rnd} may help if function crashes.
 
 \examples{
 
-data(Cetacea)
+data(Cetacea_clades)
 
 \donttest{
-regime<-c(rep("Odontocete",72),rep("Mystecite",15))
-names(regime)<-c("Physeter_catodon","Kogia_breviceps","Kogia_simus","Platanista_gangetica","Platanista_minor","Tasmacetus_shepherdi","Berardius_arnuxii","Berardius_bairdii","Ziphius_cavirostris","Indopacetus_pacificus","Hyperoodon_ampullatus","Hyperoodon_planifrons","Mesoplodon_bidens","Mesoplodon_traversi","Mesoplodon_ginkgodens","Mesoplodon_europaeus","Mesoplodon_mirus","Mesoplodon_bowdoini","Mesoplodon_carlhubbsi","Mesoplodon_layardii","Mesoplodon_hectori","Mesoplodon_densirostris","Mesoplodon_stejnegeri","Mesoplodon_grayi","Mesoplodon_perrini","Mesoplodon_peruvianus","Lipotes_vexillifer","Inia_geoffrensis","Pontoporia_blainvillei","Delphinapterus_leucas","Monodon_monoceros","Neophocaena_phocaenoides","Phocoena_phocoena","Phocoena_dalli","Phocoena_sinus","Phocoena_dioptrica","Phocoena_spinipinnis","Orcinus_orca","Orcaella_brevirostris","Grampus_griseus","Pseudorca_crassidens","Feresa_attenuata","Peponocephala_electra","Globicephala_macrorhynchus","Globicephala_melas","Lagenorhynchus_albirostris","Lagenorhynchus_acutus","Lissodelphis_borealis","Lissodelphis_peronii","Cephalorhynchus_hectori","Cephalorhynchus_commersonii","Cephalorhynchus_eutropia","Lagenorhynchus_obscurus","Lagenorhynchus_obliquidens","Cephalorhynchus_heavisidii","Lagenorhynchus_australis","Lagenorhynchus_cruciger","Steno_bredanensis","Sotalia_fluviatilis","Sotalia_guianensis","Lagenodelphis_hosei","Stenella_longirostris","Stenella_attenuata","Tursiops_aduncus","Tursiops_truncatus","Sousa_chinensis","Stenella_clymene","Stenella_coeruleoalba","Stenella_frontalis","Delphinus_tropicalis","Delphinus_capensis","Delphinus_delphis","Balaena_mysticetus","Eubalaena_australis","Eubalaena_glacialis","Eubalaena_japonica","Caperea_marginata","Eschrichtius_robustus","Balaenoptera_acutorostrata","Balaenoptera_bonaerensis","Balaenoptera_physalus","Megaptera_novaeangliae","Balaenoptera_musculus","Balaenoptera_omurai","Balaenoptera_borealis","Balaenoptera_brydei","Balaenoptera_edeni")
-regime.map<-phytools::make.simmap(Cetacea,regime)
 
 # Simulate data under the matching competition model
-MC_tworegime.data<-sim_t_tworegime(Cetacea,pars=c(sig2=0.01,S1=-0.1,S2=-0.01),root.value=0,Nsegments=1000,model="MC",regime.map=regime.map)
+MC_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,S1=-0.1,S2=-0.01),root.value=0,Nsegments=1000,model="MC")
 
 # Simulate data under the diversity dependent linear model
-DDlin_tworegime.data<-sim_t_tworegime(Cetacea,pars=c(sig2=0.01,b1=-0.0001,b2=-0.000001),root.value=0,Nsegments=1000,model="DDlin",regime.map=regime.map)
+DDlin_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,b1=-0.0001,b2=-0.000001),root.value=0,Nsegments=1000,model="DDlin")
 
 # Simulate data under the diversity dependent linear model
-DDexp_tworegime.data<-sim_t_tworegime(Cetacea,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="DDexp",regime.map=regime.map)
+DDexp_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="DDexp")
 
 # Simulate data under the diversity dependent linear model
-EB.data_tworegime<-sim_t_tworegime(Cetacea,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="EB",regime.map=regime.map)
+EB.data_tworegime<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="EB")
 
 
 }
