@@ -69,6 +69,7 @@ For two-regime fits without measurement error, the second and third values for \
 For fits including measurement error, the default starting value for sig2 is \code{0.95*var(data)/max(nodeHeights(phylo))}, and nuisance values start at \code{0.05*var(data)/max(nodeHeights(phylo))}.
 In all cases, the nuisance parameter is the last in the \code{par} vector, with the order of other variables as described above.
 
+For two-regime fits, particularly under the matching competition model, we recommend fitting with several different starting values.
 }
 
 \references{
