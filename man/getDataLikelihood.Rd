@@ -43,5 +43,5 @@ modelBM <- createModel(tree, 'BM')
 dataBM <- simulateTipData(modelBM, c(0,0,0,1))
 
 #Likelihood of the data :
-getDataLikelihood(modelBM, dataBM, c(0,0,0,1))
+getDataLikelihood(modelBM, dataBM, error=NULL, c(0,0,0,1))
 }
