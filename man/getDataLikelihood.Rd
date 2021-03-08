@@ -7,13 +7,13 @@ Likelihood of tip trait values.
 Computes -log( likelihood ) of tip trait data under a given set of parameters, and for a specified model of trait evolution.
 }
 \usage{
-getDataLikelihood(object, data, error=NULL, params, v)
+getDataLikelihood(object, data, error, params, v)
 }
 
 \arguments{
 \item{object}{an object of class 'PhenotypicModel'.}
 \item{data}{vector of tip trait data.}
-\item{error}{vector of intraspecific (i.e., tip-level) standard error of the mean.}
+\item{error}{vector of intraspecific (i.e., tip-level) standard error of the mean. Specify NULL if no error data are available.}
 
 \item{params}{vector of parameters, given in the same order as in the 'model' object.}
 \item{v}{boolean specifying the verbose mode. Default value : FALSE.}

@@ -19,15 +19,18 @@ an object of type 'phylo' (see ape documentation); if \code{two.regime=TRUE}, th
   \item{data}{
 a named vector of trait values with names matching \code{phylo$tip.label}
 }
-  \item{error}{
-if including measurement error, a named vector of error values (the standard error of the [intraspecific] mean) with names matching \code{phylo$tip.label}
-}
-
   \item{model}{
 model chosen to fit trait data, \code{"BM"} is the Brownian motion model, \code{"OU"} is the Ornstein-Uhlenbeck model, and \code{"EB"} is the early burst model.
 }
-  \item{pars}{
-vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
+
+  \item{error}{
+if including measurement error, a named vector of error values (the standard error of the [intraspecific] mean) with names matching \code{phylo$tip.label}
+}
+  \item{two.regime}{
+if \code{TRUE}, fits a two-regime model
+}
+  \item{method}{
+optimization method from \code{link{optim}}
 }
 
   \item{echo}{
@@ -73,7 +76,8 @@ data(Cetacea_clades)
 
 \donttest{
 
-data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="EB")
+data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),
+	root.value=0,Nsegments=1000,model="EB")
 error<-rep(0.05,length(Cetacea_clades$tip.label))
 names(error)<-Cetacea_clades$tip.label
 

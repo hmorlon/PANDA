@@ -10,7 +10,7 @@ Simulates datasets for a given phylogeny under two-regime matching competition (
 \usage{
 
 sim_t_tworegime(regime.map,pars,root.value,Nsegments=2500,model=c("MC","DDexp","DDlin","EB"),
-		,verbose=TRUE,rnd=6)
+		verbose=TRUE,rnd=6)
 
 }
 
@@ -77,16 +77,20 @@ data(Cetacea_clades)
 \donttest{
 
 # Simulate data under the matching competition model
-MC_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,S1=-0.1,S2=-0.01),root.value=0,Nsegments=1000,model="MC")
+MC_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,S1=-0.1,S2=-0.01),
+	root.value=0,Nsegments=1000,model="MC")
 
 # Simulate data under the diversity dependent linear model
-DDlin_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,b1=-0.0001,b2=-0.000001),root.value=0,Nsegments=1000,model="DDlin")
+DDlin_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,b1=-0.0001,b2=-0.000001),
+	root.value=0,Nsegments=1000,model="DDlin")
 
 # Simulate data under the diversity dependent linear model
-DDexp_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="DDexp")
+DDexp_tworegime.data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),
+	root.value=0,Nsegments=1000,model="DDexp")
 
 # Simulate data under the diversity dependent linear model
-EB.data_tworegime<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),root.value=0,Nsegments=1000,model="EB")
+EB.data_tworegime<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),
+	root.value=0,Nsegments=1000,model="EB")
 
 
 }
