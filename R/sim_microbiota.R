@@ -30,5 +30,5 @@ function(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300, proport
   write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))
   host_tree <- read.tree(file=paste("host_tree_",name,".tre",sep=""))
   n <- Ntip(host_tree)
-  output <- mclapply(1:length(name_index),simulate_alignment,mc.cores=nb_cores,host_tree=host_tree,name=name,seed=seed,name_index=name_index,mu=mu,n=n,N=N,proportion_variant=proportion_variant,simul=simul,model=model,mean=mean,sd=sd,host_signal=host_signal,geo_signal=geo_signal,stochastic_map=stochastic_map,path=path)
+  output <- mclapply(1:length(name_index),simulate_OTU_alignment,mc.cores=nb_cores,host_tree=host_tree,name=name,seed=seed,name_index=name_index,mu=mu,n=n,N=N,proportion_variant=proportion_variant,simul=simul,model=model,mean=mean,sd=sd,host_signal=host_signal,geo_signal=geo_signal,stochastic_map=stochastic_map,path=path)
 }
