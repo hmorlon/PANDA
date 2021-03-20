@@ -38,10 +38,10 @@ Imports:
     parallel,
     vegan,
     GUniFrac,
-    R.utils
-		stats,
-		TESS,
-		utils
+    R.utils,
+	stats,
+	TESS,
+	utils
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],
