@@ -1,12 +1,12 @@
 setGeneric(
     name="fitTipData",
-    def=function(object="PhenotypicModel", data="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
+    def=function(object="PhenotypicModel", data="numeric", error="numeric", params0="numeric", GLSstyle="logical", v="logical"){standardGeneric("fitTipData")}
 )
 
 setMethod(
     f="fitTipData",
     signature="PhenotypicModel",
-    definition=function(object, data, params0=NULL, GLSstyle=FALSE, v=FALSE){
+    definition=function(object, data, error=NULL, params0=NULL, GLSstyle=FALSE, v=FALSE){
         if(v){
             cat("*** Fit of tip trait data ***\n")
             cat("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
@@ -40,6 +40,10 @@ setMethod(
                     tipdistribution <- getTipDistribution(object, c(0,params))
                   
 		            V<-tipdistribution$Sigma
+		            if(!is.null(error)){
+            			error<-error[rownames(tipdistribution$Sigma)]
+            			V<- V + diag(error^2) + diag(rep(exp(params[length(params)]),n))
+					}
 		            data<-data[rownames(V)]
 		  			op <- getOption("show.error.messages")
 		  			options(show.error.messages=FALSE)
@@ -63,7 +67,7 @@ setMethod(
                     params <- c(m0, params)
 
                 }else{
-                    calcul <- getDataLikelihood(object, data, params)
+                    calcul <- getDataLikelihood(object, data, error, params)
                 }
 
             }else{
@@ -81,6 +85,12 @@ setMethod(
             tipdistribution <- getTipDistribution(object, c(0,inferredParams))
 
 		    V<-tipdistribution$Sigma
+		    
+		    if(!is.null(error)){
+		    	error<-error[rownames(tipdistribution$Sigma)]
+            	V<- V + diag(error^2) + diag(rep(exp(inferredParams[length(inferredParams)]),n))
+			}
+			
 		  	op <- getOption("show.error.messages")
 		  	options(show.error.messages=FALSE)
 			IV=try(solve(V))

@@ -21,7 +21,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   if (root.value < bounds[1] || root.value > bounds [2]) {print("Warning: root value outside boundaries; continuing simulation")}
   
   process_dead = F
-  traits <- list(c(1,1,2,root.value),c(2,-1,1,root.value)) #lineage number, status (incipient=-1/good=1/extinct=-2), sister lineage, trait values 
+  traits <- list(c(1,1,2,NA,root.value),c(2,-1,1,root.value,root.value)) #lineage number, status (incipient=-1/good=1/extinct=-2), parental lineage (if incipient), current trait value of parental lineage, trait values 
   lineages <- rbind(c(1,0,0,-1,1,0,0),c(1,0,0,-1,-1,0,NA)) #parental node, descendant node, starting t, ending t (still alive=-1), status, sp completion/extinction t, sp completion t
   active_lineages = c(1,2)
   n_lineages = length(active_lineages)
@@ -35,7 +35,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
     
     #trait differences among lineages
     for (i in 1:n_lineages){
-      mat_diff[i,] <- sapply(traits[active_lineages],function(x)(traits[[active_lineages[i]]][3+step_count] - x[3+step_count]))
+      mat_diff[i,] <- sapply(traits[active_lineages],function(x)(traits[[active_lineages[i]]][4+step_count] - x[4+step_count]))
     }
     
     diag(mat_diff) <- NA
@@ -53,10 +53,10 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
     for (i in 1:length(active_lineages)){
       signs_me <- diff_sign[i,-i]
       diff_me[[active_lineages[i]]] <- mat_diff[i,-i] #saves diff vector to use later for extinction rates
-      dist_bounds <- traits[[active_lineages[i]]][3+step_count] - bounds #distance to bounds
+      dist_bounds <- traits[[active_lineages[i]]][4+step_count] - bounds #distance to bounds
       bound_effect <- 3 * sum(sign(dist_bounds)*exp(-2*(dist_bounds)^2)) #repulsion of bounds
       #update trait value
-      traits[[active_lineages[i]]][4+step_count] <- traits[[active_lineages[i]]][3+step_count] + 
+      traits[[active_lineages[i]]][5+step_count] <- traits[[active_lineages[i]]][4+step_count] + 
         alpha2 * m * sum(signs_me * exp(-alpha2 * (diff_me[[active_lineages[i]]])^2)) +
         rnorm(1, 0, s) + bound_effect 
     }
@@ -68,10 +68,9 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
       #if lineage is incipient
       if (lineages[i,5] == -1){
         #captures the case where sister lineage speciates again before finishing another i_sp  
-        if (is.na(traits[[traits[[i]][3]]][[3+step_count]])){
-          diff_trait_isp = abs(traits[[i]][3+step_count] - traits[[traits[[i]][3]]][[4+step_count]])
-        }
-        else{diff_trait_isp = abs(traits[[i]][3+step_count] - traits[[traits[[i]][3]]][[3+step_count]])}
+        traits[[i]][4] <- tail(traits[[traits[[i]][3]]], 1) #update current trait of parental lineage
+        diff_trait_isp = abs(traits[[i]][4 + step_count] - 
+                               traits[[i]][4]) #calculate absolute value of difference from trait value of parental lineage
         #sp completion rate depends on distance w/parent
         lambda2 = tau0 * exp(beta * (diff_trait_isp)^2)
         #extinction rate depends on distance with all lineages, same as trait evolution
@@ -90,35 +89,6 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
             lineages[i,c(4,5,6)] <- c(t,-2,t)
             traits[[i]][2] <- -2
             dead_lin <- c(dead_lin, i)
-            # i sister has now new sister: it's most closely related living good sp (if any, otherwise takes closest incipient)
-            i_sister <- traits[[i]][3]
-            #to find it... take first ancestral node, any descendent living lineage? if fails, take second ancestral node, an so on. if many lineages, pick random.
-            anc_node <- lineages[which(lineages[,2]==lineages[i_sister,1]),1]
-            while (T){
-              #collect all living tips from focal anc_node
-              possible <- active_lineages[lineages[active_lineages,1]>=anc_node] #lineages that could be descendent of anc_node (i.e. younger)
-              possible <- possible[possible!=i_sister] #not myself
-              possible <- possible[lineages[possible,5]!=-2] #not extinct at t
-              if(length(possible)==0){break}
-              #discard lineages that don't descend from anc_node
-              for (lin in possible){
-                node_parent <- lineages[lin,1]
-                while(T){
-                  if(node_parent==anc_node){break}
-                  else if(node_parent<anc_node){possible<-possible[possible!=lin]; break}
-                  node_parent <- lineages[which(lineages[,2]==node_parent),1]
-                }
-              }
-              if (length(possible)>0){
-                goods <- possible[lineages[possible,5]==1] 
-                #if there are good lineages, choose goods first (randomly if there are many)
-                if (length(goods)>0){traits[[i_sister]][3]<-goods[sample(1:length(goods),size = 1)]}
-                else{traits[[i_sister]][3]<-possible[sample(1:length(possible),size = 1)]}
-                break
-              }#found!
-              #otherwise move one node backwards and repeat
-              anc_node <- lineages[which(lineages[,2]==anc_node),1]
-            }
           }
         }
       }
@@ -142,14 +112,14 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
             lineages <- rbind(lineages, new_lin1, new_lin2)
             dead_lin <- c(dead_lin,i)
             born_lin <- c(born_lin, dim(lineages)[1]-1, dim(lineages)[1])
-            traits[[dim(lineages)[1]-1]] <- c(dim(lineages)[1]-1,1,dim(lineages)[1],rep(NA, times = step_count),traits[[i]][4+step_count])
-            traits[[dim(lineages)[1]]] <- c(dim(lineages)[1],-1,dim(lineages)[1]-1,rep(NA, times = step_count),traits[[i]][4+step_count])
+            traits[[dim(lineages)[1]-1]] <- c(dim(lineages)[1]-1,1,dim(lineages)[1],NA,rep(NA, times = step_count),traits[[i]][5+step_count])
+            traits[[dim(lineages)[1]]] <- c(dim(lineages)[1],-1,dim(lineages)[1]-1,traits[[i]][5 + step_count],rep(NA, times = step_count),traits[[i]][5+step_count])
             #has already descendent incipient lineages?
-            sisters <- which(unlist(lapply(traits,function(x)(x[3])))==i) #get lineages who have i as sister
-            sisters <- sisters[lineages[sisters,2]==0] #keep only living 
-            if (sum(sisters)>0){
-              #update sister number of all i_sp lineages descending from this parental good lineage (or it's ancestors) with new id 
-              for (j in sisters){
+            daughters <- which(unlist(lapply(traits,function(x)(x[3])))==i) #get lineages who have i as parent
+            daughters <- daughters[lineages[daughters,2]==0] #keep only living 
+            if (sum(daughters)>0){
+              #update parent number of all i_sp lineages descending from this parental good lineage (or it's ancestors) with new id 
+              for (j in daughters){
                traits[[j]][3] <- nrow(lineages)-1
               }
             }
@@ -160,17 +130,9 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
             traits[[i]][2] <- -2
             dead_lin <- c(dead_lin, i)
             #if sister is incipient & alive, becomes good 
-            i_sister <- traits[[i]][3]
-            if (lineages[i_sister,5] == -1){lineages[i_sister,c(5,6,7)] <- c(1,t,t); traits[[i_sister]][2]<-1}
-            #i_sister inherits older sisters from the extinct
-            sisters <- which(unlist(lapply(traits,function(x)(x[3])))==i) #get older lineages who have i as sister
-            #discard current sister, extinct, and ancestral lineages
-            sisters <- sisters[sisters!=i_sister] 
-            sisters <- sisters[which(lineages[sisters,5]!=-2)]
-            sisters <- sisters[which(lineages[sisters,2]==0)]
-            for (j in sisters){traits[[j]][3] <- i_sister}
-            #i_sister has new sister, which is the youngest of the older non-extinct branches of i (if any left)
-            if (sum(sisters)>0){traits[[i_sister]][3] <- max(sisters)}
+            i_daughter <- traits[[i]][3]
+            if (lineages[i_daughter,5] == -1){lineages[i_daughter,c(5,6,7)] <- c(1,t,t); traits[[i_daughter]][2]<-1}
+            #i_daughter inherits older parents from the extinct
             }
           }
       }

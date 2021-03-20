@@ -8,7 +8,8 @@ Fits models of trait evolution incorporating competitive interactions
 Fits matching competition (MC), diversity dependent linear (DDlin), or diversity dependent exponential (DDexp) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_comp(phylo, data, model=c("MC","DDexp","DDlin"), pars=NULL, geography.object=NULL)
+fit_t_comp(phylo, data, error=NULL, model=c("MC","DDexp","DDlin"), pars=NULL, 
+		geography.object=NULL, regime.map=NULL)
 }
 
 \arguments{
@@ -18,14 +19,22 @@ an object of type 'phylo' (see ape documentation)
   \item{data}{
 a named vector of trait values with names matching \code{phylo$tip.label}
 }
+  \item{error}{
+if including measurement error, a named vector of error values (the standard error of the [intraspecific] mean) with names matching \code{phylo$tip.label}
+}
+
   \item{model}{
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
-  \item{geography.object}{
-a list of sympatry through time created using \code{\link{CreateGeoObject}}
-}
   \item{pars}{
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
+}
+
+  \item{geography.object}{
+if incorporating biogeography, a list of sympatry through time created using \code{\link{CreateGeoObject}}
+}
+  \item{regime.map}{
+if running two-regime versions of models, a stochastic map of the two regimes stored as a simmap object output from \code{\link{make.simmap}}
 }
 
 }
@@ -41,16 +50,26 @@ vector specifying starting parameter values for maximum likelihood optimization.
   \item{b}{maximum-likelihood estimate of \code{b} parameter of linear diversity dependence model}
   \item{r}{maximum-likelihood estimate of \code{r} parameter of exponential diversity dependence model}
   \item{z0}{maximum-likelihood estimate of \code{z0}, the value at the root of the tree}
+  \item{nuisance}{maximum-likelihood estimate of \code{nuisance}, the unknown, nuisance contribution to measurement error (see details)}
   \item{convergence}{convergence diagnostics from \code{\link{optim}} function (see optim documentation)}
 }
 
 \details{
-If unspecified, \code{par} takes the default values of \code{var(data)/max(nodeHeights(phylo))} for sig2 and 0 for either \code{S} for the matching competition model, 
+
+Note: if including known measurement error, the model fit incorporates this known error and, in addition, estimates an unknown, nuisance contribution to measurement error. The current implementation does not differentiate between the two, so, for instance, it is not possible to estimate the nuisance measurement error without providing the known, intraspecific error values.
+ 
+For single-regime fits without measurement error, \code{par} takes the default values of \code{var(data)/max(nodeHeights(phylo))} for sig2 and 0 for either \code{S} for the matching competition model, 
 \code{b} for the linear diversity dependence model, or \code{r} for the exponential diversity dependence model. Values can be manually entered as a vector with the first element
 equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}. Note: since likelihood optimization
 uses sig rather than sig2, and since the starting value for is exponentiated to stabilize the likelihood search, if you input a \code{par} value, the first value specifying sig2 
 should be the log(sqrt()) of the desired sig2 starting value.
 
+For two-regime fits without measurement error, the second and third values for \code{par} correspond to the first and second \code{S}, \code{b}, or \code{r} value (run trial fit to see which regime corresponds to each slope).
+
+For fits including measurement error, the default starting value for sig2 is \code{0.95*var(data)/max(nodeHeights(phylo))}, and nuisance values start at \code{0.05*var(data)/max(nodeHeights(phylo))}.
+In all cases, the nuisance parameter is the last in the \code{par} vector, with the order of other variables as described above.
+
+For two-regime fits, particularly under the matching competition model, we recommend fitting with several different starting values.
 }
 
 \references{
