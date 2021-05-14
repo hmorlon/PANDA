@@ -129,10 +129,10 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     if (only_A==FALSE) {if (length(unique(as.vector(cophe_B)))<3) {
       print("The phylogenetic distance matrix of guild B only is composed of only 2 different values (because of polytomies?).")
       return(results)}}
-    if (length(unique(as.vector(eco_A)))<2) {
+    if (length(unique(as.vector(eco_A)))<3) {
       print("The ecological distance matrix of guild A is composed of only 1 value (identical patterns of interactions across species?).")
       return(results)}
-    if (only_A==FALSE) {if (length(unique(as.vector(eco_B)))<2) {
+    if (only_A==FALSE) {if (length(unique(as.vector(eco_B)))<3) {
       print("The ecological distance matrix of guild B is composed of only 1 value (identical patterns of interactions across species?).")
       return(results)}}
 
