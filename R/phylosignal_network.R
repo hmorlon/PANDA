@@ -123,6 +123,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
 
     results <- c(nb_A, nb_B, NA, NA, NA, NA, NA, NA)
     names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_high_A","pvalue_low_A", "mantel_cor_B", "pvalue_high_B", "pvalue_low_B")
+
     if (length(unique(as.vector(cophe_A)))<3) {
       print("The phylogenetic distance matrix of guild A is composed of only 2 different values (because of polytomies?).")
       return(results)}

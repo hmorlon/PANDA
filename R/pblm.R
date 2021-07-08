@@ -139,8 +139,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
   MSEStar<-cov(matrix(Estar))
   
   #######
-  if(is.null(tree1) | is.null(tree2))
-  {
+  if(is.null(tree1) | is.null(tree2)) {
     coefs<-approxCFstar
     rownames(coefs)<-c("lower CI 95%","estimate","upper CI 95%")
     colnames(coefs)<-paste("star",c("intercept",colnames(U)[-1]),sep="-")
@@ -265,6 +264,11 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
     V1<-V1/detV1^(1/nspp1)
     V2<-V2/detV2^(1/nspp2)
     
+    
+    # test 27/12/20: V needed for bootstraping only
+    V <- kronecker(V2, V1)
+    
+    
     invV1 <- chol2inv(chol(V1))
     invV2 <- chol2inv(chol(V2))
     invV <- kronecker(invV2,invV1)  
@@ -294,8 +298,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
     
     ################
     #bootstrap CIs
-    if(bootstrap)
-    {
+    if (bootstrap) {
       Vtrue<-V
       Atrue<-A
       atrue<-aFull
@@ -310,16 +313,18 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
       #				  = T*V*T'
       #				  = I
       
-      TT<-iG%*%t(L)
-      Y<-TT%*%Atrue
-      Z<-TT%*%U
+      TT <- iG%*%t(L)
+      Y <- TT%*%Atrue
+      Z <- TT%*%U
       
-      res<-(Y-Z%*%atrue)	# residuals in orthogonalized space
-      invT <- chol2inv(chol(TT))
+      res <- (Y-Z%*%atrue)	# residuals in orthogonalized space
+      
+      # test on 27/12/20
+      #invT <- chol2inv(chol(TT)) # Error in chol.default(TT) : the leading minor of order 2 is not positive definite
+      invT <- qr.solve(TT)
       
       bootlist=NULL
-      for (i in 1:nreps)
-      {
+      for (i in 1:nreps) {
         randindex<-sample(1:nassocs,replace=TRUE)	# vector of random indices
         #randindex=1:nassocs					# retain order
         YY<-Z%*%atrue+res[randindex]	# create new values of Y with random residuals
@@ -356,8 +361,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
       #Calculate bootstrapped CIs
       alpha<-0.05  # alpha is always 0.05, but could change here
       conf<-NULL
-      for(j in 1:nc)
-      {
+      for(j in 1:nc){
         bootconf<-quantile(bootlist[,j],probs = c(alpha/2, 1-alpha/2))
         conf<-rbind(conf,c(bootconf[1],bootconf[2]))
       }
