@@ -30,9 +30,11 @@ a phylogenetic tree of the guild A (the columns of the interaction network). It 
 }
 
 \item{method}{
-indicates which method is used to compute the phylogenetic signal in species interactions. If you want to perform a Mantel test between the phylogenetic distances and some ecological distances, you can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), or "GUniFrac" to compute the generalized UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
+indicates which method is used to compute the phylogenetic signal in species interactions. If you want to perform a Mantel test between the phylogenetic distances and some ecological distances, you can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), or "GUniFrac" to compute the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
 
-Conversely, if you want to evaluate the phylogenetic signal in the degree of generalism, you can choose "degree". Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear Model "PBLM" (see Ives and Godfray, 2006) or "PBLM_binary" to not consider the abundances of the interactions.
+Conversely, if you want to evaluate the phylogenetic signal in the degrees of generalism, you can choose "degree". 
+
+Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear Model "PBLM" (see Ives and Godfray, 2006) or "PBLM_binary" to not consider the abundances of the interactions.
 }
 
 \item{correlation}{

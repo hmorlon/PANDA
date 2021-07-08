@@ -1,13 +1,12 @@
-phylosignal_sub_network <-
-function(network, tree_A, tree_B, method = "Jaccard_weighted", 
-                                    nperm = 1000, correlation = "Pearson", minimum=10){
+phylosignal_sub_network <- function(network, tree_A, tree_B, method = "Jaccard_weighted", 
+                                    nperm = 1000, correlation = "Pearson", minimum=10, degree=F){
   
   host_tree <- tree_A
   symbiont_tree <- tree_B
   
   if (!inherits(host_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
   if (!inherits(symbiont_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
-  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals.\n")}
+  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted")) {stop("Please provide a \"method\" to compute phylogenetic signals.\n")}
   
   if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop(print("Please provide a network with row names and columns names matching the species names.\n"))}
   
@@ -37,11 +36,25 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
       if (nrow(sub_network)>1){
         nb_sub_clades <- nb_sub_clades+1
         mantel_test <- phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = method, nperm = nperm, correlation = correlation)
-        results_sub_clades <- rbind(results_sub_clades, c(i, mantel_test[1:5]))
+        
+        if (degree==TRUE){
+          mantel_degree <- rep("NA", 5)
+          tryCatch({
+            mantel_degree <- phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = "degree", nperm = nperm, correlation = correlation)
+          }, error=function(e){cat("clade ",i,": ", conditionMessage(e), "\n")})
+          results_sub_clades <- rbind(results_sub_clades, c(i, mantel_test[1:5],NA,NA, mantel_degree[3:5] ))
+        }else{
+          results_sub_clades <- rbind(results_sub_clades, c(i, mantel_test[1:5],NA,NA))
+        }
+        
       }
     }
   }
-  colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_high", "pvalue_low") 
+  if (degree==TRUE){
+    colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_high", "pvalue_low", "pvalue_high_corrected","pvalue_low_corrected", "degree_mantel_cor", "degree_pvalue_high", "degree_pvalue_low") 
+  }else{
+    colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_high", "pvalue_low", "pvalue_high_corrected","pvalue_low_corrected") 
+  }
   results_sub_clades <- data.frame(results_sub_clades, stringsAsFactors = F)
   results_sub_clades$nb_A <- as.numeric(results_sub_clades$nb_A)
   results_sub_clades$nb_B <- as.numeric(results_sub_clades$nb_B)
@@ -54,5 +67,17 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
   results_sub_clades$pvalue_high_corrected[results_sub_clades$pvalue_high_corrected>1] <- 1
   results_sub_clades$pvalue_low_corrected[results_sub_clades$pvalue_low_corrected>1] <- 1
   
+  if (degree==TRUE){
+    results_sub_clades$degree_mantel_cor <- as.numeric(results_sub_clades$degree_mantel_cor)
+    results_sub_clades$degree_pvalue_high <- as.numeric(results_sub_clades$degree_pvalue_high)
+    results_sub_clades$degree_pvalue_low <- as.numeric(results_sub_clades$degree_pvalue_low)
+    
+    results_sub_clades$degree_pvalue_high_corrected <- results_sub_clades$degree_pvalue_high*nb_sub_clades
+    results_sub_clades$degree_pvalue_low_corrected <- results_sub_clades$degree_pvalue_low*nb_sub_clades
+    results_sub_clades$degree_pvalue_high_corrected[results_sub_clades$degree_pvalue_high_corrected>1] <- 1
+    results_sub_clades$degree_pvalue_low_corrected[results_sub_clades$degree_pvalue_low_corrected>1] <- 1
+  }
+  
   return(results_sub_clades)
 }
+

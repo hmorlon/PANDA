@@ -15,7 +15,7 @@ Mantel tests can be computed using quantified or binary networks, with the Jacca
 phylosignal_sub_network(network, tree_A, tree_B,
     method = "Jaccard_weighted", 
     correlation = "Pearson", 
-    nperm = 1000, minimum=10)
+    nperm = 1000, minimum=10, degree=F)
 }
 
 \arguments{
@@ -31,7 +31,7 @@ a phylogenetic tree of the guild A (the columns of the interaction network). It 
 }
 
 \item{method}{
-indicates which method is used to compute the phylogenetic signal in species interactions using Mantel tests. You can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), or "GUniFrac" to compute the generalized UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
+indicates which method is used to compute the phylogenetic signal in species interactions using Mantel tests. You can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), or "GUniFrac" to compute the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
 }
 
 \item{correlation}{
@@ -45,6 +45,10 @@ number of permutations to evaluate the significance of the Mantel test. By defau
 \item{minimum}{
 indicates the minimal number of descending species for a node in tree A to compute its clade-specific phylogenetic signal. 
 }
+
+\item{degree}{
+if degree=TRUE, a Mantel tests testing for phylogenetic signal in degrees of generalism is additionally performed in each sub-clade.
+}
 }
 
 
@@ -54,7 +58,10 @@ For Mantel tests, the function outputs a table where each line corresponds to a 
 
 "mantel_cor" indicates the strength of phylogenetic signal in the sub-clade A. The upper p-value "pvalue_high" indicates the significance of phylogenetic signal in the sub-clade A. The lower p-value "pvalue_low" indicates the significance of anti-phylogenetic signal in the sub-clade A. Both Bonferroni  p-values are corrected using the number of tested nodes. 
 
+If degree=TRUE, it also indicates in each sub-clade, the phylogenetic signal in the degree of generalism ("degree_mantel_cor") and its significance with or without the Bonferroni correction ("degree_pvalue_high", "degree_pvalue_low" and "degree_pvalue_high_corrected", "degree_pvalue_low_corrected")
+
 }
+
 \details{
 
 See tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network). 
@@ -89,14 +96,14 @@ tree_fungi <- mycorrhizal_network[[3]] # phylogenetic tree (phylo object)
 # (do closely related species interact with similar partners in sub-clades of guild A?)
 
 results_clade_A <- phylosignal_sub_network(network, tree_A = tree_orchids, tree_B = tree_fungi,
-method = "GUniFrac", correlation = "Pearson")
+method = "GUniFrac", correlation = "Pearson", degree=T)
 plot_phylosignal_sub_network(tree_A = tree_orchids, results_clade_A)
 
 # Clade-specific phylogenetic signal in species interactions in guild B 
 # (do closely related species interact with similar partners in sub-clades of guild B?)
 
 results_clade_B <- phylosignal_sub_network(t(network), tree_A = tree_fungi, tree_B = tree_orchids, 
-method = "GUniFrac", correlation = "Pearson")
+method = "GUniFrac", correlation = "Pearson", degree=T)
 plot_phylosignal_sub_network(tree_A = tree_fungi, results_clade_B)
 
 }
