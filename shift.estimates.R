@@ -25,7 +25,7 @@
 # Version 0.1.3
 # - new argument rate.max to constrain maximum rate value (cannot be used with n.max)
 
-shift.estimates <- function(phy, data, sampling.fractions, ncomb.shift,
+shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
                             models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
                             np.sub = 4, multi.backbone = F, backbone.option = "backbone2",
                             n.max = NULL, rate.max = NULL, 
