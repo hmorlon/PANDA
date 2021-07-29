@@ -1,6 +1,5 @@
-# This function calculates the number of combinations of subclades for which
+# This function calculates the combinations of subclades for which
 # sampling fraction is available thanks to the taxonomy.
-# Only one backbone for now.
 # 
 # Version from July 10, 2020
 #

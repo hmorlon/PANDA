@@ -2,6 +2,7 @@
 # 
 # Created on January 28, 2021
 #
+
 get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T, text.cex = 1, pch.cex = 0.8, ...){
   
   # Packages ####
@@ -37,7 +38,7 @@ get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T,
   
   # Species should be the first column
   data <- data[,c("Species", names(data)[names(data) != "Species"])]
-  
+
   if(any(!phy$tip.label %in% data$Species)){
     stop("Some species of the phylogeny are not in the database \"data\".")
   }
@@ -93,7 +94,7 @@ get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T,
   phy.df$f[!phy.df$nodes %in% phy.df$to_test] <- NA
   phy.df[phy.df$nodes == Ntip(phy)+1, c("f", "sp_in", "sp_tt")] <- c(Ntip(phy)/nrow(data), Ntip(phy), nrow(data))
   
-  # PLOT ####
+  # PLOT optionnal ####
   if(plot == T){
     
     if(lad == T){

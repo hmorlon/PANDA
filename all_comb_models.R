@@ -285,14 +285,14 @@ all_comb_models <- function(to){
       
       #####################################
       
-      results <- div.models_RPANDA(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
-                                   backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                                   cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = T)
+      results <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
+                            backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
+                            cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = T)
       if(btb < length(phylo_backbone_cut)){
         # cond has to be changed to properly estimate likelihood of each part if they are not the last part
-        results1 <- div.models_RPANDA(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
-                                      backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                                      cond = F, models = models, n.max = n.max, rate.max = rate.max, verbose = F)
+        results1 <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
+                               backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
+                               cond = F, models = models, n.max = n.max, rate.max = rate.max, verbose = F)
         
         results2 <- merge(results1[,c(1:4)], results[,c(1,5:8)], by="Models")
         results <- results2[match(results$Models, results2$Models),]

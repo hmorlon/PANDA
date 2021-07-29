@@ -44,7 +44,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   
   # additional functions
   #source("./tools/functions.for.shift.estimates.R")
-  #source("./get.ncomb.shift.R")
+  #source("./get.comb.shift.R")
   
   setwd(source)
   #### argument check ####
@@ -71,10 +71,10 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
          \nPlease rename the corresponding column with the name \"Species\".")
   }
   
-  if(is(ncomb.shift)[1] != "list"){
-    stop("Object \"ncomb.shift\" is incorrect.")
+  if(is(comb.shift)[1] != "list"){
+    stop("Object \"comb.shift\" is incorrect.")
   } else {
-    ALL_bck_comb <- ncomb.shift
+    ALL_bck_comb <- comb.shift
   }
   
   if(any(!phy$tip.label %in% data$Species)){
@@ -83,7 +83,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
     stop()
   }
   
-  if(all(sapply(ncomb.shift, is.null)) & multi.backbone == T){
+  if(all(sapply(comb.shift, is.null)) & multi.backbone == T){
     multi.backbone <- F
     cat("\nWarnings: There is no combination with multiple backbones.\n")
   }
@@ -128,8 +128,8 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   
   cat("\n","Sampling fraction =",  paste0(Ntip(phy), "/", nrow(data), " (",round(f1,3)*100," %)"), "\n") 
   
-  res_phy <- div.models_RPANDA(phylo = phy, tot_time = max(node.age(phylo)$ages), f = f1, 
-                               cond = "crown", models = models, n.max = n.max, rate.max = rate.max)
+  res_phy <- div.models(phylo = phy, tot_time = max(node.age(phylo)$ages), f = f1,
+                        cond = "crown", models = models, n.max = n.max, rate.max = rate.max)
   
   res_phy[,-1] <- apply(res_phy[,-1], 2, as.numeric)
   
@@ -139,7 +139,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   
   all_res[[1]] <- res_phy ; names(all_res)[[1]] <- "whole_tree"
   
-  all_tested_nodes <- unique(c(unique(unlist(strsplit(names(ncomb.shift), "[.]"))), unique(unlist(ncomb.shift))))
+  all_tested_nodes <- unique(c(unique(unlist(strsplit(names(comb.shift), "[.]"))), unique(unlist(comb.shift))))
   
   all_lineages <- unique(unlist(strsplit(names(ALL_bck_comb), "[.]")))
   
@@ -263,9 +263,9 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
     n_tot <- sampling.fractions$sp_tt[sampling.fractions$nodes == as.numeric(names(phylo2)[i])]
     cat("\n","Sampling fraction", names_phylo2[i], "=",  paste0(n_tree, "/", n_tot, " (",round(f2[[i]],3)*100," %)"), "\n") 
     
-    results <- div.models_RPANDA(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
+    results <- div.models(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
                                  cond = F, models = models.sub, n.max = n.max, rate.max = rate.max)
-    results1 <- div.models_RPANDA(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
+    results1 <- div.models(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
                                   cond = cond[[i]], models = models.sub, n.max = n.max, rate.max = rate.max, verbose = F)
     
   
@@ -354,7 +354,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   # Check what comes form RPANDA
   clusterExport(cl, list("all_comb_models", "subtree", "multi.backbone", "ALL_branch_times_clades", "phy", "ALL_bck_comb","Descendants", "Ancestors", "Siblings", "getMRCA",
                          "get.node.ages", "drop.tip", "all_tested_nodes", "ALL_backbones", "node.age", "totalsp", "totalsp2", "Ntip", 
-                         "div.models_RPANDA", "fit_bd_backbone", "likelihood_bd_backbone", "n.max", ".Phi", "integrate", ".Psi", ".Integrate",
+                         "div.models", "fit_bd_backbone","fit_bd_backbone_c", "likelihood_bd_backbone", "n.max", ".Phi", "integrate", ".Psi", ".Integrate",
                          "branching.times", "ALL_clade_names", "sampling.fractions", "backbone.option", "models", "ALL_final3", "rate.max",
                          "Children", "extract.clade.ln", "expand.grid", "get.branching.nodes"), envir = env.func)
   
