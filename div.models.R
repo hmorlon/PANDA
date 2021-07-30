@@ -1,10 +1,10 @@
 # This function mimics div.models from functions.for.shift.estimates.R but with RPANDA functions
 # backbone options are available.
 
-div.models_RPANDA <- function(phylo, tot_time, f,
-                              backbone = F, spec_times = NULL, branch_times = NULL,
-                              models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
-                              cond, verbose = T, n.max = NULL, rate.max = NULL){
+div.models <- function(phylo, tot_time, f,
+                       backbone = F, spec_times = NULL, branch_times = NULL,
+                       models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
+                       cond, verbose = T, n.max = NULL, rate.max = NULL){
   
   results <- as.data.frame(matrix(NA,length(models),8))
   colnames(results)<-c("Models","Parameters","logL","AICc","Lambda","Alpha","Mu","Beta")
