@@ -186,7 +186,7 @@ div.models <- function(phylo, tot_time, f,
                                              f.lamb = function(x,y){y}, f.mu = function(x,y){y[1]*exp(y[2]*x)},
                                              lamb_par = list_param[[p]][c(1)], mu_par = list_param[[p]][c(3,4)],
                                              cst.lamb = T, cst.mu=F, expo.lamb=F, expo.mu=T, fix.mu=F, cond=cond, model = models[res_l]),
-          silent = F
+          silent = T
         )
       } else {
         name <- paste0(models[res_l],"c")
