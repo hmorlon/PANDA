@@ -33,15 +33,18 @@ div.models <- function(phylo, tot_time, f,
                                         backbone = backbone, spec_times = spec_times, branch_times = branch_times,
                                         f.lamb = function(x,y){y}, f.mu = function(x,y){0},
                                         lamb_par = list_param[[p]][1], mu_par = NULL,
-                                        cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=T, cond=cond),
+                                        cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=T, cond=cond, model = models[res_l]),
           silent = T
         ))
       } else{
         name <- paste0(models[res_l],"c")
         suppressWarnings(test <- try(
-          treei_BCST <- fitLikelihood_c(phylo, tot_time, model = models[res_l], backbone=backbone, spec_times = spec_times, branch_times = branch_times,
-                                        f.lamb = function(x,y){y}, f.mu = function(x,y){0}, lamb_par = list_param[[p]][1], n.max = n.max, rate.max = rate.max,
-                                        mu_par = NULL, f=f, cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=T, cond=cond),
+          treei_BCST <- fit_bd_backbone_c(phylo, tot_time, f=f,
+                                          backbone = backbone, spec_times = spec_times, branch_times = branch_times,
+                                          f.lamb = function(x,y){y}, f.mu = function(x,y){0},
+                                          lamb_par = list_param[[p]][1], mu_par = NULL,
+                                          cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=T, cond=cond, model = models[res_l],
+                                          n.max = n.max, rate.max = rate.max),
           silent = T
         ))
       }
@@ -69,14 +72,17 @@ div.models <- function(phylo, tot_time, f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
                                              f.lamb = function(x,y){y}, f.mu = function(x,y){y},
                                              lamb_par = list_param[[p]][1], mu_par = list_param[[p]][3],
-                                             cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=F, cond=cond)
+                                             cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=F, cond=cond, model = models[res_l])
         )
       } else {
         name <- paste0(models[res_l],"c")
         test <- try(
-          treei_BCST_DCST <- fitLikelihood_c(phylo, tot_time, 
-                                             f.lamb = function(x,y){y}, f.mu = function(x,y){y}, lamb_par = list_param[[p]][1], n.max = n.max, rate.max = rate.max,
-                                             mu_par = list_param[[p]][3], f=f, cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=F, cond=cond),
+          treei_BCST_DCST <- fit_bd_backbone_c(phylo, tot_time, f=f,
+                                               backbone = backbone, spec_times = spec_times, branch_times = branch_times,
+                                               f.lamb = function(x,y){y}, f.mu = function(x,y){y},
+                                               lamb_par = list_param[[p]][1], mu_par = list_param[[p]][3],
+                                               cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=F, cond=cond, model = models[res_l],
+                                               n.max = n.max, rate.max = rate.max),
           silent = T
         )
       }
@@ -101,7 +107,7 @@ div.models <- function(phylo, tot_time, f,
                                         backbone = backbone, spec_times = spec_times, branch_times = branch_times,
                                         f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){0},
                                         lamb_par = list_param[[p]][c(1,2)], mu_par = NULL,
-                                        cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F, fix.mu=T, cond=cond),
+                                        cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F, fix.mu=T, cond=cond, model = models[res_l]),
           silent = T
         )
         
@@ -109,10 +115,12 @@ div.models <- function(phylo, tot_time, f,
       } else {
         name <- paste0(models[res_l],"c")
         test <- try(
-          treei_BVAR <- fitLikelihood_c(phylo, tot_time, model = models[res_l], backbone=backbone, spec_times = spec_times, branch_times = branch_times,
-                                        f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){0}, lamb_par = list_param[[p]][c(1,2)], n.max = n.max,
-                                        rate.max = rate.max,
-                                        mu_par = NULL, f=f, cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F, fix.mu=T, cond=cond),
+          treei_BVAR <- fit_bd_backbone_c(phylo, tot_time, f=f,
+                                          backbone = backbone, spec_times = spec_times, branch_times = branch_times,
+                                          f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){0},
+                                          lamb_par = list_param[[p]][c(1,2)], mu_par = NULL,
+                                          cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F, fix.mu=T, cond=cond, model = models[res_l],
+                                          n.max = n.max, rate.max = rate.max),
           silent = T
         )
       }
@@ -140,16 +148,18 @@ div.models <- function(phylo, tot_time, f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
                                              f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){y},
                                              lamb_par = list_param[[p]][c(1,2)], mu_par = list_param[[p]][3],
-                                             cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F,fix.mu=F,cond=cond),
+                                             cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F,fix.mu=F,cond=cond, model = models[res_l]),
           silent = T
         )
       } else {
         name <- paste0(models[res_l],"c")
         test <- try(
-          treei_BVAR_DCST <- fitLikelihood_c(phylo, tot_time, model = models[res_l], backbone = backbone, spec_times = spec_times, branch_times = branch_times, n.max = n.max,
-                                             f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){y}, lamb_par = list_param[[p]][c(1,2)], 
-                                             rate.max = rate.max,
-                                             mu_par = list_param[[p]][3], f=f, cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F, fix.mu=F, cond=cond),
+          treei_BVAR_DCST <- fit_bd_backbone_c(phylo, tot_time, f=f,
+                                               backbone = backbone, spec_times = spec_times, branch_times = branch_times,
+                                               f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){y},
+                                               lamb_par = list_param[[p]][c(1,2)], mu_par = list_param[[p]][3],
+                                               cst.lamb=F, cst.mu=T, expo.lamb=T, expo.mu=F,fix.mu=F,cond=cond, model = models[res_l],
+                                               n.max = n.max, rate.max = rate.max),
           silent = T
         )
       }
@@ -175,17 +185,18 @@ div.models <- function(phylo, tot_time, f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
                                              f.lamb = function(x,y){y}, f.mu = function(x,y){y[1]*exp(y[2]*x)},
                                              lamb_par = list_param[[p]][c(1)], mu_par = list_param[[p]][c(3,4)],
-                                             cst.lamb = T, cst.mu=F, expo.lamb=F, expo.mu=T, fix.mu=F, cond=cond),
+                                             cst.lamb = T, cst.mu=F, expo.lamb=F, expo.mu=T, fix.mu=F, cond=cond, model = models[res_l]),
           silent = F
         )
       } else {
         name <- paste0(models[res_l],"c")
         test <- try(
-          treei_BCST_DVAR <- fitLikelihood_c(phylo, tot_time, 
-                                             f.lamb = function(x,y){y}, f.mu = function(x,y){y[1]*exp(y[2]*x)}, lamb_par = list_param[[p]][c(1)],
-                                             mu_par = list_param[[p]][c(3,4)], f=f, n.max = n.max,
-                                             rate.max = rate.max,
-                                             cst.lamb=T, cst.mu=F, expo.lamb=F, expo.mu=T, fix.mu=F, cond=cond),
+          treei_BCST_DVAR <- fit_bd_backbone_c(phylo, tot_time, f=f,
+                                               backbone = backbone, spec_times = spec_times, branch_times = branch_times,
+                                               f.lamb = function(x,y){y}, f.mu = function(x,y){y[1]*exp(y[2]*x)},
+                                               lamb_par = list_param[[p]][c(1)], mu_par = list_param[[p]][c(3,4)],
+                                               cst.lamb = T, cst.mu=F, expo.lamb=F, expo.mu=T, fix.mu=F, cond=cond, model = models[res_l],
+                                               n.max = n.max, rate.max = rate.max),
           silent = T
         )
       }
@@ -210,16 +221,18 @@ div.models <- function(phylo, tot_time, f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
                                              f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){y[1]*exp(y[2]*x)},
                                              lamb_par = list_param[[p]][c(1,2)], mu_par = list_param[[p]][c(3,4)],
-                                             cst.lamb=F, cst.mu=F, expo.lamb=T, expo.mu=T, fix.mu=F, cond=cond),
+                                             cst.lamb=F, cst.mu=F, expo.lamb=T, expo.mu=T, fix.mu=F, cond=cond, model = models[res_l]),
           silent = T
         )
       } else {
         name <- paste0(models[res_l],"c")
         test <- try(
-          treei_BVAR_DVAR <- fitLikelihood_c(phylo, tot_time, model = models[res_l], backbone = backbone, spec_times = spec_times, branch_times = branch_times, n.max = n.max,
-                                             f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){y[1]*exp(y[2]*x)}, lamb_par = list_param[[p]][c(1,2)],
-                                             rate.max = rate.max,
-                                             mu_par = list_param[[p]][c(3,4)], f=f, cst.lamb=F, cst.mu=F, expo.lamb=T, expo.mu=T, fix.mu=F, cond=cond),
+          treei_BVAR_DVAR <- fit_bd_backbone_c(phylo, tot_time, f=f,
+                                               backbone = backbone, spec_times = spec_times, branch_times = branch_times,
+                                               f.lamb = function(x,y){y[1]*exp(y[2]*x)}, f.mu = function(x,y){y[1]*exp(y[2]*x)},
+                                               lamb_par = list_param[[p]][c(1,2)], mu_par = list_param[[p]][c(3,4)],
+                                               cst.lamb=F, cst.mu=F, expo.lamb=T, expo.mu=T, fix.mu=F, cond=cond, model = models[res_l],
+                                               n.max = n.max, rate.max = rate.max),
           silent = T
         )
       }
