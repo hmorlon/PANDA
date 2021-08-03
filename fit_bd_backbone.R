@@ -66,7 +66,7 @@ fit_bd_backbone <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f 
       f.mu.par <- function(t) {
         abs(f.mu(t, mu_par))
       }
-      ate.test <- rate(init, tot_time, model) 
+      rate.test <- rate(init, tot_time, model) 
       
       check1 <- length(lamb_par) == 1 & length(mu_par) == 1 & lamb_par[1] <= mu_par[1]
       check2 <- min(rate.test, na.rm = T) < 0
