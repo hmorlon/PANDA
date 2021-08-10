@@ -260,22 +260,23 @@ all_comb_models <- function(to){
       
       # by default backbone.option = backbone2
       backbone <- backbone.option
-      
       spec_times <- NULL
-      if(length(grep("_sub", names(phylo_backbone_cut[btb]))) == 1){
-        cond <-F
-      } else {
-        cond <- "crown"
-      }
+      cond <- "crown"
       
-      # 
-      # To discuss to be sure: Checked! to check again...
+      # CHECKED!
       tot_time3 <- max(c(node.age(phylo_backbone_cut[[btb]])$ages, unlist(branch_times_to_bck[[btb]])))
       
       # for converting in backbone1: not fully working yet
       if(backbone.option == "backbone1"){
-        spec_times <- list(sapply(branch_times_to_bck[[btb]], "[[", 2))
+        
+        spec_times <- sapply(branch_times_to_bck[[btb]], "[[", 2)
         cond <- "stem"
+        
+        # conditioning backbone at root
+        if(length(grep("_bck", names(phylo_backbone_cut[btb]))) == 1){
+          cond <- "crown"
+        }
+        
         branch_times_to_bck[[btb]] <- rep(list(NULL),1)
         
         if(!is.null(phylo_backbone_cut[[btb]]$root.edge)){

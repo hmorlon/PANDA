@@ -1,4 +1,4 @@
-# First attempt to improve likelihood_bd to include arguments needed for backbone anlysis
+# Version of likelihood_bd including arguments needed for backbone analysis
 
 likelihood_bd_backbone <- function (phylo, tot_time, f, f.lamb.l, f.mu.l, 
           backbone, spec_times, branch_times, # arguments for backbone analysis
@@ -28,18 +28,14 @@ likelihood_bd_backbone <- function (phylo, tot_time, f, f.lamb.l, f.mu.l,
                                                      f.lamb.l, f.mu.l, f, cst.lamb = cst.lamb, cst.mu = cst.mu, 
                                                      expo.lamb = expo.lamb, expo.mu = expo.mu, dt = dt)))
   
-  #Type of analysis (options backbone, branch_times and spec_time should be added here)
+#Type of analysis (options backbone, branch_times and spec_time should be added here)
   if (backbone == F) {
     log_data_lik <- sum(log_indLikelihood) + nbtips * log(f)
   } else if (backbone == "backbone1"){
-    ########## Part similar to what might be the good way of coding for spec_times...
-    #spec_lik<-1
-    #for (i in 1:length(spec_times))
-    #{spec_lik<-spec_lik*f.lamb.l(spec_times[i])}
-    ##########
+
     spec_lik<-prod(f.lamb.l(spec_times))
     log_data_lik<-sum(log_indLikelihood)+nbtips*log(f)+log(spec_lik)
-    
+
   } else if (backbone == "backbone2"){
     branch_lik<-1	
     for (k in 1:length(branch_times))
