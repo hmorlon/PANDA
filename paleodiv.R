@@ -12,7 +12,7 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
                      backbone.option = "backbone2", combi = 1, split.div = F){
   
   # pkgs ####
-
+  
   pkgs <- c("phangorn")
   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
   if(length(new.pkgs)){install.packages(new.pkgs)}
@@ -69,8 +69,8 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
   tot_time <- max(branching.times(phy))
   totalsp <- list(nrow(data))
   
-  time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
-  
+  #time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
+  time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
   globaldiv <- matrix(NA,length(comb.sub)+length(comb.bck)+ifelse(comb.sub != "whole_tree",1,0), length(time.seq)) #matrix(NA, Number of clades, Crown age of the whole tree + 1)
   
   if(any(comb.sub == "whole_tree")){
@@ -96,7 +96,7 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
       tot_time2 <- as.list(branching.times(phy)[best_subclades_df_combi$Clades])
     }
     
-    totalsp2 <- as.list(sampling.fractions$sp_tt[as.numeric(comb.sub)])
+    totalsp2 <- as.list(sampling.fractions$sp_tt[sampling.fractions$nodes %in% as.numeric(comb.sub)])
     names(totalsp2) <- comb.sub
   }
   
@@ -112,8 +112,8 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
     mu_pari <- as.numeric(c(values["Mu"],values["Beta"]))
     agei <- tot_time2[[clade]]
     sizei <- totalsp2[[clade]]
-    time_seq <- c(agei, seq(floor(agei),0,by=-1))
-    #time_seq <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
+    #time_seq <- c(agei, seq(floor(agei),0,by=-1))
+    time_seq <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
     
     if (grepl("BCST", model)){
       div <-sizei*exp(-abs(lamb_pari[1])*time_seq)
@@ -235,9 +235,9 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
       }
       sizei <- lin.node$sp_tt_prev[j]
       
-      time_seq <- c(agei, seq(floor(agei),0,by=-1))
+      #time_seq <- c(agei, seq(floor(agei),0,by=-1))
       
-      #time_seq <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
+      time_seq <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
       
       if (grepl("BCST", model)){
         div <-sizei*exp(-abs(lamb_pari[1])*time_seq)
