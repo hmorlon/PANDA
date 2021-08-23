@@ -1,22 +1,27 @@
-add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), plot.obj.phylo = NULL, present = NULL,
-                          xpd.x = T, names = NULL,
+add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), phylo = F,
+                          present = NULL,
+                          xpd.x = T, names = NULL, fill = T,
                           cex = 1, root.age = NULL, direction = "rightwards"){
    # to add as a argument
-  if(is.null(plot.obj.phylo)){
-    plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
-  } 
   
-  if(is.null(present)){ # to counter plot.obj.phylo
-    if(is.null(root.age)){
-      if("xx" %in% names(plot.obj.phylo)){
-        present <- plot.obj.phylo$present[1]
-      } else {
-        present <- 40 # to adjust for other plots
-      }
-    } else {
-      present <- root.age
-    }
+  if(phylo){
+    plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
+    present <- plot.obj.phylo$xx[1]
+    root.age <- 0
   }
+
+  
+  #if(is.null(present)){ # to counter plot.obj.phylo
+  #  if(is.null(root.age)){
+  #    if("xx" %in% names(plot.obj.phylo)){
+  #      present <- plot.obj.phylo$present[1]
+  #    } else {
+  #      present <- 40 # to adjust for other plots
+  #    }
+  #  } else {
+  #    present <- root.age
+  #  }
+  #}
 
   # GTS
   ages <- data.frame(start = NA, end = NA)
@@ -74,8 +79,29 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), plot.obj.ph
   y1 <- plot_dim[3] - abs(Y1)
   #y1 <- Y1
   
+  # dealing with x
   y2 <- plot_dim[3]
-
+  
+  if(phylo){
+    time.seq <- c(root.age, seq(present - floor(present), present))
+  } else {
+    if(root.age == 0){
+      time.seq <- c(seq(root.age, present))
+      present <- time.seq[length(time.seq)]
+    } else {
+      time.seq <- c(seq(root.age, present),0)
+      present <- 0
+    }
+    
+  }
+  
+  if(all(time.seq >= 0)){
+    if(time.seq[1] > time.seq[2]){
+      ages$start <- -ages$start
+      ages$end <- -ages$end
+    }
+  }
+    
   ages$start  <- ages$start + present
   ages$end  <- ages$end + present  
 
@@ -83,10 +109,16 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), plot.obj.ph
     xlimit <- ceiling(c(max(plot.obj.phylo$xx)+present)/5)*5
     ages <- ages[which(ages$start < xlimit),]
   } else {
-    ages <- ages[c(1:which(ages$end<0)[1]),]
+    if(all(time.seq >= 0)){
+      if(time.seq[1] > time.seq[2]){
+        ages <- ages[c(1:which(ages$end > root.age)[1]),]
+      } else {
+        ages <- ages[c(1:which(ages$end < root.age)[1]),]
+      }
+    } else {
+      ages <- ages[c(1:which(ages$end<0)[1]),]
+    }
   }
-  
-  col.period <- rep(c("grey92","white"), nrow(ages)/2+1)
   
   # working for rightwards only
   if(xpd.x == F){
@@ -103,26 +135,41 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), plot.obj.ph
   }
   
   if(direction == "leftwards"){
-    seq_time
     labels = as.character(-c(seq_time-present))
   } else{
-    min_time <- ifelse(xpd.x, min(ages[,c(1,2)]),0)
-    labels <- seq(-ceiling(present-min_time),0,1)
-    #root_time <- c(present - max(abs(labels)))
-    seq_time <- present
-    labels <- as.character(labels)
-    for(i in 1:(length(labels)-1)){
-      seq_time <- c(seq_time, seq_time[length(seq_time)]-1)
+    if(all(time.seq >= 0)){
+      if(time.seq[1] > time.seq[2]){
+        labels <- as.character(-ceiling(time.seq))
+      } else {
+        labels <- rev(as.character(-ceiling(time.seq)))
+      }
+    } else {
+      labels <- as.character(ceiling(time.seq))
     }
-    seq_time <- rev(seq_time)
+    
+    #min_time <- ifelse(xpd.x, min(ages[,c(1,2)]),0)
+    #labels <- seq(-ceiling(present-min_time),0,1)
+    #root_time <- c(present - max(abs(labels)))
+    #seq_time <- present
+    #labels <- as.character(labels)
+    #for(i in 1:(length(labels)-1)){
+    #  seq_time <- c(seq_time, seq_time[length(seq_time)]-1)
+    #}
+    #seq_time <- rev(seq_time)
     
   }
   
-  axis(side = 1, at = seq_time, labels = rep("", length(seq_time)), cex = cex, col.ticks = "grey", line = -0.5, pos = y1, cex.axis = cex)
-  axis(side = 1, at = seq_time[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = y1, cex.axis = cex)
+  axis(side = 1, at = time.seq, labels = rep("", length(time.seq)), cex = cex, col.ticks = "grey", line = -0.5, pos = y1, cex.axis = cex)
+  axis(side = 1, at = time.seq[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = y1, cex.axis = cex)
+  
   for(i in 1:nrow(ages)){
     
-    rect(xleft = ages[i, 2], xright = ages[i, 1], ybottom = y2, ytop = plot_dim[4], col = col.period[i], border = col.period[i])
+    if(fill){
+      col.period <- rep(c("grey92","white"), nrow(ages)/2+1)
+      rect(xleft = ages[i, 2], xright = ages[i, 1], ybottom = y2, ytop = plot_dim[4], col = col.period[i], border = col.period[i])
+    } else {
+      arrows(x0 = ages[i, 2], y0 = y2, x1 = ages[i, 2], plot_dim[4], lty = 2, col = "grey50", length = 0)
+    }
     polygon(unlist(rep(ages[i, c(1,2)], each = 2)), c(y1,y2,y2,y1), col = ages$col[i], lwd = 0.5)
     
     if(i != nrow(ages)){
