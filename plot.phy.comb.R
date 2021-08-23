@@ -142,7 +142,7 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
       col.bck <- c(c("blue4", "orange4", "red4", "grey40", "coral4", "deeppink4", "khaki4", "darkolivegreen", "darkslategray")[1:c(length(comb.bck))],"black")
       colors_clades <- rep("black", Nedge(phy1))
     } else {
-      colors_clades <- rep(col.bck, Nedge(phy1))
+      colors_clades <- rep(col.bck[length(col.bck)], Nedge(phy1))
     }
     
     if(!is.null(comb.bck)){
@@ -165,7 +165,7 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
     if(!is.null(comb.bck)){
       for(j in 1:length(comb.bck)){
         clade_edges <- Descendants(phy1, as.numeric(comb.bck[j]), type = "all")
-        colors_clades[which(phy1$edge[,2] %in% clade_edges)] <- ifelse(colors_clades[which(phy1$edge[,2] %in% clade_edges)] == "black", col.bck[j], colors_clades[which(phy1$edge[,2] %in% clade_edges)])
+        colors_clades[which(phy1$edge[,2] %in% clade_edges)] <- ifelse(colors_clades[which(phy1$edge[,2] %in% clade_edges)] == col.bck[length(col.bck)], col.bck[j], colors_clades[which(phy1$edge[,2] %in% clade_edges)])
       }
     }
     
