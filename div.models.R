@@ -55,10 +55,11 @@ div.models <- function(phylo, tot_time, f,
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda")] <- c(name, 1, c(treei_BCST$LH,treei_BCST$aicc, treei_BCST$lamb_par))
     res_l <- res_l + 1
     
+    if(treei_BCST$lamb_par > list_param[["improved"]][3]){
+      list_param[["improved"]][1] <- treei_BCST$lamb_par
+    }
   }
-  if(treei_BCST$lamb_par > list_param[["improved"]][3]){
-    list_param[["improved"]][1] <- treei_BCST$lamb_par
-  }
+  
   
   if("BCST_DCST" %in% models){
     p = 1
@@ -132,9 +133,8 @@ div.models <- function(phylo, tot_time, f,
     if(verbose == T){cat("   ",name," \t \t AICc =", treei_BVAR$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda", "Alpha")] <- c(name, 2, c(treei_BVAR$LH, treei_BVAR$aicc, treei_BVAR$lamb_par))
     res_l <- res_l + 1
+    list_param[["improved"]][c(1,2)] <- treei_BVAR$lamb_par
   }
-  
-  list_param[["improved"]][c(1,2)] <- treei_BVAR$lamb_par
   
   if("BVAR_DCST" %in% models){
     p = 1
