@@ -25,11 +25,10 @@
 # Version 0.1.3
 # - new argument rate.max to constrain maximum rate value (cannot be used with n.max)
 
-shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
+shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                             models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
-                            np.sub = 4, multi.backbone = F, backbone.option = "backbone2",
-                            n.max = NULL, rate.max = NULL, 
-                            Ncores = 1){
+                            backbone.option = "backbone2", multi.backbone = F, 
+                            np.sub = 4, n.max = NULL, rate.max = NULL, Ncores = 1){
   env.func <- environment()
   options(echo = T)
   #### Loading packages ####
@@ -52,10 +51,10 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
     stop("object \"data\" is not of class \"data.frame\"")
   }
   
-  if(!inherits(phy, "phylo")){
-    stop("object \"phy\" is not of class \"phylo\"")
+  if(!inherits(phylo, "phylo")){
+    stop("object \"phylo\" is not of class \"phylo\"")
   } else {
-    phy$node.label <- c(c(Ntip(phy)+1):c(Ntip(phy)+Nnode(phy)))
+    phylo$node.label <- c(c(Ntip(phylo)+1):c(Ntip(phylo)+Nnode(phylo)))
   }
   
   if(!inherits(sampling.fractions, "data.frame")){
@@ -77,9 +76,9 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
     ALL_bck_comb <- comb.shift
   }
   
-  if(any(!phy$tip.label %in% data$Species)){
+  if(any(!phylo$tip.label %in% data$Species)){
     cat("The following tips are not in the database.\n \n")
-    cat(phy$tip.label[!phy$tip.label %in% data$Species], "\n")
+    cat(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
     stop()
   }
   
@@ -103,12 +102,12 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   }
   
   # Final list to  to return
-  phylo <- ladderize(phy, F) # Mandatory to match node.labels
+  phylo <- ladderize(phylo, F) # Mandatory to match node.labels (to check)
   
   all_res <- rep(list(NULL),4)
   
   totalsp <- nrow(data) # number of species in datanomic database
-  data_phylo <- data[data$Species %in% phy$tip.label,]
+  data_phylo <- data[data$Species %in% phylo$tip.label,]
   
   ####_____________ ####
   #### WHOLE TREE ####
@@ -126,18 +125,18 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   f1 <- Ntip(phylo)/totalsp
   cat("\n--- WHOLE TREE ---\n \n")
   
-  cat("\n","Sampling fraction =",  paste0(Ntip(phy), "/", nrow(data), " (",round(f1,3)*100," %)"), "\n") 
+  cat("\n","Sampling fraction =",  paste0(Ntip(phylo), "/", nrow(data), " (",round(f1,3)*100," %)"), "\n") 
   
-  res_phy <- div.models(phylo = phy, tot_time = max(node.age(phylo)$ages), f = f1,
+  res_phylo <- div.models(phylo = phylo, tot_time = max(node.age(phylo)$ages), f = f1,
                         cond = "crown", models = models, n.max = n.max, rate.max = rate.max)
   
-  res_phy[,-1] <- apply(res_phy[,-1], 2, as.numeric)
+  res_phylo[,-1] <- apply(res_phylo[,-1], 2, as.numeric)
   
-  for(i in 1:nrow(res_phy)){res_phy$Parameters[i] <- 4-sum(is.na(res_phy[i,]))}
+  for(i in 1:nrow(res_phylo)){res_phylo$Parameters[i] <- 4-sum(is.na(res_phylo[i,]))}
   
-  res_phy <- res_phy[,c("Models","Parameters","logL","AICc","Lambda","Alpha","Mu","Beta")]
+  res_phylo <- res_phylo[,c("Models","Parameters","logL","AICc","Lambda","Alpha","Mu","Beta")]
   
-  all_res[[1]] <- res_phy ; names(all_res)[[1]] <- "whole_tree"
+  all_res[[1]] <- res_phylo ; names(all_res)[[1]] <- "whole_tree"
   
   all_tested_nodes <- unique(c(unique(unlist(strsplit(names(comb.shift), "[.]"))), unique(unlist(comb.shift))))
   
@@ -146,11 +145,11 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   ALL_clade_names <- rep(list(NULL), length(unique(unlist(all_tested_nodes))))
   
   for(pot_names in 1:length(ALL_clade_names)){
-    ALL_clade_names[pot_names] <- list(phy$tip.label[unlist(Descendants(phy, as.numeric(all_tested_nodes[pot_names])))])
+    ALL_clade_names[pot_names] <- list(phylo$tip.label[unlist(Descendants(phylo, as.numeric(all_tested_nodes[pot_names])))])
   }
   names(ALL_clade_names) <- all_tested_nodes
   
-  ALL_nodes_ages <- as.data.frame(apply(data.frame(nodesID=names(branching.times(phy)),ages=branching.times(phy)), 2, as.numeric))
+  ALL_nodes_ages <- as.data.frame(apply(data.frame(nodesID=names(branching.times(phylo)),ages=branching.times(phylo)), 2, as.numeric))
   
   ALL_clade_names1 <- ALL_clade_names[all_lineages]
   
@@ -160,7 +159,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   # Check whether all groups are monophyletic 
   subclade_check <- NULL
   for(subclade in 1:length(ALL_clade_names1)){
-    if(!is.monophyletic(phy = phy, tips = ALL_clade_names1[[subclade]])){
+    if(!is.monophyletic(phy = phylo, tips = ALL_clade_names1[[subclade]])){
       subclade_check <- c(subclade_check, names(ALL_clade_names1[subclade]))
     }
   }
@@ -172,19 +171,19 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   
   phylo2 <- list()
   for(cla in 1:length(ALL_clade_names1)){
-    phylo2[[cla]] <- subtree(phy, unlist(ALL_clade_names1[names(ALL_clade_names1)[cla]]))
+    phylo2[[cla]] <- subtree(phylo, unlist(ALL_clade_names1[names(ALL_clade_names1)[cla]]))
   }
   
   names(phylo2) <- names(ALL_clade_names1)
   
-  node_order <- names(branching.times(phy)[order(branching.times(phy))])
+  node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
   node_order <- node_order[node_order %in% names(ALL_clade_names1)]
   ALL_clade_names2 <- ALL_clade_names1[match(node_order, names(ALL_clade_names1))]
   
   for(cla in 1:length(ALL_clade_names2)){
     
     if(is.na(sampling.fractions$sp_tt[as.numeric(names(ALL_clade_names2)[cla])])){
-      ancest_cla <- Ancestors(phy, as.numeric(names(ALL_clade_names2)[cla]))
+      ancest_cla <- Ancestors(phylo, as.numeric(names(ALL_clade_names2)[cla]))
       cla_no_NA <- sampling.fractions$nodes[sampling.fractions$nodes %in% ancest_cla &
                                               !is.na(sampling.fractions$sp_in)]
       ancest_cla <- ancest_cla[ancest_cla %in% cla_no_NA]
@@ -327,8 +326,8 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   
   for(clade in 1:length(all_tested_nodes)){
     
-    parental_node <- Ancestors(phy, as.numeric(all_tested_nodes[clade]), type = "parent")
-    if(parental_node == Ntip(phy)+1){ # this clade is at the root
+    parental_node <- Ancestors(phylo, as.numeric(all_tested_nodes[clade]), type = "parent")
+    if(parental_node == Ntip(phylo)+1){ # this clade is at the root
       root_clade <- 1
     } else {
       root_clade <- 0
@@ -340,7 +339,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
     branch_times_clade[1] <- list(bt_cl)
     
     if(root_clade == 1){
-      branch_times_clade[1 + root_clade] <- list(c(Siblings(phy, max(bt_cl)),min(bt_cl)))
+      branch_times_clade[1 + root_clade] <- list(c(Siblings(phylo, max(bt_cl)),min(bt_cl)))
     }  
     ALL_branch_times_clades[[clade]] <- branch_times_clade
   }
@@ -352,7 +351,7 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   
   cl <- parallel::makeCluster(Ncores, type="SOCK")
   # Check what comes form RPANDA
-  clusterExport(cl, list("all_comb_models", "subtree", "multi.backbone", "ALL_branch_times_clades", "phy", "ALL_bck_comb","Descendants", "Ancestors", "Siblings", "getMRCA",
+  clusterExport(cl, list("all_comb_models", "subtree", "multi.backbone", "ALL_branch_times_clades", "phylo", "ALL_bck_comb","Descendants", "Ancestors", "Siblings", "getMRCA",
                          "get.node.ages", "drop.tip", "all_tested_nodes", "ALL_backbones", "node.age", "totalsp", "totalsp2", "Ntip", 
                          "div.models", "fit_bd_backbone","fit_bd_backbone_c", "likelihood_bd_backbone", "n.max", ".Phi", "integrate", ".Psi", ".Integrate",
                          "branching.times", "ALL_clade_names", "sampling.fractions", "backbone.option", "models", "ALL_final3", "rate.max",
@@ -416,10 +415,10 @@ shift.estimates <- function(phy, data, sampling.fractions, comb.shift,
   }
   
   #ALL_TOTAL_df <- ALL_TOTAL_df[-ALL_TOTAL_df$AICc < 0,]
-  res_phy1 <- cbind("whole_tree", res_phy[res_phy$AICc == min(res_phy$AICc), c("Parameters","logL","AICc")])
-  names(res_phy1) <- names(ALL_TOTAL)
+  res_phylo1 <- cbind("whole_tree", res_phylo[res_phylo$AICc == min(res_phylo$AICc), c("Parameters","logL","AICc")])
+  names(res_phylo1) <- names(ALL_TOTAL)
   
-  ALL_TOTAL <- rbind(ALL_TOTAL, res_phy1)
+  ALL_TOTAL <- rbind(ALL_TOTAL, res_phylo1)
   
   ALL_TOTAL$delta_AICc <- ALL_TOTAL$AICc - min(ALL_TOTAL$AICc)
   ALL_TOTAL <- ALL_TOTAL[order(ALL_TOTAL$delta_AICc),]

@@ -3,7 +3,7 @@
 # Created on January 28, 2021
 #
 
-get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T, text.cex = 1, pch.cex = 0.8, ...){
+get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = T, text.cex = 1, pch.cex = 0.8, ...){
   
   # Packages ####
   pkgs <- c("ape", "phytools", "phangorn")
@@ -12,11 +12,11 @@ get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T,
   lapply(pkgs, require, character.only = T, quietly = T)
   
   # Checks ####
-  if(is.null(phy) | is(phy)[1] != "phylo"){
-    stop("Object \"phy\" is NULL or not of class \"phylo\".")
+  if(is.null(phylo) | is(phylo)[1] != "phylo"){
+    stop("Object \"phylo\" is NULL or not of class \"phylo\".")
   }
   
-  phy$node.label <- c(Ntip(phy) + 1):c(Ntip(phy) + Nnode(phy))
+  phylo$node.label <- c(Ntip(phylo) + 1):c(Ntip(phylo) + Nnode(phylo))
   
   if(is.null(data) | is(data)[1] != "data.frame"){
     stop("Object \"data\" is NULL or not of class \"data.frame\".")
@@ -39,7 +39,7 @@ get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T,
   # Species should be the first column
   data <- data[,c("Species", names(data)[names(data) != "Species"])]
 
-  if(any(!phy$tip.label %in% data$Species)){
+  if(any(!phylo$tip.label %in% data$Species)){
     stop("Some species of the phylogeny are not in the database \"data\".")
   }
   
@@ -47,9 +47,9 @@ get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T,
   
   # Core function ####
   
-  phy.df <- data.frame(nodes = 1:c(Ntip(phy) + Nnode(phy)), data = NA, f = NA, sp_in = NA, sp_tt = NA)
+  phylo.df <- data.frame(nodes = 1:c(Ntip(phylo) + Nnode(phylo)), data = NA, f = NA, sp_in = NA, sp_tt = NA)
   
-  data_phylo <- data[data$Species %in% phy$tip.label, ]
+  data_phylo <- data[data$Species %in% phylo$tip.label, ]
   
   data_loop <- data.frame(data[,!colnames(data) %in% "Species"])
   names(data_loop) <- colnames(data)[!colnames(data) %in% "Species"]
@@ -71,65 +71,65 @@ get.sampling.fractions <- function(phy, data, clade.size = 5, plot = F, lad = T,
         next()
       }
       
-      MRCA <- getMRCA(phy, as.character(sp_in))
+      MRCA <- getMRCA(phylo, as.character(sp_in))
       
-      if(is.na(phy.df$data[phy.df$nodes == MRCA]) | phy.df$data[phy.df$nodes == MRCA] == "not_mono"){
-        if(length(Descendants(phy, MRCA)[[1]]) != length(sp_in)){
-          phy.df[phy.df$nodes == MRCA,] <- cbind(MRCA, "not_mono", NA, NA, NA)
+      if(is.na(phylo.df$data[phylo.df$nodes == MRCA]) | phylo.df$data[phylo.df$nodes == MRCA] == "not_mono"){
+        if(length(Descendants(phylo, MRCA)[[1]]) != length(sp_in)){
+          phylo.df[phylo.df$nodes == MRCA,] <- cbind(MRCA, "not_mono", NA, NA, NA)
           
         } else {
-          phy.df[phy.df$nodes == MRCA,] <- cbind(MRCA, group, length(sp_in)/length(sp_tt), length(sp_in), length(sp_tt))
+          phylo.df[phylo.df$nodes == MRCA,] <- cbind(MRCA, group, length(sp_in)/length(sp_tt), length(sp_in), length(sp_tt))
           
         }
       }
       
     }
   }
-  phy.df[!colnames(phy.df) %in% "data"][] <- lapply(phy.df[!colnames(phy.df) %in% "data"], as.numeric)
+  phylo.df[!colnames(phylo.df) %in% "data"][] <- lapply(phylo.df[!colnames(phylo.df) %in% "data"], as.numeric)
   
-  phy.df1 <- phy.df[phy.df$sp_in >= clade.size,]
-  phy.df1 <- na.omit(phy.df1)
+  phylo.df1 <- phylo.df[phylo.df$sp_in >= clade.size,]
+  phylo.df1 <- na.omit(phylo.df1)
   
-  phy.df$to_test <- ifelse(phy.df$nodes %in% phy.df1$nodes, phy.df$nodes, NA)
-  phy.df$f[!phy.df$nodes %in% phy.df$to_test] <- NA
-  phy.df[phy.df$nodes == Ntip(phy)+1, c("f", "sp_in", "sp_tt")] <- c(Ntip(phy)/nrow(data), Ntip(phy), nrow(data))
+  phylo.df$to_test <- ifelse(phylo.df$nodes %in% phylo.df1$nodes, phylo.df$nodes, NA)
+  phylo.df$f[!phylo.df$nodes %in% phylo.df$to_test] <- NA
+  phylo.df[phylo.df$nodes == Ntip(phylo)+1, c("f", "sp_in", "sp_tt")] <- c(Ntip(phylo)/nrow(data), Ntip(phylo), nrow(data))
   
   # PLOT optionnal ####
   if(plot == T){
     
     if(lad == T){
       pos_leg <- "bottomleft"
-      phy <- ladderize(phy, right = T)
+      phylo <- ladderize(phylo, right = T)
     } else {
       pos_leg <- "topleft"
-      phy <- ladderize(phy, F)
+      phylo <- ladderize(phylo, F)
     }
     
-    phy$node.label <- c(Ntip(phy)+1):c(Ntip(phy)+Nnode(phy))
-    node_legends <- phy.df$data[phy.df$nodes %in% phy$node.label]
-    node_legends <- ifelse(node_legends %in% phy.df$data[phy.df$nodes %in% phy.df$to_test], node_legends, NA)
+    phylo$node.label <- c(Ntip(phylo)+1):c(Ntip(phylo)+Nnode(phylo))
+    node_legends <- phylo.df$data[phylo.df$nodes %in% phylo$node.label]
+    node_legends <- ifelse(node_legends %in% phylo.df$data[phylo.df$nodes %in% phylo.df$to_test], node_legends, NA)
     #node_legends <- ifelse(grepl("clade", node_legends), NA, node_legends)
     
     
-    plot(phy, show.node.label = F, label.offset = 0.4, ...)
+    plot(phylo, show.node.label = F, label.offset = 0.4, ...)
     nodelabels(node_legends, adj = c(1.1,-0.5), bg = "white", cex = text.cex, frame = "n")  
     
     axisPhylo(backward = T, cex.axis = text.cex)
-    mtext(text = "Time (Myrs)", side = 1, line = 2, at = max(branching.times(phy))/2, cex = text.cex)
+    mtext(text = "Time (Myrs)", side = 1, line = 2, at = max(branching.times(phylo))/2, cex = text.cex)
     
     lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
     node <- (lastPP$Ntip + 1):length(lastPP$xx)
     XX <- lastPP$xx[node]
-    XX_lab <- XX[sort(phy.df$nodes[phy.df$nodes > Ntip(phy) & !is.na(phy.df$f) & !is.na(phy.df$to_test) & !is.na(phy.df$sp_in)]) - Ntip(phy)]
+    XX_lab <- XX[sort(phylo.df$nodes[phylo.df$nodes > Ntip(phylo) & !is.na(phylo.df$f) & !is.na(phylo.df$to_test) & !is.na(phylo.df$sp_in)]) - Ntip(phylo)]
     YY <- lastPP$yy[node]
-    YY_lab <- YY[sort(phy.df$nodes[phy.df$nodes > Ntip(phy) & !is.na(phy.df$f) & !is.na(phy.df$to_test) & !is.na(phy.df$sp_in)]) - Ntip(phy)]
+    YY_lab <- YY[sort(phylo.df$nodes[phylo.df$nodes > Ntip(phylo) & !is.na(phylo.df$f) & !is.na(phylo.df$to_test) & !is.na(phylo.df$sp_in)]) - Ntip(phylo)]
     BOTHlabels(text="", node, XX_lab, YY_lab, adj = c(0.5, 0.5), 
                frame = "none", pch = 21, thermo = NULL, pie = NULL, 
                piecol = NULL, col = "black", bg = "red", 
                horiz = FALSE, width = NULL, height = NULL, cex= pch.cex)
     
   }
-  return(phy.df)
+  return(phylo.df)
   
 }
 

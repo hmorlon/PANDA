@@ -8,7 +8,7 @@
 # March 25, 2021
 # Update on output for whole tree as the best scenario
 
-paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
+paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
                      backbone.option = "backbone2", combi = 1, split.div = F){
   
   # pkgs ####
@@ -19,16 +19,16 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
   lapply(pkgs, require, character.only = T)
   
   # Checking arguments ####
-  # phy
-  if(!inherits(phy, "phylo")){
-    stop("object \"phy\" is not of class \"phylo\"")
+  # phylo
+  if(!inherits(phylo, "phylo")){
+    stop("object \"phylo\" is not of class \"phylo\"")
   }
   # data
   if(!inherits(data, "data.frame")){
     stop("object \"data\" is not of class \"data.frame\"")
   }
   # sampling.fractions
-  if(phy$Nnode + Ntip(phy) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
+  if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or is do not correspond to the provided phylogeny")
   }
   # shift.estimates.res
@@ -66,7 +66,7 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
     comb.bck <- NULL
   }
   
-  tot_time <- max(branching.times(phy))
+  tot_time <- max(branching.times(phylo))
   totalsp <- list(nrow(data))
   
   #time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
@@ -90,10 +90,10 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
     best_subclades_df_combi <- best_subclades_df_combi[match(comb.sub, best_subclades_df_combi$Clades), ]
     
     if(backbone.option == "backbone1"){
-      parental_nodes <- Ancestors(phy, as.numeric(best_subclades_df_combi$Clades), type = "parent")
-      tot_time2 <- as.list(branching.times(phy)[as.character(parental_nodes)])
+      parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Clades), type = "parent")
+      tot_time2 <- as.list(branching.times(phylo)[as.character(parental_nodes)])
     } else {
-      tot_time2 <- as.list(branching.times(phy)[best_subclades_df_combi$Clades])
+      tot_time2 <- as.list(branching.times(phylo)[best_subclades_df_combi$Clades])
     }
     
     totalsp2 <- as.list(sampling.fractions$sp_tt[sampling.fractions$nodes %in% as.numeric(comb.sub)])
@@ -164,21 +164,21 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
       
     }
     
-    lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phy)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
+    lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phylo)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
     lin.node$node <- as.character(lin.node$node)
     lin.node <- merge(lin.node, sampling.fractions[sampling.fractions$nodes %in% lin.node$node, c("nodes", "sp_tt"),],
                       by.x = "node", by.y = "nodes")
     
-    node_order <- names(branching.times(phy)[order(branching.times(phy))])
+    node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
     node_order <- node_order[node_order %in% lin.node$node]
     
     lin.node <- lin.node[match(node_order, lin.node$node),]
     
     for(n.lin in 1:nrow(lin.node)){
-      desc.n.lin <- length(Descendants(phy, as.numeric(lin.node$node[n.lin]))[[1]])
+      desc.n.lin <- length(Descendants(phylo, as.numeric(lin.node$node[n.lin]))[[1]])
       # whether this node is present in an other lineage
-      int.n.lin <- Descendants(phy, as.numeric(lin.node$node[n.lin]), type = "all")
-      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phy)])
+      int.n.lin <- Descendants(phylo, as.numeric(lin.node$node[n.lin]), type = "all")
+      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phylo)])
       # Ntip
       if(any(comb.sub %in% int.n.lin)){
         lin.node$n.tips[n.lin] <- desc.n.lin - sum(lin.node$n.tips[lin.node$node %in% comb.sub[comb.sub %in% int.n.lin]])
@@ -194,8 +194,8 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
     lin.node_bck <- lin.node[!lin.node$node %in% comb.sub,]
     
     for(l.n in c(1:nrow(lin.node_bck))){
-      int.desc_lin <- unlist(Descendants(phy, as.numeric(lin.node_bck$node[l.n]), "all"))
-      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phy)]
+      int.desc_lin <- unlist(Descendants(phylo, as.numeric(lin.node_bck$node[l.n]), "all"))
+      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phylo)]
       
       if(any(lin.node_bck$node %in% int.desc_lin)){
         
@@ -225,13 +225,13 @@ paleodiv <- function(phy, data, sampling.fractions, shift.estimates.res,
       mu_pari <- as.numeric(best_backbones_df[j, c("Mu","Beta")])
       
       if(backbone.option == "backbone1"){
-        parental_nodes <- Ancestors(phy, as.numeric(lin.node$node[j]), type = "parent")
+        parental_nodes <- Ancestors(phylo, as.numeric(lin.node$node[j]), type = "parent")
         if(parental_nodes == 0){
-          parental_nodes <- Ntip(phy)+1
+          parental_nodes <- Ntip(phylo)+1
         }
-        agei <- as.numeric(branching.times(phy)[as.character(parental_nodes)])
+        agei <- as.numeric(branching.times(phylo)[as.character(parental_nodes)])
       } else {
-        agei <- as.numeric(branching.times(phy)[lin.node$node[j]])
+        agei <- as.numeric(branching.times(phylo)[lin.node$node[j]])
       }
       sizei <- lin.node$sp_tt_prev[j]
       

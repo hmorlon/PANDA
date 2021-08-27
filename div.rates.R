@@ -1,10 +1,9 @@
-div.rates <- function(phy, shift.estimates.res, combi = 1, part = "backbone",
-                      backbone.option = "backbone2"){
+div.rates <- function(phylo, shift.estimates.res, combi = 1, part = "backbone", backbone.option = "backbone2"){
   
   # Checking arguments ####
-  # phy
-  if(!inherits(phy, "phylo")){
-    stop("object \"phy\" is not of class \"phylo\"")
+  # phylo
+  if(!inherits(phylo, "phylo")){
+    stop("object \"phylo\" is not of class \"phylo\"")
   }
 
   # shift.estimates.res
@@ -30,7 +29,7 @@ div.rates <- function(phy, shift.estimates.res, combi = 1, part = "backbone",
   comb <- shift.estimates.res$total$Combination[combi]
   if(comb == "whole_tree"){
     
-    tot_time <- max(branching.times(phy))
+    tot_time <- max(branching.times(phylo))
     time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
     
     rate_data <- shift.estimates.res$whole_tree[shift.estimates.res$whole_tree$AICc == min(shift.estimates.res$whole_tree$AICc),]
@@ -94,17 +93,17 @@ div.rates <- function(phy, shift.estimates.res, combi = 1, part = "backbone",
     
     best_subclades_df_combi <- best_subclades_df[best_subclades_df$Clades %in% as.numeric(comb.sub),]
     names(best_subclades_df_combi)[1] <- "Parts"
-    tot_time <- max(branching.times(phy))
+    tot_time <- max(branching.times(phylo))
     
     #time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
     #time.seq <- c(seq(tot_time,0,by=-1),0)
     time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
     
     if(backbone.option == "backbone1"){
-      parental_nodes <- Ancestors(phy, as.numeric(best_subclades_df_combi$Parts), type = "parent")
-      tot_time2 <- as.list(branching.times(phy)[as.character(parental_nodes)])
+      parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Parts), type = "parent")
+      tot_time2 <- as.list(branching.times(phylo)[as.character(parental_nodes)])
     } else {
-      tot_time2 <- as.list(branching.times(phy)[best_subclades_df_combi$Parts])
+      tot_time2 <- as.list(branching.times(phylo)[best_subclades_df_combi$Parts])
     }
     
     # Backbones #### 
@@ -131,7 +130,7 @@ div.rates <- function(phy, shift.estimates.res, combi = 1, part = "backbone",
       if(!is.null(comb.bck)){
         bck_names <- gsub("_sub", "", best_backbones_df$Parts)
         bck_names <- bck_names[-length(bck_names)]
-        time_data <- c(branching.times(phy)[bck_names], tot_time)
+        time_data <- c(branching.times(phylo)[bck_names], tot_time)
       } else {
         time_data <- tot_time
       }
@@ -152,7 +151,7 @@ div.rates <- function(phy, shift.estimates.res, combi = 1, part = "backbone",
       if(!is.null(comb.bck)){
         bck_names <- gsub("_sub", "", best_backbones_df$Parts)
         bck_names <- bck_names[-length(bck_names)]
-        time_data <- c(unlist(tot_time2), branching.times(phy)[bck_names], tot_time)
+        time_data <- c(unlist(tot_time2), branching.times(phylo)[bck_names], tot_time)
       } else {
         time_data <- c(unlist(tot_time2), tot_time)
       }

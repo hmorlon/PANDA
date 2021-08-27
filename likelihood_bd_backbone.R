@@ -33,7 +33,7 @@ likelihood_bd_backbone <- function (phylo, tot_time, f, f.lamb.l, f.mu.l,
     log_data_lik <- sum(log_indLikelihood) + nbtips * log(f)
   } else if (backbone == "backbone1"){
 
-    spec_lik<-prod(f.lamb.l(spec_times))
+    spec_lik<-prod(sapply(spec_times, f.lamb.l))
     log_data_lik<-sum(log_indLikelihood)+nbtips*log(f)+log(spec_lik)
 
   } else if (backbone == "backbone2"){

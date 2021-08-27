@@ -10,7 +10,7 @@
 # The argument multi.backbone allows to split backbone in different parts and to calculate
 # 
 
-get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size = 5){
+get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncores = 1){
   env.func <- environment()
   options(echo = T)
   #### Loading packages ####
@@ -24,24 +24,24 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
     stop("object \"data\" is not of class \"data.frame\"")
   }
   
-  if(!inherits(phy, "phylo")){
-    stop("object \"phy\" is not of class \"phylo\"")
+  if(!inherits(phylo, "phylo")){
+    stop("object \"phylo\" is not of class \"phylo\"")
   }
   
-  phy$node.label <- c(Ntip(phy) + 1):c(Ntip(phy) + Nnode(phy))
+  phylo$node.label <- c(Ntip(phylo) + 1):c(Ntip(phylo) + Nnode(phylo))
   
   if(any("Species" %in% colnames(data)) == F){
     stop("No column named \"Species\" in the database
          \nPlease rename the corresponding column with the name \"Species\".")
   }
   
-  if(any(!phy$tip.label %in% data$Species)){
+  if(any(!phylo$tip.label %in% data$Species)){
     cat("The following tips are not in database.\n \n")
-    cat(phy$tip.label[!phy$tip.label %in% data$Species], "\n")
+    cat(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
     stop()
   }
   
-  if(phy$Nnode + Ntip(phy) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
+  if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or it does not correspond to the provided phylogeny")
   }
   
@@ -60,8 +60,8 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   
   # 2) create coalescence of subclades to exclude combinaisons that are not possible
   
-  coal_potential_clades <- Ancestors(phy, potential_clades$nodes, "all")
-  #coal_potential_clades <- lapply(coal_potential_clades, function(x) x[!x %in% 1:Ntip(phy)])
+  coal_potential_clades <- Ancestors(phylo, potential_clades$nodes, "all")
+  #coal_potential_clades <- lapply(coal_potential_clades, function(x) x[!x %in% 1:Ntip(phylo)])
   #coal_potential_clades <- lapply(coal_potential_clades, rev)
   max_length_coal <- max(sapply(coal_potential_clades, length))
   df_coal <- as.data.frame(matrix(nrow = length(coal_potential_clades), ncol = max_length_coal+1))
@@ -81,7 +81,7 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   
   diff_lineages <- df_coal_pat[!df_coal_pat %in% to_remove]
   diff_lineages <- strsplit(diff_lineages,"[.]")
-  diff_lineages <- lapply(diff_lineages, function(x) x[!x %in% as.character(Ntip(phy)+1)]) # remove the root
+  diff_lineages <- lapply(diff_lineages, function(x) x[!x %in% as.character(Ntip(phylo)+1)]) # remove the root
   diff_lineages <- lapply(diff_lineages, function(x) x[!x %in% sampling.fractions$nodes[is.na(sampling.fractions$f)]]) # remove node without f
   
   all_lineages <- unique(unlist(diff_lineages))
@@ -100,7 +100,7 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   names(n_clade_comb) <- 1:length(diff_lineages)
   get.all.comb <- function(n){
     ALL_comb <- NULL
-    poor_nodes <- sapply(unlist(diff_lineages), function(x) length(unlist(Descendants(phy, as.numeric(x), type = "tips"))))
+    poor_nodes <- sapply(unlist(diff_lineages), function(x) length(unlist(Descendants(phylo, as.numeric(x), type = "tips"))))
     poor_nodes <- names(poor_nodes[poor_nodes < clade.size])
     
     for(n_row in 1:nrow(n_clade_comb[[n]])){
@@ -117,7 +117,7 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   }
   cat("\n SIMPLE BACKBONES:\n")
   cl <- parallel::makeCluster(Ncores, type="SOCK")
-  clusterExport(cl, list("phy","Descendants", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste", "clade.size"),
+  clusterExport(cl, list("phylo","Descendants", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste", "clade.size"),
                 envir = env.func)
   ALL_comb <- unlist(ParallelLogger::clusterApply(cl, seq_along(n_clade_comb), get.all.comb, progressBar = T))
   stopCluster(cl)
@@ -129,7 +129,7 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   # Because of too poor backbones
   comb_to_remove <- NULL
   for(comb in 1:length(ALL_comb)){
-    if(c(Ntip(phy) - length(phy$tip.label[unlist(Descendants(phy, as.numeric(ALL_comb[[comb]])))])) < clade.size){
+    if(c(Ntip(phylo) - length(phylo$tip.label[unlist(Descendants(phylo, as.numeric(ALL_comb[[comb]])))])) < clade.size){
       comb_to_remove <- c(comb_to_remove, comb)
     }
   }
@@ -140,7 +140,7 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   ALL_clade_names <- rep(list(NULL), length(unique(unlist(all_lineages))))
   
   for(pot_names in 1:length(ALL_clade_names)){
-    ALL_clade_names[pot_names] <- list(phy$tip.label[unlist(Descendants(phy, as.numeric(all_lineages[pot_names])))])
+    ALL_clade_names[pot_names] <- list(phylo$tip.label[unlist(Descendants(phylo, as.numeric(all_lineages[pot_names])))])
   }
   names(ALL_clade_names) <- unlist(all_lineages)
   
@@ -151,7 +151,7 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
   
   cat("\n MULTI-BACKBONES:\n")
   cl <- parallel::makeCluster(Ncores, type="SOCK")
-  clusterExport(cl, list("phy","Descendants", "Ancestors", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste",
+  clusterExport(cl, list("phylo","Descendants", "Ancestors", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste",
                          "ALL_comb", "ALL_clade_names", "sampling.fractions","Ntip", "clade.size", "ALL_bck_comb", "drop.tip",
                          "branching.times"),
                 envir = env.func)
@@ -161,15 +161,15 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
     cat(comb, "/",length(ALL_comb), "\n")
     names(ALL_bck_comb)[comb] <- paste(ALL_comb[[comb]], collapse = ".")
     
-    phy_bck <- drop.tip(phy, unlist(ALL_clade_names[ALL_comb[[comb]]]))
+    phylo_bck <- drop.tip(phylo, unlist(ALL_clade_names[ALL_comb[[comb]]]))
     
-    sub_node <- c(Ancestors(phy, as.numeric(unlist(ALL_comb[comb])), "parent"),
+    sub_node <- c(Ancestors(phylo, as.numeric(unlist(ALL_comb[comb])), "parent"),
                   as.numeric(unlist(ALL_comb[comb])),
-                  unlist(Descendants(phy, as.numeric(unlist(ALL_comb[comb])), "all")))
+                  unlist(Descendants(phylo, as.numeric(unlist(ALL_comb[comb])), "all")))
     
     sf_bck <- sampling.fractions[!sampling.fractions$nodes %in% sub_node,c("nodes", "data", "f","to_test")]
-    matching <- data.frame(bck.nodes = unique(phy_bck$edge[,1]), phy = phy_bck$node.label)
-    sf_bck <- merge(sf_bck, matching, by.x = "nodes", by.y = "phy", all = T)
+    matching <- data.frame(bck.nodes = unique(phylo_bck$edge[,1]), phylo = phylo_bck$node.label)
+    sf_bck <- merge(sf_bck, matching, by.x = "nodes", by.y = "phylo", all = T)
     
     sf_bck <- sf_bck[!is.na(sf_bck$to_test),]
     sub_diff_lineages <- diff_lineages[sapply(diff_lineages, function(x) any(ALL_comb[[comb]] %in% x))]
@@ -192,20 +192,20 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
       
       other_lin <- sub_diff_lineages
       other_lin[sapply(sub_diff_lineages, function(x) ALL_comb[[comb]][node.c] %in% x)] <- list(NULL)
-      par_nodes_sub <- c(ALL_comb[[comb]], Ancestors(phy,as.numeric(ALL_comb[[comb]]),"parent"))
+      par_nodes_sub <- c(ALL_comb[[comb]], Ancestors(phylo,as.numeric(ALL_comb[[comb]]),"parent"))
       
       lin <- lin[!lin %in% par_nodes_sub]
       if(length(lin) != 0){
         
         lin.node <- data.frame(node = lin, n.tips = rep(NA, length(lin)))
         for(n.lin in 1:length(lin)){
-          desc.n.lin <- length(Descendants(phy, as.numeric(lin[n.lin]))[[1]])
+          desc.n.lin <- length(Descendants(phylo, as.numeric(lin[n.lin]))[[1]])
           # whether this node is present in an other lineage
           if(any(sapply(other_lin, function(x) any(lin[n.lin] %in% x)))){
             sub_to_rem <- unique(c(node.c, which(sapply(other_lin, function(x) any(lin[n.lin] %in% x)))))
-            desc.n.lin <- desc.n.lin - length(unlist(Descendants(phy, as.numeric(ALL_comb[[comb]][sub_to_rem]), "tips")))
+            desc.n.lin <- desc.n.lin - length(unlist(Descendants(phylo, as.numeric(ALL_comb[[comb]][sub_to_rem]), "tips")))
           }else{
-            desc.n.lin <- desc.n.lin - length(Descendants(phy, as.numeric(ALL_comb[[comb]][node.c], "tips"))[[1]])
+            desc.n.lin <- desc.n.lin - length(Descendants(phylo, as.numeric(ALL_comb[[comb]][node.c], "tips"))[[1]])
           }
           
           if(desc.n.lin >= clade.size){
@@ -238,16 +238,16 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
         }
       }
       
-      lin.node <- data.frame(node = c(bck_nodes,Ntip(phy)+1), n.tips = rep(NA, length(bck_nodes)+1))
+      lin.node <- data.frame(node = c(bck_nodes,Ntip(phylo)+1), n.tips = rep(NA, length(bck_nodes)+1))
       lin.node$node <- as.character(lin.node$node)
       for(n.lin in 1:nrow(lin.node)){
-        desc.n.lin <- length(Descendants(phy, as.numeric(lin.node$node[n.lin]))[[1]])
+        desc.n.lin <- length(Descendants(phylo, as.numeric(lin.node$node[n.lin]))[[1]])
         # whether this node is present in an other lineage
-        int.n.lin <- Descendants(phy, as.numeric(lin.node$node[n.lin]), type = "all")
-        int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phy)])
+        int.n.lin <- Descendants(phylo, as.numeric(lin.node$node[n.lin]), type = "all")
+        int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phylo)])
         sub_to_rem <- ALL_comb[[comb]] %in% int.n.lin
         if(any(ALL_comb[[comb]] %in% int.n.lin)){
-          desc.n.lin <- desc.n.lin - length(unlist(Descendants(phy, as.numeric(ALL_comb[[comb]][sub_to_rem]), "tips")))
+          desc.n.lin <- desc.n.lin - length(unlist(Descendants(phylo, as.numeric(ALL_comb[[comb]][sub_to_rem]), "tips")))
         }
         lin.node$n.tips[n.lin] <- desc.n.lin
       }
@@ -256,17 +256,17 @@ get.comb.shift <- function(phy, data, sampling.fractions, Ncores = 1, clade.size
       bck_comb_to_remove <- NULL
       
       for(n_bck_comb in 1:length(ALL_bck_comb_n)){
-        sub.lin.node <- lin.node[lin.node$node %in% c(ALL_bck_comb_n[[n_bck_comb]], Ntip(phy)+1),]
+        sub.lin.node <- lin.node[lin.node$node %in% c(ALL_bck_comb_n[[n_bck_comb]], Ntip(phylo)+1),]
         
         sub.lin.node$n.tips_prev <- sub.lin.node$n.tips
-        node_order <- names(branching.times(phy)[order(branching.times(phy))])
+        node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
         node_order <- node_order[node_order %in% sub.lin.node$node]
         
         sub.lin.node <- sub.lin.node[match(sub.lin.node$node, node_order),]
         
         for(l.n in 1:nrow(sub.lin.node)){
-          int.desc_lin <- unlist(Descendants(phy, as.numeric(sub.lin.node$node[l.n]), "all"))
-          int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phy)]
+          int.desc_lin <- unlist(Descendants(phylo, as.numeric(sub.lin.node$node[l.n]), "all"))
+          int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phylo)]
           if(any(sub.lin.node$node %in% int.desc_lin)){
             
             bck_up <- sub.lin.node[which(sub.lin.node$node %in% int.desc_lin),]

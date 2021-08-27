@@ -10,7 +10,7 @@
 # 
 
 
-plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, combi = 1,
+plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res, combi = 1,
                           backbone.option = "backbone2",
                           col.sub = NULL, col.bck = "black", lad = T, tested_nodes = F, lty.bck = 1,
                           text.cex = 1, pch.cex = 1,
@@ -23,9 +23,9 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
   lapply(pkgs, require, character.only = T)
   
   # Checking arguments ####
-  # phy
-  if(!inherits(phy, "phylo")){
-    stop("object \"phy\" is not of class \"phylo\"")
+  # phylo
+  if(!inherits(phylo, "phylo")){
+    stop("object \"phylo\" is not of class \"phylo\"")
   }
   # data
   if(!inherits(data, "data.frame")){
@@ -33,7 +33,7 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
   }
   
   # sampling.fractions
-  if(phy$Nnode + Ntip(phy) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
+  if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or is do not correspond to the provided phylogeny")
   }
   # shift.estimates.res
@@ -72,25 +72,25 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
     names(sampling.fractions)[names(sampling.fractions) == "taxo"] <- "data"
   }
   
-  phy1 <- phy
+  phylo1 <- phylo
   
   if(lad == T){
     pos_leg <- "bottomleft"
-    phy1 <- ladderize(phy1, right = T)
+    phylo1 <- ladderize(phylo1, right = T)
   } else {
     pos_leg <- "topleft"
-    phy1 <- ladderize(phy1, F)
+    phylo1 <- ladderize(phylo1, F)
   }
   
-  phy1$node.label <- c(Ntip(phy1)+1):c(Ntip(phy1)+Nnode(phy1))
-  node_legends <- sampling.fractions$data[sampling.fractions$nodes %in% phy1$node.label]
+  phylo1$node.label <- c(Ntip(phylo1)+1):c(Ntip(phylo1)+Nnode(phylo1))
+  node_legends <- sampling.fractions$data[sampling.fractions$nodes %in% phylo1$node.label]
   node_legends <- ifelse(node_legends %in% sampling.fractions$data[sampling.fractions$nodes %in% sampling.fractions$to_test], node_legends, NA)
   
   comb <- shift.estimates.res$total$Combination[combi]
   
   if(comb == "whole_tree"){
-    colors_clades <- rep("black", Nedge(phy1))
-    lty_clades <- rep(lty.bck, Nedge(phy1))
+    colors_clades <- rep("black", Nedge(phylo1))
+    lty_clades <- rep(lty.bck, Nedge(phylo1))
     
   } else {
     
@@ -117,7 +117,7 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
     names_leg <- sampling.fractions$data[sampling.fractions$nodes %in% comb.sub]
     for(j in 1:length(names_leg)){
       if(is.na(names_leg[j])){
-        names_leg_NA <- sampling.fractions$data[unlist(Descendants(phy1, as.numeric(comb.sub[j]), "children"))]
+        names_leg_NA <- sampling.fractions$data[unlist(Descendants(phylo1, as.numeric(comb.sub[j]), "children"))]
         if(length(names_leg_NA) > 3 | any(is.na(names_leg_NA))){
           names_leg_NA <- paste0("node ", comb.sub[j])
         }
@@ -140,9 +140,9 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
     
     if(!is.null(comb.bck) & length(col.bck) == 1){
       col.bck <- c(c("blue4", "orange4", "red4", "grey40", "coral4", "deeppink4", "khaki4", "darkolivegreen", "darkslategray")[1:c(length(comb.bck))],"black")
-      colors_clades <- rep("black", Nedge(phy1))
+      colors_clades <- rep("black", Nedge(phylo1))
     } else {
-      colors_clades <- rep(col.bck[length(col.bck)], Nedge(phy1))
+      colors_clades <- rep(col.bck[length(col.bck)], Nedge(phylo1))
     }
     
     if(!is.null(comb.bck)){
@@ -151,21 +151,21 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
       }
     }
     
-    lty_clades <- rep(lty.bck, Nedge(phy1))
+    lty_clades <- rep(lty.bck, Nedge(phylo1))
     
     for(i in 1:length(comb.sub)){
-      clade_edges <- Descendants(phy1, as.numeric(comb.sub[i]), type = "all")
+      clade_edges <- Descendants(phylo1, as.numeric(comb.sub[i]), type = "all")
       if(backbone.option == "backbone1"){
         clade_edges <- c(as.numeric(comb.sub[i]),clade_edges)
       }
-      colors_clades[which(phy1$edge[,2] %in% clade_edges)] <- col.sub[i]
-      lty_clades[which(phy1$edge[,2] %in% clade_edges)] <- 1
+      colors_clades[which(phylo1$edge[,2] %in% clade_edges)] <- col.sub[i]
+      lty_clades[which(phylo1$edge[,2] %in% clade_edges)] <- 1
     }
     
     if(!is.null(comb.bck)){
       for(j in 1:length(comb.bck)){
-        clade_edges <- Descendants(phy1, as.numeric(comb.bck[j]), type = "all")
-        colors_clades[which(phy1$edge[,2] %in% clade_edges)] <- ifelse(colors_clades[which(phy1$edge[,2] %in% clade_edges)] == col.bck[length(col.bck)], col.bck[j], colors_clades[which(phy1$edge[,2] %in% clade_edges)])
+        clade_edges <- Descendants(phylo1, as.numeric(comb.bck[j]), type = "all")
+        colors_clades[which(phylo1$edge[,2] %in% clade_edges)] <- ifelse(colors_clades[which(phylo1$edge[,2] %in% clade_edges)] == col.bck[length(col.bck)], col.bck[j], colors_clades[which(phylo1$edge[,2] %in% clade_edges)])
       }
     }
     
@@ -189,7 +189,7 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
   }
 
   
-  plot(phy1, label.offset = 0.4, edge.color = colors_clades, edge.lty = lty_clades, ...)
+  plot(phylo1, label.offset = 0.4, edge.color = colors_clades, edge.lty = lty_clades, ...)
   mtext(text = AICc_leg, line = 1, side = 3, cex = text.cex)
 
   if(comb == "whole_tree"){
@@ -205,9 +205,9 @@ plot.phy.comb <- function(phy, data, sampling.fractions, shift.estimates.res, co
       lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
       node <- (lastPP$Ntip + 1):length(lastPP$xx)
       XX <- lastPP$xx[node]
-      XX_lab <- XX[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phy1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phy1)]
+      XX_lab <- XX[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phylo1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phylo1)]
       YY <- lastPP$yy[node]
-      YY_lab <- YY[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phy1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phy1)]
+      YY_lab <- YY[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phylo1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phylo1)]
       BOTHlabels(text="", node, XX_lab, YY_lab, adj = c(0.5, 0.5), 
                  frame = "none", pch = 21, thermo = NULL, pie = NULL, 
                  piecol = NULL, col = "black", bg = "red", 

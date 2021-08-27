@@ -1,10 +1,9 @@
-add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), phylo = F,
-                          present = NULL,
-                          xpd.x = T, names = NULL, fill = T,
-                          cex = 1, root.age = NULL, direction = "rightwards"){
+add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
+                          root.age = NULL, present = NULL, xpd.x = T,
+                          names = NULL, fill = T, cex = 1, direction = "rightwards"){
    # to add as a argument
   
-  if(phylo){
+  if(is.phylo){
     plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
     present <- plot.obj.phylo$xx[1]
     root.age <- 0
@@ -82,7 +81,7 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), phylo = F,
   # dealing with x
   y2 <- plot_dim[3]
   
-  if(phylo){
+  if(is.phylo){
     time.seq <- c(root.age, seq(present - floor(present), present))
   } else {
     if(root.age == 0){
