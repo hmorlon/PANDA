@@ -38,7 +38,7 @@ indicates where to put the legend (default is "bottomleft").
 }
 
 \value{
-A phylogenetic tree with nodes colored according to the clade-specific phylogenetic signals. Blue nodes are not significant (Bonferonni correction), whereas orange-red nodes present significant phylogenetic signal and their color indicates the strenght of the signal (R).
+A phylogenetic tree with nodes colored according to the clade-specific phylogenetic signals. Blue nodes are not significant (Bonferonni correction), whereas orange-red nodes present significant phylogenetic signal and their color indicates the strenght of the signal (correlation R of the Mantel test).
 }
 \details{
 
@@ -46,7 +46,7 @@ See tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network).
 
 }
 \references{
-Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in ecological networks.
+Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
 
 Goslee, S.C. & Urban, D.L. (2007). The ecodist package for dissimilarity-based analysis of ecological data. J. Stat. Softw., 22, 1–19.
 

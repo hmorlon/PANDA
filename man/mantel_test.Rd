@@ -24,7 +24,7 @@ an optional dataframe containing the variables in the model as columns of dissim
 }
 
 \item{correlation}{
-indicates which correlation must be used among Pearson (default), Spearman, and Kendall correlations.
+indicates which correlation (R) must be used among Pearson (default), Spearman, and Kendall correlations.
 }
 
 \item{nperm}{
@@ -49,7 +49,7 @@ This function is adapted from the function mantel in the R-package ecodist (Gosl
 
 }
 \references{
-Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Measuring phylogenetic signal in bipartite interaction networks: Do closely related species interact with similar partners?
+Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
 
 Goslee, S.C. & Urban, D.L. (2007). The ecodist package for dissimilarity-based analysis of ecological data. J. Stat. Softw., 22, 1–19.
 

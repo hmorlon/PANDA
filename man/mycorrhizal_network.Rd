@@ -16,7 +16,7 @@ Martos, F., Munoz, F., Pailler, T., Kottke, I., Gonneau, C. & Selosse, M.-A. (20
 
 Martos, F., Munoz, F., Pailler, T., Kottke, I., Gonneau, C. & Selosse, M.-A. (2012). The role of epiphytism in architecture and evolutionary constraint within mycorrhizal networks of tropical orchids. Mol. Ecol., 21, 5098–5109.
 
-Perez‐Lamarque, B., Maliet, O., Selosse, M.-A., Martos, F., Morlon H. (in prep). Measuring phylogenetic signal in bipartite interaction networks: Do closely related species interact with similar partners?
+Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
 
 }
 \examples{

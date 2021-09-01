@@ -21,7 +21,7 @@ phylosignal_sub_network(network, tree_A, tree_B,
 \arguments{
 
 \item{network}{
-a matrix representing the ecological interaction network with species from guild A in columns and species from guild B in rows. Row names (resp. columns names) must correspond to the tip labels of tree B (resp. tree A).
+a matrix representing the bipartite interaction network with species from guild A in columns and species from guild B in rows. Row names (resp. columns names) must correspond to the tip labels of tree B (resp. tree A).
 }
 \item{tree_A}{
 a phylogenetic tree of the guild A (the columns of the interaction network). It must be an object of class "phylo".
@@ -35,11 +35,11 @@ indicates which method is used to compute the phylogenetic signal in species int
 }
 
 \item{correlation}{
-indicates which correlation must be used in the Mantel test, among Pearson (default), Spearman, and Kendall correlations.
+indicates which correlation (R) must be used in the Mantel test, among Pearson (default), Spearman, and Kendall correlations.
 }
 
 \item{nperm}{
-number of permutations to evaluate the significance of the Mantel test. By default, it equals 10 000, but this can be very long for the Kendall correlation.
+number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation.
 }
 
 \item{minimum}{
@@ -47,18 +47,18 @@ indicates the minimal number of descending species for a node in tree A to compu
 }
 
 \item{degree}{
-if degree=TRUE, a Mantel tests testing for phylogenetic signal in degrees of generalism is additionally performed in each sub-clade.
+if degree=TRUE, Mantel tests testing for phylogenetic signal in the number of partners are additionally performed in each sub-clade.
 }
 }
 
 
 \value{
 
-For Mantel tests, the function outputs a table where each line corresponds to a tested clade and which contains 8 columns: the name of the node ("node"), the number of species in the sub-clade A ("nb_A"), the number of species in guild B associated with the sub-clade A ("nb_B"), the Mantel correlation for guild A ("mantel_cor"), its associated upper p-value ("pvalue_high"), its associated lower p-value ("pvalue_low"), and the associated Bonferroni corrected p-values ("pvalue_high_corrected" and "pvalue_low_corrected"). 
+For Mantel tests, the function outputs a table where each line corresponds to a tested clade and which contains at least 8 columns: the name of the node ("node"), the number of species in the sub-clade A ("nb_A"), the number of species in guild B associated with the sub-clade A ("nb_B"), the Mantel correlation for guild A ("mantel_cor"), its associated upper p-value ("pvalue_high"), its associated lower p-value ("pvalue_low"), and the associated Bonferroni corrected p-values ("pvalue_high_corrected" and "pvalue_low_corrected"). 
 
-"mantel_cor" indicates the strength of phylogenetic signal in the sub-clade A. The upper p-value "pvalue_high" indicates the significance of phylogenetic signal in the sub-clade A. The lower p-value "pvalue_low" indicates the significance of anti-phylogenetic signal in the sub-clade A. Both Bonferroni  p-values are corrected using the number of tested nodes. 
+"mantel_cor" indicates the strength of phylogenetic signal in the sub-clade A. The upper p-value "pvalue_high" indicates the significance of the phylogenetic signal in the sub-clade A. The lower p-value "pvalue_low" indicates the significance of the anti-phylogenetic signal in the sub-clade A. Both Bonferroni  p-values are corrected using the number of tested nodes. 
 
-If degree=TRUE, it also indicates in each sub-clade, the phylogenetic signal in the degree of generalism ("degree_mantel_cor") and its significance with or without the Bonferroni correction ("degree_pvalue_high", "degree_pvalue_low" and "degree_pvalue_high_corrected", "degree_pvalue_low_corrected")
+If degree=TRUE, it also indicates in each sub-clade, the phylogenetic signal in the number of partners ("degree_mantel_cor") and its significance with or without the Bonferroni correction ("degree_pvalue_high", "degree_pvalue_low" and "degree_pvalue_high_corrected", "degree_pvalue_low_corrected")
 
 }
 
@@ -68,7 +68,7 @@ See tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network).
 
 }
 \references{
-Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in ecological networks.
+Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
 
 Goslee, S.C. & Urban, D.L. (2007). The ecodist package for dissimilarity-based analysis of ecological data. J. Stat. Softw., 22, 1–19.
 
