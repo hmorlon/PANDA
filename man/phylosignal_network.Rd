@@ -55,7 +55,7 @@ Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear M
 
 \value{
 
-For Mantel tests, the function outputs a vector of up to 8 values: the number of species in guild A ("nb_A"), the number of species in guild B ("nb_B"), the Mantel correlation for guild A ("mantel_cor_A"), its associated upper p-value ("pvalue_high_A"), its associated lower p-value ("pvalue_low_A"), and (optional) the Mantel correlation for guild B ("mantel_cor_B"), its associated upper p-value ("pvalue_high_B"), abd its associated lower p-value ("pvalue_low_B"),
+For Mantel tests, the function outputs a vector of up to 8 values: the number of species in guild A ("nb_A"), the number of species in guild B ("nb_B"), the Mantel correlation for guild A ("mantel_cor_A"), its associated upper p-value ("pvalue_high_A", i.e. the fraction of permutations that led to higher correlation values), its associated lower p-value ("pvalue_low_A", i.e. the fraction of permutations that led to lower correlation values), and (optional) the Mantel correlation for guild B ("mantel_cor_B"), its associated upper p-value ("pvalue_high_B"), abd its associated lower p-value ("pvalue_low_B"),
 
 "mantel_cor_A" (or "mantel_cor_B") indicates the strength of the phylogenetic signal in guild A (or B). The upper p-value "pvalue_high_A" (or "pvalue_high_B") indicates the significance of the phylogenetic signal in guild A (or B). The lower p-value "pvalue_low_A" (or "pvalue_low_B") indicates the significance of the anti-phylogenetic signal in guild A (or B).  
 
