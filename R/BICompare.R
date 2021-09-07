@@ -35,7 +35,7 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 					pDP[[j]] <- 1-pnorm(as.numeric(r[j]),m,s)
 				}
 			low_z <- cbind(as.numeric(r),pDP)
-			low_z <- sort(low_z[,1])
+			low_z <- sort(unlist(low_z[,1]))
 	r = low_z[5]			
 	}		
 
@@ -59,7 +59,7 @@ BICompare <- function(phylo,t,meth=c("ultrametric")){
 					pDP[[j]] <- 1-pnorm(as.numeric(r[j]),m,s)
 				}
 			low_z <- cbind(as.numeric(r),pDP)
-			low_z <- sort(low_z[,1])
+			low_z <- sort(unlist(low_z[,1]))
 	r = low_z[50]			
 	}	
 	
