@@ -5,16 +5,16 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
   host_tree <- tree_A
   symbiont_tree <- tree_B
   
-  if (!inherits(host_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
-  if (!inherits(symbiont_tree, "phylo")) {stop(print("object \"phy\" is not of class \"phylo\".\n"))}
-  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted")) {stop("Please provide a \"method\" to compute phylogenetic signals.\n")}
+  if (!inherits(host_tree, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}
+  if (!inherits(symbiont_tree, "phylo")) {stop("object \"tree_B\" is not of class \"phylo\".")}
+  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted")) {stop("Please provide a \"method\" to compute phylogenetic signals.")}
   
-  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop(print("Please provide a network with row names and columns names matching the species names.\n"))}
+  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop("Please provide a network with row names and columns names matching the species names.")}
   
-  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.\n")}
+  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.")}
   
-  if (nrow(network)<2){stop(print("Please provide a network with at least 2 species in clade B.\n"))}
-  if (ncol(network)<2){stop(print("Please provide a network with at least 2 species in clade A.\n"))}
+  if (nrow(network)<2){stop("Please provide a \"network\" with at least 2 species in clade B.")}
+  if (ncol(network)<2){stop("Please provide a \"network\" with at least 2 species in clade A.")}
   
   host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
   symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
@@ -57,8 +57,8 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
       colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_high", "pvalue_low", "pvalue_high_corrected","pvalue_low_corrected") 
     }
   results_sub_clades <- data.frame(results_sub_clades, stringsAsFactors = F)
-  results_sub_clades$nb_A <- as.numeric(results_sub_clades$nb_A)
-  results_sub_clades$nb_B <- as.numeric(results_sub_clades$nb_B)
+  results_sub_clades$nb_A <- round(as.numeric(results_sub_clades$nb_A))
+  results_sub_clades$nb_B <- round(as.numeric(results_sub_clades$nb_B))
   results_sub_clades$mantel_cor <- as.numeric(results_sub_clades$mantel_cor)
   results_sub_clades$pvalue_high <- as.numeric(results_sub_clades$pvalue_high)
   results_sub_clades$pvalue_low <- as.numeric(results_sub_clades$pvalue_low)

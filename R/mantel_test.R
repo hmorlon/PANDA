@@ -1,8 +1,8 @@
 mantel_test <-
 function(formula = formula(data), data = sys.parent(), correlation = "Pearson", nperm = 1000) {
   
-  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop(print("Correlation must be among 'Pearson', 'Spearman', or 'Kendall'.\n"))}
-  if (!is.numeric(nperm)) {stop(print("Please provide a numeric number of permutations (nperm).\n"))}
+  if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("\"correlation\" must be among 'Pearson', 'Spearman', or 'Kendall'.")}
+  if (!is.numeric(nperm)) {stop("Please provide a numeric number of permutations (\"nperm\").")}
   
   m <- match.call(expand.dots = FALSE)
   m2 <- match(c("formula", "data"), names(m), nomatch = 0)
@@ -12,10 +12,10 @@ function(formula = formula(data), data = sys.parent(), correlation = "Pearson", 
   m <- as.matrix(m)
   n <- (1 + sqrt(1 + 8 * nrow(m)))/2
   if (abs(n - round(n)) > 1e-12) 
-    stop("Matrix not square.\n")
+    stop("Matrix not square.")
   n <- round(n)
   if (ncol(m) < 2) 
-    stop("Not enough data. \n")
+    stop("Not enough data.")
   
   ymat <- as.vector(m[, 1])
   xmat <- as.vector(m[, 2])
