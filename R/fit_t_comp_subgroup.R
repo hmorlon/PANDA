@@ -4,7 +4,8 @@ fit_t_comp_subgroup<-function(full.phylo,ana.events,clado.events,stratified=FALS
 	if(!is.null(dim(data))){stop("data needs to be a single trait")}
 	is_tip <- full.phylo$edge[,2] <= length(full.phylo$tip.label)
 	if(sum(diff(full.phylo$edge[is_tip, 2])<0)>0){ stop('fit_t_comp_subgroup cannot be used with ladderized full.phylogenies')}
-	
+	if(length(unique(ape::branching.times(phylo)))<length(ape::branching.times(phylo))){stop("fit_t_comp requires phylogenies where no nodes occur at precisely the same time [see ape::branching.times(phylo)]")}
+
 	if(is.null(bounds[["lower"]]) & is.null(bounds[["upper"]])){
         bounds$lower = -Inf
         bounds$upper = Inf
