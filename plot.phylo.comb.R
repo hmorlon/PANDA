@@ -9,12 +9,11 @@
 # gts is not included in this version but developped as an external function add.geochrono
 # 
 
-
 plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res, combi = 1,
-                          backbone.option = "backbone2",
-                          col.sub = NULL, col.bck = "black", lad = T, tested_nodes = F, lty.bck = 1,
-                          text.cex = 1, pch.cex = 1,
-                          leg = T, ...){
+                            backbone.option = "backbone2", main = NULL,
+                            col.sub = NULL, col.bck = "black", lad = T, tested_nodes = F, lty.bck = 1,
+                            text.cex = 1, pch.cex = 1,
+                            leg = T, ...){
   
   # Loading packages ####
   pkgs <- c("ape", "phytools", "phangorn","picante","stats", "strap", "geiger", "RColorBrewer")
@@ -31,7 +30,6 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
   if(!inherits(data, "data.frame")){
     stop("object \"data\" is not of class \"data.frame\"")
   }
-  
   # sampling.fractions
   if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or is do not correspond to the provided phylogeny")
@@ -40,7 +38,6 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
   if(!is(shift.estimates.res)[1] == "list" | any(names(shift.estimates.res) != c("whole_tree", "subclades", "backbones", "total"))){
     stop("object \"shift.estimates.res\" might be incorrect.")
   }
-  
   if(!is.numeric(combi)){
     stop("argument \"combi\" should be numeric.")
   }
@@ -179,19 +176,33 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
     model_leg <- c(model_leg, model_leg_bck)
     model_leg <- gsub("_", " ", model_leg)
     model_leg <- paste0(names_leg, " (", model_leg, ")")
-    
   }
   
-  if(shift.estimates.res$total$delta_AICc[combi] > 0){
-    AICc_leg <- paste0("Combination ", combi, " (delta AICc = " , round(shift.estimates.res$total$delta_AICc[combi],3),")")
-  } else {
-    AICc_leg <- "Best combination"
+  if(is.null(main)){
+    if(shift.estimates.res$total$delta_AICc[combi] > 0){
+      main <- paste0("Combination ", combi, " (delta AICc = " , round(shift.estimates.res$total$delta_AICc[combi],3),")")
+    } else {
+      main <- "Best combination"
+    }
   }
 
+  plot(phylo1, label.offset = 0.4, edge.color = colors_clades,
+       edge.lty = lty_clades, main = main, ...)
   
-  plot(phylo1, label.offset = 0.4, edge.color = colors_clades, edge.lty = lty_clades, ...)
-  mtext(text = AICc_leg, line = 1, side = 3, cex = text.cex)
-
+  if(tested_nodes == T){
+    pos_leg_n <- c(par("xaxp")[1]-2, c(par("yaxp")[2]+3))
+    lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+    node <- (lastPP$Ntip + 1):length(lastPP$xx)
+    XX <- lastPP$xx[node]
+    XX_lab <- XX[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phylo1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phylo1)]
+    YY <- lastPP$yy[node]
+    YY_lab <- YY[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phylo1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phylo1)]
+    BOTHlabels(text="", node, XX_lab, YY_lab, adj = c(0.5, 0.5), 
+               frame = "none", pch = 21, thermo = NULL, pie = NULL, 
+               piecol = NULL, col = "black", bg = "red", 
+               horiz = FALSE, width = NULL, height = NULL, cex=pch.cex)
+  }
+  
   if(comb == "whole_tree"){
     if(leg == T){
       model_leg <- shift.estimates.res$whole_tree$Models[shift.estimates.res$whole_tree$AICc == min(shift.estimates.res$whole_tree$AICc)]
@@ -199,21 +210,6 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
     }
     
   } else {
-    
-    if(tested_nodes == T){
-      pos_leg_n <- c(par("xaxp")[1]-2, c(par("yaxp")[2]+3))
-      lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
-      node <- (lastPP$Ntip + 1):length(lastPP$xx)
-      XX <- lastPP$xx[node]
-      XX_lab <- XX[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phylo1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phylo1)]
-      YY <- lastPP$yy[node]
-      YY_lab <- YY[sort(sampling.fractions$nodes[sampling.fractions$nodes > Ntip(phylo1) & !is.na(sampling.fractions$f) & !is.na(sampling.fractions$to_test) & !is.na(sampling.fractions$sp_in)]) - Ntip(phylo1)]
-      BOTHlabels(text="", node, XX_lab, YY_lab, adj = c(0.5, 0.5), 
-                 frame = "none", pch = 21, thermo = NULL, pie = NULL, 
-                 piecol = NULL, col = "black", bg = "red", 
-                 horiz = FALSE, width = NULL, height = NULL, cex=pch.cex)
-    }
-    # bottomleft
     
     if(leg == T){
       legend(pos_leg, legend = paste(model_leg,sep=" "), text.col = c(col.sub, col.bck), title = "Subgroups (Best models)",
