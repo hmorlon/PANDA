@@ -3,7 +3,7 @@
 # N.B.: last time points is not present because of prob_dtt.
 # Two options: (1) modify prob_dtt (2) or this function
 
-apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
+apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
                            combi = 1, backbone.option = "backbone2", scale = 1){
   
   # some checks ####
@@ -11,10 +11,10 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     stop("object \"data\" is not of class \"data.frame\"")
   }
   
-  if(!inherits(phy, "phylo")){
-    stop("object \"phy\" is not of class \"phylo\"")
+  if(!inherits(phylo, "phylo")){
+    stop("object \"phylo\" is not of class \"phylo\"")
   } else {
-    phy$node.label <- c(c(Ntip(phy)+1):c(Ntip(phy)+Nnode(phy)))
+    phylo$node.label <- c(c(Ntip(phylo)+1):c(Ntip(phylo)+Nnode(phylo)))
   }
   
   if(!inherits(sampling.fractions, "data.frame")){
@@ -30,9 +30,9 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
          \nPlease rename the corresponding column with the name \"Species\".")
   }
   
-  if(any(!phy$tip.label %in% data$Species)){
+  if(any(!phylo$tip.label %in% data$Species)){
     cat("The following tips are not in the database.\n \n")
-    cat(phy$tip.label[!phy$tip.label %in% data$Species], "\n")
+    cat(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
     stop()
   }
   
@@ -119,11 +119,12 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     
     whole_df <- shifts$whole_tree[shifts$whole_tree$AICc == min(shifts$whole_tree$AICc),]
     whole_fit.bd <- mimic_fit.bd(whole_df)
+    tot_time <- max(branching.times(phylo))
 
-    N0 <- sampling.fractions$sp_tt[sampling.fractions$nodes == Ntip(phy)+1]
-    l <- sampling.fractions$sp_in[sampling.fractions$nodes == Ntip(phy)+1]    
+    N0 <- sampling.fractions$sp_tt[sampling.fractions$nodes == Ntip(phylo)+1]
+    l <- sampling.fractions$sp_in[sampling.fractions$nodes == Ntip(phylo)+1]    
     
-    whole_diversity <- paleodiv(phy = phy, data = data, split.div = F,
+    whole_diversity <- paleodiv(phylo = phylo, data = data, split.div = F,
                             sampling.fractions = sampling.fractions, shift.estimates.res = shifts, combi = combi)
     prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
                                 N0 = N0, l = l, type = type, prec = 10000,
@@ -145,17 +146,17 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     }
     
     # Deterministic diversity to set the limit
-    diversities <- paleodiv(phy = phy, data = data, split.div = T,
+    diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
                             sampling.fractions = sampling.fractions, shift.estimates.res = shifts, combi = combi)
-    row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phy)+1))), Ntip(phy)+1))
+    row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
     max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = T))/10)*10
    
     # subclade(s) ####
-    tips_sub <- Descendants(phy, as.numeric(comb.sub))
+    tips_sub <- Descendants(phylo, as.numeric(comb.sub))
     
     subclades_trees <- list()
     for(i in 1:length(tips_sub)){
-      subclades_trees[[i]] <- subtree(phy, phy$tip.label[tips_sub[[i]]])
+      subclades_trees[[i]] <- subtree(phylo, phylo$tip.label[tips_sub[[i]]])
     }
     
     # fit_bd values for subclade(s) ####
@@ -176,10 +177,11 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     
     subclades_N0 <- sapply(comb.sub, function(x) sampling.fractions$sp_tt[sampling.fractions$nodes == x])
     subclades_l <- sapply(comb.sub, function(x) sampling.fractions$sp_in[sampling.fractions$nodes == x])
-  
-  
+    
+    cat("\nDTT calculation for subclade(s):\n")
     prob_subclades <- list()
     for(i in 1:length(subclades_trees)){
+      cat("\t", i, "/", length(subclades_trees), "\n")
       l <- subclades_l[i]
       N0 <- subclades_N0[i]
       method <- ifelse(l/N0 == 1, "simple", "hard")
@@ -197,21 +199,21 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     lapply(prob_subclades, colSums)
     
     # N0 for backbones ####
-    lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phy)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
+    lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phylo)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
     lin.node$node <- as.character(lin.node$node)
     lin.node <- merge(lin.node, sampling.fractions[sampling.fractions$nodes %in% lin.node$node, c("nodes", "sp_tt"),],
                       by.x = "node", by.y = "nodes")
     
-    node_order <- names(branching.times(phy)[order(branching.times(phy))])
+    node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
     node_order <- node_order[node_order %in% lin.node$node]
     
     lin.node <- lin.node[match(node_order, lin.node$node),]
     
     for(n.lin in 1:nrow(lin.node)){
-      desc.n.lin <- length(Descendants(phy, as.numeric(lin.node$node[n.lin]))[[1]])
+      desc.n.lin <- length(Descendants(phylo, as.numeric(lin.node$node[n.lin]))[[1]])
       # whether this node is present in an other lineage
-      int.n.lin <- Descendants(phy, as.numeric(lin.node$node[n.lin]), type = "all")
-      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phy)])
+      int.n.lin <- Descendants(phylo, as.numeric(lin.node$node[n.lin]), type = "all")
+      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phylo)])
       # Ntip
       if(any(comb.sub %in% int.n.lin)){
         lin.node$n.tips[n.lin] <- desc.n.lin - sum(lin.node$n.tips[lin.node$node %in% comb.sub[comb.sub %in% int.n.lin]])
@@ -227,8 +229,8 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     lin.node_bck <- lin.node[!lin.node$node %in% comb.sub,]
     
     for(l.n in c(1:nrow(lin.node_bck))){
-      int.desc_lin <- unlist(Descendants(phy, as.numeric(lin.node_bck$node[l.n]), "all"))
-      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phy)]
+      int.desc_lin <- unlist(Descendants(phylo, as.numeric(lin.node_bck$node[l.n]), "all"))
+      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phylo)]
       
       if(any(lin.node_bck$node %in% int.desc_lin)){
         
@@ -252,12 +254,12 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     
     # backbone trees
     
-    backbone_tre <- drop.tip(phy, phy$tip.label[unlist(tips_sub)])
+    backbone_tre <- drop.tip(phylo, phylo$tip.label[unlist(tips_sub)])
     backbone_trees <- list()
     if(!is.null(comb.bck)){
       for(i in 1:length(comb.bck)){
         
-        tips_bcki <- phy$tip.label[Descendants(phy, as.numeric(comb.bck))[[1]]]
+        tips_bcki <- phylo$tip.label[Descendants(phylo, as.numeric(comb.bck))[[1]]]
         tips_bcki <- tips_bcki[tips_bcki %in% backbone_tre$tip.label]
         backbone_trees[[i]] <- subtree(backbone_tre, tips_bcki)
         
@@ -265,10 +267,10 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
           backbone_trees[[i+1]] <- drop.tip(backbone_tre, unlist(lapply(backbone_trees, function(x) x$tip.label)))
         }
       }
-      names(backbone_trees) <- c(comb.bck, Ntip(phy)+1)
+      names(backbone_trees) <- c(comb.bck, Ntip(phylo)+1)
     } else {
       backbone_trees[[1]] <- backbone_tre
-      names(backbone_trees) <- c(Ntip(phy)+1)
+      names(backbone_trees) <- c(Ntip(phylo)+1)
     }
     
     
@@ -287,9 +289,9 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     }
   
     if(!is.null(comb.bck)){
-      names(backbone_fit.bd) <- c(comb.bck, Ntip(phy)+1)
+      names(backbone_fit.bd) <- c(comb.bck, Ntip(phylo)+1)
     } else {
-      names(backbone_fit.bd) <- Ntip(phy)+1
+      names(backbone_fit.bd) <- Ntip(phylo)+1
     }
     
     type <- rep(type, nrow(lin.node))
@@ -297,21 +299,21 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     backbone_tot_times <- c()
     for(i in 1:nrow(lin.node)){
       if(backbone.option == "backbone1"){
-        parental_nodes <- Ancestors(phy, as.numeric(lin.node$node[i]), type = "parent")
+        parental_nodes <- Ancestors(phylo, as.numeric(lin.node$node[i]), type = "parent")
         # last backbone should be "crown"
         if(i == nrow(lin.node)){
           type[i] <- "crown"
         }
         if(parental_nodes == 0){
-          parental_nodes <- Ntip(phy)+1
+          parental_nodes <- Ntip(phylo)+1
         }
-        backbone_tot_times[i] <- as.numeric(branching.times(phy)[as.character(parental_nodes)])
+        backbone_tot_times[i] <- as.numeric(branching.times(phylo)[as.character(parental_nodes)])
       } else {
-        backbone_tot_times[i] <- as.numeric(branching.times(phy)[lin.node$node[i]])
+        backbone_tot_times[i] <- as.numeric(branching.times(phylo)[lin.node$node[i]])
       }
     }
     
-    #branch_times <- list(c(branching.times(phy)["89"], branching.times(phy)[as.character(Ancestors(phy, 89))]))
+    #branch_times <- list(c(branching.times(phylo)["89"], branching.times(phylo)[as.character(Ancestors(phylo, 89))]))
     #spec_times <- NULL
     #backbone <- "backbone2"
     #cond = "crown"
@@ -323,8 +325,10 @@ apply_prob_dtt <- function(phy, data, sampling.fractions, shifts,
     #                                 cst.lamb = F, cst.mu = F, expo.lamb = T, expo.mu = T,
     #                                 cond = cond, model = "BVAR_DVAR", fix.mu = F)
     
+    cat("\nDTT calculation for backbone(s):\n")
     prob_backbone <- list()
     for(i in 1:length(backbone_fit.bd)){
+      cat("\t", i, "/", length(backbone_fit.bd), "\n")
       l <- lin.node$n.tips_prev[lin.node$node == names(backbone_fit.bd)[i]]
       N0 <- lin.node$sp_tt_prev[lin.node$node == names(backbone_fit.bd)[i]]
       method <- ifelse(l/N0 == 1, "simple", "hard")

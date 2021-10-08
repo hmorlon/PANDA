@@ -1,4 +1,4 @@
-get.branching.nodes <- function(shift, root_ID = Ntip(phy)+1){
+get.branching.nodes <- function(shift, root_ID = Ntip(phylo)+1){
   
   root_ID <- as.numeric(root_ID)
   
@@ -12,7 +12,7 @@ get.branching.nodes <- function(shift, root_ID = Ntip(phy)+1){
   row.names(df_ALL) <- 1:nrow(df_ALL)
   
   # detect the root in the clades TO REMOVE BECAUSE ONLY ON PARENTAL NODES
-  #if(any(df_ALL$node == Ntip(phy) + 1)){
+  #if(any(df_ALL$node == Ntip(phylo) + 1)){
   # root_clade <- 0
   #root_node <-  NULL # because already in df_all
   #} 
@@ -25,7 +25,7 @@ get.branching.nodes <- function(shift, root_ID = Ntip(phy)+1){
     
     for(df_l in 1:nrow(df_ALL)){
       
-      all_ancestors[df_l] <- list(c(df_ALL$node[df_l],Ancestors(phy, df_ALL$node[df_l], type = "all")))
+      all_ancestors[df_l] <- list(c(df_ALL$node[df_l],Ancestors(phylo, df_ALL$node[df_l], type = "all")))
       
     }
     
@@ -68,7 +68,7 @@ get.branching.nodes <- function(shift, root_ID = Ntip(phy)+1){
         
         if(ALL_par_nodes[df_l] != root_ID){
           
-          parental_nodes[[df_l]] <- c(ALL_par_nodes[df_l], Ancestors(phy, ALL_par_nodes[df_l], type = "parent"))
+          parental_nodes[[df_l]] <- c(ALL_par_nodes[df_l], Ancestors(phylo, ALL_par_nodes[df_l], type = "parent"))
         }
       }
       # WHETHER PARENTAL NODES ARE THE ROOT
@@ -105,11 +105,11 @@ get.branching.nodes <- function(shift, root_ID = Ntip(phy)+1){
   }
   
   if(root_clade == 1){
-    branch_times_to[bt + p + root_clade] <- list(c(Siblings(phy, root_node),Ancestors(phy, root_node, type = "parent")))
+    branch_times_to[bt + p + root_clade] <- list(c(Siblings(phylo, root_node),Ancestors(phylo, root_node, type = "parent")))
   }
   
   #names(branch_times_to) <- c(names(bt_1),rep("parental_node",length(parental_nodes)),rep("root",length(root_node)))
-  names(branch_times_to) <- c(names(bt_1), sapply(parental_nodes, function(x) x[1]), Siblings(phy, root_node))
+  names(branch_times_to) <- c(names(bt_1), sapply(parental_nodes, function(x) x[1]), Siblings(phylo, root_node))
   
   return(branch_times_to)
 }

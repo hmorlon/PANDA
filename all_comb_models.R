@@ -67,7 +67,7 @@ all_comb_models <- function(to){
     if(is.null(ALL_bck_comb_to[[mb]])){
       # No split in the backbone
       
-      phylo_backbone_cut <- list(drop.tip(phy, unlist(ALL_clade_names[clade_to_shift])))
+      phylo_backbone_cut <- list(drop.tip(phylo, unlist(ALL_clade_names[clade_to_shift])))
       names(phylo_backbone_cut) <- paste0(paste(c(clade_to_shift),collapse = "."),"_bck")
       #branch_times_to_bck <- list(unlist(ALL_branch_times_to_bck[clade_to_shift], recursive = F))
       
@@ -79,10 +79,10 @@ all_comb_models <- function(to){
       # Split in the backbone
       int_nodes <- ALL_bck_comb_to[[mb]]
       # order from present to past
-      int_nodes <- names(branching.times(phy)[order(branching.times(phy))])[names(branching.times(phy)[order(branching.times(phy))]) %in% int_nodes]
+      int_nodes <- names(branching.times(phylo)[order(branching.times(phylo))])[names(branching.times(phylo)[order(branching.times(phylo))]) %in% int_nodes]
       branch_times_to_bck <- rep(list(NULL), length(int_nodes)+1)
       phylo_backbone_cut <- rep(list(NULL), length(int_nodes)+1)
-      phylo_backbone_core <- drop.tip(phy, unlist(ALL_clade_names[clade_to_shift]))
+      phylo_backbone_core <- drop.tip(phylo, unlist(ALL_clade_names[clade_to_shift]))
       sb.tips <- rep(list(NULL), length(int_nodes))
       
       for(sb in 1:length(int_nodes)){
@@ -92,17 +92,17 @@ all_comb_models <- function(to){
         phylo_backbone_cut[[sb]] <- subtree(phylo_backbone_core, sb.tips[[sb]])
         names(phylo_backbone_cut)[[sb]] <- paste(int_nodes[sb],"sub", sep = "_")
         
-        sb.desc <- Descendants(phy, as.numeric(int_nodes[sb]), type = "all")
+        sb.desc <- Descendants(phylo, as.numeric(int_nodes[sb]), type = "all")
         desc_sub_up_bck <- c(clade_to_shift[clade_to_shift %in% sb.desc],int_nodes[int_nodes %in% sb.desc])
         
         if(sb > 1){
           desc_sub_up_bck <- desc_sub_up_bck[!desc_sub_up_bck %in% unlist(strsplit(names(branch_times_to_bck)[!is.na(names(branch_times_to_bck))], "[.]"))]
           phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_cut[[sb]], unlist(sb.tips[-sb]))
-          child <- Children(phy, as.numeric(int_nodes[sb]))
+          child <- Children(phylo, as.numeric(int_nodes[sb]))
           
           if(as.numeric(int_nodes[sb-1]) %in% child){ # Direct Descendant
             
-            sis <- Siblings(phy, as.numeric(int_nodes[sb-1]))
+            sis <- Siblings(phylo, as.numeric(int_nodes[sb-1]))
             
             branch_time_sb <- get.branching.nodes(ALL_branch_times_clades[c(desc_sub_up_bck, as.character(sis))], root_ID = int_nodes[sb])
             
@@ -133,7 +133,7 @@ all_comb_models <- function(to){
           if(phylo_backbone_cut[[sb]]$node.label[1] != int_nodes[sb] &
              !phylo_backbone_cut[[sb]]$node.label[1] %in% names(branch_time_sb)){
             
-            root_sb_to_int_nodes <- c(phylo_backbone_cut[[sb]]$node.label[1], Ancestors(phy, phylo_backbone_cut[[sb]]$node.label[1]))
+            root_sb_to_int_nodes <- c(phylo_backbone_cut[[sb]]$node.label[1], Ancestors(phylo, phylo_backbone_cut[[sb]]$node.label[1]))
             root_sb_to_int_nodes <- root_sb_to_int_nodes[1:c(which(root_sb_to_int_nodes == int_nodes[sb])-1)]
             missed_sb_nodes <- root_sb_to_int_nodes[!root_sb_to_int_nodes %in% as.numeric(names(branch_time_sb))]
             
@@ -148,7 +148,7 @@ all_comb_models <- function(to){
           }
           
           branch_times_to_bck[sb] <- list(branch_time_sb)
-          names(branch_times_to_bck)[sb] <- paste(c(clade_to_shift[clade_to_shift %in% Descendants(phy, as.numeric(int_nodes[sb]), "all")]), collapse = ".")
+          names(branch_times_to_bck)[sb] <- paste(c(clade_to_shift[clade_to_shift %in% Descendants(phylo, as.numeric(int_nodes[sb]), "all")]), collapse = ".")
         }
         
         if(sb == length(int_nodes)){
@@ -158,9 +158,9 @@ all_comb_models <- function(to){
           phylo_backbone_cut[[sb+1]] <- drop.tip(phylo_backbone_core, tips_up_bck)
           names(phylo_backbone_cut)[sb+1] <- paste(int_nodes[sb],"bck", sep = "_")
           
-          sb1.desc <- Descendants(phy, Ntip(phy)+1, type = "all")
+          sb1.desc <- Descendants(phylo, Ntip(phylo)+1, type = "all")
           sb1.desc <- sb1.desc[!sb1.desc %in% sb.desc]
-          sb1.desc <- sb1.desc[sb1.desc > Ntip(phy)]
+          sb1.desc <- sb1.desc[sb1.desc > Ntip(phylo)]
           
           if(!is.null(tips_last_bck)){  
             # subgroup(s) in the deep backbone
@@ -169,7 +169,7 @@ all_comb_models <- function(to){
             
             # Using get.branching.nodes to be sure to get all branches
             
-            branch_time_deep <- get.branching.nodes(ALL_branch_times_clades[btt_bck], root_ID = Ntip(phy)+1)
+            branch_time_deep <- get.branching.nodes(ALL_branch_times_clades[btt_bck], root_ID = Ntip(phylo)+1)
             
             for(nodeID in 1:length(branch_time_deep)){
               branch_time_deep[[nodeID]] <- sapply(branch_time_deep[[nodeID]], get.node.ages)
@@ -201,21 +201,21 @@ all_comb_models <- function(to){
     
     # Sampling fractions ####
     
-    lin.node <- data.frame(node = c(ALL_comb[[to]],int_nodes, Ntip(phy)+1), n.tips = rep(NA, length(ALL_comb[[to]]) + length(int_nodes)+1))
+    lin.node <- data.frame(node = c(ALL_comb[[to]],int_nodes, Ntip(phylo)+1), n.tips = rep(NA, length(ALL_comb[[to]]) + length(int_nodes)+1))
     lin.node$node <- as.character(lin.node$node)
     lin.node <- merge(lin.node, sampling.fractions[sampling.fractions$nodes %in% lin.node$node, c("nodes", "sp_tt"),],
                       by.x = "node", by.y = "nodes")
     
-    node_order <- names(branching.times(phy)[order(branching.times(phy))])
+    node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
     node_order <- node_order[node_order %in% lin.node$node]
     
     lin.node <- lin.node[match(node_order, lin.node$node),]
     
     for(n.lin in 1:nrow(lin.node)){
-      desc.n.lin <- length(Descendants(phy, as.numeric(lin.node$node[n.lin]))[[1]])
+      desc.n.lin <- length(Descendants(phylo, as.numeric(lin.node$node[n.lin]))[[1]])
       # whether this node is present in an other lineage
-      int.n.lin <- Descendants(phy, as.numeric(lin.node$node[n.lin]), type = "all")
-      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phy)])
+      int.n.lin <- Descendants(phylo, as.numeric(lin.node$node[n.lin]), type = "all")
+      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phylo)])
       # Ntip
       if(any(ALL_comb[[to]] %in% int.n.lin)){
         lin.node$n.tips[n.lin] <- desc.n.lin - sum(lin.node$n.tips[lin.node$node %in% ALL_comb[[to]][ALL_comb[[to]] %in% int.n.lin]])
@@ -231,8 +231,8 @@ all_comb_models <- function(to){
     lin.node_bck <- lin.node[!lin.node$node %in% ALL_comb[[to]],]
     
     for(l.n in c(1:nrow(lin.node_bck))){
-      int.desc_lin <- unlist(Descendants(phy, as.numeric(lin.node_bck$node[l.n]), "all"))
-      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phy)]
+      int.desc_lin <- unlist(Descendants(phylo, as.numeric(lin.node_bck$node[l.n]), "all"))
+      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phylo)]
       
       if(any(lin.node_bck$node %in% int.desc_lin)){
         
@@ -298,6 +298,9 @@ all_comb_models <- function(to){
         results2 <- merge(results1[,c(1:4)], results[,c(1,5:8)], by="Models")
         results <- results2[match(results$Models, results2$Models),]
         
+        # adding a parameter for the location of the shift (to modify for the printing)
+        results$AICc <- 2 * -results$logL + 2 * (results$Parameters+1) + (2 * (results$Parameters+1) * ((results$Parameters+1) + 1))/(Ntip(phylo_backbone_cut[[btb]]) - (results$Parameters+1) - 1)
+        results$Parameters <- results$Parameters+1
       }
       
       results[,-1] <- apply(results[,-1], 2, as.numeric)

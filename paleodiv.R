@@ -23,6 +23,9 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
   if(!inherits(phylo, "phylo")){
     stop("object \"phylo\" is not of class \"phylo\"")
   }
+  
+  phylo$node.label <- NULL
+  
   # data
   if(!inherits(data, "data.frame")){
     stop("object \"data\" is not of class \"data.frame\"")
