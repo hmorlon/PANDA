@@ -1,6 +1,6 @@
-add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
-                          root.age = NULL, present = NULL, xpd.x = T,
-                          names = NULL, fill = T, cex = 1, direction = "rightwards"){
+add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
+                          root.age = NULL, present = NULL, xpd.x = T, time.interval = 1,
+                          names = NULL, fill = T, cex = 1, direction = "rightwards", padj = -0.5){
    # to add as a argument
   
   if(is.phylo){
@@ -158,8 +158,13 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = 
     
   }
   
-  axis(side = 1, at = time.seq, labels = rep("", length(time.seq)), cex = cex, col.ticks = "grey", line = -0.5, pos = y1, cex.axis = cex)
-  axis(side = 1, at = time.seq[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = y1, cex.axis = cex)
+  if(time.interval == 1){
+    axis(side = 1, at = time.seq, labels = rep("", length(time.seq)), cex = cex, col.ticks = "grey", line = -0.5, pos = y1, cex.axis = cex, padj = padj)
+    axis(side = 1, at = time.seq[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = y1, cex.axis = cex, padj = padj)
+  } else {
+    axis(side = 1, at = time.seq[seq(length(labels),1,-time.interval)], labels = labels[seq(length(labels),1,-time.interval)],
+         cex = cex, pos = y1, cex.axis = cex, padj = padj)
+  }
   
   for(i in 1:nrow(ages)){
     
@@ -174,11 +179,11 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = 
     if(i != nrow(ages)){
       mean_i <- mean(as.numeric(ages[i, c(1,2)]))
       text(mean_i, y1, labels = ages$names[i], pos = 3,
-           cex = cex)
+           cex = cex, adj = c(0.5, 0.5))
     } else {
       if(direction == "leftwards"){
         text(mean(as.numeric(c(ages[i, c(1)],plot_dim[2]))), y1, labels = ages$names[i], pos = 3,
-             cex = cex)
+             cex = cex, adj = c(0.5, 0.5))
       } else {
         # to improve
         if(!is.null(names)){
@@ -186,7 +191,7 @@ add.geochrono <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = 
         }else {
           x.text <- ifelse(xpd.x, mean(c(0,ages$start[i])), mean(c(plot_dim[1],ages$start[i])))
         }
-        text(x.text, y1, labels = ages$names[i], pos = 3, cex = cex)
+        text(x.text, y1, labels = ages$names[i], pos = 3, cex = cex, adj = c(0.5, 0.5))
       }
     } 
   }
