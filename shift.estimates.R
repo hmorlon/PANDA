@@ -262,15 +262,19 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     n_tot <- sampling.fractions$sp_tt[sampling.fractions$nodes == as.numeric(names(phylo2)[i])]
     cat("\n","Sampling fraction", names_phylo2[i], "=",  paste0(n_tree, "/", n_tot, " (",round(f2[[i]],3)*100," %)"), "\n") 
     
-    results <- div.models(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
+    results <- div.models(phylo = phylo2[[i]], tot_time = tot_time2[[i]], f = f2[[i]],
                                  cond = F, models = models.sub, n.max = n.max, rate.max = rate.max)
     results1 <- div.models(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
                                   cond = cond[[i]], models = models.sub, n.max = n.max, rate.max = rate.max, verbose = F)
     
-  
     results <- merge(results[, c("Models", "Parameters", "logL", "AICc")], results1[,c("Models", "Lambda", "Alpha", "Mu", "Beta")], by = "Models")
     
+    # adding a parameter for the location of the shift (to modify for the printing)
+    results$AICc <- 2 * -results$logL + 2 * (results$Parameters+1) + (2 * (results$Parameters+1) * ((results$Parameters+1) + 1))/(n_tree - (results$Parameters+1) - 1)
+    
+    
     results[,-1] <- apply(results[,-1], 2, as.numeric)
+    results$Parameters <- results$Parameters+1
     
     results$delta_AICc <- results$AICc - min(results$AICc)
     results <- results[order(results$delta_AICc),]
@@ -360,11 +364,11 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(ALL_bck_comb), all_comb_models, progressBar = T, stopOnError = T)
   
   # for debugging
-  # ALL_final3 <- lapply(1, all_comb_models)
+  #ALL_final3 <- lapply(1, all_comb_models)
   
   stopCluster(cl)
   
-  sapply(ALL_final3, function(x) x[[1]][[1]]$Lambda < 0)
+  #sapply(ALL_final3, function(x) x[[1]][[1]]$Lambda < 0)
   
   names(ALL_final3) <- names(ALL_bck_comb)
   if(multi.backbone == T){
@@ -380,6 +384,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     
     for(sub_to in 1:length(ALL_final3[[to]])){
       for(ss_to in 1:length(ALL_final3[[to]][[sub_to]])){
+        
         ALL_final3[[to]][[sub_to]][[ss_to]]$delta_AICc <- ALL_final3[[to]][[sub_to]][[ss_to]]$AICc - min(ALL_final3[[to]][[sub_to]][[ss_to]]$AICc)
         ALL_final3[[to]][[sub_to]][[ss_to]] <- ALL_final3[[to]][[sub_to]][[ss_to]][order(ALL_final3[[to]][[sub_to]][[ss_to]]$AICc),]
         ALL_final3[[to]][[sub_to]][[ss_to]][,-1] <- apply(ALL_final3[[to]][[sub_to]][[ss_to]][,-1], 2, as.numeric)
@@ -435,9 +440,18 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   setwd(source)
   
-  cat("\n A total of", nrow(best_ALL_TOTAL), "combination(s) got the best fit(s) (delta AICc < 2). \n")
-  
-  
+  if(!"whole_tree" %in% best_ALL_TOTAL$Combination){
+    cat("\n A total of", nrow(best_ALL_TOTAL), "combination(s) got the best fit(s) (delta AICc < 2). \n")
+  } else{
+    if(best_ALL_TOTAL$Combination[1] == "whole_tree"){
+      cat("\n No shift has been detected. \n")
+    } else {
+      if(which(best_ALL_TOTAL$Combination == "whole_tree")-1 == 1){
+        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combination has been detected. \n")
+      } else {
+        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combinations have been detected. \n")
+      }
+    }
+  }
   return(all_res)
-  
 }
