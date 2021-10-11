@@ -1,5 +1,5 @@
 # This function plots a phylogenetic tree and represents shifts of diversification rates detected
-# by the function shift.estimates.res
+# by the function shift.estimates
 #
 # Version 1.0 from November 12, 2020
 # geotime.scale not emplemented yet
@@ -9,7 +9,7 @@
 # gts is not included in this version but developped as an external function add.geochrono
 # 
 
-plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res, combi = 1,
+plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 1,
                             backbone.option = "backbone2", main = NULL,
                             col.sub = NULL, col.bck = "black", lad = T, tested_nodes = F, lty.bck = 1,
                             text.cex = 1, pch.cex = 1,
@@ -34,9 +34,9 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
   if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or is do not correspond to the provided phylogeny")
   }
-  # shift.estimates.res
-  if(!is(shift.estimates.res)[1] == "list" | any(names(shift.estimates.res) != c("whole_tree", "subclades", "backbones", "total"))){
-    stop("object \"shift.estimates.res\" might be incorrect.")
+  # shift.res
+  if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
+    stop("object \"shift.res\" might be incorrect.")
   }
   if(!is.numeric(combi)){
     stop("argument \"combi\" should be numeric.")
@@ -83,7 +83,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
   node_legends <- sampling.fractions$data[sampling.fractions$nodes %in% phylo1$node.label]
   node_legends <- ifelse(node_legends %in% sampling.fractions$data[sampling.fractions$nodes %in% sampling.fractions$to_test], node_legends, NA)
   
-  comb <- shift.estimates.res$total$Combination[combi]
+  comb <- shift.res$total$Combination[combi]
   
   if(comb == "whole_tree"){
     colors_clades <- rep("black", Nedge(phylo1))
@@ -166,12 +166,12 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
       }
     }
     
-    model_leg <- sapply(shift.estimates.res$subclades[comb.sub], function(x) x$Models[1])
+    model_leg <- sapply(shift.res$subclades[comb.sub], function(x) x$Models[1])
     
     if(!is.null(comb.bck)){
-      model_leg_bck <- sapply(shift.estimates.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]], function(x) x$Models[1])
+      model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]], function(x) x$Models[1])
     } else {
-      model_leg_bck <- sapply(shift.estimates.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]], function(x) x$Models[1])
+      model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]], function(x) x$Models[1])
     }
     model_leg <- c(model_leg, model_leg_bck)
     model_leg <- gsub("_", " ", model_leg)
@@ -179,8 +179,8 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
   }
   
   if(is.null(main)){
-    if(shift.estimates.res$total$delta_AICc[combi] > 0){
-      main <- paste0("Combination ", combi, " (delta AICc = " , round(shift.estimates.res$total$delta_AICc[combi],3),")")
+    if(shift.res$total$delta_AICc[combi] > 0){
+      main <- paste0("Combination ", combi, " (delta AICc = " , round(shift.res$total$delta_AICc[combi],3),")")
     } else {
       main <- "Best combination"
     }
@@ -205,7 +205,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.estimates.res
   
   if(comb == "whole_tree"){
     if(leg == T){
-      model_leg <- shift.estimates.res$whole_tree$Models[shift.estimates.res$whole_tree$AICc == min(shift.estimates.res$whole_tree$AICc)]
+      model_leg <- shift.res$whole_tree$Models[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc)]
       legend(pos_leg, legend = paste0("whole_tree (", model_leg, ")"), text.col = "black",cex = text.cex, bty = "n")
     }
     

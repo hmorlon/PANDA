@@ -1,20 +1,20 @@
 # This function allows to remove a model from the model comparison.
 # It avoid to rerun all the models.
 
-remove.model <- function(shift.estimates.res, model){
+remove.model <- function(shift.res, model){
   
   if(!model %in% c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR")){
     stop("Model name is incorrect. Should be the same name as in the function shift.estimates.")
   }
   
-  whole <- shift.estimates.res$whole_tree
+  whole <- shift.res$whole_tree
   whole <- whole[!grepl(model,whole$Models),]
   whole$delta_AICc <- whole$AICc - min(whole$AICc)
   whole <- whole[order(whole$AICc),]
   
-  sub_list <- shift.estimates.res$subclades
-  bck_list <- shift.estimates.res$backbones
-  total2 <- as.data.frame(matrix(nrow = nrow(shift.estimates.res$total), ncol = ncol(shift.estimates.res$total)-1))
+  sub_list <- shift.res$subclades
+  bck_list <- shift.res$backbones
+  total2 <- as.data.frame(matrix(nrow = nrow(shift.res$total), ncol = ncol(shift.res$total)-1))
   names(total2) <- c("Combination", "Parameters", "logL", "AICc")
   
   sub_list <- lapply(seq_along(sub_list), function(i){
@@ -23,7 +23,7 @@ remove.model <- function(shift.estimates.res, model){
     sub_list[[i]] <- sub_list[[i]][order(sub_list[[i]]$AICc), ]
   })
   
-  names(sub_list) <- names(shift.estimates.res$subclades)
+  names(sub_list) <- names(shift.res$subclades)
   
   # Multibackbone
   
@@ -64,7 +64,7 @@ remove.model <- function(shift.estimates.res, model){
   }
   
   total2$Combination[nrow(total2)] <- "whole_tree"
-  total2[nrow(total2), c("Parameters", "logL", "AICc")] <- shift.estimates.res$whole_tree[shift.estimates.res$whole_tree$AICc == min(shift.estimates.res$whole_tree$AICc), c("Parameters", "logL", "AICc")]
+  total2[nrow(total2), c("Parameters", "logL", "AICc")] <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc), c("Parameters", "logL", "AICc")]
   total2$delta_AICc <- total2$AICc - min(total2$AICc)
   total2 <- total2[order(total2$AICc),]
   row.names(total2) <- NULL
@@ -72,7 +72,7 @@ remove.model <- function(shift.estimates.res, model){
     total2$Combination <- gsub("/", "",total2$Combination)
   }
   
-  shift.estimates.res2 <- list(whole_tree = whole, subclades = sub_list, backbones = bck_list, total = total2)
+  shift.res2 <- list(whole_tree = whole, subclades = sub_list, backbones = bck_list, total = total2)
   
-  return(shift.estimates.res2)
+  return(shift.res2)
 }
