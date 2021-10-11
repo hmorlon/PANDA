@@ -1,4 +1,4 @@
-div.rates <- function(phylo, shift.estimates.res, combi = 1, part = "backbone", backbone.option = "backbone2"){
+div.rates <- function(phylo, shift.res, combi = 1, part = "backbone", backbone.option = "backbone2"){
   
   # Checking arguments ####
   # phylo
@@ -6,9 +6,9 @@ div.rates <- function(phylo, shift.estimates.res, combi = 1, part = "backbone", 
     stop("object \"phylo\" is not of class \"phylo\"")
   }
 
-  # shift.estimates.res
-  if(!is(shift.estimates.res)[1] == "list" | any(names(shift.estimates.res) != c("whole_tree", "subclades", "backbones", "total"))){
-    stop("object \"shift.estimates.res\" might be incorrect.")
+  # shift.res
+  if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
+    stop("object \"shift.res\" might be incorrect.")
   }
   if(!is.numeric(combi)){
     stop("object \"combi\" should be numeric.")
@@ -21,18 +21,18 @@ div.rates <- function(phylo, shift.estimates.res, combi = 1, part = "backbone", 
   
   # Subclades ####
   
-  best_subclades_df <- do.call(rbind.data.frame, lapply(shift.estimates.res$subclades, function(x) x[1,]))
+  best_subclades_df <- do.call(rbind.data.frame, lapply(shift.res$subclades, function(x) x[1,]))
   best_subclades_df$Clades <- row.names(best_subclades_df)
   row.names(best_subclades_df) <- NULL
   best_subclades_df <- best_subclades_df[,c(10,1:8)]
   
-  comb <- shift.estimates.res$total$Combination[combi]
+  comb <- shift.res$total$Combination[combi]
   if(comb == "whole_tree"){
     
     tot_time <- max(branching.times(phylo))
     time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
     
-    rate_data <- shift.estimates.res$whole_tree[shift.estimates.res$whole_tree$AICc == min(shift.estimates.res$whole_tree$AICc),]
+    rate_data <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc),]
     model <- as.character(rate_data$Models)
     
     model <- rate_data$Models
@@ -109,14 +109,14 @@ div.rates <- function(phylo, shift.estimates.res, combi = 1, part = "backbone", 
     # Backbones #### 
     
     if(is.null(comb.bck)){
-      best_backbones <- shift.estimates.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
+      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
       best_backbones_df <- best_backbones[1,]
       best_backbones_df$Parts <- paste0(paste(comb.sub, collapse = "."), "_bck")
       row.names(best_backbones_df) <- NULL
       best_backbones_df <- best_backbones_df[,c(10,1:8)]
       
     } else {
-      best_backbones <- shift.estimates.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
+      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
       best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))
       best_backbones_df$Parts <- row.names(best_backbones_df)
       row.names(best_backbones_df) <- NULL

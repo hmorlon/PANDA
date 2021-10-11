@@ -1,5 +1,5 @@
 # This function plots the paleo-diversity dynamic associated to shifts of diversification rates detected
-# by the function shift.estimates.res
+# by the function shift.estimates
 #
 # Version 1.0 from November 12, 2020
 # geotime.scale not emplemented yet
@@ -8,7 +8,7 @@
 # March 25, 2021
 # Update on output for whole tree as the best scenario
 
-paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
+paleodiv <- function(phylo, data, sampling.fractions, shift.res,
                      backbone.option = "backbone2", combi = 1, split.div = F){
   
   # pkgs ####
@@ -34,9 +34,9 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
   if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or is do not correspond to the provided phylogeny")
   }
-  # shift.estimates.res
-  if(!is(shift.estimates.res)[1] == "list" | any(names(shift.estimates.res) != c("whole_tree", "subclades", "backbones", "total"))){
-    stop("object \"shift.estimates.res\" might be incorrect.")
+  # shift.res
+  if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
+    stop("object \"shift.res\" might be incorrect.")
   }
   if(!is.numeric(combi)){
     stop("object \"combi\" should be numeric.")
@@ -50,12 +50,12 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
     stop()
   }
   
-  best_subclades_df <- do.call(rbind.data.frame, lapply(shift.estimates.res$subclades, function(x) x[1,]))
+  best_subclades_df <- do.call(rbind.data.frame, lapply(shift.res$subclades, function(x) x[1,]))
   best_subclades_df$Clades <- row.names(best_subclades_df)
   row.names(best_subclades_df) <- NULL
   best_subclades_df <- best_subclades_df[,c(10,1:8)]
   
-  comb <- shift.estimates.res$total$Combination[combi]
+  comb <- shift.res$total$Combination[combi]
   if(length(grep("/", comb)) == 1){
     if(length(strsplit(comb, "/")[[1]]) > 1){
       comb.sub <- strsplit(sapply(strsplit(comb, "/"), "[[", 1), "[.]")[[1]]
@@ -78,7 +78,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
   
   if(any(comb.sub == "whole_tree")){
     
-    best_subclades_df_combi <- shift.estimates.res$whole_tree
+    best_subclades_df_combi <- shift.res$whole_tree
     best_subclades_df_combi <- best_subclades_df_combi[best_subclades_df_combi$AICc == min(best_subclades_df_combi$AICc),]
     best_subclades_df_combi$Clades <- comb.sub
     
@@ -150,14 +150,14 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.estimates.res,
     # Backbone diversity
     
     if(is.null(comb.bck)){
-      best_backbones <- shift.estimates.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
+      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
       best_backbones_df <- best_backbones[1,]
       best_backbones_df$parts <- paste0(paste(comb.sub, collapse = "."), "_bck")
       row.names(best_backbones_df) <- NULL
       best_backbones_df <- best_backbones_df[,c(10,1:8)]
       
     } else {
-      best_backbones <- shift.estimates.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
+      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
       #best_backbones <- best_backbones[match(comb.bck, names(best_backbones))]
       #best_backbones <- best_backbones[[1]]
       best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))

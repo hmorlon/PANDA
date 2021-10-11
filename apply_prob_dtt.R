@@ -3,7 +3,7 @@
 # N.B.: last time points is not present because of prob_dtt.
 # Two options: (1) modify prob_dtt (2) or this function
 
-apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
+apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
                            combi = 1, backbone.option = "backbone2", scale = 1){
   
   # some checks ####
@@ -40,8 +40,8 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
     stop("\"backbone.option\" argument is incorrect." )
   }
   
-  if(!is(shifts)[1] == "list" | any(names(shifts) != c("whole_tree", "subclades", "backbones", "total"))){
-    stop("object \"shift.estimates.res\" might be incorrect.")
+  if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
+    stop("object \"shift.res\" might be incorrect.")
   }
   if(!is.numeric(combi)){
     stop("object \"combi\" should be numeric.")
@@ -111,13 +111,13 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
   
   # core script ####
   
-  comb <- shifts$total$Combination[combi]
+  comb <- shift.res$total$Combination[combi]
   
   # Deterministic diversity to set the limit
   
   if(comb == "whole_tree"){
     
-    whole_df <- shifts$whole_tree[shifts$whole_tree$AICc == min(shifts$whole_tree$AICc),]
+    whole_df <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc),]
     whole_fit.bd <- mimic_fit.bd(whole_df)
     tot_time <- max(branching.times(phylo))
 
@@ -125,7 +125,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
     l <- sampling.fractions$sp_in[sampling.fractions$nodes == Ntip(phylo)+1]    
     
     whole_diversity <- paleodiv(phylo = phylo, data = data, split.div = F,
-                            sampling.fractions = sampling.fractions, shift.estimates.res = shifts, combi = combi)
+                            sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
     prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
                                 N0 = N0, l = l, type = type, prec = 10000,
                                 m = 1:max(whole_diversity)))
@@ -147,7 +147,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
     
     # Deterministic diversity to set the limit
     diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
-                            sampling.fractions = sampling.fractions, shift.estimates.res = shifts, combi = combi)
+                            sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
     row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
     max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = T))/10)*10
    
@@ -162,7 +162,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
     # fit_bd values for subclade(s) ####
     subclades_df <- list()
     for(i in 1:length(comb.sub)){
-      subclades_df[[i]] <- shifts$subclades[names(shifts$subclades) == comb.sub[i]][[1]]
+      subclades_df[[i]] <- shift.res$subclades[names(shift.res$subclades) == comb.sub[i]][[1]]
     }
     
     subclades_fit.bd <- lapply(subclades_df, mimic_fit.bd)
@@ -276,9 +276,9 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shifts,
     
     # fit_bd values for backbone(s) ####
     if(!is.null(comb.bck)){
-      backbones_df <- shifts$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
+      backbones_df <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
     } else {
-      backbones_df <- shifts$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
+      backbones_df <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
     }
     
     backbone_fit.bd <- list()
