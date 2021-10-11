@@ -6,7 +6,7 @@ Compute phylogenetic signal in a bipartite interaction network
 }
 
 \description{
-This function computes the phylogenetic signal in a bipartite interaction network, either the phylogenetic signal in species interactions (do closely related species interact with similar partners?) using Mantel tests, or the phylogenetic signal in the number of partners (i.e. degree; do closely related species interact with the same number of partners?) using Mantel tests, or using the Phylogenetic bipartite linear model (PBLM) from Ives and Godfray (2006). 
+This function computes the phylogenetic signal in a bipartite interaction network, either the phylogenetic signal in species interactions (do closely related species interact with similar partners?) using Mantel tests, or the phylogenetic signal in the number of partners (i.e. degree; do closely related species interact with the same number of partners?) using Mantel tests or using the Phylogenetic bipartite linear model (PBLM) from Ives and Godfray (2006). 
 Mantel tests measuring the phylogenetic signal in species interactions can be computed using quantified or binary networks, with the Jaccard or UniFrac ecological distances.
 
 }
@@ -23,10 +23,10 @@ correlation = "Pearson", only_A = FALSE)
 a matrix representing the bipartite interaction network with species from guild A in columns and species from guild B in rows. Row names (resp. columns names) must correspond to the tip labels of tree B (resp. tree A).
 }
 \item{tree_A}{
-a phylogenetic tree of the guild A (the columns of the interaction network). It must be an object of class "phylo".
+a phylogenetic tree of guild A (the columns of the interaction network). It must be an object of class "phylo".
 }
 \item{tree_B}{
-(optional) a phylogenetic tree of the guild B (the rows of the interaction network). It must be an object of class "phylo".
+(optional) a phylogenetic tree of guild B (the rows of the interaction network). It must be an object of class "phylo".
 }
 
 \item{method}{
@@ -42,7 +42,7 @@ Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear M
 }
 
 \item{nperm}{
-(optional) number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation. It only applies for the methods "Jaccard_weighted", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
+(optional) a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation. It only applies for the methods "Jaccard_weighted", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
 }
 
 \item{only_A}{
@@ -55,16 +55,17 @@ Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear M
 
 \value{
 
-For Mantel tests, the function outputs a vector of up to 8 values: the number of species in guild A ("nb_A"), the number of species in guild B ("nb_B"), the Mantel correlation for guild A ("mantel_cor_A"), its associated upper p-value ("pvalue_high_A", i.e. the fraction of permutations that led to higher correlation values), its associated lower p-value ("pvalue_low_A", i.e. the fraction of permutations that led to lower correlation values), and (optional) the Mantel correlation for guild B ("mantel_cor_B"), its associated upper p-value ("pvalue_high_B"), abd its associated lower p-value ("pvalue_low_B"),
+For Mantel tests, the function outputs a vector of up to 8 values: the number of species in guild A ("nb_A"), the number of species in guild B ("nb_B"), the correlation for guild A ("mantel_cor_A"), its associated upper p-value ("pvalue_upper_A", i.e. the fraction of permutations that led to higher correlation values), its associated lower p-value ("pvalue_lower_A", i.e. the fraction of permutations that led to lower correlation values), and (optional) the correlation for guild B ("mantel_cor_B"), its associated upper p-value ("pvalue_upper_B"), and its associated lower p-value ("pvalue_lower_B"),
 
-"mantel_cor_A" (or "mantel_cor_B") indicates the strength of the phylogenetic signal in guild A (or B). The upper p-value "pvalue_high_A" (or "pvalue_high_B") indicates the significance of the phylogenetic signal in guild A (or B). The lower p-value "pvalue_low_A" (or "pvalue_low_B") indicates the significance of the anti-phylogenetic signal in guild A (or B).  
+"mantel_cor_A" (or "mantel_cor_B") indicates the strength of the phylogenetic signal in guild A (or B). The upper p-value "pvalue_upper_A" (or "pvalue_upper_B") indicates the significance of the phylogenetic signal in guild A (or B). The lower p-value "pvalue_lower_A" (or "pvalue_lower_B") indicates the significance of the anti-phylogenetic signal in guild A (or B). 
+For instance, if "pvalue_upper_A"<0.05, there is a significant phylogenetic signal in guild A. 
 
 For the PBLM approach (Ives and Godfray, 2006), the function outputs a vector of 8 values: the number of species in guild A ("nb_A"), the number of species in guild B ("nb_B"), the phylogenetic signals in guilds A ("dA") and B ("dB"), the covariance of interaction matrix ("MSETotal"), the mean square error of the complete model ("MSEFull"), the mean square error of model run on star phylogenies ("MSEStar"), and the mean square error of the model assuming strict Brownian motion evolutions ("MSEBase"). The significance of the phylogenetic signal can be evaluated by comparing "MSEFull" and "MSEStar".
 
 }
 \details{
 
-See tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network). 
+See the tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network). 
 
 }
 \references{

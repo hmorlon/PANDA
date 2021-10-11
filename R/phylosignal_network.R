@@ -127,7 +127,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     if (only_A==FALSE) cophe_B <- cophenetic.phylo(tree_B)
 
     results <- c(round(nb_A), round(nb_B), NA, NA, NA, NA, NA, NA)
-    names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_high_A","pvalue_low_A", "mantel_cor_B", "pvalue_high_B", "pvalue_low_B")
+    names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_upper_A","pvalue_lower_A", "mantel_cor_B", "pvalue_upper_B", "pvalue_lower_B")
 
     if (length(unique(as.vector(cophe_A)))<3) {
       print("The phylogenetic distance matrix of guild A is composed of only 2 different values (because of polytomies?).")
@@ -161,7 +161,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     if (only_A==TRUE) mantel_B <- c(NA, NA, NA)
     
     results <- c(round(nb_A), round(nb_B), mantel_A[1], mantel_A[2], mantel_A[3], mantel_B[1], mantel_B[2], mantel_B[3])
-    names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_high_A","pvalue_low_A", "mantel_cor_B", "pvalue_high_B", "pvalue_low_B")
+    names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_upper_A","pvalue_lower_A", "mantel_cor_B", "pvalue_upper_B", "pvalue_lower_B")
     return(results)
   }
 }

@@ -6,7 +6,7 @@ Plot clade-specific phylogenetic signals in a bipartite interaction network
 }
 
 \description{
-This function plots the clade-specific phylogenetic signals in species interactions. For each node of the tree A having a certain number of descending species, it represents the phylogenetic signal in the resulting sub-network by performing a Mantel test between the phylogenetic distances and the ecological distances for the given sub-clade of tree A. 
+This function plots the clade-specific phylogenetic signals in species interactions. For each node of tree A having a certain number of descending species, it represents the phylogenetic signal in the resulting sub-network by performing a Mantel test between the phylogenetic distances and the ecological distances for the given sub-clade of tree A. 
 
 }
 
@@ -18,7 +18,7 @@ plot_phylosignal_sub_network <- function(tree_A, results_sub_clades, legend=TRUE
 \arguments{
 
 \item{tree_A}{
-a phylogenetic tree of the guild A (the columns of the interaction network). It must be an object of class "phylo".
+a phylogenetic tree of guild A (the columns of the interaction network). It must be an object of class "phylo".
 }
 \item{results_sub_clades}{
 output of the function phylosignal_sub_network.
@@ -38,11 +38,11 @@ indicates where to put the legend (default is "bottomleft").
 }
 
 \value{
-A phylogenetic tree with nodes colored according to the clade-specific phylogenetic signals. Blue nodes are not significant (Bonferonni correction), whereas orange-red nodes present significant phylogenetic signal and their color indicates the strenght of the signal (correlation R of the Mantel test).
+A phylogenetic tree with nodes colored according to the clade-specific phylogenetic signals. Blue nodes are not significant (Bonferonni correction), whereas orange-red nodes present significant phylogenetic signals and their color indicates the strength of the signal (correlation R of the Mantel test).
 }
 \details{
 
-See tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network). 
+See the tutorial on GitHub (https://github.com/BPerezLamarque/Phylosignal_network). 
 
 }
 \references{

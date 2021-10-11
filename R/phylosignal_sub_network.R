@@ -52,31 +52,31 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
     }
   }
   if (degree==TRUE){
-    colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_high", "pvalue_low", "pvalue_high_corrected","pvalue_low_corrected", "degree_mantel_cor", "degree_pvalue_high", "degree_pvalue_low") 
+    colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_upper", "pvalue_lower", "pvalue_upper_corrected","pvalue_lower_corrected", "degree_mantel_cor", "degree_pvalue_upper", "degree_pvalue_lower") 
     }else{
-      colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_high", "pvalue_low", "pvalue_high_corrected","pvalue_low_corrected") 
+      colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_upper", "pvalue_lower", "pvalue_upper_corrected","pvalue_lower_corrected") 
     }
   results_sub_clades <- data.frame(results_sub_clades, stringsAsFactors = F)
   results_sub_clades$nb_A <- round(as.numeric(results_sub_clades$nb_A))
   results_sub_clades$nb_B <- round(as.numeric(results_sub_clades$nb_B))
   results_sub_clades$mantel_cor <- as.numeric(results_sub_clades$mantel_cor)
-  results_sub_clades$pvalue_high <- as.numeric(results_sub_clades$pvalue_high)
-  results_sub_clades$pvalue_low <- as.numeric(results_sub_clades$pvalue_low)
+  results_sub_clades$pvalue_upper <- as.numeric(results_sub_clades$pvalue_upper)
+  results_sub_clades$pvalue_lower <- as.numeric(results_sub_clades$pvalue_lower)
   
-  results_sub_clades$pvalue_high_corrected <- results_sub_clades$pvalue_high*nb_sub_clades
-  results_sub_clades$pvalue_low_corrected <- results_sub_clades$pvalue_low*nb_sub_clades
-  results_sub_clades$pvalue_high_corrected[results_sub_clades$pvalue_high_corrected>1] <- 1
-  results_sub_clades$pvalue_low_corrected[results_sub_clades$pvalue_low_corrected>1] <- 1
+  results_sub_clades$pvalue_upper_corrected <- results_sub_clades$pvalue_upper*nb_sub_clades
+  results_sub_clades$pvalue_lower_corrected <- results_sub_clades$pvalue_lower*nb_sub_clades
+  results_sub_clades$pvalue_upper_corrected[results_sub_clades$pvalue_upper_corrected>1] <- 1
+  results_sub_clades$pvalue_lower_corrected[results_sub_clades$pvalue_lower_corrected>1] <- 1
   
   if (degree==TRUE){
     results_sub_clades$degree_mantel_cor <- as.numeric(results_sub_clades$degree_mantel_cor)
-    results_sub_clades$degree_pvalue_high <- as.numeric(results_sub_clades$degree_pvalue_high)
-    results_sub_clades$degree_pvalue_low <- as.numeric(results_sub_clades$degree_pvalue_low)
+    results_sub_clades$degree_pvalue_upper <- as.numeric(results_sub_clades$degree_pvalue_upper)
+    results_sub_clades$degree_pvalue_lower <- as.numeric(results_sub_clades$degree_pvalue_lower)
     
-  results_sub_clades$degree_pvalue_high_corrected <- results_sub_clades$degree_pvalue_high*nb_sub_clades
-  results_sub_clades$degree_pvalue_low_corrected <- results_sub_clades$degree_pvalue_low*nb_sub_clades
-  results_sub_clades$degree_pvalue_high_corrected[results_sub_clades$degree_pvalue_high_corrected>1] <- 1
-  results_sub_clades$degree_pvalue_low_corrected[results_sub_clades$degree_pvalue_low_corrected>1] <- 1
+  results_sub_clades$degree_pvalue_upper_corrected <- results_sub_clades$degree_pvalue_upper*nb_sub_clades
+  results_sub_clades$degree_pvalue_lower_corrected <- results_sub_clades$degree_pvalue_lower*nb_sub_clades
+  results_sub_clades$degree_pvalue_upper_corrected[results_sub_clades$degree_pvalue_upper_corrected>1] <- 1
+  results_sub_clades$degree_pvalue_lower_corrected[results_sub_clades$degree_pvalue_lower_corrected>1] <- 1
   }
   
   return(results_sub_clades)

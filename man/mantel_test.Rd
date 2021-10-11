@@ -20,7 +20,7 @@ nperm = 1000, correlation = "Pearson")
 formula y ~ x describing the test to be conducted where y and x  are distance matrices.
 }
 \item{data}{
-an optional dataframe containing the variables in the model as columns of dissimilarities. By default the variables are taken from the current environment.
+an optional data frame containing the variables in the model as columns of dissimilarities. By default, the variables are taken from the current environment.
 }
 
 \item{correlation}{
@@ -28,7 +28,7 @@ indicates which correlation (R) must be used among Pearson (default), Spearman, 
 }
 
 \item{nperm}{
-number of permutations to evaluate the significance of the correlation. By default, it equals 1000, but this can be very long for the Kendall correlation.
+a number of permutations to evaluate the significance of the correlation. By default, it equals 1000, but this can be very long for the Kendall correlation.
 }
 
 
