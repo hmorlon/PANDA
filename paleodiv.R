@@ -218,8 +218,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     }
     lin.node[lin.node$node %in% lin.node_bck$node,] <- lin.node_bck
     
-    lin.node <- lin.node[-(1:length(comb.sub)),]
-    
+    lin.node <- lin.node[!lin.node$node %in% comb.sub,]
     
     for(j in 1:nrow(best_backbones_df)){
       

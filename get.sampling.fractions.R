@@ -56,13 +56,13 @@ get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = 
   data_loop[] <- lapply(data_loop, factor)
   
   data_loop_phylo <- data.frame(data_phylo[,!colnames(data_phylo) %in% "Species"])
-  names(data_loop) <- colnames(data)[!colnames(data) %in% "Species"]
+  names(data_loop_phylo) <- colnames(data)[!colnames(data) %in% "Species"]
   data_loop_phylo[] <- lapply(data_loop_phylo, factor)
   
-  for(j in 1:ncol(data_loop)){
-    for(i in 1:nlevels(data_loop[,j])){
+  for(j in 1:ncol(data_loop_phylo)){
+    for(i in 1:nlevels(data_loop_phylo[,j])){
       
-      group <- levels(data_loop[,j])[i]
+      group <- levels(data_loop_phylo[,j])[i]
       
       sp_in <- data_phylo$Species[data_phylo[,c(j+1)] == group]
       sp_tt <- data$Species[data[,c(j+1)] == group]

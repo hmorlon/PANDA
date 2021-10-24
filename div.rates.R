@@ -5,7 +5,6 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone", backbone.o
   if(!inherits(phylo, "phylo")){
     stop("object \"phylo\" is not of class \"phylo\"")
   }
-
   # shift.res
   if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
     stop("object \"shift.res\" might be incorrect.")
@@ -165,38 +164,39 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone", backbone.o
       
       model <- as.character(rate_data$Models[r])
       agei <- time_data[r]
+      time.seq_r <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
       
       rate_df <- matrix(NA,2, length(time.seq))
       row.names(rate_df) <- c("Speciation", "Extinction")
-      
+        
       if (grepl("BCST", model)){
-        rate_spec <- rep(rate_data$Lambda[r], length(time.seq))
-        rate_ext <- rep(NA, length(time.seq))
+        rate_spec <- rep(rate_data$Lambda[r], length(time.seq_r))
+        rate_ext <- rep(NA, length(time.seq_r))
       }
       
       if (grepl("BCST_DCST", model)){
-        rate_spec <- rep(rate_data$Lambda[r], length(time.seq))
-        rate_ext <- rep(rate_data$Mu[r], length(time.seq))
+        rate_spec <- rep(rate_data$Lambda[r], length(time.seq_r))
+        rate_ext <- rep(rate_data$Mu[r], length(time.seq_r))
       }
       
       if (grepl("BVAR", model)){
-        rate_spec <- rate_data$Lambda[r] *exp(rate_data$Alpha[r] * time.seq)
-        rate_ext <- rep(NA, length(time.seq))
+        rate_spec <- rate_data$Lambda[r] *exp(rate_data$Alpha[r] * time.seq_r)
+        rate_ext <- rep(NA, length(time.seq_r))
       }
       
       if (grepl("BVAR_DCST", model)){
-        rate_spec <- rate_data$Lambda[r] *exp(rate_data$Alpha[r] * time.seq)
-        rate_ext <- rep(rate_data$Mu[r], length(time.seq))
+        rate_spec <- rate_data$Lambda[r] *exp(rate_data$Alpha[r] * time.seq_r)
+        rate_ext <- rep(rate_data$Mu[r], length(time.seq_r))
       }
       
       if (grepl("BCST_DVAR", model)){
-        rate_spec <- rep(rate_data$Lambda[r], length(time.seq))
-        rate_ext <- rate_data$Mu[r] *exp(rate_data$Beta[r] * time.seq)
+        rate_spec <- rep(rate_data$Lambda[r], length(time.seq_r))
+        rate_ext <- rate_data$Mu[r] *exp(rate_data$Beta[r] * time.seq_r)
       }
       
       if (grepl("BVAR_DVAR", model)){
-        rate_spec <- rate_data$Lambda[r] *exp(rate_data$Alpha[r] * time.seq)
-        rate_ext <- rate_data$Mu[r] *exp(rate_data$Beta[r] * time.seq)
+        rate_spec <- rate_data$Lambda[r] *exp(rate_data$Alpha[r] * time.seq_r)
+        rate_ext <- rate_data$Mu[r] *exp(rate_data$Beta[r] * time.seq_r)
       }
       rate_df2 <- rbind(rate_spec, rate_ext)
       
