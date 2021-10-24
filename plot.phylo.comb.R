@@ -186,7 +186,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
     }
   }
 
-  plot(phylo1, label.offset = 0.4, edge.color = colors_clades,
+  plot(phylo1, edge.color = colors_clades,
        edge.lty = lty_clades, main = main, ...)
   
   if(tested_nodes == T){
