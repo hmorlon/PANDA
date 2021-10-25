@@ -3,6 +3,12 @@ function(tree_A, results_sub_clades, legend=TRUE, show.tip.label=FALSE, where="b
   
   set.seed(1)
   host_tree <- tree_A
+  
+  if (!inherits(host_tree, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}
+  
+  if (Nnode(host_tree)!=nrow(results_sub_clades)){
+    stop("object \"tree_A\" contains more node than \"results_sub_clades\". Remove these nodes from \"tree_A\" before plotting.")
+  }
 
   plot(host_tree, show.tip.label=show.tip.label)
   # significant and R>=0.05
