@@ -1,12 +1,12 @@
 plot_phylosignal_sub_network <-
-function(tree_A, results_sub_clades, legend=TRUE, show.tip.label=FALSE, where="bottomleft"){
+function(tree_A, results_sub_clades, network, legend=TRUE, show.tip.label=FALSE, where="bottomleft"){
   
   set.seed(1)
   host_tree <- tree_A
   
   if (!inherits(host_tree, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}
   
-  if (Nnode(host_tree)!=nrow(results_sub_clades)){
+  if ((Ntip(host_tree)+1)!=results_sub_clades$node[1]){
     stop("object \"tree_A\" contains more node than \"results_sub_clades\". Remove these nodes from \"tree_A\" before plotting.")
   }
 
