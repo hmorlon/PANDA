@@ -7,7 +7,7 @@ Compute phylogenetic signal in a bipartite interaction network
 
 \description{
 This function computes the phylogenetic signal in a bipartite interaction network, either the phylogenetic signal in species interactions (do closely related species interact with similar partners?) using Mantel tests, or the phylogenetic signal in the number of partners (i.e. degree; do closely related species interact with the same number of partners?) using Mantel tests or using the Phylogenetic bipartite linear model (PBLM) from Ives and Godfray (2006). 
-Mantel tests measuring the phylogenetic signal in species interactions can be computed using quantified or binary networks, with the Jaccard or UniFrac ecological distances.
+Mantel tests measuring the phylogenetic signal in species interactions can be computed using quantified or binary networks, with the Jaccard, Bray-Curtis, or UniFrac ecological distances.
 
 }
 
@@ -30,7 +30,7 @@ a phylogenetic tree of guild A (the columns of the interaction network). It must
 }
 
 \item{method}{
-indicates which method is used to compute the phylogenetic signal in species interactions. If you want to perform a Mantel test between the phylogenetic distances and some ecological distances (do closely related species interact with similar partners?), you can choose "Jaccard_weighted" (default) for computing the ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), or "GUniFrac" to compute the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
+indicates which method is used to compute the phylogenetic signal in species interactions. If you want to perform a Mantel test between the phylogenetic distances and some ecological distances (do closely related species interact with similar partners?), you can choose "Jaccard_weighted" (default) for computing the ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), "Bray-Curtis" for computing the Bray-Curtis dissimilarity, or "GUniFrac" for computing the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
 
 Conversely, if you want to evaluate the phylogenetic signal in the number of partners (do closely related species interact with the same number of partners?), you can choose "degree". 
 
@@ -38,11 +38,11 @@ Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear M
 }
 
 \item{correlation}{
-(optional) indicates which correlation (R) must be used in the Mantel test, among Pearson (default), Spearman, and Kendall correlations. It only applies for the methods "Jaccard_weighted", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
+(optional) indicates which correlation (R) must be used in the Mantel test, among Pearson (default), Spearman, and Kendall correlations. It only applies for the methods "Jaccard_weighted", "Jaccard_binary", "Bray-Curtis", "GUniFrac", "UniFrac_unweighted", or "degree".
 }
 
 \item{nperm}{
-(optional) a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation. It only applies for the methods "Jaccard_weighted", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
+(optional) a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation. It only applies for the methods "Jaccard_weighted", "Bray-Curtis", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
 }
 
 \item{only_A}{

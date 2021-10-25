@@ -7,7 +7,7 @@ Compute clade-specific phylogenetic signals in a bipartite interaction network
 
 \description{
 This function computes the clade-specific phylogenetic signals in species interactions. For each node of tree A having a certain number of descending species, it computes the phylogenetic signal in the resulting sub-network by performing a Mantel test between the phylogenetic distances and the ecological distances for the given sub-clade of tree A. 
-Mantel tests can be computed using quantified or binary networks, with the Jaccard or UniFrac ecological distances.
+Mantel tests can be computed using quantified or binary networks, with the Jaccard, Bray-Curtis, or UniFrac ecological distances.
 
 }
 
@@ -31,7 +31,7 @@ a phylogenetic tree of guild A (the columns of the interaction network). It must
 }
 
 \item{method}{
-indicates which method is used to compute the phylogenetic signal in species interactions using Mantel tests. You can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), or "GUniFrac" to compute the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
+indicates which method is used to compute the phylogenetic signal in species interactions using Mantel tests. You can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), "Bray-Curtis" for computing the Bray-Curtis dissimilarity, or "GUniFrac" for computing the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
 }
 
 \item{correlation}{

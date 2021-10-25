@@ -6,9 +6,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   if (!inherits(tree_A, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}
   if (!is.null(tree_B)) {if (!inherits(tree_B, "phylo")) {stop("object \"tree_B\" is not of class \"phylo\".")}}
   
-  if (is.null(method)) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'.")}
+  if (is.null(method)) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'Bray-Curtis', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'.")}
   if (method %in% c("GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary")) {if (is.null(tree_B)) stop("Please provide a phylogenetic tree \"tree_B\" for guild B.")}
-  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'.")}
+  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "Bray-Curtis", "GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary", "degree")) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'Bray-Curtis', 'GUniFrac', 'UniFrac_unweighted', 'PBLM', 'PBLM_binary', and 'degree'.")}
   
   if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.")}
   
@@ -59,6 +59,15 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     if (only_A==FALSE) jaccard_B <- as.matrix(vegan::vegdist(network, "jaccard", binary=F))
     eco_A <- jaccard_A
     if (only_A==FALSE) eco_B <- jaccard_B
+  }
+  
+  
+  # Bray-Curtis dissimilarity 
+  if (method=="Bray-Curtis"){
+    bray_A <- as.matrix(vegan::vegdist(t(network), "bray", binary=F))
+    if (only_A==FALSE) bray_B <- as.matrix(vegan::vegdist(network, "bray", binary=F))
+    eco_A <- bray_A
+    if (only_A==FALSE) eco_B <- bray_B
   }
   
   # Unifrac (generalized UniFrac, with alpha=0.5)
