@@ -11,6 +11,7 @@ Suggests:
     testthat
 Imports:
     ape,
+    bipartite,
     cluster,
     coda,
     corpcor,
