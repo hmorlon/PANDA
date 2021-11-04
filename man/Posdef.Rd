@@ -51,7 +51,7 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 
 \examples{
 \donttest{
-require(mvMORPH)
+if(require(mvMORPH)){
 set.seed(123)
 n <- 32 # number of species
 p <- 40 # number of traits
@@ -63,6 +63,6 @@ Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 
 test <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
 GIC(test)
-
+}
 }
 }

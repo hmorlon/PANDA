@@ -60,7 +60,7 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 
 \examples{
 \donttest{
-require(mvMORPH)
+if(require(mvMORPH)){
 set.seed(1)
 n <- 32 # number of species
 p <- 31 # number of traits
@@ -79,5 +79,6 @@ pca_results <- phyl.pca_pl(fit, plot=T)
 
 # retrieve the scores
 head(pca_results$scores)
+}
 }
 }

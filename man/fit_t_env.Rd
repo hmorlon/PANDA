@@ -179,7 +179,8 @@ trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp",
 
 ## Fit user defined environmental function
 
-require(pspline)
+if(require(pspline)){
+
   	 spline_result <- sm.spline(x=InfTemp[,1],y=InfTemp[,2], df=50)
   	 env_func <- function(t){predict(spline_result,t)}
   	 t<-unique(InfTemp[,1])
@@ -189,11 +190,11 @@ require(pspline)
   
   # We then fit the model
   	 fit_t_env(Cetacea, trait, env_data=env_data)
-  
+ }
+ 
 ## Various parameterization (box constraints, df, scaling of the curve...) example
  fit_t_env(Cetacea, trait, env_data=InfTemp, model="EnvLin", method="L-BFGS-B", 
  			scale=TRUE, lower=-30, upper=20, df=10)
-
 
 ## A very general model...
 
