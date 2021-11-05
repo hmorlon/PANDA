@@ -103,7 +103,7 @@ O. Maliet
 \code{\link{fit_ClaDS0}}, \code{\link{plot_ClaDS_chains}}.
 }
 \examples{
-\donttest{
+\dontrun{
 data("Caprimulgidae")
 
 sample_fraction = 0.61
@@ -131,7 +131,7 @@ print(paste0("sigma = ", maps[1], " ; alpha = ",
   maps[2], " ; epsilon = ", maps[3], " ; l_0 = ", maps[4] ))
   
 # plot the infered branch specific speciation rates
-# plot_ClaDS_phylo(Caprimulgidae_ClaDS2$tree, maps[-(1:4)])
+plot_ClaDS_phylo(Caprimulgidae_ClaDS2$tree, maps[-(1:4)])
 }
 
 }
