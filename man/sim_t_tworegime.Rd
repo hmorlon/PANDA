@@ -9,8 +9,9 @@ Simulates datasets for a given phylogeny under two-regime matching competition (
 }
 \usage{
 
-sim_t_tworegime(regime.map,pars,root.value,Nsegments=2500,model=c("MC","DDexp","DDlin","EB"),
-		verbose=TRUE,rnd=6)
+sim_t_tworegime(regime.map, pars, root.value, Nsegments=2500, 
+                model=c("MC","DDexp","DDlin","EB"),
+	            	verbose=TRUE, rnd=6)
 
 }
 

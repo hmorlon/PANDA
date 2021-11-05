@@ -156,7 +156,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                    }
                   
                   # design matrix
-                  W <- .Call("mvmorph_weights", nterm=as.integer(nobs), epochs=precalc$epochs, 
+                  W <- .Call("mvmorph_weights", nterm=as.integer(nobs), epochs=precalc$epochs,
                            lambda=alpha, S=1, S1=1, 
                            beta=precalc$listReg, root=as.integer(0), PACKAGE="mvMORPH")
                   
@@ -189,7 +189,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                    }
                   
                   # design matrix
-                  W <- .Call("mvmorph_weights", nterm=as.integer(nobs), epochs=precalc$epochs, 
+                  W <- .Call("mvmorph_weights", nterm=as.integer(nobs), epochs=precalc$epochs,
                            lambda=alpha, S=1, S1=1, 
                            beta=precalc$listReg, root=as.integer(0), PACKAGE="mvMORPH")
                   
@@ -275,5 +275,5 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
     if(mod=="OUM"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = 5, sig2 = ",as.numeric(res$param[1]),", alpha = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0_",names(res$theta)[1]," = ",as.numeric(res$theta[1]),", z0_",names(res$theta)[2]," = ",as.numeric(res$theta[2]),", convergence = ",res$opt$convergence,")")))}
     
     }
-    return(results)
+    return(res)
 }
