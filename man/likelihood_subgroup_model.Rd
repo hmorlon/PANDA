@@ -89,7 +89,7 @@ Canidae.phylo<-BGB.examples$Canidae.phylo
 dummy.group<-c(rep("B",3),rep("A",12),rep("B",2),rep("A",6),rep("B",5),rep("A",6))
 names(dummy.group)<-Canidae.phylo$tip.label
 
-\donttest{
+\dontrun{
 
 Canidae.simmap<-phytools::make.simmap(Canidae.phylo, dummy.group)
 

@@ -75,7 +75,7 @@ Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
 fit <- fit_t_pl(Y, tree, model="lambda", method="RidgeAlt")
 
 # Perform a phylogenetic PCA using the model fit (Pagel lambda model)
-pca_results <- phyl.pca_pl(fit, plot=T) 
+pca_results <- phyl.pca_pl(fit, plot=TRUE) 
 
 # retrieve the scores
 head(pca_results$scores)
