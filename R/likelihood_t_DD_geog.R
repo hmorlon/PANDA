@@ -21,7 +21,7 @@ likelihood_t_DD_geog<-function(phylo,data,par,geo.object,model=c("DDlin","DDexp"
 	IV=try(solve(V))
   	options(show.error.messages=op)
   if(inherits(IV, "try-error")){
-    IV=corpcor::pseudoinverse(V)
+    IV=pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
   

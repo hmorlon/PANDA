@@ -63,7 +63,7 @@ setMethod(
     f="applyV",
     signature=c("MPhiFFT","vector"),
     definition=function(object,x){
-      return(object@d0 * Re(pracma::ifft(object@fftColumn * fft(c(x,object@zero)))[1:object@n]))
+      return(object@d0 * Re(ifft_panda(object@fftColumn * fft(c(x,object@zero)))[1:object@n]))
     }
 )
 

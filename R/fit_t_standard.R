@@ -146,7 +146,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                   
                   }else{
                   
-                   V<-.Call("mvmorph_covar_ou_random",A=precalc$C1, alpha=alpha, sigma=sigma2, PACKAGE="mvMORPH")
+                   V<-.Call(C_panda_covar_ou_random, A=precalc$C1, alpha=alpha, sigma=sigma2)
                     
                    if(!is.null(error) & nuisance==TRUE){
                      nuisance = exp(par[3])
@@ -156,9 +156,9 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                    }
                   
                   # design matrix
-                  W <- .Call("mvmorph_weights", nterm=as.integer(nobs), epochs=precalc$epochs,
+                  W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
                            lambda=alpha, S=1, S1=1, 
-                           beta=precalc$listReg, root=as.integer(0), PACKAGE="mvMORPH")
+                           beta=precalc$listReg, root=as.integer(0))
                   
                   # ll computation
                   llik <- mvLL(V, data, method="rpf", param=list(D=W))
@@ -178,8 +178,8 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                   #    }
                   
                   # covariance matrix
-                  if(fixedRoot) V<-.Call("mvmorph_covar_ou_fixed", A=precalc$C1, alpha=alpha, sigma=sigma2, PACKAGE="mvMORPH")
-                   else  V<-.Call("mvmorph_covar_ou_random",A=precalc$C1, alpha=alpha, sigma=sigma2, PACKAGE="mvMORPH")
+                  if(fixedRoot) V<-.Call(C_panda_covar_ou_fixed, A=precalc$C1, alpha=alpha, sigma=sigma2)
+                   else  V<-.Call(C_panda_covar_ou_random, A=precalc$C1, alpha=alpha, sigma=sigma2)
                   
                    if(!is.null(error) & nuisance==TRUE){
                      nuisance = exp(par[3])
@@ -189,9 +189,9 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                    }
                   
                   # design matrix
-                  W <- .Call("mvmorph_weights", nterm=as.integer(nobs), epochs=precalc$epochs,
+                  W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
                            lambda=alpha, S=1, S1=1, 
-                           beta=precalc$listReg, root=as.integer(0), PACKAGE="mvMORPH")
+                           beta=precalc$listReg, root=as.integer(0))
                   
                   # ll computation
                   llik <- mvLL(V, data, method="rpf", param=list(D=W))
@@ -201,7 +201,9 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
               	sigma2=exp(par[1])
               	rate=-abs(par[2])
               	
-              	phy_temp = geiger::rescale(phy,model="EB",a=rate,sigsq=sigma2)
+                #phy_temp = geiger::rescale(phy,model="EB",a=rate,sigsq=sigma2) # to limit number of packages dependencies
+                phy_temp = transform_EB(phy, beta=rate, sigmasq=sigma2)
+                
               	if(!is.null(error) & nuisance==TRUE){
                           nuisance = exp(par[3])
                           phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2 + nuisance

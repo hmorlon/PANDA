@@ -1,4 +1,4 @@
-likelihood_subgroup_model<-function(data,phylo,geography.object,model=c("MC","DDexp","DDlin"),par,return.z0=FALSE,maxN=NULL){
+likelihood_subgroup_model<-function(data, phylo, geography.object, model=c("MC","DDexp","DDlin"), par, return.z0=FALSE, maxN=NULL){
  	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
 	if(is.null(names(data))){stop("data is unnamed; names should match tip labels in phylogeny")}
 	if(!model%in%c("MC","DDexp","DDlin") | length(model)>1){stop("model must be specified as either 'MC', 'DDexp', or 'DDlin'")}

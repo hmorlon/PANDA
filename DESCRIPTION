@@ -5,20 +5,18 @@ Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
     R (>= 2.14.2),
+    ape,
     picante,
     methods
 Suggests:
     testthat
 Imports:
-    ape,
     bipartite,
     cluster,
     coda,
-    corpcor,
     deSolve,
     fields, 
     fpc,
-    geiger,
     glassoFast,
     graphics,
     grDevices,
@@ -28,7 +26,6 @@ Imports:
     mvtnorm,
     parallel,
     phytools,
-    pracma,
     pspline,
     pvclust,
     raster,

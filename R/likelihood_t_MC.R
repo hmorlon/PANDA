@@ -14,7 +14,7 @@ likelihood_t_MC<-function(phylo,data,par) #par[1]=sig2,par[2]=sterm
 	IV=try(solve(V))
   	options(show.error.messages=op)
   if(inherits(IV, "try-error")){
-    IV=corpcor::pseudoinverse(V)
+    IV=pseudoinverse(V)
   	if(max(IV)==0){return(Inf)}
   }
 	data<-as.matrix(data[rownames(V)])

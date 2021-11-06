@@ -106,7 +106,7 @@ maxN<-max(vapply(Canidae.geobyclass.object$geography.object$geography.object,
 	function(x)max(rowSums(x)),1))
 
 lh <- -likelihood_subgroup_model(data=Canidae.A, phylo=Canidae.geobyclass.object$map, 
-	geo.object=Canidae.geobyclass.object$geography.object, model="DDlin", par=par, 
+	geography.object=Canidae.geobyclass.object$geography.object, model="DDlin", par=par, 
 	return.z0=FALSE, maxN=maxN)
 	
 	}
