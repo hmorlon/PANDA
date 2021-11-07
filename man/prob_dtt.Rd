@@ -18,7 +18,7 @@
     an object of class 'fit.bd', output of the 'fit_bd' function.
 }
   \item{tot_time}{
-    the age of the underlying phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+    the age of the underlying phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
 }
   \item{time}{
     vector of times on which the function calculates the probabilities of 'm' species. The function goes forward in time, so that \eqn{t = 0} is the time of the most recent common ancestor.
@@ -79,7 +79,7 @@
 
 \examples{
 data(Balaenopteridae)
-tot_time<-max(node.age(Balaenopteridae)$ages)
+tot_time<-max(node.age_util(Balaenopteridae)$ages)
 
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate
 # with time
