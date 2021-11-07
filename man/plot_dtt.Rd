@@ -16,7 +16,7 @@ plot_dtt(fit.bd, tot_time, N0)
 an object of class 'fit.bd', output of the 'fit_bd' function
 }
   \item{tot_time}{
-the age of the underlying phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the underlying phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
 }
   \item{N0}{
 number of extant species. If all extant species are represented in the phylogeny, N0 is given by length(phylo$tip.label)
@@ -44,7 +44,7 @@ Plot representing how the estimated number of species vary through time
 \examples{
 
 data(Balaenopteridae)
-tot_time<-max(node.age(Balaenopteridae)$ages)
+tot_time<-max(node.age_util(Balaenopteridae)$ages)
 
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate
 # with time
