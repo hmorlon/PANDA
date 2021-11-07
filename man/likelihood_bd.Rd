@@ -18,7 +18,7 @@ an object of type 'phylo' (see ape documentation)
 }
   
   \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
 }
  \item{f.lamb}{
   a function specifying the time-variation of the speciation rate \eqn{\lambda}. This function as a single argument (time). Any function may be used.
@@ -67,7 +67,7 @@ conditioning to use to fit the model:
 
 \examples{
 data(Cetacea)
-tot_time <- max(node.age(Cetacea)$ages)
+tot_time <- max(node.age_util(Cetacea)$ages)
 # Compute the likelihood for a pure birth model (no extinction) with
 # an exponential variation of speciation rate with time
 lamb_par <- c(0.1, 0.01)
