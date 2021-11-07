@@ -1,6 +1,6 @@
 # Load data and get tot_time
 data(Cetacea)
-tot_time<-max(node.age(Cetacea)$ages)
+tot_time<-max(node.age_util(Cetacea)$ages)
 options(digits=17)
 
 # # Parameters for validation
