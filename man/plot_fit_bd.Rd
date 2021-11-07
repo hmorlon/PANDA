@@ -16,7 +16,7 @@ plot_fit_bd(fit.bd, tot_time)
 an object of class 'fit.bd', output of the 'fit_bd' function
 }
   \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
 }
 }
 
@@ -34,7 +34,7 @@ Plots representing how the estimated speciation, extinction & net diversificatio
 \examples{
 
 data(Balaenopteridae)
-tot_time<-max(node.age(Balaenopteridae)$ages)
+tot_time<-max(node.age_util(Balaenopteridae)$ages)
 
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate
 # with time
