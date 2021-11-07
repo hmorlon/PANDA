@@ -77,7 +77,7 @@
 
 \examples{
 data(Balaenopteridae)
-tot_time<-max(node.age(Balaenopteridae)$ages)
+tot_time<-max(node.age_util(Balaenopteridae)$ages)
 
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate
 # with time
