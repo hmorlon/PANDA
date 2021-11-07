@@ -5,7 +5,7 @@ likelihood_bd <- function(phylo,tot_time,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FAL
 
   nbtips <- Ntip(phylo)
   log_indLikelihood <- c()
-  from_past <- cbind(phylo$edge,node.age(phylo)$ages)
+  from_past <- cbind(phylo$edge,node.age_util(phylo)$ages)
   ages <- rbind(from_past[,2:3],c(nbtips+1,0))
   ages <- ages[order(ages[,1]),]
   age <- max(ages[,2])
