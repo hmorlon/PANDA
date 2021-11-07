@@ -17,7 +17,7 @@ fit_sgd(phylo, tot_time, par, f=1, meth = "Nelder-Mead")
 an object of type 'phylo' (see ape documentation)
 }
 \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages)
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages)
 }
 \item{par}{
 a numeric vector of initial values for the parameters (b,d,nu) to be estimated (these values are used by the optimization algorithm)
