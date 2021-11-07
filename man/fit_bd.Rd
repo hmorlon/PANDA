@@ -19,7 +19,7 @@ fit_bd(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
 an object of type 'phylo' (see ape documentation)
 }
   \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
 }
   \item{f.lamb}{
 a function specifying the hypothesized functional form (e.g. constant, linear, exponential, etc.) of the variation of the speciation rate \eqn{\lambda} with time. Any functional form may be used.
@@ -99,7 +99,7 @@ this is that negative speciation/extinction rates estimates can be returned. The
 # Some examples may take a little bit of time. Be patient!
 
 data(Cetacea)
-tot_time<-max(node.age(Cetacea)$ages)
+tot_time<-max(node.age_util(Cetacea)$ages)
 
 # Fit the pure birth model (no extinction) with a constant speciation rate
 f.lamb <-function(t,y){y[1]}
