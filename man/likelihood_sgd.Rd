@@ -15,7 +15,7 @@ likelihood_sgd(phylo, tot_time, b, d, nu, f)
 an object of type 'phylo' (see ape documentation)
 }
 \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
 }
 \item{b}{
 the (constant) birth rate of individuals in the model.
@@ -46,7 +46,7 @@ M Manceau
 
 \examples{
 data(Cetacea)
-tot_time <- max(node.age(Cetacea)$ages)
+tot_time <- max(node.age_util(Cetacea)$ages)
 b <- 1e6
 d <- 1e6-0.5
 nu <- 0.6
