@@ -75,7 +75,7 @@ Posdef <- function (p, ev = rexp(p, 1/100)) {
 }
 
 # --- Function to simulate multivariate normal distribution
-# From the mvtnorm package 
+# From the mvtnorm package H.Morlon
 rmvnorm_util<-function (n, mean = rep(0, nrow(sigma)), sigma = diag(length(mean)), 
     method = c("eigen", "svd", "chol"), pre0.9_9994 = FALSE, 
     checkSymmetry = TRUE) 
@@ -111,6 +111,29 @@ rmvnorm_util<-function (n, mean = rep(0, nrow(sigma)), sigma = diag(length(mean)
     retval <- sweep(retval, 2, mean, "+")
     colnames(retval) <- names(mean)
     retval
+}
+
+# --- Function to compute node ages
+# From the picante package H.Morlon
+node.age_util<-function (phy) 
+{
+    if (!is.rooted(phy)) {
+        stop("function node.age only works with a rooted phylo object")
+    }
+    rootN = length(phy$tip.label) + 1
+    nEdges = nrow(phy$edge)
+    ages = rep(NA, nEdges)
+    for (n in 1:nEdges) {
+        if (phy$edge[n, 1] == rootN) 
+            anc.age = 0
+        else {
+            anc.age = ages[which(phy$edge[, 2] == phy$edge[n, 
+                1])]
+        }
+        ages[n] = anc.age + phy$edge.length[n]
+    }
+    phy$ages = ages
+    return(phy)
 }
 
 
