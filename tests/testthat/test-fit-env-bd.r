@@ -1,6 +1,6 @@
 # Load data and get tot_time
 data(Cetacea)
-tot_time<-max(node.age_util(Cetacea)$ages)
+tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 options(digits=16)
