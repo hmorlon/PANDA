@@ -19,7 +19,7 @@ an object of class 'fit.env', output of the 'fit_env' function
 environmental data, given as a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
 }
   \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
 }
 
@@ -38,7 +38,7 @@ Plots representing how the estimated speciation, extinction & net diversificatio
 \donttest{
 if(require(pspline)){
 data(Balaenopteridae)
-tot_time<-max(node.age_util(Balaenopteridae)$ages)
+tot_time<-max(node.age(Balaenopteridae)$ages)
 data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
