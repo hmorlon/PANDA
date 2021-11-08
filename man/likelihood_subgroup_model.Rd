@@ -82,6 +82,8 @@ when fitting \code{DDlin} model, it is necessary to specify the maximum number o
 
 
 \examples{
+
+\donttest{
 data(BGB.examples)
 
 
@@ -89,7 +91,6 @@ Canidae.phylo<-BGB.examples$Canidae.phylo
 dummy.group<-c(rep("B",3),rep("A",12),rep("B",2),rep("A",6),rep("B",5),rep("A",6))
 names(dummy.group)<-Canidae.phylo$tip.label
 
-\dontrun{
 
 Canidae.simmap<-phytools::make.simmap(Canidae.phylo, dummy.group)
 
@@ -109,6 +110,6 @@ lh <- -likelihood_subgroup_model(data=Canidae.A, phylo=Canidae.geobyclass.object
 	geography.object=Canidae.geobyclass.object$geo.object, model="DDlin", par=par, 
 	return.z0=FALSE, maxN=maxN)
 	
-	}
+}	
 
 }
