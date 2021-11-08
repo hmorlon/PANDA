@@ -22,7 +22,7 @@ an object of type 'phylo' (see ape documentation)
 environmental data, given as a data frame with two columns. The first column is time, the second column is the environmental data (temperature for instance).
 }
   \item{tot_time}{
-the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age_util(phylo)$ages).
+the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
   \item{f.lamb}{
 a function specifying the hypothesized functional form of the variation of the speciation rate \eqn{\lambda} with time and the environmental variable. Any functional form may be used.
@@ -111,7 +111,7 @@ Morlon, H., Rolland, J. and Condamine, F. (2020) Response to Technical Comment â
 
 \examples{
 data(Cetacea)
-tot_time<-max(node.age_util(Cetacea)$ages)
+tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
 
