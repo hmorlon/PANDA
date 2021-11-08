@@ -24,6 +24,7 @@ Imports:
     mvMORPH (>= 1.1.0),
     parallel,
     phytools,
+    picante,
     pspline,
     pvclust,
     raster,
