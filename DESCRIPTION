@@ -6,7 +6,7 @@ Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
     R (>= 2.14.2),
     ape,
-    picante
+    picante,
     methods
 Suggests:
     testthat
