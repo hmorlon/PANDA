@@ -101,12 +101,12 @@ Canidae.geobyclass.object<-CreateGeobyClassObject(phylo=Canidae.phylo,
 	simmap=Canidae.simmap, trim.class="A", ana.events=BGB.examples$Canidae.ana.events, 
 	clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE, rnd=5)
 
-par <- c(log(0.01),-0.0005)
-maxN<-max(vapply(Canidae.geobyclass.object$geography.object$geography.object, 
+par <- c(log(0.01),-0.000005)
+maxN<-max(vapply(Canidae.geobyclass.object$geo.object$geography.object, 
 	function(x)max(rowSums(x)),1))
 
 lh <- -likelihood_subgroup_model(data=Canidae.A, phylo=Canidae.geobyclass.object$map, 
-	geography.object=Canidae.geobyclass.object$geography.object, model="DDlin", par=par, 
+	geography.object=Canidae.geobyclass.object$geo.object, model="DDlin", par=par, 
 	return.z0=FALSE, maxN=maxN)
 	
 	}
