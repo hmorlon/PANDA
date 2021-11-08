@@ -6,6 +6,7 @@ Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
     R (>= 2.14.2),
     ape,
+    picante
     methods
 Suggests:
     testthat
@@ -24,7 +25,6 @@ Imports:
     mvMORPH (>= 1.1.0),
     parallel,
     phytools,
-    picante,
     pspline,
     pvclust,
     raster,
