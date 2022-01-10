@@ -11,7 +11,7 @@ This function plots the clade-specific phylogenetic signals in species interacti
 }
 
 \usage{
-plot_phylosignal_sub_network <- function(tree_A, results_sub_clades, legend=TRUE, show.tip.label=FALSE, where="bottomleft")
+plot_phylosignal_sub_network <- function(tree_A, results_sub_clades, network, legend=TRUE, show.tip.label=FALSE, where="bottomleft")
 
 }
 
@@ -22,6 +22,10 @@ a phylogenetic tree of guild A (the columns of the interaction network). It must
 }
 \item{results_sub_clades}{
 output of the function phylosignal_sub_network.
+}
+
+\item{network}{
+a matrix representing the bipartite interaction network with species from guild A in columns and species from guild B in rows. Row names (resp. columns names) must correspond to the tip labels of tree B (resp. tree A).
 }
 
 \item{legend}{
@@ -75,13 +79,13 @@ tree_fungi <- mycorrhizal_network[[3]] # phylogenetic tree (phylo object)
 
 results_clade_A <- phylosignal_sub_network(network, tree_A = tree_orchids, tree_B = tree_fungi,
 method = "GUniFrac", correlation = "Pearson")
-plot_phylosignal_sub_network(tree_A = tree_orchids, results_clade_A)
+plot_phylosignal_sub_network(tree_A = tree_orchids, results_clade_A, network)
 
 # Clade-specific phylogenetic signal in species interactions in guild B 
 # (do closely related species interact with similar partners in sub-clades of guild B?)
 
 results_clade_B <- phylosignal_sub_network(t(network), tree_A = tree_fungi, tree_B = tree_orchids,
 method = "GUniFrac", correlation = "Pearson")
-plot_phylosignal_sub_network(tree_A = tree_fungi, results_clade_B)
+plot_phylosignal_sub_network(tree_A = tree_fungi, results_clade_B, t(network))
 }
 

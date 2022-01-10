@@ -11,17 +11,28 @@ function(network, tree_A, tree_B, method = "Jaccard_weighted",
   
   if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop("Please provide a network with row names and columns names matching the species names.")}
   
+
   if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.")}
   
   if (nrow(network)<2){stop("Please provide a \"network\" with at least 2 species in clade B.")}
   if (ncol(network)<2){stop("Please provide a \"network\" with at least 2 species in clade A.")}
   
-  host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
-  symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+  if (minimum<2){stop("The minimal number of descending species (\"minimum\") must be with at least of 2 (or even larger!).")}
   
-  network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  # only keep species having at least one interaction
   network <- network[rowSums(network)>0,]
   network <- network[,colSums(network)>0]
+  host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
+  symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+  network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  
+  # check a second time (in case of a missing species) 
+  network <- network[rowSums(network)>0,]
+  network <- network[,colSums(network)>0]
+  host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
+  symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+  network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  
   
   set.seed(1)
   
