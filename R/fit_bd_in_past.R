@@ -1,4 +1,4 @@
-likelihood_bd <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot_desc,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0,cond="crown"){
+likelihood_bd_in_past <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot_desc,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0,cond="crown"){
   if (!inherits(phylo, "phylo"))
     stop("object \"phylo\" is not of class \"phylo\"")
   
