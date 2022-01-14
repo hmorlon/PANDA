@@ -62,7 +62,7 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
         mu_par <- init[(1+length(lamb_par)):length(init)]
         f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
         f.mu.par <- function(t){abs(f.mu(t,mu_par))}
-        LH <- likelihood_bd_in_past(phylo,tot_time,time_stop, f.lamb.par,f.mu.par,desc, tot_desc,,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt,cond=cond)
+        LH <- likelihood_bd_in_past(phylo,tot_time,time_stop, f.lamb.par,f.mu.par,desc, tot_desc,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt,cond=cond)
         return(-LH)
       }
       temp <- suppressWarnings(optim(init, optimLH, method = meth))
@@ -82,7 +82,7 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
         lamb_par <- init[1:length(lamb_par)]
         f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
         f.mu.par <- function(t){abs(f.mu(t,mu_par))}
-        LH <- likelihood_bd(phylo,tot_time,f.lamb.par,f.mu.par,f,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,dt=dt,cond=cond)
+        LH <- likelihood_bd_in_past(phylo,tot_time,time_stop, f.lamb.par,f.mu.par,desc, tot_desc,cst.lamb=cst.lamb,cst.mu=TRUE,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt,cond=cond)
         return(-LH)
       }
       temp <- suppressWarnings(optim(init, optimLH, method = meth))
