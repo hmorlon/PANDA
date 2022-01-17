@@ -1,3 +1,102 @@
+.Psi_in_past <- function(s,t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0)
+{
+  if ((cst.lamb==TRUE) & (cst.mu==TRUE))
+  {
+    lamb <- f.lamb(0)
+    mu <- f.mu(0)
+    r <- lamb-mu
+    res <- exp(r*(t-s))*(abs(1+(lamb*(exp(r*t)-exp(r*s)))/(r/f+lamb*(exp(r*s)-1))))^(-2)
+    return(res)
+  }
+  
+  ####### exponential dependencies ########
+  
+  if ((cst.lamb==TRUE) & (expo.mu==TRUE))
+    
+  {
+    lamb0 <- f.lamb(0)
+    mu0 <- f.mu(0)
+    beta <- log(f.mu(1)/mu0)
+    r.int <- function(x,y){lamb0*(y-x)-mu0/beta*(exp(beta*y)-exp(beta*x))}
+    g <- function(y){r.int(0,y)}
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
+    return(res)
+  }
+  
+  if ((expo.lamb==TRUE) & (cst.mu==TRUE))
+  {
+    lamb0 <- f.lamb(0)
+    alpha <- log(f.lamb(1)/lamb0)
+    mu0 <- f.mu(0)
+    r.int <- function(x,y){lamb0/alpha*(exp(alpha*y)-exp(alpha*x))-mu0*(y-x)}
+    g <- function(y){r.int(0,y)}
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
+    return(res)
+  }
+  
+  if ((expo.lamb==TRUE) & (expo.mu==TRUE))
+  {
+    lamb0 <- f.lamb(0)
+    alpha <- log(f.lamb(1)/lamb0)
+    mu0 <- f.mu(0)
+    beta <- log(f.mu(1)/mu0)
+    r.int <- function(x,y){lamb0/alpha*(exp(alpha*y)-exp(alpha*x))-mu0/beta*(exp(beta*y)-exp(beta*x))}
+    g <- function(y){r.int(0,y)}
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    res <- exp(r.int(s,t))*(abs(1+r.int.int(s,t)/(1/f+r.int.int(0,s))))^(-2)
+    return(res)
+  }
+  
+  ####### other dependencies ########
+  
+  else
+  {
+    if (dt==0)
+    {
+      # Compute using R integration functions
+      r <- function(t){f.lamb(t)-f.mu(t)}
+      r.int <- function(x,y){.Integrate(Vectorize(r),x,y,stop.on.error=FALSE)}
+      r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
+      r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+      rst <- r.int(s,t)
+      rist <- r.int.int(s,t)
+      ri0s <- r.int.int(0,s)
+      res <- exp(rst)*(abs(1+rist/(1/f+ri0s)))^(-2)
+      return(res)
+    }
+    else
+    {
+      Nintervals <- 1 + as.integer((t-0)/dt)
+      X <- seq(0, t, length.out = Nintervals + 1)
+      r <- function(t){f.lamb(t)-f.mu(t)}
+      r.int <- cumsum(r(X)) * (t - 0) / Nintervals
+      r.int.0 <- function(y){exp(r.int[1 + as.integer( (y - 0) * Nintervals / (t - 0))]) * f.lamb(y)}
+      r.int.int.tab <- cumsum(r.int.0(X)) * (t - 0) / Nintervals
+      r.int.int <- function(x,y){
+        indy <- 1 + as.integer( (y - 0) * Nintervals / (t - 0))
+        indx <- 1 + as.integer( (x - 0) * Nintervals / (t - 0))
+        value <- r.int.int.tab[indy] - r.int.int.tab[indx]
+        return(value)
+      }
+      rst <- r.int[1 + Nintervals] - r.int[1 + as.integer( (s - 0) * Nintervals / (t - 0))]
+      rist <- r.int.int(s,t)
+      ri0s <- r.int.int(0,s)
+      res <- exp(rst)*(abs(1+rist/(1/f+ri0s)))^(-2)
+      return(res)
+    }
+  }
+}
+
+
+
 likelihood_bd_in_past <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot_desc,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0,cond="crown"){
   if (!inherits(phylo, "phylo"))
     stop("object \"phylo\" is not of class \"phylo\"")
@@ -11,16 +110,15 @@ likelihood_bd_in_past <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot
   ages <- ages[order(ages[,1]),]
   age <- max(ages[,2])
   
-  for (j in 1:(nbtips-1))
-  {
+  for (j in 1:(nbtips-1)){
     node <- (nbtips+j)
     edges <- phylo$edge[phylo$edge[,1]==node,]
     tj <- age-ages[edges[1,1],2]
-    Psi_timevar_errap_tj <- .Psi(time_stop,tj,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
+    Psi_timevar_errap_tj <- .Psi_in_past(time_stop,tj,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_lik_tj <- log(f.lamb(tj)) + log(Psi_timevar_errap_tj)
     log_indLikelihood <- c(log_indLikelihood,log_lik_tj)
   }
-  log_indLikelihood <- c(log_indLikelihood,log(.Psi(time_stop,tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)))
+  log_indLikelihood <- c(log_indLikelihood,log(.Psi_in_past(time_stop,tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)))
   
   log_data_lik <- sum(log_indLikelihood)+desc*log(f)
   
@@ -28,14 +126,12 @@ likelihood_bd_in_past <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot
     log_final_lik <- log_data_lik
   }
   
-  else if (cond=="stem")
-  {
+  else if (cond=="stem"){
     Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_final_lik <- log_data_lik - log(1-Phi)
   }
   
-  else if (cond=="crown")
-  {
+  else if (cond=="crown"){
     Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_final_lik <- log_data_lik - log(f.lamb(tot_time)) - 2*log(1-Phi)
   }
