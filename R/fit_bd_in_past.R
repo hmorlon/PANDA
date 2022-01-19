@@ -1,19 +1,27 @@
 .Psi_in_past <- function(s,t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0)
 {
-  if ((cst.lamb==TRUE) & (cst.mu==TRUE))
-  {
+  if ((cst.lamb==TRUE) & (cst.mu==TRUE)){
     lamb <- f.lamb(0)
     mu <- f.mu(0)
     r <- lamb-mu
-    res <- exp(r*(t-s))*(abs(1+(lamb*(exp(r*t)-exp(r*s)))/(r/f+lamb*(exp(r*s)-1))))^(-2)
+    # print("test") # delete
+    # print(lamb)
+    # print(mu)
+    res <- exp(r*(t-s))*(1+(lamb*(exp(r*t)-exp(r*s)))/(r/f+lamb*(exp(r*s)-1)))^(-2)
+    
+    # write.table("test", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+    # write.table(lamb, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+    # write.table(mu, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+    # write.table(r, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+    # write.table(res, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+    # 
+    
     return(res)
   }
   
   ####### exponential dependencies ########
   
-  if ((cst.lamb==TRUE) & (expo.mu==TRUE))
-    
-  {
+  if ((cst.lamb==TRUE) & (expo.mu==TRUE)){
     lamb0 <- f.lamb(0)
     mu0 <- f.mu(0)
     beta <- log(f.mu(1)/mu0)
@@ -26,8 +34,7 @@
     return(res)
   }
   
-  if ((expo.lamb==TRUE) & (cst.mu==TRUE))
-  {
+  if ((expo.lamb==TRUE) & (cst.mu==TRUE)){
     lamb0 <- f.lamb(0)
     alpha <- log(f.lamb(1)/lamb0)
     mu0 <- f.mu(0)
@@ -40,8 +47,7 @@
     return(res)
   }
   
-  if ((expo.lamb==TRUE) & (expo.mu==TRUE))
-  {
+  if ((expo.lamb==TRUE) & (expo.mu==TRUE)){
     lamb0 <- f.lamb(0)
     alpha <- log(f.lamb(1)/lamb0)
     mu0 <- f.mu(0)
@@ -57,10 +63,7 @@
   
   ####### other dependencies ########
   
-  else
-  {
-    if (dt==0)
-    {
+  if (dt==0){
       # Compute using R integration functions
       r <- function(t){f.lamb(t)-f.mu(t)}
       r.int <- function(x,y){.Integrate(Vectorize(r),x,y,stop.on.error=FALSE)}
@@ -71,27 +74,35 @@
       ri0s <- r.int.int(0,s)
       res <- exp(rst)*(abs(1+rist/(1/f+ri0s)))^(-2)
       return(res)
-    }
-    else
-    {
-      Nintervals <- 1 + as.integer((t-0)/dt)
+      
+    }else{
+      
+      Nintervals <- 1 + as.integer(t/dt)
       X <- seq(0, t, length.out = Nintervals + 1)
       r <- function(t){f.lamb(t)-f.mu(t)}
-      r.int <- cumsum(r(X)) * (t - 0) / Nintervals
-      r.int.0 <- function(y){exp(r.int[1 + as.integer( (y - 0) * Nintervals / (t - 0))]) * f.lamb(y)}
-      r.int.int.tab <- cumsum(r.int.0(X)) * (t - 0) / Nintervals
+      r.int <- cumsum(r(X)) * t / Nintervals
+      r.int.0 <- function(y){exp(r.int[1 + as.integer( y * Nintervals / t)]) * f.lamb(y)}
+      r.int.int.tab <- cumsum(r.int.0(X)) * t / Nintervals
       r.int.int <- function(x,y){
-        indy <- 1 + as.integer( (y - 0) * Nintervals / (t - 0))
-        indx <- 1 + as.integer( (x - 0) * Nintervals / (t - 0))
+        indy <- 1 + as.integer( y * Nintervals / t)
+        indx <- 1 + as.integer( x * Nintervals / t)
         value <- r.int.int.tab[indy] - r.int.int.tab[indx]
         return(value)
       }
-      rst <- r.int[1 + Nintervals] - r.int[1 + as.integer( (s - 0) * Nintervals / (t - 0))]
+      rst <- r.int[1 + Nintervals] - r.int[1 + as.integer( s * Nintervals / t)]
       rist <- r.int.int(s,t)
       ri0s <- r.int.int(0,s)
       res <- exp(rst)*(abs(1+rist/(1/f+ri0s)))^(-2)
+      # write.table("test2", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+      # write.table(rst, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+      # write.table(rist, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+      # write.table(ri0s, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+      # write.table(res, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+      # # print(rst)
+      # print(rist)
+      # print(ri0s)
+      # print(res)
       return(res)
-    }
   }
 }
 
@@ -146,11 +157,17 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
     if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")
     
+  
+  # print(fix.mu) # delete
+  
     nobs <- Ntip(phylo)
     
     phylo$edge.length[phylo$edge[,2] %in% 1:nobs] <- phylo$edge.length[phylo$edge[,2] %in% 1:nobs] + time_stop
     
     if (fix.mu==FALSE){
+      
+      # print("test3") # delete
+      
       init <- c(lamb_par,mu_par)
       p <- length(init)
       optimLH <- function(init){
@@ -159,22 +176,36 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
         f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
         f.mu.par <- function(t){abs(f.mu(t,mu_par))}
         LH <- likelihood_bd_in_past(phylo,tot_time,time_stop, f.lamb.par,f.mu.par,desc, tot_desc,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt,cond=cond)
+        
+        
+        # print("test") # delete
+        # print(lamb_par)
+        # print(mu_par)
+        # print(-LH)
+        # 
+        # write.table("test", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+        # write.table(lamb_par, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+        # write.table(mu_par, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+        # write.table(-LH, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+        # write.table(" ", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
+        # 
+        
+        
         return(-LH)
       }
-      temp <- suppressWarnings(optim(init, optimLH, method = meth))
+      # temp <- suppressWarnings(optim(init, optimLH, method = meth)) # original -> replace
+      temp <- optim(init, optimLH, method = meth)
       lamb.par <- temp$par[1:length(lamb_par)]
       mu.par <- temp$par[(1+length(lamb_par)):length(init)]
       f.lamb.par <- function(t){abs(f.lamb(t, lamb.par))}
       f.mu.par <- function(t){abs(f.mu(t, mu.par))}
       res <- list(model = "birth death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1) , lamb_par=lamb.par, mu_par=mu.par, f.lamb=Vectorize(f.lamb.par), f.mu=Vectorize(f.mu.par))
-    }
-    
-    else
-    {
+   
+       }else{
+         
       init <- c(lamb_par)
       p <- length(init)
-      optimLH <- function(init)
-      {
+      optimLH <- function(init){
         lamb_par <- init[1:length(lamb_par)]
         f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
         f.mu.par <- function(t){abs(f.mu(t,mu_par))}
@@ -185,7 +216,7 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
       lamb.par <- temp$par[1:length(lamb_par)]
       f.lamb.par <- function(t){abs(f.lamb(t, lamb.par))}
       f.mu.par <- function(t){abs(f.mu(t, mu_par))}
-      res <- list(model = "birth.death", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=lamb.par, f.lamb=Vectorize(f.lamb.par))
+      res <- list(model = "pure birth", LH = -temp$value, aicc=2*temp$value+2*p+(2*p*(p+1))/(nobs-p-1),lamb_par=lamb.par, f.lamb=Vectorize(f.lamb.par))
     }
     class(res) <- "fit.bd"
     return(res)
