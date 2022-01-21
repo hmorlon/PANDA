@@ -1,51 +1,10 @@
-# This function tests all combinations of subclades for which
-# sampling fraction is available thanks to the taxonomy.
-# 
-# Update from April 03, 2020
-#
-#
-# Update from August 11, 2020
-# Ncores argument allows to specifies number of cores used for parallelization
-# 
-# Upgrade from November 09, 2020
-# Version 0.1.0
-# - Multiple backbone has been successfully implemented
-# - MODELc constrains diversification rate estimates to a limit maximum set by n.max
-# 
-# Upgrade from February 10, 2021
-# Version 0.1.1
-# - Coded to be used with hypothesis testing.
-#
-# Upgrade from April 07, 2021
-# Version 0.1.2
-# - Better selection of initial values for parameters
-# - new argument np.sub to apply a reduced set of models to subclades.
-
-# Upgrade from April 30, 2021
-# Version 0.1.3
-# - new argument rate.max to constrain maximum rate value (cannot be used with n.max)
-
 shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                             models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
                             backbone.option = "backbone2", multi.backbone = F, 
                             np.sub = 4, n.max = NULL, rate.max = NULL, Ncores = 1){
   env.func <- environment()
   options(echo = T)
-  #### Loading packages ####
-  source <- getwd()
-  pkgs <- c("ape", "phytools", "phangorn","picante","stats", "parallel", "snow", "geiger", "ParallelLogger")
-  new.pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs)){install.packages(new.pkgs)}
-  lapply(pkgs, require, character.only = T)
   
-  # RPANDA codes and functions ####
-  # to check why these functions are not in RPANDA package
-  
-  # additional functions
-  #source("./tools/functions.for.shift.estimates.R")
-  #source("./get.comb.shift.R")
-  
-  setwd(source)
   #### argument check ####
   if(!inherits(data, "data.frame")){
     stop("object \"data\" is not of class \"data.frame\"")
@@ -101,7 +60,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     stop()
   }
   
-  # Final list to  to return
+  # Final list to return
   phylo <- ladderize(phylo, F) # Mandatory to match node.labels (to check)
   
   all_res <- rep(list(NULL),4)
@@ -235,10 +194,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   names_phylo2 <- ifelse(is.na(names_phylo2), paste("at node", names(phylo2)), paste("for", names_phylo2))
   
-  #cl <- makeCluster(Ncores, type="SOCK")
-  #clusterExport(cl, list("phylo2", "tot_time2", "backbone", "spec_times", "branch_times", "f2", "models", "div.models",
-  #                       "fitLikelihood", "suppressWarnings", "try","getLikelihood", ".Phi", "integrate", ".Psi", ".Integrate"), envir = env.func)
-  
   models.sub <- models
   if(np.sub == 1){
     models.sub <- models.sub[models.sub %in% "BCST"]
@@ -255,6 +210,11 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   if(np.sub == "no_extinction"){
     models.sub <- models.sub[models.sub %in% c("BCST", "BVAR")]
   }
+  
+  # subclades to parallelize
+  #cl <- makeCluster(Ncores, type="SOCK")
+  #clusterExport(cl, list("phylo2", "tot_time2", "backbone", "spec_times", "branch_times", "f2", "models", "div.models",
+  #                       "fitLikelihood", "suppressWarnings", "try","getLikelihood", ".Phi", "integrate", ".Psi", ".Integrate"), envir = env.func)
   
   final2 <- lapply(seq_along(phylo2), function(i){
     cat(i, "/", length(phylo2))
@@ -283,8 +243,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     return(results)
     
   })
-  #, progressBar = T, stopOnError = T
-  #stopCluster(cl)
   
   names(final2) <- names(phylo2)
   names_final2 <- paste(names(phylo2),lapply(final2,function(x) paste(x$Models[x$delta_AICc < 2], collapse = "/")), sep = "/")
@@ -349,7 +307,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   }
   
   # LOOP ON COMBINATIONS ####
-  
   # Parallelization of backbone models
   cat("\nDiversification models are running: \n")
   
@@ -362,13 +319,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                          "Children", "extract.clade.ln", "expand.grid", "get.branching.nodes"), envir = env.func)
   
   ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(ALL_bck_comb), all_comb_models, progressBar = T, stopOnError = T)
-  
-  # for debugging
-  #ALL_final3 <- lapply(1, all_comb_models)
-  
   stopCluster(cl)
-  
-  #sapply(ALL_final3, function(x) x[[1]][[1]]$Lambda < 0)
   
   names(ALL_final3) <- names(ALL_bck_comb)
   if(multi.backbone == T){
@@ -419,7 +370,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     }
   }
   
-  #ALL_TOTAL_df <- ALL_TOTAL_df[-ALL_TOTAL_df$AICc < 0,]
   res_phylo1 <- cbind("whole_tree", res_phylo[res_phylo$AICc == min(res_phylo$AICc), c("Parameters","logL","AICc")])
   names(res_phylo1) <- names(ALL_TOTAL)
   
@@ -437,8 +387,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   all_res[3] <- list(ALL_final3)
   all_res[4] <- list(ALL_TOTAL)
   names(all_res)[c(3,4)] <- c("backbones", "total")
-  
-  setwd(source)
   
   if(!"whole_tree" %in% best_ALL_TOTAL$Combination){
     cat("\n A total of", nrow(best_ALL_TOTAL), "combination(s) got the best fit(s) (delta AICc < 2). \n")

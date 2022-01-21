@@ -1,14 +1,14 @@
 fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1, 
                                backbone = backbone, spec_times = spec_times, branch_times = branch_times, # options for backbone analysis
                                meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE, 
-                               expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE, dt = 0, 
+                               expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE, dt = 1e-3, 
                                cond = "crown", model, n.max, rate.max) 
 {
-  # functions for setting up constraints
-  # to check
+  if (!inherits(phylo, "phylo"))
+    stop("object \"phylo\" is not of class \"phylo\"")
+  
   div <- function(par, phylo, branch_times, model, backbone){
     
-    # to change for multi-backbone and for backbone1
     if(backbone == "backbone2"){
       if(max(unlist(branch_times)) > max(branching.times(phylo))){
         tmrca <- max(unlist(branch_times))
@@ -19,7 +19,6 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
     } else {
       tmrca <- max(branching.times(phylo))
     }
-    
     
     if(model == "BCST"){
       lambda <- par[1]

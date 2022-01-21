@@ -13,18 +13,10 @@ all_comb_models <- function(to){
   cat("\n", to, "/", length(ALL_comb))
   shift <- ALL_branch_times_clades[c(clade_to_shift,unlist(ALL_bck_comb_to))]
   
-  # USELESS??? ####
-  
-  # to check if working with multiple backbone
   branch_times_to <- get.branching.nodes(shift)
-  #if(length(branch_times_to) > 1){
   branch_to_bck <- lapply(all_tested_nodes, function(x) get.branching.nodes(ALL_branch_times_clades[x]))
-  #} else {
-  #  branch_to_bck <- lapply(all_tested_nodes, function(x) get.branching.nodes(ALL_branch_times_clades[x]))
-  #}
   
   # ~ Branching TIMES ##### 
-  # Branching times should be created from branch_times because there are created at each combination
   branch_times <- branch_times_to
   for(nodeID in 1:length(branch_times_to)){
     branch_times[[nodeID]] <- sapply(branch_times_to[[nodeID]], get.node.ages)
@@ -40,7 +32,6 @@ all_comb_models <- function(to){
     ALL_branch_times_to_bck[[bID]] <- branch_times_nodeID
   }
   
-  #ALL_branch_times_to_bck[length(ALL_branch_times_to_bck) + 1] <- list(branch_times)
   names(ALL_branch_times_to_bck) <- all_tested_nodes
   
   # Muli backbone

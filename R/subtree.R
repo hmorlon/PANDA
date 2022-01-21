@@ -1,7 +1,3 @@
-#take a list of species and return the monophyletic group containing these species (i.e the species and all the descendants of the MRCA), along with the root length, contained in subtree$root.edge
-
-#source("./tools/extract.clade.ln.R")
-
 subtree<-function(tree,species_list)
 
 {

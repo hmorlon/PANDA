@@ -1,6 +1,3 @@
-# This function mimics div.models from functions.for.shift.estimates.R but with RPANDA functions
-# backbone options are available.
-
 div.models <- function(phylo, tot_time, f,
                        backbone = F, spec_times = NULL, branch_times = NULL,
                        models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),

@@ -1,15 +1,4 @@
-# This function calculates and represent sampling fractions from group given by a data frame (could be the taxonomy, trait data, etc.).
-# 
-# Created on January 28, 2021
-#
-
 get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = T, text.cex = 1, pch.cex = 0.8, ...){
-  
-  # Packages ####
-  pkgs <- c("ape", "phytools", "phangorn")
-  new.pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs)){install.packages(new.pkgs)}
-  lapply(pkgs, require, character.only = T, quietly = T)
   
   # Checks ####
   if(is.null(phylo) | is(phylo)[1] != "phylo"){

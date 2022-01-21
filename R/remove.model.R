@@ -1,6 +1,3 @@
-# This function allows to remove a model from the model comparison.
-# It avoid to rerun all the models.
-
 remove.model <- function(shift.res, model){
   
   if(!model %in% c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR")){

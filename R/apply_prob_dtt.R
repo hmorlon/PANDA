@@ -1,8 +1,3 @@
-# This function applies prob_dtt to a combination of shifts from the output of shift.estimates.
-# 
-# N.B.: last time points is not present because of prob_dtt.
-# Two options: (1) modify prob_dtt (2) or this function
-
 apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
                            combi = 1, backbone.option = "backbone2"){
   
@@ -368,19 +363,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
   }
 }
-
-#mat <- prob_backbone[[1]]
-#mean.val <- t(as.numeric(rownames(mat))) %*% mat
-#max_mean_div <- max(mean.val)
-
-#plot_prob_dtt(prob_backbone[[1]], lwd = 2, grain = 0.1, ylim = c(0, max_mean_div + max_mean_div*0.50))
-#par(new = T)
-#plot(1:length(diversities["88",]), diversities["88",], type = "l", ylim = c(0, max_mean_div + max_mean_div*0.50),
-#     xlab = "", ylab = "", axes = F, lty = 3, col = "deepskyblue4", lwd = 3)
-
-#plot_prob_dtt(prob_backbone[[1]], lwd = 2, grain = 0.05)
-#plot_prob_dtt(prob_subclades[[1]], lwd = 2, grain = 0.05, add = T, col.mean = "blue")
-
 
 
 

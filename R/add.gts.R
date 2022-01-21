@@ -1,26 +1,14 @@
 add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
                           root.age = NULL, present = NULL, xpd.x = T, time.interval = 1,
                           names = NULL, fill = T, cex = 1, direction = "rightwards", padj = -0.5){
-   # to add as a argument
+  
+  # BETA VERSION: SHOULD BE TESTED MORE DEEPLY
   
   if(is.phylo){
     plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
     present <- plot.obj.phylo$xx[1]
     root.age <- 0
   }
-
-  
-  #if(is.null(present)){ # to counter plot.obj.phylo
-  #  if(is.null(root.age)){
-  #    if("xx" %in% names(plot.obj.phylo)){
-  #      present <- plot.obj.phylo$present[1]
-  #    } else {
-  #      present <- 40 # to adjust for other plots
-  #    }
-  #  } else {
-  #    present <- root.age
-  #  }
-  #}
 
   # GTS
   ages <- data.frame(start = NA, end = NA)
@@ -195,6 +183,4 @@ add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
       }
     } 
   }
-
-  #mtext(text = "Time (Myrs)", side = 1, line = 3.5, at = present/2, cex = cex*2/3)
 }

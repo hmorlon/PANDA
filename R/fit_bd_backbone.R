@@ -4,8 +4,8 @@ fit_bd_backbone <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f 
                              expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE, dt = 1e-3, 
                              cond = "crown", model) 
 {
-  
-  # functions for setting up constraints
+  if (!inherits(phylo, "phylo"))
+    stop("object \"phylo\" is not of class \"phylo\"")
   
   rate <- function(par, tot_time, model){
     

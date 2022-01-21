@@ -1,24 +1,8 @@
-# This function calculates the combinations of subclades for which
-# sampling fraction is available thanks to the taxonomy.
-# 
-# Version from July 10, 2020
-#
-# Update from August 14, 2020
-# The argument Ncores allows to specifies number of cores used for parallelization
-# 
-# Version from November 16, 2020 
-# The argument multi.backbone allows to split backbone in different parts and to calculate
-# 
-
 get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncores = 1){
+  
   env.func <- environment()
   options(echo = T)
-  #### Loading packages ####
-  pkgs <- c("ape", "phytools", "phangorn","picante","stats", "parallel", "geiger", "ParallelLogger")
-  new.pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs)){install.packages(new.pkgs)}
-  lapply(pkgs, require, character.only = T)
-  
+
   #### argument check ####
   if(!inherits(data, "data.frame")){
     stop("object \"data\" is not of class \"data.frame\"")

@@ -1,5 +1,3 @@
-# Version of likelihood_bd including arguments needed for backbone analysis
-
 likelihood_bd_backbone <- function (phylo, tot_time, f, f.lamb.l, f.mu.l, 
           backbone, spec_times, branch_times, # arguments for backbone analysis
           cst.lamb = FALSE, cst.mu = FALSE, expo.lamb = FALSE, expo.mu = FALSE,

@@ -1,25 +1,8 @@
-# This function plots a phylogenetic tree and represents shifts of diversification rates detected
-# by the function shift.estimates
-#
-# Version 1.0 from November 12, 2020
-# geotime.scale not emplemented yet
-# 
-
-# Version 1.1 from May 13, 2021
-# gts is not included in this version but developped as an external function add.geochrono
-# 
-
 plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 1,
                             backbone.option = "backbone2", main = NULL,
                             col.sub = NULL, col.bck = "black", lad = T, tested_nodes = F, lty.bck = 1,
                             text.cex = 1, pch.cex = 1,
                             leg = T, ...){
-  
-  # Loading packages ####
-  pkgs <- c("ape", "phytools", "phangorn","picante","stats", "strap", "geiger", "RColorBrewer")
-  new.pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs)){install.packages(new.pkgs)}
-  lapply(pkgs, require, character.only = T)
   
   # Checking arguments ####
   # phylo

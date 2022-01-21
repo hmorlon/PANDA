@@ -1,23 +1,6 @@
-# This function plots the paleo-diversity dynamic associated to shifts of diversification rates detected
-# by the function shift.estimates
-#
-# Version 1.0 from November 12, 2020
-# geotime.scale not emplemented yet
-# 
-
-# March 25, 2021
-# Update on output for whole tree as the best scenario
-
 paleodiv <- function(phylo, data, sampling.fractions, shift.res,
                      backbone.option = "backbone2", combi = 1, split.div = F){
-  
-  # pkgs ####
-  
-  pkgs <- c("phangorn")
-  new.pkgs <- pkgs[!(pkgs %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs)){install.packages(new.pkgs)}
-  lapply(pkgs, require, character.only = T)
-  
+
   # Checking arguments ####
   # phylo
   if(!inherits(phylo, "phylo")){
