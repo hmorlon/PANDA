@@ -1,9 +1,10 @@
 plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE, 
                            int = TRUE, plot.bound = FALSE, conf = 0.95, add = FALSE, 
                            col.mean = "red", col.bound = "blue", lty = "solid", lwd = 1,
-                           lty.bound = 1, ...) 
+                           lty.bound = 1, add.present = T, ...) 
 {
-  int.conf <- function(vect, conf = 0.95, div) {
+
+    int.conf <- function(vect, conf = 0.95, div) {
     tab <- cbind(vect, div)
     tab.sort <- tab[order(tab[, 1], decreasing = TRUE), 
     ]
@@ -17,6 +18,11 @@ plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE,
                     tab[, 2] > max(tab.sort[c(1:i), 2]), 0, tab[, 1])
     return(out)
   }
+  
+  if(add.present == F){
+    mat <- mat[,-ncol(mat)]
+  }
+  
   nsp <- nrow(mat)
   tim <- ncol(mat)
   pm <- (matrix(nrow = nsp * tim, ncol = 4))

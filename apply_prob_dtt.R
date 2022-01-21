@@ -4,7 +4,7 @@
 # Two options: (1) modify prob_dtt (2) or this function
 
 apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
-                           combi = 1, backbone.option = "backbone2", scale = 1){
+                           combi = 1, backbone.option = "backbone2"){
   
   # some checks ####
   if(!inherits(data, "data.frame")){
@@ -113,8 +113,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
   
   comb <- shift.res$total$Combination[combi]
   
-  # Deterministic diversity to set the limit
-  
   if(comb == "whole_tree"){
     
     whole_df <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc),]
@@ -134,7 +132,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
     return(prob_whole)
     
-  }  else { # combination is not the whole tree
+  } else { # combination is not the whole tree
     
     comb <- strsplit(comb, split = "/")[[1]]
     comb <- sapply(comb, function(x) strsplit(x, split = "[.]"))
@@ -193,10 +191,13 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
                                       time = 1:subclades_tot_times[i],
                                       N0 = N0, l = l, prec = 1000,
                                       m = 1:round(max_div))
+      # adding diversities at present
+      prob_subclades[[i]] <- cbind(prob_subclades[[i]],rep(0, nrow(prob_subclades[[i]])))
+      prob_subclades[[i]][row.names(prob_subclades[[i]]) == as.character(diversities[i,ncol(diversities)]),
+                          ncol(prob_subclades[[i]])] <- 1
+      colnames(prob_subclades[[i]])[ncol(prob_subclades[[i]])] <- "0"
     }
     names(prob_subclades) <- comb.sub
-    
-    lapply(prob_subclades, colSums)
     
     # N0 for backbones ####
     lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phylo)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
@@ -326,27 +327,37 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     #                                 cond = cond, model = "BVAR_DVAR", fix.mu = F)
     
     cat("\nDTT calculation for backbone(s):\n")
+    
     prob_backbone <- list()
     for(i in 1:length(backbone_fit.bd)){
+      # first attempt to get a minimum of 95% for the sum of the probabilities per Myr
+      check_prob <- F
       cat("\t", i, "/", length(backbone_fit.bd), "\n")
+      m_range <- c(1, 2, 2.5, 3, 3.5, 4, 4.5, 5) # potential argument?
       l <- lin.node$n.tips_prev[lin.node$node == names(backbone_fit.bd)[i]]
       N0 <- lin.node$sp_tt_prev[lin.node$node == names(backbone_fit.bd)[i]]
       method <- ifelse(l/N0 == 1, "simple", "hard")
-      
       max_div <- max_diversities[names(max_diversities) == names(backbone_fit.bd)[i]]
-      if(max_div > 10000){
-        max_div <- 1000
+      
+      while(check_prob == F){
+        # cat("\t\t", 9-length(m_range), "/ 9\n")
+        prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
+                                       time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
+                                       method = method, l = l, N0 = N0,
+                                       m = 1:round(max_div*m_range[1]))
+        m_range <- m_range[-1]
+        
+        # adding diversities at present
+        prob_backbone[[i]] <- cbind(prob_backbone[[i]],rep(0, nrow(prob_backbone[[i]])))
+        prob_backbone[[i]][row.names(prob_backbone[[i]]) == as.character(diversities[length(prob_subclades)+i,ncol(diversities)]),
+                            ncol(prob_backbone[[i]])] <- 1
+        colnames(prob_backbone[[i]])[ncol(prob_backbone[[i]])] <- "0"
+        
+        if(min(colSums(prob_backbone[[i]])) >= 0.95){
+          check_prob <- T
+        }
       }
-      prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
-                                     time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
-                                     method = method, l = l, N0 = N0,
-                                     m = 1:round(max_div*scale))
     }
-    
-    summary(colSums(prob_backbone[[1]]))
-    
-    as.vector(colSums(prob_backbone[[1]]))
-    which(colSums(prob_backbone[[1]]) == min(colSums(prob_backbone[[1]])))
     
     #plot_dtt(test_backbone, backbone_tot_times[1], N0)
     #plot_dtt(backbone_fit.bd[[1]], backbone_tot_times, N0)
