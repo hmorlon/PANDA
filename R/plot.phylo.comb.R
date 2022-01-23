@@ -1,8 +1,8 @@
 plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 1,
                             backbone.option = "backbone2", main = NULL,
-                            col.sub = NULL, col.bck = "black", lad = T, tested_nodes = F, lty.bck = 1,
-                            text.cex = 1, pch.cex = 1,
-                            leg = T, ...){
+                            col.sub = NULL, col.bck = "black", lad = T,  leg = T,
+                            tested_nodes = F, lty.bck = 1, text.cex = 1, pch.cex = 1,
+                            ...){
   
   # Checking arguments ####
   # phylo

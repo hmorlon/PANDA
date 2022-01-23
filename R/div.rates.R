@@ -1,4 +1,5 @@
-div.rates <- function(phylo, shift.res, combi = 1, part = "backbone", backbone.option = "backbone2"){
+div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
+                      backbone.option = "backbone2"){
   
   # Checking arguments ####
   # phylo

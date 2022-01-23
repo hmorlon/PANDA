@@ -1,8 +1,10 @@
-add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
-                          root.age = NULL, present = NULL, xpd.x = T, time.interval = 1,
-                          names = NULL, fill = T, cex = 1, direction = "rightwards", padj = -0.5){
+add.gts <- function(thickness, quaternary = T, is.phylo = F,
+                    root.age = NULL, present = NULL, xpd.x = T, time.interval = 1,
+                    names = NULL, fill = T, cex = 1, direction = "rightwards", padj = -0.5){
   
   # BETA VERSION: SHOULD BE TESTED MORE DEEPLY
+  par(xpd = T)
+  plot_dim = par("usr")
   
   if(is.phylo){
     plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
@@ -63,8 +65,8 @@ add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
     }
   }
   
-  y1 <- plot_dim[3] - abs(Y1)
-  #y1 <- Y1
+  thickness <- plot_dim[3] - abs(thickness)
+  #thickness <- thickness
   
   # dealing with x
   y2 <- plot_dim[3]
@@ -147,11 +149,11 @@ add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
   }
   
   if(time.interval == 1){
-    axis(side = 1, at = time.seq, labels = rep("", length(time.seq)), cex = cex, col.ticks = "grey", line = -0.5, pos = y1, cex.axis = cex, padj = padj)
-    axis(side = 1, at = time.seq[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = y1, cex.axis = cex, padj = padj)
+    axis(side = 1, at = time.seq, labels = rep("", length(time.seq)), cex = cex, col.ticks = "grey", line = -0.5, pos = thickness, cex.axis = cex, padj = padj)
+    axis(side = 1, at = time.seq[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = thickness, cex.axis = cex, padj = padj)
   } else {
     axis(side = 1, at = time.seq[seq(length(labels),1,-time.interval)], labels = labels[seq(length(labels),1,-time.interval)],
-         cex = cex, pos = y1, cex.axis = cex, padj = padj)
+         cex = cex, pos = thickness, cex.axis = cex, padj = padj)
   }
   
   for(i in 1:nrow(ages)){
@@ -162,15 +164,15 @@ add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
     } else {
       arrows(x0 = ages[i, 2], y0 = y2, x1 = ages[i, 2], plot_dim[4], lty = 2, col = "grey50", length = 0)
     }
-    polygon(unlist(rep(ages[i, c(1,2)], each = 2)), c(y1,y2,y2,y1), col = ages$col[i], lwd = 0.5)
+    polygon(unlist(rep(ages[i, c(1,2)], each = 2)), c(thickness,y2,y2,thickness), col = ages$col[i], lwd = 0.5)
     
     if(i != nrow(ages)){
       mean_i <- mean(as.numeric(ages[i, c(1,2)]))
-      text(mean_i, y1, labels = ages$names[i], pos = 3,
+      text(mean_i, thickness, labels = ages$names[i], pos = 3,
            cex = cex, adj = c(0.5, 0.5))
     } else {
       if(direction == "leftwards"){
-        text(mean(as.numeric(c(ages[i, c(1)],plot_dim[2]))), y1, labels = ages$names[i], pos = 3,
+        text(mean(as.numeric(c(ages[i, c(1)],plot_dim[2]))), thickness, labels = ages$names[i], pos = 3,
              cex = cex, adj = c(0.5, 0.5))
       } else {
         # to improve
@@ -179,7 +181,7 @@ add.gts <- function(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
         }else {
           x.text <- ifelse(xpd.x, mean(c(0,ages$start[i])), mean(c(plot_dim[1],ages$start[i])))
         }
-        text(x.text, y1, labels = ages$names[i], pos = 3, cex = cex, adj = c(0.5, 0.5))
+        text(x.text, thickness, labels = ages$names[i], pos = 3, cex = cex, adj = c(0.5, 0.5))
       }
     } 
   }

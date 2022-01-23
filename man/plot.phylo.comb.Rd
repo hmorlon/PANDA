@@ -1,0 +1,84 @@
+\name{plot.phylo.comb}
+\alias{plot.phylo.comb}
+
+\title{
+  Plot shifts of diversifcation on a phylogeny
+}
+\description{
+  Plots the phylogeny with colored branches according to shifts of diversifcation.
+}
+\usage{
+  plot.phylo.comb(phylo, data, sampling.fractions, shift.res, combi = 1,
+                backbone.option = "backbone2", main = NULL,
+                col.sub = NULL, col.bck = "black", lad = T, leg = T,
+                lty.bck = 1, tested_nodes = F, text.cex = 1, pch.cex = 1,
+                ...)
+}
+
+\arguments{
+  \item{phylo}{
+    an object of type 'phylo' (see ape documentation)
+  }
+  \item{data}{
+    an object of class "data.frame" containing a database of monophyletic groups for which potential shift can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phylo.
+  }
+  \item{sampling.fractions}{
+    the output resulting from get.sampling.fractions.
+  }
+  \item{shift.res}{
+    the output resulting from shift.estimates.
+  }
+  \item{combi}{
+    numeric. The combination of shifts defined by its rank in the global comparison.
+  }
+  \item{backbone.option}{
+    character. Define the type of backbone analysis done. "backbone1" includes the stems of subclades in subclade analyses. "backbone2" includes the stems of subclades in the backbone analysis.  
+  }
+  \item{col.sub}{
+    character. A vector to specify colors of subclade(s). Can be let NULL (see details).
+  }
+  \item{col.bck}{
+    character. A vector to specify colors of backbone(s). Default is "black" for simple backbone (see details).
+  }
+  \item{lad}{
+    bolean. Allows to ladderize the tree.
+  }
+  \item{leg}{
+    bolean. If TRUE, legend of the selected combination is added to the plot with names from data and best model names. Default is TRUE. The position is automatically adjusted in function of lad argument.
+  }
+  \item{lty.bck}{
+    numeric. Define lty for the backbone.
+  }
+  \item{tested_nodes}{
+    bolean. If TRUE, all the tested node are highlighted by a red point.
+  }
+  \item{text.cex}{
+    numeric. Define the size of legend text.
+  }
+  \item{pch.cex}{
+    numeric. Define the size of points if tested_nodes = TRUE
+  }
+  \item{...}{
+    further arguments to be passed to plot or to plot.phylo.
+  }
+}
+
+\value{
+plot.phylo.comb returns the same invisible object as plot.phylo.
+}
+\details{
+  If col.sub is not specified, color vector for subclades is c(c(brewer.pal(8, "Dark2"),brewer.pal(8, "Set1"),"darkmagenta","dodgerblue2", "orange", "forestgreen")). For multiple backbone, default vector is c("blue4", "orange4", "red4", "grey40", "coral4", "deeppink4", "khaki4", "darkolivegreen", "darkslategray",”black”).
+  ... allows to set different graphical parameters from plot.phylo such as cex for size of tip labels or lwd for the thickness of the phylogeny edges.
+
+}
+\references{
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+}
+\author{Nathan Mazet}
+\seealso{
+\code{\link{shift.estimates}}}
+}
+\examples{
+# Examples are coming...
+
+}
