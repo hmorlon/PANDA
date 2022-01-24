@@ -28,17 +28,12 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or it does not correspond to the provided phylogeny")
   }
-  
-  # START
-  
+
+    # START
   #### SUBCLADES ####
   # Steps #
   # 1) list all potential subclades (named by nodes)
-  # If sampling.fractions is calculated from get.sampling.fractions instead of get.f.bygroups
-  if(any(names(sampling.fractions) == "taxo")){
-    names(sampling.fractions)[names(sampling.fractions) == "taxo"] <- "data"
-  }
-  
+
   potential_clades <- sampling.fractions[!is.na(sampling.fractions$to_test),]
   potential_clades$data <- ifelse(is.na(potential_clades$data), paste("f", sampling.fractions[!is.na(sampling.fractions$to_test), c("nodes")], sep="."), potential_clades$data)
   

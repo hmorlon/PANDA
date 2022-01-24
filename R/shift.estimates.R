@@ -18,10 +18,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   if(!inherits(sampling.fractions, "data.frame")){
     stop("object \"sampling.fractions\" is not of class \"data.frame\"")
-  } else {
-    if(any(names(sampling.fractions) == "taxo")){
-      names(sampling.fractions)[names(sampling.fractions) == "taxo"] <- "data"
-    }
   }
   
   if(any("Species" %in% colnames(data)) == F){
