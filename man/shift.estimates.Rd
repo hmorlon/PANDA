@@ -65,7 +65,8 @@
 }
 \details{
   The output for backbone is a list of with three levels. The first level corresponds to the combinations of subclades. The second level corresponds to the potential splitting within the backbone if analysis with multiple backbones has been led. The third level is the list of dataframe summaryzing the model comparison for all backbone of this combination of subclade (see example section).
-  We recommand to remove "BVAR_DVAR" models from the models set and to lead the first analysis with multi.backbone = F.
+
+We recommand to remove "BVAR_DVAR" model from the models set and to lead the first analysis with multi.backbone = F.
 
 }
 \references{
