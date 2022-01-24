@@ -4,18 +4,7 @@
     lamb <- f.lamb(0)
     mu <- f.mu(0)
     r <- lamb-mu
-    # print("test") # delete
-    # print(lamb)
-    # print(mu)
-    res <- exp(r*(t-s))*(1+(lamb*(exp(r*t)-exp(r*s)))/(r/f+lamb*(exp(r*s)-1)))^(-2)
-    
-    # write.table("test", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-    # write.table(lamb, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-    # write.table(mu, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-    # write.table(r, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-    # write.table(res, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-    # 
-    
+    res <- exp(r*(t-s))*(abs(1+(lamb*(exp(r*t)-exp(r*s)))/(r/f+lamb*(exp(r*s)-1))))^(-2)
     return(res)
   }
   
@@ -80,9 +69,9 @@
       Nintervals <- 1 + as.integer(t/dt)
       X <- seq(0, t, length.out = Nintervals + 1)
       r <- function(t){f.lamb(t)-f.mu(t)}
-      r.int <- cumsum(r(X)) * t / Nintervals
+      r.int <- cumsum(sapply(X, r)) * t / Nintervals
       r.int.0 <- function(y){exp(r.int[1 + as.integer( y * Nintervals / t)]) * f.lamb(y)}
-      r.int.int.tab <- cumsum(r.int.0(X)) * t / Nintervals
+      r.int.int.tab <- cumsum(sapply(X, r.int.0)) * t / Nintervals
       r.int.int <- function(x,y){
         indy <- 1 + as.integer( y * Nintervals / t)
         indx <- 1 + as.integer( x * Nintervals / t)
@@ -93,18 +82,103 @@
       rist <- r.int.int(s,t)
       ri0s <- r.int.int(0,s)
       res <- exp(rst)*(abs(1+rist/(1/f+ri0s)))^(-2)
-      # write.table("test2", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-      # write.table(rst, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-      # write.table(rist, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-      # write.table(ri0s, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-      # write.table(res, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-      # # print(rst)
-      # print(rist)
-      # print(ri0s)
-      # print(res)
       return(res)
   }
 }
+
+
+.Phi_in_past <- function(t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0)
+{
+  
+  if ((cst.lamb==TRUE) & (cst.mu==TRUE))
+  {
+    lamb <- f.lamb(0)
+    mu <- f.mu(0)
+    r <- lamb-mu
+    res <- 1-r*exp(r*t)/(r/f+lamb*(exp(r*t)-1))
+    return(res)
+  }
+  
+  if ((cst.lamb==TRUE) & (expo.mu==TRUE))
+  {
+    lamb0 <- f.lamb(0)
+    mu0 <- f.mu(0)
+    beta <- log(f.mu(1)/mu0)
+    r.int <- function(x,y){lamb0*(y-x)-mu0/beta*(exp(beta*y)-exp(beta*x))}
+    g <- function(y){r.int(0,y)}
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
+    return(res)
+  }
+  
+  if ((expo.lamb==TRUE) & (cst.mu==TRUE))
+  {
+    lamb0 <- f.lamb(0)
+    alpha <- log(f.lamb(1)/lamb0)
+    mu0 <- f.mu(0)
+    r.int <- function(x,y){lamb0/alpha*(exp(alpha*y)-exp(alpha*x))-mu0*(y-x)}
+    g <- function(y){r.int(0,y)}
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
+    return(res)
+  }
+  
+  if ((expo.lamb==TRUE) & (expo.mu==TRUE))
+  {
+    lamb0 <- f.lamb(0)
+    alpha <- log(f.lamb(1)/lamb0)
+    mu0 <- f.mu(0)
+    beta <- log(f.mu(1)/mu0)
+    r.int <- function(x,y){lamb0/alpha*(exp(alpha*y)-exp(alpha*x))-mu0/beta*(exp(beta*y)-exp(beta*x))}
+    g <- function(y){r.int(0,y)}
+    gvect <- function(y){mapply(g,y)}
+    r.int.0 <- function(y){exp(gvect(y))*f.lamb(y)}
+    r.int.int <- function(x,y){.Integrate(r.int.0,x,y,stop.on.error=FALSE)}
+    res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
+    return(res)
+  }
+  
+  else
+  {
+    if (dt==0)
+    {
+      r <- function(t){f.lamb(t)-f.mu(t)}
+      r.int <- function(x,y){.Integrate(Vectorize(r),x,y,stop.on.error=FALSE)}
+      r.int.0 <- function(y){exp(r.int(0,y))*f.lamb(y)}
+      r.int.int <- function(x,y){.Integrate(Vectorize(r.int.0),x,y,stop.on.error=FALSE)}
+      rit <- r.int(0,t)
+      ri0t <- r.int.int(0,t)
+      res <- 1.0 - exp(rit)/(1/f+ri0t)
+      return(res)
+    }
+    else
+    {
+      s <- 0
+      t <- t
+      Nintervals <- 1 + as.integer((t-s)/dt)
+      X <- seq(s, t, length.out = Nintervals + 1)
+      r <- function(t){f.lamb(t)-f.mu(t)}
+      r.int <- cumsum(sapply(X, r)) * (t - s) / Nintervals
+      r.int.0 <- function(y){exp(r.int[1 + as.integer( (y - s) * Nintervals / (t - s))]) * f.lamb(y)}
+      r.int.int.tab <- cumsum(sapply(X, r.int.0)) * (t - s) / Nintervals
+      r.int.int <- function(x,y){
+        indy <- 1 + as.integer( (y - s) * Nintervals / (t - s))
+        indx <- 1 + as.integer( (x - s) * Nintervals / (t - s))
+        value <- r.int.int.tab[indy] - r.int.int.tab[indx]
+        return(value)
+      }
+      rit <- r.int[1 + Nintervals]
+      ri0t <- r.int.int(0,t)
+      res <- 1.0 - exp(rit)/(1/f+ri0t)
+      return(res)
+    }
+  }
+}
+
 
 
 
@@ -133,19 +207,23 @@ likelihood_bd_in_past <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot
   
   log_data_lik <- sum(log_indLikelihood)+desc*log(f)
   
+  log_data_lik <- log_data_lik + desc*log(1-.Phi_in_past(time_stop,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt))
+  
+  
   if (cond==FALSE){
     log_final_lik <- log_data_lik
   }
   
   else if (cond=="stem"){
-    Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
+    Phi <- .Phi_in_past(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_final_lik <- log_data_lik - log(1-Phi)
   }
   
   else if (cond=="crown"){
-    Phi <- .Phi(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
+    Phi <- .Phi_in_past(tot_time,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt)
     log_final_lik <- log_data_lik - log(f.lamb(tot_time)) - 2*log(1-Phi)
   }
+  
   return(log_final_lik)
 }
 
@@ -156,17 +234,13 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
             dt=0, cond="crown") {
     if (!inherits(phylo, "phylo"))
       stop("object \"phylo\" is not of class \"phylo\"")
-    
-  
-  # print(fix.mu) # delete
+
   
     nobs <- Ntip(phylo)
     
     phylo$edge.length[phylo$edge[,2] %in% 1:nobs] <- phylo$edge.length[phylo$edge[,2] %in% 1:nobs] + time_stop
     
     if (fix.mu==FALSE){
-      
-      # print("test3") # delete
       
       init <- c(lamb_par,mu_par)
       p <- length(init)
@@ -175,26 +249,18 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
         mu_par <- init[(1+length(lamb_par)):length(init)]
         f.lamb.par <- function(t){abs(f.lamb(t,lamb_par))}
         f.mu.par <- function(t){abs(f.mu(t,mu_par))}
+        
+        # test
+        if ((abs(f.lamb.par(0))>1e5)|(abs(f.mu.par(0))>1e5)){
+          return(Inf)
+        }
+        
         LH <- likelihood_bd_in_past(phylo,tot_time,time_stop, f.lamb.par,f.mu.par,desc, tot_desc,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt,cond=cond)
-        
-        
-        # print("test") # delete
-        # print(lamb_par)
-        # print(mu_par)
-        # print(-LH)
-        # 
-        # write.table("test", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-        # write.table(lamb_par, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-        # write.table(mu_par, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-        # write.table(-LH, "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-        # write.table(" ", "/Users/bperez/ownCloud/Recherche/These/ISYEB/network/AM_2019/network/diversification/RPANDA_slice_past/test_simulations/test.txt", append = T, quote=F, row.names = F, col.names = F) # delete
-        # 
-        
-        
+
         return(-LH)
       }
-      # temp <- suppressWarnings(optim(init, optimLH, method = meth)) # original -> replace
-      temp <- optim(init, optimLH, method = meth)
+      temp <- suppressWarnings(optim(init, optimLH, method = meth))
+
       lamb.par <- temp$par[1:length(lamb_par)]
       mu.par <- temp$par[(1+length(lamb_par)):length(init)]
       f.lamb.par <- function(t){abs(f.lamb(t, lamb.par))}
