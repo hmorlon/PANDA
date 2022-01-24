@@ -29,12 +29,12 @@ likelihood_bd_backbone <- function (phylo, tot_time, f, f.lamb.l, f.mu.l,
 #Type of analysis (options backbone, branch_times and spec_time should be added here)
   if (backbone == F) {
     log_data_lik <- sum(log_indLikelihood) + nbtips * log(f)
-  } else if (backbone == "backbone1"){
+  } else if (backbone == "stem.shift"){
 
     spec_lik<-prod(sapply(spec_times, f.lamb.l))
     log_data_lik<-sum(log_indLikelihood)+nbtips*log(f)+log(spec_lik)
 
-  } else if (backbone == "backbone2"){
+  } else if (backbone == "crown.shift"){
     branch_lik<-1	
     for (k in 1:length(branch_times))
     {branch_lik<-branch_lik*f.lamb.l(branch_times[[k]][2])*.Psi(branch_times[[k]][1],branch_times[[k]][2],f.lamb=f.lamb.l,f.mu=f.mu.l,f=f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu)}
