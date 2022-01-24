@@ -60,7 +60,7 @@
 }
 \author{Nathan Mazet}
 \seealso{
-\code{\link{plot_fit_bd}}, \code{\link{plot_dtt}}, \code{\link{likelihood_bd}}
+\code{\link{get.comb.shift}}, \code{\link{shift.estimates}}}
 }
 \examples{
 # Examples are coming...

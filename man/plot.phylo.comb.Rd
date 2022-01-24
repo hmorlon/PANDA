@@ -9,9 +9,9 @@
 }
 \usage{
   plot.phylo.comb(phylo, data, sampling.fractions, shift.res, combi = 1,
-                backbone.option = "backbone2", main = NULL,
-                col.sub = NULL, col.bck = "black", lad = T, leg = T,
-                lty.bck = 1, tested_nodes = F, text.cex = 1, pch.cex = 1,
+                 backbone.option = "backbone2", main = NULL,
+                 col.sub = NULL, col.bck = "black", lad = T, leg = T,
+                 lty.bck = 1, tested_nodes = F, text.cex = 1, pch.cex = 1,
                 ...)
 }
 

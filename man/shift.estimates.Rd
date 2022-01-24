@@ -34,7 +34,7 @@
     type of the backbone analysis:
     \itemize{ 
       \item"backbone1": the stems of subclades are included in subclade analyses;
-      \item"backbone2": the stems of subclades are included in the backbone analysis.
+      \item"backbone2": the stems of subclades are included in the backbone analysis (Default).
     }
   }
   
@@ -42,7 +42,7 @@
     bolean. If TRUE backbones are splitted when it is possible.
   }
   \item{np.sub}{
-    Defines set of models to apply to subclade based on the number of parameters. By default np.sub = 4 and all models from argument models will be applied. If np.sub = 3, the more complex model "BVAR_DVAR" is excluded. If np.sub = 2, the set of models is reduced to "BCST", "BCST_DCST" and "BVAR" models. np.sub = "no_extinction" only applies "BCST" and "BVAR" models.
+    Defines the set of models to apply to subclade based on the number of parameters. By default np.sub = 4 and all models from argument models will be applied. If np.sub = 3, the more complex model "BVAR_DVAR" is excluded. If np.sub = 2, the set of models is reduced to "BCST", "BCST_DCST" and "BVAR" models. np.sub = "no_extinction" only applies "BCST" and "BVAR" models.
   }
   \item{rate.max}{
     numeric. Define a maximum value for diversification rate through time.
@@ -51,7 +51,7 @@
     numeric. Define a maximum value for diversity through time.
   }
   \item{Ncores}{
-    numeric. Define the number of CPU to use for parallelizing the computation of combinations.
+    numeric. Define the number of CPU cores to use for parallelizing the computation of combinations.
   }
 }
 
@@ -74,7 +74,7 @@
 }
 \author{Nathan Mazet}
 \seealso{
-\code{\link{div.models}}}
+\code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}, code{\link{paleodiv}}
 }
 \examples{
 # More to come... (add Cetacea output)

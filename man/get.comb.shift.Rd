@@ -8,7 +8,8 @@
   Provides all the combinations of nodes of a phylogeny where shifts of diversification can be tested.
 }
 \usage{
-  get.comb.shift(phylo, data, sampling.fractions, clade.size = 5, Ncores = 1)
+  get.comb.shift(phylo, data, sampling.fractions,
+                 clade.size = 5, Ncores = 1)
 }
 
 \arguments{
@@ -25,12 +26,12 @@
     numeric. Define the minimum number of species in a subgroup. Default is 5.
   }
   \item{Ncores}{
-    numeric. Define the number of CPU to use for parallelizing the computation of combinations.
+    numeric. Define the number of CPU cores to use for parallelizing the computation of combinations.
   }
 }
 
 \value{
-  a list of combinations of subclades. The name of each element of list corresponds to the nodes of the subclades composing the combination separated by a point. If an combination cannot be splitted, its item in the list is NULL. Otherwise, it contains the internal nodes where the backbone can be splitted.
+  a list of combinations of subclades. The name of each element of the list corresponds to the nodes of the subclades composing the combination separated by a point. If an combination of subclade cannot be splitted in the backbone, its item in the list is NULL. Otherwise, it contains the internal nodes where the backbone can be splitted.
   
 }
 \details{
