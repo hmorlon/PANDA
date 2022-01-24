@@ -29,12 +29,12 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   character. Allows to analyse a backbone. Default is FALSE and spec_times and branch_times are then ignored.
   Otherwise:
     \itemize{ 
-      \item"backbone1": the stems of subclades are included in subclade analyses;
-      \item"backbone2": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis.
     }
   }
   \item{spec_times}{
-  a numeric vector numeric of the stem ages of subclades. Used only if backbone = "backbone1". Default is NULL.
+  a numeric vector numeric of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
   }
   \item{branch_times}{
   a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "backbone2". Default is NULL.

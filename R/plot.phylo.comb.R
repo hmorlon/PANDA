@@ -1,5 +1,5 @@
 plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 1,
-                            backbone.option = "backbone2", main = NULL,
+                            backbone.option = "crown.shift", main = NULL,
                             col.sub = NULL, col.bck = "black", lad = T,  leg = T,
                             tested_nodes = F, lty.bck = 1, text.cex = 1, pch.cex = 1,
                             ...){
@@ -41,7 +41,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
     stop("argument \"lty.bck\" should be numeric.")
   }
   
-  if(!backbone.option %in% c("backbone1", "backbone2")){
+  if(!backbone.option %in% c("stem.shift", "crown.shift")){
     cat("\nArgument \"backbone.option\" is incorrect.")
     stop()
   }
@@ -135,7 +135,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
     
     for(i in 1:length(comb.sub)){
       clade_edges <- Descendants(phylo1, as.numeric(comb.sub[i]), type = "all")
-      if(backbone.option == "backbone1"){
+      if(backbone.option == "stem.shift"){
         clade_edges <- c(as.numeric(comb.sub[i]),clade_edges)
       }
       colors_clades[which(phylo1$edge[,2] %in% clade_edges)] <- col.sub[i]

@@ -249,7 +249,7 @@ all_comb_models <- function(to){
         cat("\n -",btb, "/",length(phylo_backbone_cut), "sub backbones\n")
       }
       
-      # by default backbone.option = backbone2
+      # by default backbone.option = "crown.shift"
       backbone <- backbone.option
       spec_times <- NULL
       cond <- "crown"
@@ -258,7 +258,7 @@ all_comb_models <- function(to){
       tot_time3 <- max(c(node.age(phylo_backbone_cut[[btb]])$ages, unlist(branch_times_to_bck[[btb]])))
       
       # for converting in backbone1: not fully working yet
-      if(backbone.option == "backbone1"){
+      if(backbone.option == "stem.shift"){
         
         spec_times <- sapply(branch_times_to_bck[[btb]], "[[", 2)
         cond <- "stem"

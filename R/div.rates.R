@@ -1,5 +1,5 @@
 div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
-                      backbone.option = "backbone2"){
+                      backbone.option = "crown.shift"){
   
   # Checking arguments ####
   # phylo
@@ -99,7 +99,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
     #time.seq <- c(seq(tot_time,0,by=-1),0)
     time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
     
-    if(backbone.option == "backbone1"){
+    if(backbone.option == "stem.shift"){
       parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Parts), type = "parent")
       tot_time2 <- as.list(branching.times(phylo)[as.character(parental_nodes)])
     } else {

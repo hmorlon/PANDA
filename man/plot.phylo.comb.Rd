@@ -9,7 +9,7 @@
 }
 \usage{
   plot.phylo.comb(phylo, data, sampling.fractions, shift.res, combi = 1,
-                 backbone.option = "backbone2", main = NULL,
+                 backbone.option = "crown.shift", main = NULL,
                  col.sub = NULL, col.bck = "black", lad = T, leg = T,
                  lty.bck = 1, tested_nodes = F, text.cex = 1, pch.cex = 1,
                 ...)
@@ -32,7 +32,7 @@
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
   \item{backbone.option}{
-    character. Define the type of backbone analysis done. "backbone1" includes the stems of subclades in subclade analyses. "backbone2" includes the stems of subclades in the backbone analysis.  
+    character. Define the type of backbone analysis done. "stem.shift" includes the stems of subclades in subclade analyses. "crown.shift" includes the stems of subclades in the backbone analysis.  
   }
   \item{col.sub}{
     character. A vector to specify colors of subclade(s). Can be let NULL (see details).

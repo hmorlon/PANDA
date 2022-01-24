@@ -1,6 +1,6 @@
 shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                             models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
-                            backbone.option = "backbone2", multi.backbone = F, 
+                            backbone.option = "crown.shift", multi.backbone = F, 
                             np.sub = 4, n.max = NULL, rate.max = NULL, Ncores = 1){
   env.func <- environment()
   options(echo = T)
@@ -47,7 +47,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     stop()
   }
   
-  if(!backbone.option %in% c("backbone1","backbone2")){
+  if(!backbone.option %in% c("stem.shift","crown.shift")){
     stop("\"backbone.option\" argument is incorrect." )
   }
   
@@ -170,13 +170,13 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   cond <- unlist(list(rep(list(NULL),length(phylo2))),recursive = F)
   
   # backbone selection
-  if(backbone.option == "backbone1"){
+  if(backbone.option == "stem.shift"){
     cond <- rep(list("stem"),length(phylo2))
     for (i in 1:length(phylo2)){
       tot_time2[[i]] <- max(node.age(phylo2[[i]])$ages) + phylo2[[i]]$root.edge
     }
   }
-  if(backbone.option == "backbone2"){
+  if(backbone.option == "crown.shift"){
     cond <- rep(list("crown"),length(phylo2))
     for (i in 1:length(phylo2)){
       tot_time2[[i]] <- max(node.age(phylo2[[i]])$ages)

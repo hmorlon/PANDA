@@ -11,7 +11,7 @@
   shift.estimates(phylo, data, sampling.fractions, comb.shift,
                   models = c("BCST", "BCST_DCST", "BVAR",
                   "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
-                  backbone.option = "backbone2", multi.backbone = F,
+                  backbone.option = "crown.shift", multi.backbone = F,
                   np.sub = 4, rate.max = NULL, n.max = NULL, Ncores = 1)
 }
 \arguments{
@@ -33,8 +33,8 @@
   \item{backbone.option}{
     type of the backbone analysis:
     \itemize{ 
-      \item"backbone1": the stems of subclades are included in subclade analyses;
-      \item"backbone2": the stems of subclades are included in the backbone analysis (Default).
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
     }
   }
   

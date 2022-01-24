@@ -9,7 +9,7 @@
 }
 \usage{
   paleodiv(phylo, data, sampling.fractions, shift.res,
-           backbone.option = "backbone2", combi = 1, split.div = F)
+           backbone.option = "crown.shift", combi = 1, split.div = F)
 }
 
 \arguments{
@@ -22,6 +22,10 @@
   \item{shift.res}{
     the output resulting from shift.estimates.
   }
+  \item{backbone.option}{
+    the output resulting from shift.estimates.
+  }
+  
   \item{combi}{
     numeric. The combination of shifts defined by its rank in the global comparison.
   }

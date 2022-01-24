@@ -1,5 +1,5 @@
 paleodiv <- function(phylo, data, sampling.fractions, shift.res,
-                     backbone.option = "backbone2", combi = 1, split.div = F){
+                     backbone.option = "crown.shift", combi = 1, split.div = F){
 
   # Checking arguments ####
   # phylo
@@ -28,7 +28,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     stop("object \"split.div\" should be logical.")
   }
   
-  if(!backbone.option %in% c("backbone1", "backbone2")){
+  if(!backbone.option %in% c("stem.shift", "crown.shift")){
     cat("\nArgument \"backbone.option\" is incorrect.")
     stop()
   }
@@ -75,7 +75,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     best_subclades_df_combi <- best_subclades_df[best_subclades_df$Clades %in% as.numeric(comb.sub),]
     best_subclades_df_combi <- best_subclades_df_combi[match(comb.sub, best_subclades_df_combi$Clades), ]
     
-    if(backbone.option == "backbone1"){
+    if(backbone.option == "stem.shift"){
       parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Clades), type = "parent")
       tot_time2 <- as.list(branching.times(phylo)[as.character(parental_nodes)])
     } else {
@@ -209,7 +209,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
       lamb_pari <- as.numeric(best_backbones_df[j, c("Lambda","Alpha")])
       mu_pari <- as.numeric(best_backbones_df[j, c("Mu","Beta")])
       
-      if(backbone.option == "backbone1"){
+      if(backbone.option == "stem.shift"){
         parental_nodes <- Ancestors(phylo, as.numeric(lin.node$node[j]), type = "parent")
         if(parental_nodes == 0){
           parental_nodes <- Ntip(phylo)+1
