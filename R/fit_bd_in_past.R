@@ -207,7 +207,7 @@ likelihood_bd_in_past <- function(phylo,tot_time,time_stop,f.lamb,f.mu,desc, tot
   
   log_data_lik <- sum(log_indLikelihood)+desc*log(f)
   
-  log_data_lik <- log_data_lik + desc*log(1-.Phi_in_past(time_stop,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt))
+  log_data_lik <- log_data_lik + nbtips*log(1-.Phi_in_past(time_stop,f.lamb,f.mu,f,cst.lamb=cst.lamb,cst.mu=cst.mu,expo.lamb=expo.lamb,expo.mu=expo.mu,dt=dt))
   
   
   if (cond==FALSE){
