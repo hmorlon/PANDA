@@ -1,5 +1,5 @@
 apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
-                           combi = 1, backbone.option = "backbone2"){
+                           combi = 1, backbone.option = "crown.shift"){
   
   # some checks ####
   if(!inherits(data, "data.frame")){
@@ -31,7 +31,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     stop()
   }
   
-  if(!backbone.option %in% c("backbone1","backbone2")){
+  if(!backbone.option %in% c("stem.shift","crown.shift")){
     stop("\"backbone.option\" argument is incorrect." )
   }
   
@@ -42,7 +42,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     stop("object \"combi\" should be numeric.")
   }
   
-  # because backbone.option = "backbone2" by default
+  # because backbone.option = "crown.shift" by default
   type <- "crown" 
   
   # functions ####
@@ -163,7 +163,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
     # can be done without subclades trees
     subclades_tot_times <- sapply(subclades_trees, function(x) max(node.age(x)$ages))
-    if(backbone.option == "backbone1"){
+    if(backbone.option == "stem.shift"){
       subclades_tot_times <- sapply(subclades_trees, function(x) max(node.age(x)$ages)+max(x$root.edge))
       type <- "stem"
     }
@@ -294,7 +294,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
     backbone_tot_times <- c()
     for(i in 1:nrow(lin.node)){
-      if(backbone.option == "backbone1"){
+      if(backbone.option == "stem.shift"){
         parental_nodes <- Ancestors(phylo, as.numeric(lin.node$node[i]), type = "parent")
         # last backbone should be "crown"
         if(i == nrow(lin.node)){
@@ -311,7 +311,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
     #branch_times <- list(c(branching.times(phylo)["89"], branching.times(phylo)[as.character(Ancestors(phylo, 89))]))
     #spec_times <- NULL
-    #backbone <- "backbone2"
+    #backbone <- "crown.shift"
     #cond = "crown"
     
     #test_backbone <- fit_bd_backbone(backbone_trees[[2]], tot_time = backbone_tot_times[i],
@@ -363,6 +363,3 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
   }
 }
-
-
-
