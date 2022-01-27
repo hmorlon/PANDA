@@ -5,14 +5,14 @@
   Plot shifts of diversifcation on a phylogeny
 }
 \description{
-  Plots the phylogeny with colored branches according to shifts of diversifcation.
+  Plots the phylogeny with colored branches according to shifts of diversification.
 }
 \usage{
   plot.phylo.comb(phylo, data, sampling.fractions, shift.res, combi = 1,
                  backbone.option = "crown.shift", main = NULL,
                  col.sub = NULL, col.bck = "black", lad = T, leg = T,
                  lty.bck = 1, tested_nodes = F, text.cex = 1, pch.cex = 1,
-                ...)
+                 ...)
 }
 
 \arguments{
@@ -79,6 +79,30 @@ plot.phylo.comb returns the same invisible object as plot.phylo.
 \code{\link{shift.estimates}}}
 }
 \examples{
-# Examples are coming...
+# loading data
+data("Cetacea")
+data("taxo_cetacea")
 
+# main procedure
+f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
+                                             data = taxo[names(taxo) != "Genus"],
+                                             plot = T, cex = 0.3)
+
+comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, data = taxo[names(taxo) != "Genus"],
+                             sampling.fractions = f_df_cetacea, Ncores = 4)
+
+shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
+                          sampling.fractions = f_df_cetacea,
+                          comb.shift = comb.shift_cetacea,
+                          models = c("BCST","BCST_DCST","BVAR",
+                          "BVAR_DCST","BCST_DVAR"),
+                          backbone.option = "crown.shift", Ncores = 4)
+
+# use of plot.phylo.comb
+plot.phylo.comb(phylo = Cetacea, data = taxo_cetacea,
+                sampling.fractions = f_df_cetacea,
+                shift.res =  shifts, combi = 1, label.offset = 0.3,
+                main = "", lad = F, edge.width = 1, cex = 0.4,
+                tested_nodes = T, text.cex = 0.8, pch.cex = 1)
 }
+

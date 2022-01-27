@@ -40,7 +40,7 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "backbone2". Default is NULL.
   }
  \item{models}{
- a vector of character. Defines the set of birth-death models to applies e.g. BCST means pure birth constant rate model, BCST_DVAR means birth constant rate and death variable rate model. Default is c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR") and applies all combinations of constant or variable rates for speciation and extinction. Time dependency is exponential.
+ a vector of character. Defines the set of birth-death models to applies e.g. BCST means pure birth constant rate model, BCST_DVAR means birth constant rate and death variable rate model. Default is c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR") and applies all combinations of constant or variable rates for speciation and extinction. Time dependency is only exponential (for now).
   }
   \item{cond}{
     conditioning to use to fit the model:

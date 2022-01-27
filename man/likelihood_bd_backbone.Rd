@@ -6,7 +6,7 @@
 Likelihood of a phylogeny under the general birth-death model (backbone)
 }
 \description{
-Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011.
+Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011. Modified version of likelihoud_bd for backbones.
 }
 \usage{
 likelihood_bd(phylo, tot_time, f.lamb, f.mu, f,

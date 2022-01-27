@@ -2,7 +2,7 @@
 \alias{div.rates}
 
 \title{
-  Daleodiversity through time
+  Paleodiversity through time
 }
 \description{
   Calculate paleodiversity through time from shift.estimates output.
@@ -30,18 +30,15 @@
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
   \item{split.div}{
-    bolean. Specifies if paleodiversity should be return by parts
+    bolean. Specifies if paleodiversity should be plitted by parts of the selected combination (TRUE) or not. 
   }
 }
 
 \value{
-  a matrix with as many rows as parts in the combination and as many column as million years from the root to the present.
+  If split.div = T, paleodiversity is returned in a matrix with as many rows as parts in the selected combination and as many column as million years from the root to the present. if spit.div = T, global paleodiversity is returned as a vector with a value per million year.
   
 }
-\details{
-  ...
-  
-}
+
 \references{
 	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
 	
@@ -51,6 +48,29 @@
 \code{\link{shift.estimates}, \link{apply_prob_dtt}}
 }
 \examples{
-# Examples are coming...
+# loading data
+data("Cetacea")
+data("taxo_cetacea")
+
+# main procedure
+f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
+                                             data = taxo[names(taxo) != "Genus"],
+                                             plot = T, cex = 0.3)
+
+comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, data = taxo[names(taxo) != "Genus"],
+                             sampling.fractions = f_df_cetacea, Ncores = 4)
+
+shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
+                          sampling.fractions = f_df_cetacea,
+                          comb.shift = comb.shift_cetacea,
+                          models = c("BCST","BCST_DCST","BVAR",
+                          "BVAR_DCST","BCST_DVAR"),
+                          backbone.option = "crown.shift", Ncores = 4)
+
+# use of paleodiv
+paleodiversity <- paleodiv(phylo = Cetacea, data = taxo,
+                      sampling.fractions = f_df_cetacea,
+                      shift.res = shifts,
+                      combi = 1, split.div = F)
 
 }

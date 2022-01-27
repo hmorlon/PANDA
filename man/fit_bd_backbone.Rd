@@ -5,7 +5,7 @@
 Maximum likelihood fit of the general birth-death model (backbone)
 }
 \description{
-Fits the birth-death model with potentially time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011.
+Fits the birth-death model with potentially time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011. Modified version of fit_bd for backbones.
 }
 \usage{
 fit_bd_backbbone(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,

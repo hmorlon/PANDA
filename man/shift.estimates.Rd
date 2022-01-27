@@ -68,6 +68,8 @@
 
 We recommand to remove "BVAR_DVAR" model from the models set and to lead the first analysis with multi.backbone = F.
 
+clade.size argument should be the same value for the whole procedure (same than for get.sampling.fraction and get.comb.shift).
+
 }
 \references{
 	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
@@ -78,6 +80,24 @@ We recommand to remove "BVAR_DVAR" model from the models set and to lead the fir
 \code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}, code{\link{paleodiv}}
 }
 \examples{
-# More to come... (add Cetacea output)
+# loading data
+
+data("Cetacea")
+data("taxo_cetacea")
+
+# main procedure
+f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
+                                             data = taxo[names(taxo) != "Genus"],
+                                             plot = T, cex = 0.3)
+
+comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, data = taxo[names(taxo) != "Genus"],
+                             sampling.fractions = f_df_cetacea, Ncores = 4)
+
+shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
+                          sampling.fractions = f_df_cetacea,
+                          comb.shift = comb.shift_cetacea,
+                          models = c("BCST","BCST_DCST","BVAR",
+                          "BVAR_DCST","BCST_DVAR"),
+                          backbone.option = "crown.shift", Ncores = 4)
 
 }
