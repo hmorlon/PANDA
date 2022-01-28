@@ -4,10 +4,14 @@ Date: 2021-11-07
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
-    R (>= 2.14.2),
+	R (>= 2.14.2),
     ape,
     picante,
-    methods
+    methods,
+    RColorBrewer,
+    phangorn,
+    parallel,
+    ParallelLogger
 Suggests:
     testthat
 Imports:
@@ -31,11 +35,7 @@ Imports:
     Rmpfr,
     stats,
     TESS,
-    utils,
-    RColorBrewer
-    phangorn
-    parallel
-    ParallelLogger
+    utils
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],
