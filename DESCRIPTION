@@ -24,18 +24,17 @@ Imports:
     Matrix,
     mvMORPH (>= 1.1.0),
     parallel,
+    ParallelLogger,
+    phangorn,
     phytools,
     pspline,
     pvclust,
     raster,
+    RColorBrewer,
     Rmpfr,
     stats,
     TESS,
     utils,
-    RColorBrewer
-    phangorn
-    parallel
-    ParallelLogger
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],
