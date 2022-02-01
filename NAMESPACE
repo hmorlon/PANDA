@@ -35,7 +35,7 @@ importFrom(utils, combn, tail, flush.console, read.table, write.table)
 importFrom(phangorn, Siblings, Ancestors, Descendants)
 importFrom(RColorBrewer, brewer.pal)
 importFrom(ParallelLogger, clusterApply)
-importFrom(parallel, makeCluster, clusterExport)
+importFrom(parallel, makeCluster, clusterExport, clusterStop)
 
 S3method(print, fit.env)
 S3method(print, fit.bd)
