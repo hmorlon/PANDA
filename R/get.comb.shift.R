@@ -292,8 +292,12 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   for(i in 1:length(ALL_bck_comb)){
     if(is.list(ALL_bck_comb[[i]])){
       ALL_bck_comb1 <- c(ALL_bck_comb1, paste0(names(ALL_bck_comb[i]), "/"))
+      for(j in 1:length(ALL_bck_comb[[i]])){
+        ALL_bck_comb1 <- c(ALL_bck_comb1, paste(names(ALL_bck_comb)[i], paste(ALL_bck_comb[[i]][[j]], collapse = "."), sep = "/"))
+      }
+    } else {
+      ALL_bck_comb1 <- c(ALL_bck_comb1, paste(names(ALL_bck_comb)[i], ALL_bck_comb[[i]], sep = "/"))
     }
-    ALL_bck_comb1 <- c(ALL_bck_comb1, paste(names(ALL_bck_comb)[i], ALL_bck_comb[[i]], sep = "/"))
   }
   
 
