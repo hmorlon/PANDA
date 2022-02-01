@@ -26,10 +26,10 @@
     the output resulting from get.sampling.fractions.
   }
   \item{shift.res}{
-    the output resulting from shift.estimates.
+    the output resulting from shift.estimates or NULL (default). This latter case allows to represent combinations only from the output of \code{\link{get.comb.shift}} by specifying the combination (see argument combi).
   }
   \item{combi}{
-    numeric. The combination of shifts defined by its rank in the global comparison.
+    character or numeric. If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison.
   }
   \item{backbone.option}{
     character. Define the type of backbone analysis done. "stem.shift" includes the stems of subclades in subclade analyses. "crown.shift" includes the stems of subclades in the backbone analysis.  
@@ -77,7 +77,7 @@ plot.phylo.comb returns the same invisible object as plot.phylo.
 \author{Nathan Mazet}
 \seealso{
 \code{\link{shift.estimates}}}
-}
+
 \examples{
 # loading data
 data("Cetacea")

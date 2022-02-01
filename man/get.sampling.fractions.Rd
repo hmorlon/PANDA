@@ -42,26 +42,25 @@
 
 
 \value{
-  a dataframe of the size of the number of node (tips included) with the following informations in column:
+  a dataframe with as many rows as nodes in the phylogeny with the following informations in columns:
   \item{nodes}{the node IDs}
-  \item{data}{the name of the subclade form data}
-  \item{f}{the sampling fraction for this node}
+  \item{data}{the name of the subclade from data}
+  \item{f}{the sampling fraction for this subclade}
   \item{sp_in}{the number of species included in the tree}
   \item{sp_tt}{the number of species described in the data}
   \item{to_test}{the node IDs for nodes that are testable according to clade.size}
 }
 \details{
-  All described species should be included to properly calculate sampling fractions. If the taxonomy of the studied group is tricky to establish, one can create a fake dataframe with random species names (Gen1_sp1, Gen1_sp2, Gen2_sp1, etc.) to circumvent taxonomic difficulties. 
+  All described species should be included to properly calculate sampling fractions. The example of Cetacea uses a taxonomic database but groups can be defined on geography or traits as soon as they are monophyletic. If the taxonomy of the studied group is difficult to establish (e.i. taxonomic uncertainty, etc.), a "fake" taxonomic database can be created with random species names (Gen1_sp1, Gen1_sp2, Gen2_sp1, etc.) to circumvent taxonomic difficulties. 
 
 }
 \references{
 	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
-	
 }
 \author{Nathan Mazet}
 \seealso{
 \code{\link{get.comb.shift}}, \code{\link{shift.estimates}}}
-}
+
 \examples{
 # loading data
 
@@ -69,18 +68,9 @@ data("Cetacea")
 data("taxo_cetacea")
 
 # main procedure
-f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                             data = taxo[names(taxo) != "Genus"],
-                                             plot = T, cex = 0.3)
-
-comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, data = taxo[names(taxo) != "Genus"],
-                             sampling.fractions = f_df_cetacea, Ncores = 4)
-
-shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
-                          sampling.fractions = f_df_cetacea,
-                          comb.shift = comb.shift_cetacea,
-                          models = c("BCST","BCST_DCST","BVAR",
-                          "BVAR_DCST","BCST_DVAR"),
-                          backbone.option = "crown.shift", Ncores = 4)
+taxo_cetacea_no_genus taxo[names(taxo) != "Genus"]
+f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
+                                    data = taxo[names(taxo) != "Genus"],
+                                    plot = T, cex = 0.3)
 
 }

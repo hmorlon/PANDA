@@ -31,7 +31,7 @@
 }
 
 \value{
-  a list of combinations of subclades. The name of each element of the list corresponds to the nodes of the subclades composing the combination separated by a point. If an combination of subclade cannot be splitted in the backbone, its item in the list is NULL. Otherwise, it contains the internal nodes where the backbone can be splitted.
+  a vector of character summaryzing the combination of shifts as a concatenation of node IDs separated by "." or "/". Node IDs at the left of "/" correspond to shifts at the origin of subclades (monophyletic and ultrametric subtrees) while node IDs at the right of "/" correspond to shifts at the origin of backbone(s) (pruned trees).
   
 }
 \details{
@@ -44,25 +44,22 @@
 \author{Nathan Mazet}
 \seealso{
 \code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}}
-}
+
 \examples{
-# loading data
-
-data("Cetacea")
-data("taxo_cetacea")
-
-# main procedure
-f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                             data = taxo[names(taxo) != "Genus"],
-                                             plot = T, cex = 0.3)
-
-comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, data = taxo[names(taxo) != "Genus"],
-                             sampling.fractions = f_df_cetacea, Ncores = 4)
-
-shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
-                          sampling.fractions = f_df_cetacea,
-                          comb.shift = comb.shift_cetacea,
-                          models = c("BCST","BCST_DCST","BVAR",
-                          "BVAR_DCST","BCST_DVAR"),
-                          backbone.option = "crown.shift", Ncores = 4)
+  \dontrun{
+  # loading data
+  
+  data("Cetacea")
+  data("taxo_cetacea")
+  
+  # main procedure
+  taxo_cetacea_no_genus taxo[names(taxo) != "Genus"]
+  f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
+                                      data = taxo[names(taxo) != "Genus"],
+                                      plot = T, cex = 0.3)
+  
+  comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
+                                       data = taxo[names(taxo) != "Genus"],
+                                       sampling.fractions = f_df_cetacea, Ncores = 4)
+  }
 }

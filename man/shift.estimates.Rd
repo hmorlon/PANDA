@@ -39,7 +39,12 @@
   }
   
   \item{multi.backbone}{
-    bolean. If TRUE backbones are splitted when it is possible.
+    can be either FALSE (default), TRUE or "all": 
+    \itemize{
+    \item{FALSE: only combinations with simple backbone will be analyzed.}
+    \item{TRUE: only multiple backbones will be analyzed.}
+    \item{"all", all combinations are analyzed.}
+    }
   }
   \item{np.sub}{
     Defines the set of models to apply to subclade based on the number of parameters. By default np.sub = 4 and all models from argument models will be applied. If np.sub = 3, the more complex model "BVAR_DVAR" is excluded. If np.sub = 2, the set of models is reduced to "BCST", "BCST_DCST" and "BVAR" models. np.sub = "no_extinction" only applies "BCST" and "BVAR" models.
