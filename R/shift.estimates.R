@@ -322,7 +322,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                          "Children", "extract.clade.ln", "expand.grid", "get.branching.nodes"), envir = env.func)
   
   ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(ALL_bck_comb), all_comb_models, progressBar = T, stopOnError = T)
-  stopCluster(cl)
+  ParallelLogger::stopCluster(cl)
   
   names(ALL_final3) <- names(ALL_bck_comb)
   cat("\n\n--- Comparison(s) of the", length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)]), "combinations ---\n")
