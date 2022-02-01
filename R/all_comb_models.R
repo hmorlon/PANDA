@@ -7,7 +7,8 @@ all_comb_models <- function(to){
   }
   ALL_comb <- strsplit(names(ALL_bck_comb), "[.]")
   
-  ALL_bck_comb_to <- ALL_bck_comb[names(ALL_bck_comb) %in% paste(ALL_comb[[to]],collapse = ".")][[1]]
+  #ALL_bck_comb_to <- ALL_bck_comb[names(ALL_bck_comb) %in% paste(ALL_comb[[to]],collapse = ".")][[1]]
+  ALL_bck_comb_to <- ALL_bck_comb[to]
   
   clade_to_shift <- ALL_comb[[to]]
   cat("\n", to, "/", length(ALL_comb))
@@ -181,12 +182,6 @@ all_comb_models <- function(to){
       }
     }
     
-    if(multi.backbone == T & !is.null(ALL_bck_comb_to)){
-      cat("\n",mb, "/",length(ALL_bck_comb_to), "multibackbone(s)")
-    } else {
-      cat("\n",mb, "/",length(phylo_backbone_cut), "backbone")
-    }
-    
     # tot time et spec time
     res_bck <- rep(list(NULL),length(phylo_backbone_cut))
     
@@ -245,9 +240,6 @@ all_comb_models <- function(to){
     names(f) <- names(phylo_backbone_cut)
     
     for(btb in 1:length(phylo_backbone_cut)){
-      if(multi.backbone == T & !is.null(ALL_bck_comb_to)){
-        cat("\n -",btb, "/",length(phylo_backbone_cut), "sub backbones\n")
-      }
       
       # by default backbone.option = "crown.shift"
       backbone <- backbone.option

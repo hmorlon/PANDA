@@ -25,21 +25,23 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
          \nPlease rename the corresponding column with the name \"Species\".")
   }
   
-  if(is(comb.shift)[1] != "list"){
-    stop("Object \"comb.shift\" is incorrect.")
-  } else {
-    ALL_bck_comb <- comb.shift
-  }
+  list_comb.shift <- strsplit(comb.shift, "/")
+  ALL_bck_comb1 <- rep(list(NULL), length(unique(sapply(list_comb.shift, "[[", 1) )))
+  names(ALL_bck_comb1) <- unique(sapply(list_comb.shift, "[[", 1))
+  # ALL_bck_comb1 = simple backbone
+  
+  ALL_bck_combm <- list_comb.shift[sapply(list_comb.shift, length) > 1]
+  names(ALL_bck_combm) <- sapply(ALL_bck_combm, "[[", 1)
+  ALL_bck_combm <- lapply(ALL_bck_combm, function(x) x[-1])
+  # ALL_bck_combm = multiple backbone
+  
+  ALL_bck_comb_all <- c(ALL_bck_comb1, ALL_bck_combm)
+  # ALL_bck_comb_all = all combinations
   
   if(any(!phylo$tip.label %in% data$Species)){
     cat("The following tips are not in the database.\n \n")
     cat(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
     stop()
-  }
-  
-  if(all(sapply(comb.shift, is.null)) & multi.backbone == T){
-    multi.backbone <- F
-    cat("\nWarnings: There is no combination with multiple backbones.\n")
   }
   
   if(!np.sub %in% 1:4 & np.sub != "no_extinction"){
@@ -93,9 +95,9 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   all_res[[1]] <- res_phylo ; names(all_res)[[1]] <- "whole_tree"
   
-  all_tested_nodes <- unique(c(unique(unlist(strsplit(names(comb.shift), "[.]"))), unique(unlist(comb.shift))))
+  all_tested_nodes <- unique(unlist(strsplit(names(ALL_bck_comb_all), "[.]")))
   
-  all_lineages <- unique(unlist(strsplit(names(ALL_bck_comb), "[.]")))
+  all_lineages <- unique(unlist(strsplit(names(ALL_bck_comb1), "[.]")))
   
   ALL_clade_names <- rep(list(NULL), length(unique(unlist(all_tested_nodes))))
   
@@ -187,7 +189,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   names_phylo2 <- sampling.fractions[sampling.fractions$nodes %in% as.numeric(names(phylo2)),]
   names_phylo2 <- names_phylo2$data[match(names_phylo2$nodes, as.numeric(names(phylo2)))]
-  
   names_phylo2 <- ifelse(is.na(names_phylo2), paste("at node", names(phylo2)), paste("for", names_phylo2))
   
   models.sub <- models
@@ -258,22 +259,28 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ####_____________ ####
   #### BACKBONES ####
   cat("\n--- BACKBONES ---\n")
-  
-  if(length(ALL_bck_comb) == length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)])){
-    multi.backbone <- F
+
+  # multi.backbone change
+  if(multi.backbone == F){
+    cat("\n", "The", length(ALL_bck_comb1),"combinations with simple backbones will be compared. \n")
+    ALL_bck_comb <- ALL_bck_comb1
   }
   
   if(multi.backbone == T){
-    
-    cat("\n MULTI-BACKBONE OPTION ACTIVATED \n \n", length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)]), "combinations will be compared. \n")
-  } else {
-    cat("\n", length(ALL_bck_comb),"combinations will be compared. \n")
+    cat("\n", "The", length(ALL_bck_combm),"combinations with multiple backbones will be compared. \n")
+    ALL_bck_comb <- ALL_bck_combm
   }
   
+  if(multi.backbone == "all"){
+    cat("\n", "All the", length(ALL_bck_comb_all),"combinations will be compared. \n")
+    ALL_bck_comb <- ALL_bck_comb_all
+  }
+
   ALL_backbones <- rep(list(NULL),length(ALL_bck_comb))
   best_backbones <- NULL
   ALL_final3 <- rep(list(NULL),length(ALL_bck_comb))
   names(ALL_final3) <- sapply(ALL_bck_comb, function(x) paste(paste(x, collapse = "."),"_bck",sep = ""))
+    
   ALL_TOTAL <- NULL
   clades <- names(totalsp2)
   
@@ -318,11 +325,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   stopCluster(cl)
   
   names(ALL_final3) <- names(ALL_bck_comb)
-  if(multi.backbone == T){
-    cat("\n\n--- Comparison(s) of the", length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)]), "combinations ---\n")
-  } else {
-    cat("\n\n--- Comparison(s) of the", length(ALL_bck_comb), "combinations ---\n")
-  }
+  cat("\n\n--- Comparison(s) of the", length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)]), "combinations ---\n")
   
   best_ALL_final3 <- ALL_final3
   
@@ -341,11 +344,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   }
   
   # __ SELECTION #####
-  if(multi.backbone == T){
-    ALL_TOTAL <- as.data.frame(matrix(ncol = 4, nrow = length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)])))
-  } else {
-    ALL_TOTAL <- as.data.frame(matrix(ncol = 4, nrow = length(ALL_bck_comb)))
-  }
+  ALL_TOTAL <- as.data.frame(matrix(ncol = 4, nrow = length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)])))
   
   names(ALL_TOTAL) <- c("Combination", "Parameters","logL","AICc")
   

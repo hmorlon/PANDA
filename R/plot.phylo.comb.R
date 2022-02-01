@@ -1,4 +1,4 @@
-plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 1,
+plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL, combi,
                             backbone.option = "crown.shift", main = NULL,
                             col.sub = NULL, col.bck = "black", lad = T,  leg = T,
                             tested_nodes = F, lty.bck = 1, text.cex = 1, pch.cex = 1,
@@ -17,12 +17,18 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
   if(phylo$Nnode + Ntip(phylo) != nrow(sampling.fractions) | is(sampling.fractions)[1]!="data.frame"){
     stop("object \"sampling.fractions is not of class \"data.frame\" or is do not correspond to the provided phylogeny")
   }
-  # shift.res
-  if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
-    stop("object \"shift.res\" might be incorrect.")
-  }
-  if(!is.numeric(combi)){
-    stop("argument \"combi\" should be numeric.")
+
+  if(!is.null(shift.res)){
+    if(!is(shift.res)[1] == "list" | any(names(shift.res) != c("whole_tree", "subclades", "backbones", "total"))){
+      stop("object \"shift.res\" might be incorrect.")
+    }
+    if(!is.numeric(combi)){
+      stop("if shift.res is specified, argument \"combi\" should be numeric.")
+    }
+  } else {
+    if(!is.character(combi)){
+      stop("if shift.res is not specified, argument \"combi\" should be a character.")
+    }
   }
   
   if(is(tested_nodes)[1] != "logical" ){
@@ -66,7 +72,11 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
   node_legends <- sampling.fractions$data[sampling.fractions$nodes %in% phylo1$node.label]
   node_legends <- ifelse(node_legends %in% sampling.fractions$data[sampling.fractions$nodes %in% sampling.fractions$to_test], node_legends, NA)
   
-  comb <- shift.res$total$Combination[combi]
+  if(!is.null(shift.res)){
+    comb <- shift.res$total$Combination[combi]
+  } else {
+    comb <- combi
+  }
   
   if(comb == "whole_tree"){
     colors_clades <- rep("black", Nedge(phylo1))
@@ -108,7 +118,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
     if(is.null(comb.bck)){
       names_leg <- c(names_leg,"Backbone")
     }else{
-      names_leg1 <- c(paste("Backbone from", comb.bck),"Deep backbone")
+      names_leg1 <- c(paste("Backbone of", sampling.fractions$data[sampling.fractions$nodes %in% comb.bck]),"Deep backbone")
       names_leg <- c(names_leg,names_leg1)
       # to test with an example
     }
@@ -149,23 +159,31 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
       }
     }
     
-    model_leg <- sapply(shift.res$subclades[comb.sub], function(x) x$Models[1])
-    
-    if(!is.null(comb.bck)){
-      model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]], function(x) x$Models[1])
+    if(!is.null(shift.res)){
+      model_leg <- sapply(shift.res$subclades[comb.sub], function(x) x$Models[1])
+      
+      if(!is.null(comb.bck)){
+        model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]], function(x) x$Models[1])
+      } else {
+        model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]], function(x) x$Models[1])
+      }
+      model_leg <- c(model_leg, model_leg_bck)
+      model_leg <- gsub("_", " ", model_leg)
+      model_leg <- paste0(names_leg, " (", model_leg, ")")
     } else {
-      model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]], function(x) x$Models[1])
+      model_leg <- names_leg
     }
-    model_leg <- c(model_leg, model_leg_bck)
-    model_leg <- gsub("_", " ", model_leg)
-    model_leg <- paste0(names_leg, " (", model_leg, ")")
   }
   
   if(is.null(main)){
-    if(shift.res$total$delta_AICc[combi] > 0){
-      main <- paste0("Combination ", combi, " (delta AICc = " , round(shift.res$total$delta_AICc[combi],3),")")
+    if(!is.null(shift.res)){
+      if(shift.res$total$delta_AICc[combi] > 0){
+        main <- paste0("Combination ", combi, " (delta AICc = " , round(shift.res$total$delta_AICc[combi],3),")")
+      } else {
+        main <- "Best combination"
+      }
     } else {
-      main <- "Best combination"
+      main <- ""
     }
   }
 
@@ -185,17 +203,27 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res, combi = 
                piecol = NULL, col = "black", bg = "red", 
                horiz = FALSE, width = NULL, height = NULL, cex=pch.cex)
   }
-  
+  leg_title <- ""
   if(comb == "whole_tree"){
     if(leg == T){
-      model_leg <- shift.res$whole_tree$Models[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc)]
-      legend(pos_leg, legend = paste0("whole_tree (", model_leg, ")"), text.col = "black",cex = text.cex, bty = "n")
+      if(!is.null(shift.res)){
+        model_leg <- shift.res$whole_tree$Models[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc)]
+        legend(pos_leg, legend = paste0("whole_tree (", model_leg, ")"), text.col = "black",cex = text.cex, bty = "n")  
+      } else {
+        legend(pos_leg, legend = paste0("whole_tree"), text.col = "black",cex = text.cex, bty = "n")  
+      }
+    } else {
+      title <- ""
     }
-    
   } else {
-    
     if(leg == T){
-      legend(pos_leg, legend = paste(model_leg,sep=" "), text.col = c(col.sub, col.bck), title = "Subgroups (Best models)",
+      if(!is.null(shift.res)){
+        leg_title <- "Shifts (Best model)"
+      } else {
+        leg_title <- "Shifts"
+      }
+      
+      legend(pos_leg, legend = paste(model_leg,sep=" "), text.col = c(col.sub, col.bck), title = leg_title,
              title.col = "black", cex = text.cex, bty = "n")
     }
   }

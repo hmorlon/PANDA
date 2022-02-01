@@ -128,7 +128,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   ALL_bck_comb <- rep(list(NULL),length(ALL_comb))
   names(ALL_bck_comb) <- lapply(ALL_comb, function(x) paste(x, collapse = "."))
   
-  cat("\n MULTI-BACKBONES:\n")
+  cat("\n MULTIPLE BACKBONES:\n")
   cl <- parallel::makeCluster(Ncores, type="SOCK")
   clusterExport(cl, list("phylo","Descendants", "Ancestors", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste",
                          "ALL_comb", "ALL_clade_names", "sampling.fractions","Ntip", "clade.size", "ALL_bck_comb", "drop.tip",
@@ -286,10 +286,21 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   
   names(ALL_bck_comb) <- sapply(ALL_comb, function(x) paste(x, collapse = "."))
   
-  cat("\n SIMPLE BACKBONES:")
-  cat("\t\n", length(ALL_bck_comb),"combination(s) have been detected. \n")
-  cat("\n MULTI-BACKBONES:")
-  cat("\n", length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)]), "combination(s) have been detected. \n")
+  # to transform here
   
-  return(ALL_bck_comb)
+  ALL_bck_comb1 <- c()
+  for(i in 1:length(ALL_bck_comb)){
+    if(is.list(ALL_bck_comb[[i]])){
+      ALL_bck_comb1 <- c(ALL_bck_comb1, paste0(names(ALL_bck_comb[i]), "/"))
+    }
+    ALL_bck_comb1 <- c(ALL_bck_comb1, paste(names(ALL_bck_comb)[i], ALL_bck_comb[[i]], sep = "/"))
+  }
+  
+
+  cat("\n ONLY SIMPLE BACKBONES:")
+  cat("\t\n",   sum(sapply(strsplit(ALL_bck_comb1, "/"), length) == 1) ,"combination(s) have been detected. \n")
+  cat("\n WITH MULTIPLE BACKBONES:")
+  cat("\n", length(ALL_bck_comb1), "combination(s) have been detected. \n")
+  
+  return(ALL_bck_comb1)
 }
