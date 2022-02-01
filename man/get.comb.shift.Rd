@@ -53,13 +53,13 @@
   data("taxo_cetacea")
   
   # main procedure
-  taxo_cetacea_no_genus taxo[names(taxo) != "Genus"]
+  taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
   f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                      data = taxo[names(taxo) != "Genus"],
+                                      data = taxo_cetacea_no_genus,
                                       plot = T, cex = 0.3)
   
   comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
-                                       data = taxo[names(taxo) != "Genus"],
+                                       data = taxo_cetacea_no_genus,
                                        sampling.fractions = f_df_cetacea, Ncores = 4)
   }
 }
