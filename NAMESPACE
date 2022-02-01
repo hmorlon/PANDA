@@ -32,7 +32,7 @@ importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun,
            cor)
 importFrom(TESS, tess.sim.age, tess.likelihood)
 importFrom(utils, combn, tail, flush.console, read.table, write.table)
-importFrom(phangorn, Siblings, Ancestors, Descendants)
+importFrom(phangorn, Siblings, Ancestors, Descendants, Children)
 importFrom(RColorBrewer, brewer.pal)
 importFrom(ParallelLogger, clusterApply)
 importFrom(parallel, makeCluster, clusterExport, stopCluster)
