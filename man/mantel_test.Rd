@@ -17,7 +17,7 @@ nperm = 1000, correlation = "Pearson")
 \arguments{
 
 \item{formula}{
-formula y ~ x describing the test to be conducted where y and x  are distance matrices.
+formula y ~ x describing the test to be conducted where y and x  are distance matrices (as "dist" objects).
 }
 \item{data}{
 an optional data frame containing the variables in the model as columns of dissimilarities. By default, the variables are taken from the current environment.
