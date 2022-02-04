@@ -23,7 +23,11 @@
     the output resulting from shift.estimates.
   }
   \item{backbone.option}{
-    the output resulting from shift.estimates.
+    type of the backbone analysis:
+    \itemize{ 
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
+    }
   }
   
   \item{combi}{

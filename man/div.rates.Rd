@@ -9,7 +9,7 @@
 }
 \usage{
   div.rates(phylo, shift.res, combi = 1,
-  part = "backbone", backbone.option = "backbone2")
+  part = "backbone", backbone.option = "crown.shift")
 }
 
 \arguments{
@@ -24,6 +24,13 @@
   }
   \item{parts}{
     character. Specifies for which parts of the combination diversification rates has to be calculated. Default is "backbone" and provide only the backbone rate. Can be "all" for all the parts of a combination or "subclades" for subclades only.
+  }
+  \item{backbone.option}{
+    type of the backbone analysis:
+    \itemize{ 
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
+    }
   }
 }
 

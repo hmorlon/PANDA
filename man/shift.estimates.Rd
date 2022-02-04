@@ -37,7 +37,6 @@
       \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
     }
   }
-  
   \item{multi.backbone}{
     can be either FALSE (default), TRUE or "all": 
     \itemize{
