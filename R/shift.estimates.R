@@ -33,6 +33,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ALL_bck_combm <- list_comb.shift[sapply(list_comb.shift, length) > 1]
   names(ALL_bck_combm) <- sapply(ALL_bck_combm, "[[", 1)
   ALL_bck_combm <- lapply(ALL_bck_combm, function(x) x[-1])
+  ALL_bck_combm <- lapply(ALL_bck_combm, function(x) unlist(strsplit(x, "[.]")))
   # ALL_bck_combm = multiple backbone
   
   ALL_bck_comb_all <- c(ALL_bck_comb1, ALL_bck_combm)
@@ -107,7 +108,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   names(ALL_clade_names) <- all_tested_nodes
   
   ALL_nodes_ages <- as.data.frame(apply(data.frame(nodesID=names(branching.times(phylo)),ages=branching.times(phylo)), 2, as.numeric))
-  
   ALL_clade_names1 <- ALL_clade_names[all_lineages]
   
   #### SUBCLADES ####

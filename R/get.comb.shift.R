@@ -102,7 +102,6 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   stopCluster(cl)
   
   names(ALL_comb) <- NULL
-  
   ALL_comb <- strsplit(ALL_comb, split = "[.]")
   
   # Because of too poor backbones
@@ -266,7 +265,6 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
         if(any(sub.lin.node$n.tips_prev < clade.size)){
           bck_comb_to_remove <- c(bck_comb_to_remove, n_bck_comb)
         }
-        
       }
       
       if(!is.null(bck_comb_to_remove)){
