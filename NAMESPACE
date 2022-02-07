@@ -75,7 +75,6 @@ export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_c
 export(sim_MCBD)
 export(phylosignal_network,phylosignal_sub_network,plot_phylosignal_sub_network,mantel_test)
 export(theta_estimator,pi_estimator,delineate_phylotypes)
-export(fit_bd_in_past,fit_env_in_past)
 
 export(sim.BipartiteEvol,make_gen.BipartiteEvol,define_species.BipartiteEvol,build_network.BipartiteEvol,
        plot_div.BipartiteEvol, plot_net.BipartiteEvol)
