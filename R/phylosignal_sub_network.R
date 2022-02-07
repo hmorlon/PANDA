@@ -24,15 +24,23 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   network <- network[rowSums(network)>0,]
   network <- network[,colSums(network)>0]
   host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
-  symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
-  network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  if (!is.null(symbiont_tree)){
+    symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+    network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  }else{
+    network <- network[,host_tree$tip.label]
+  }
   
   # check a second time (in case of a missing species) 
   network <- network[rowSums(network)>0,]
   network <- network[,colSums(network)>0]
   host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
-  symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
-  network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  if (!is.null(symbiont_tree)){
+    symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+    network <- network[symbiont_tree$tip.label,host_tree$tip.label]
+  }else{
+    network <- network[,host_tree$tip.label]
+  }
   
   
   set.seed(1)
@@ -44,7 +52,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
     if (Ntip(sub_host_tree)>=minimum){
       sub_network <- network[,sub_host_tree$tip.label]
       sub_network <- sub_network[which(rowSums(sub_network)>0),,drop=F]
-      sub_symbiont_tree <- drop.tip(symbiont_tree, tip= symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(sub_network)])
+      if (!is.null(symbiont_tree)){
+        sub_symbiont_tree <- drop.tip(symbiont_tree, tip= symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(sub_network)])
+      }else{sub_symbiont_tree <- NULL}
       
       if (nrow(sub_network)>1){
         nb_sub_clades <- nb_sub_clades+1
