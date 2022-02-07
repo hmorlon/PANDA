@@ -5,11 +5,12 @@
   Paleodiversity through time
 }
 \description{
-  Calculate paleodiversity through time from shift.estimates output.
+  Calculates paleodiversity through time from shift.estimates output with the determinsitic approach.
 }
 \usage{
   paleodiv(phylo, data, sampling.fractions, shift.res,
-           backbone.option = "crown.shift", combi = 1, split.div = F)
+           backbone.option = "crown.shift", combi = 1,
+           split.div = F)
 }
 
 \arguments{
@@ -17,7 +18,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    an object of class "data.frame" containing a database of monophyletic groups for which potential shift can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phy.
+    a data.frame containing a database of monophyletic groups for which potential shift can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phy.
   }
   \item{shift.res}{
     the output resulting from shift.estimates.
@@ -39,8 +40,7 @@
 }
 
 \value{
-  If split.div = T, paleodiversity is returned in a matrix with as many rows as parts in the selected combination and as many column as million years from the root to the present. if spit.div = T, global paleodiversity is returned as a vector with a value per million year.
-  
+  If split.div = FALSE, paleodiversity dynamics are returned in a matrix with as many rows as parts in the selected combination and as many column as million years from the root to the present. If spit.div = TRUE, global paleodiversity dynamic is returned as a vector with a value per million year.
 }
 
 \references{
@@ -52,6 +52,7 @@
 \code{\link{shift.estimates}, \link{apply_prob_dtt}}
 }
 \examples{
+\dontrun{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")
@@ -81,5 +82,5 @@ paleodiversity <- paleodiv(phylo = Cetacea,
                            sampling.fractions = f_df_cetacea,
                            shift.res = shifts,
                            combi = 1, split.div = F)
-
+}
 }

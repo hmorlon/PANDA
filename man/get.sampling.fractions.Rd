@@ -17,7 +17,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    an object of class "data.frame" containing a database of monophyletic groups for which potential shift can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo. 
+    a data.frame containing a database of monophyletic groups for which potential shift can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo. 
   }
   \item{clade.size}{
     numeric. Define the minimum number of species in a subgroup. Default is 5.
@@ -36,13 +36,13 @@
    numeric. Defines the size of the red points at the crown of subclades.
   }
   \item{...}{
-   
+   further arguments to be passed to plot or to plot.phylo.
   }
 }
 
 
 \value{
-  a dataframe with as many rows as nodes in the phylogeny with the following informations in columns:
+  a data.frame with as many rows as nodes in the phylogeny with the following informations in columns:
   \item{nodes}{the node IDs}
   \item{data}{the name of the subclade from data}
   \item{f}{the sampling fraction for this subclade}
@@ -72,5 +72,4 @@ taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
 f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
                                     data = taxo_cetacea_no_genus,
                                     plot = T, cex = 0.3)
-
 }

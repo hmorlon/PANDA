@@ -37,20 +37,20 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   a numeric vector numeric of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
   }
   \item{branch_times}{
-  a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "backbone2". Default is NULL.
+  a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "crown.shift". Default is NULL.
   }
  \item{models}{
- a vector of character. Defines the set of birth-death models to applies e.g. BCST means pure birth constant rate model, BCST_DVAR means birth constant rate and death variable rate model. Default is c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR") and applies all combinations of constant or variable rates for speciation and extinction. Time dependency is only exponential (for now).
+ a vector of character. Defines the set of birth-death models to applies e.g. BCST means pure-birth constant rate model, BCST_DVAR means birth constant rate and death variable rate model. Default is c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR") and applies all combinations of constant or variable rates for speciation and extinction. Time dependency is only exponential.
   }
   \item{cond}{
     conditioning to use to fit the model:
     \itemize{ \item FALSE: no conditioning (not recommended);
-      \item "stem": conditioning on the survival of the stem lineage (use when the stem age is known, in this case tot_time should be the stem age);
-      \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
+      \item "stem": conditioning on the survival of the stem lineage (used when the stem age is known, in this case tot_time should be the stem age);
+      \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (used when the stem age is not known, in this case tot_time should be the crown age).
     }
   }
   \item{verbose}{
-  bolean. Wether to print AICc values during the estimation.
+  bolean. Wether to print model names and AICc values during the calculation.
   }
   \item{rate.max}{
   numeric. Set a limit of diversificaton rates in terme of rate values.
@@ -59,18 +59,15 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   numeric. Set a limit of diversificaton rates in terms of diversity estimates with the deterministic approach.
   }  
 }
-
 \details{
   Parameters of birth-death models are defined backward in time such as a positive alpha corresponds to a speciation rate decreasing through time from the past to present.
 }
-
 \value{
-  A dataframe with number of parameters, likelihood, AICc and parameter values for all models.
+  A data.frame with number of parameters, likelihood, AICc and parameter values for all models.
 }
 \references{
   Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep)
 }
-
 \author{Nathan Mazet}
 
 \examples{

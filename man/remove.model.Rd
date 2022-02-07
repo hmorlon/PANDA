@@ -5,7 +5,7 @@
   Removing model from shift.estimates output
 }
 \description{
-  Allows to remove a model from the model comparison when estimating shifts with shift.estimates.
+  Allows to remove a model from the model comparisons of shift.estimates output.
 }
 \usage{
   remove.model(shift.res, model)
@@ -37,6 +37,7 @@
 \code{\link{shift.estimates}}
 }
 \examples{
+\dontrun{
 # loading data
 
 data("Cetacea")
@@ -62,5 +63,5 @@ shifts_cetacea <- shift.estimates(phylo = Cetacea,
 
 # To remove "BVAR_DVAR" models if it was included before
 shifts_cetacea_noBVAR_DVAR <- remove.models(shifts_cetacea, model = "BVAR_DVAR")
-
+}
 }
