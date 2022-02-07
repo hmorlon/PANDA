@@ -108,21 +108,12 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
     
     # Backbones #### 
     
-    if(is.null(comb.bck)){
-      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
-      best_backbones_df <- best_backbones[1,]
-      best_backbones_df$Parts <- paste0(paste(comb.sub, collapse = "."), "_bck")
-      row.names(best_backbones_df) <- NULL
-      best_backbones_df <- best_backbones_df[,c(10,1:8)]
+    best_backbones <- shift.res$backbones[paste(paste(comb.sub, collapse = "."), paste(comb.bck, collapse = "."), sep = "/")][[1]]
+    best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))
+    best_backbones_df$Parts <- row.names(best_backbones_df)
+    row.names(best_backbones_df) <- NULL
+    best_backbones_df <- best_backbones_df[,c(10,1:8)]
       
-    } else {
-      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
-      best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))
-      best_backbones_df$Parts <- row.names(best_backbones_df)
-      row.names(best_backbones_df) <- NULL
-      best_backbones_df <- best_backbones_df[,c(10,1:8)]
-      
-    }
     
     if(part == "backbone"){
       

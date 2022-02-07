@@ -120,9 +120,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL, c
     }else{
       names_leg1 <- c(paste("Backbone of", sampling.fractions$data[sampling.fractions$nodes %in% comb.bck]),"Deep backbone")
       names_leg <- c(names_leg,names_leg1)
-      # to test with an example
     }
-    # Multi combi if possible.
     
     if(is.null(col.sub)){
       col.sub <- c(c(brewer.pal(8, "Dark2"),brewer.pal(8, "Set1"),"darkmagenta","dodgerblue2" , "orange", "forestgreen"))[c(1:length(comb.sub))]
@@ -162,11 +160,10 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL, c
     if(!is.null(shift.res)){
       model_leg <- sapply(shift.res$subclades[comb.sub], function(x) x$Models[1])
       
-      if(!is.null(comb.bck)){
-        model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]], function(x) x$Models[1])
-      } else {
-        model_leg_bck <- sapply(shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]], function(x) x$Models[1])
-      }
+    if(any(grepl("/", shift.res$total$Combination))){
+      model_leg_bck <- unlist(sapply(shift.res$backbones[paste(paste(comb.sub, collapse = "."),paste0(comb.bck, collapse = "."), sep = "/")][[1]], function(x) x$Models[1]))
+    }
+    
       model_leg <- c(model_leg, model_leg_bck)
       model_leg <- gsub("_", " ", model_leg)
       model_leg <- paste0(names_leg, " (", model_leg, ")")

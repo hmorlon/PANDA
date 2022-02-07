@@ -33,6 +33,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
   ages[15,] <- -c(298.9, 358.9)
   
   if(direction == "leftwards"){
+    stop("NOT IMPLEMENTED YET.")
     ages[,c(1,2)] <- apply(ages[,c(1,2)], 2, function(x) -x)
   }
   

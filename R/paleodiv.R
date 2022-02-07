@@ -6,7 +6,6 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   if(!inherits(phylo, "phylo")){
     stop("object \"phylo\" is not of class \"phylo\"")
   }
-  
   phylo$node.label <- NULL
   
   # data
@@ -132,23 +131,11 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   if(all(comb.sub != "whole_tree")){
     # Backbone diversity
     
-    if(is.null(comb.bck)){
-      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
-      best_backbones_df <- best_backbones[1,]
-      best_backbones_df$parts <- paste0(paste(comb.sub, collapse = "."), "_bck")
-      row.names(best_backbones_df) <- NULL
-      best_backbones_df <- best_backbones_df[,c(10,1:8)]
-      
-    } else {
-      best_backbones <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
-      #best_backbones <- best_backbones[match(comb.bck, names(best_backbones))]
-      #best_backbones <- best_backbones[[1]]
-      best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))
-      best_backbones_df$parts <- row.names(best_backbones_df)
-      row.names(best_backbones_df) <- NULL
-      best_backbones_df <- best_backbones_df[,c(10,1:8)]
-      
-    }
+    best_backbones <- shift.res$backbones[paste(paste(comb.sub, collapse = "."), paste(comb.bck, collapse = "."), sep = "/")][[1]]
+    best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))
+    best_backbones_df$parts <- row.names(best_backbones_df)
+    row.names(best_backbones_df) <- NULL
+    best_backbones_df <- best_backbones_df[,c(10,1:8)]
     
     lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phylo)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
     lin.node$node <- as.character(lin.node$node)
@@ -254,7 +241,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     if(is.null(comb.bck)){
       row.names(globaldiv) <- c(comb.sub, comb.bck, "backbone")
     } else {
-      row.names(globaldiv) <- c(comb.sub, paste("Backbone from", comb.bck),"Deep backbone")
+      row.names(globaldiv) <- c(comb.sub, paste("Backbone of", comb.bck),"Deep backbone")
     }
   } else {
     row.names(globaldiv) <- "whole_tree"
@@ -273,6 +260,4 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   }else{
     return(past.div.curve)
   }
-  
 }
-

@@ -324,46 +324,48 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(ALL_bck_comb), all_comb_models, progressBar = T, stopOnError = T)
   stopCluster(cl)
   
-  names(ALL_final3) <- names(ALL_bck_comb)
-  cat("\n\n--- Comparison(s) of the", length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)]), "combinations ---\n")
+  #ALL_final3 <- ParallelLogger::clusterApply(cl, 1, all_comb_models, progressBar = T, stopOnError = T)
+  
+  #ALL_final3 <- lapply(1, all_comb_models)
+  
+  names(ALL_final3) <- paste(names(ALL_bck_comb), sapply(ALL_final3, function(x) paste(names(x), collapse = ".")), sep = "/")
+  for(i in 1:length(ALL_final3)){
+    names(ALL_final3[[i]]) <- NULL
+  }
+  ALL_final3 <- lapply(ALL_final3, unlist, recursive = F)
+  
+  cat("\n\n--- Comparison(s) of the", length(ALL_final3), "combinations ---\n")
   
   best_ALL_final3 <- ALL_final3
   
   cat("\n")
   for(to in 1:length(ALL_final3)){
-    
     for(sub_to in 1:length(ALL_final3[[to]])){
-      for(ss_to in 1:length(ALL_final3[[to]][[sub_to]])){
-        
-        ALL_final3[[to]][[sub_to]][[ss_to]]$delta_AICc <- ALL_final3[[to]][[sub_to]][[ss_to]]$AICc - min(ALL_final3[[to]][[sub_to]][[ss_to]]$AICc)
-        ALL_final3[[to]][[sub_to]][[ss_to]] <- ALL_final3[[to]][[sub_to]][[ss_to]][order(ALL_final3[[to]][[sub_to]][[ss_to]]$AICc),]
-        ALL_final3[[to]][[sub_to]][[ss_to]][,-1] <- apply(ALL_final3[[to]][[sub_to]][[ss_to]][,-1], 2, as.numeric)
-        best_ALL_final3[[to]][[sub_to]][[ss_to]] <- ALL_final3[[to]][[sub_to]][[ss_to]][1,]
-      }
+      ALL_final3[[to]][[sub_to]]$delta_AICc <- ALL_final3[[to]][[sub_to]]$AICc - min(ALL_final3[[to]][[sub_to]]$AICc)
+      ALL_final3[[to]][[sub_to]] <- ALL_final3[[to]][[sub_to]][order(ALL_final3[[to]][[sub_to]]$AICc),]
+      ALL_final3[[to]][[sub_to]][,-1] <- apply(ALL_final3[[to]][[sub_to]][,-1], 2, as.numeric)
+      best_ALL_final3[[to]][[sub_to]] <- ALL_final3[[to]][[sub_to]][1,]
     }
   }
   
   # __ SELECTION #####
-  ALL_TOTAL <- as.data.frame(matrix(ncol = 4, nrow = length(unlist(ALL_bck_comb, recursive = F))+length(ALL_bck_comb[sapply(ALL_bck_comb, is.null)])))
-  
+  ALL_TOTAL <- as.data.frame(matrix(ncol = 4, nrow = length(ALL_bck_comb)))
   names(ALL_TOTAL) <- c("Combination", "Parameters","logL","AICc")
   
-  n_to <- 1
   for(to in 1:length(best_ALL_final3)){
-    names_subclades <- gsub("_bck","",unlist(strsplit(names(best_ALL_final3)[[to]], "[.]")))
+    names_subclades <- unlist(strsplit(sapply(strsplit(names(best_ALL_final3)[[to]], "/"), "[[", 1), split = "[.]"))
     
     for(sub_to in 1:length(best_ALL_final3[[to]])){
       
-      ALL_TOTAL[n_to,-1] <- apply(do.call(rbind.data.frame, lapply(best_ALL_final3[[to]][[sub_to]], function(x) x[, c("Parameters", "logL", "AICc")])), 2, sum)
+      ALL_TOTAL[to,-1] <- apply(do.call(rbind.data.frame, lapply(best_ALL_final3[[to]], function(x) x[, c("Parameters", "logL", "AICc")])), 2, sum)
       
       for(n_sub in 1:length(names_subclades)){
-        ALL_TOTAL[n_to,-1] <- ALL_TOTAL[n_to,-1] + best_subclades_df[best_subclades_df$Clades %in% names_subclades[n_sub], c("Parameters","logL","AICc")]
+        ALL_TOTAL[to,-1] <- ALL_TOTAL[to,-1] + best_subclades_df[best_subclades_df$Clades %in% names_subclades[n_sub], c("Parameters","logL","AICc")]
       }
-      
-      ALL_TOTAL$Combination[n_to] <- paste0(paste(names_subclades, collapse = "."), "/", paste(names(best_ALL_final3[[to]][sub_to]), collapse = "."))
-      n_to <- n_to + 1 
     }
   }
+  
+  ALL_TOTAL$Combination <- names(best_ALL_final3)
   
   res_phylo1 <- cbind("whole_tree", res_phylo[res_phylo$AICc == min(res_phylo$AICc), c("Parameters","logL","AICc")])
   names(res_phylo1) <- names(ALL_TOTAL)
@@ -398,3 +400,4 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   }
   return(all_res)
 }
+

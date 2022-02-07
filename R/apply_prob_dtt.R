@@ -45,7 +45,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
   # because backbone.option = "crown.shift" by default
   type <- "crown" 
   
-  # functions ####
+  # function ####
   mimic_fit.bd <- function(res){
     
     mod <- res$Models[1]
@@ -105,7 +105,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
   }
   
   # core script ####
-  
   comb <- shift.res$total$Combination[combi]
   
   if(comb == "whole_tree"){
@@ -129,11 +128,11 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
   } else { # combination is not the whole tree
     
-    comb <- strsplit(comb, split = "/")[[1]]
-    comb <- sapply(comb, function(x) strsplit(x, split = "[.]"))
-    comb.sub <- comb[[1]]
+    comb <- unlist(strsplit(comb, split = "/"))
+    comb.sub <- unlist(strsplit(comb.sub[1], split = "[.]"))
+    
     if(length(comb) > 1){
-      comb.bck <- comb[[2]]
+      comb.bck <- unlist(strsplit(comb[2], split = "[.]"))
     } else {
       comb.bck <- NULL
     }
@@ -245,7 +244,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       
     }
     lin.node[lin.node$node %in% lin.node_bck$node,] <- lin.node_bck
-    
     lin.node <- lin.node[-(1:length(comb.sub)),]
     
     # backbone trees
@@ -271,25 +269,10 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
     
     # fit_bd values for backbone(s) ####
-    if(!is.null(comb.bck)){
-      backbones_df <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][paste(comb.bck, collapse = ".")][[1]]
-    } else {
-      backbones_df <- shift.res$backbones[paste(comb.sub, collapse = ".")][[1]][[1]][[1]]
-    }
+    backbones_df <- shift.res$backbones[paste(paste(comb.sub, collapse = "."), paste(comb.bck, collapse = "."), sep = "/")][[1]]
+    backbone_fit.bd <- lapply(backbones_df, mimic_fit.bd)
     
-    backbone_fit.bd <- list()
-    if(!is.null(comb.bck)){
-      backbone_fit.bd <- lapply(backbones_df, mimic_fit.bd)
-    } else {
-      backbone_fit.bd <- list(mimic_fit.bd(backbones_df))
-    }
-  
-    if(!is.null(comb.bck)){
-      names(backbone_fit.bd) <- c(comb.bck, Ntip(phylo)+1)
-    } else {
-      names(backbone_fit.bd) <- Ntip(phylo)+1
-    }
-    
+    names(backbone_fit.bd) <- names(max_diversities[!names(max_diversities) %in% comb.sub])
     type <- rep(type, nrow(lin.node))
     
     backbone_tot_times <- c()
@@ -353,13 +336,8 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         }
       }
     }
-    
-    #plot_dtt(test_backbone, backbone_tot_times[1], N0)
-    #plot_dtt(backbone_fit.bd[[1]], backbone_tot_times, N0)
-
     names(prob_backbone) <- names(backbone_fit.bd)
     
     return(list(backbones = prob_backbone, subclades = prob_subclades))
-    
   }
 }
