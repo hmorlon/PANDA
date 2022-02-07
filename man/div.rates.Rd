@@ -5,11 +5,11 @@
   Diversification rates through time
 }
 \description{
-  Calculate diversification rates through time from shift.estimates output.
+  Calculates diversification rates through time from shift.estimates() output.
 }
 \usage{
   div.rates(phylo, shift.res, combi = 1,
-  part = "backbone", backbone.option = "crown.shift")
+            part = "backbone", backbone.option = "crown.shift")
 }
 
 \arguments{
@@ -35,12 +35,7 @@
 }
 
 \value{
-  a list of matrix with two rows (speciation and extinction) and as many column as million years from the root to the present.
-  
-}
-
-\details{
-  ...
+  a list of matrix with two rows (speciation and extinction) and as many columnS as million years from the root to the present.
 }
 
 \references{
@@ -53,6 +48,7 @@
 \code{\link{shift.estimates}}
 }
 \examples{
+\dontrun{
 # loading data
 
 data("Cetacea")
@@ -74,6 +70,6 @@ shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
                           backbone.option = "crown.shift", Ncores = 4)
 
 # use of div.rates
-rates <- div.rates(phylo = Cetacea, shift.res = shifts, combi = 1, part = "all")
-
+rates <- div.rates(phylo = Cetacea, shift.res = shifts_cetacea, combi = 1, part = "all")
+}
 }

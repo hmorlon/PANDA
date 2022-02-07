@@ -17,7 +17,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    an object of class "data.frame" containing a database of monophyletic groups for which potential shift can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phylo.
+    a data.frame containing a database of monophyletic groups for which potential shift can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo.
   }
   \item{sampling.fractions}{
     the output resulting from get.sampling.fractions.
@@ -35,7 +35,7 @@
   
 }
 \details{
-  clade.size argument should be the same value for the whole procedure (same than for get.sampling.fraction and shift.estimates).
+  clade.size argument should be the same value for the whole procedure (same that for get.sampling.fraction and shift.estimates).
 }
 \references{
 	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
@@ -46,7 +46,7 @@
 \code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}}
 
 \examples{
-  \dontrun{
+\dontrun{
   # loading data
   
   data("Cetacea")
@@ -61,5 +61,5 @@
   comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
                                        data = taxo_cetacea_no_genus,
                                        sampling.fractions = f_df_cetacea, Ncores = 4)
-  }
+}
 }

@@ -39,18 +39,18 @@ a numeric vector of initial values for the parameters of f.mu to be estimated (t
 the fraction of extant species included in the phylogeny
   }
   \item{backbone}{
-  character. Allows to analyse a backbone. Default is FALSE and spec_times and branch_times are then ignored.
-  Otherwise
+    character. Allows to analyse a backbone. Default is FALSE and spec_times and branch_times are then ignored.
+    Otherwise
     \itemize{ 
-      \item"backbone1": the stems of subclades are included in subclade analyses;
-      \item"backbone2": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis.
     }
   }
   \item{spec_times}{
-  a numeric vector numeric of the stem ages of subclades. Used only if backbone = "backbone1". Default is NULL.
+  a numeric vector of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
   }
   \item{branch_times}{
-  a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "backbone2". Default is NULL.
+  a list of numeric vectors. Each vector contains the stem and crown ages of subclades (in this order). Used only if backbone = "crown.shift". Default is NULL.
   }
   \item{meth}{
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.

@@ -18,7 +18,6 @@ likelihood_bd(phylo, tot_time, f.lamb, f.mu, f,
   \item{phylo}{  
 an object of type 'phylo' (see ape documentation)
 }
-  
   \item{tot_time}{
 the age of the phylogeny (crown age, or stem age if known). If working with crown ages, tot_time is given by max(node.age(phylo)$ages).
 }
@@ -35,15 +34,15 @@ the fraction of extant species included in the phylogeny
   character. Allows to analyse a backbone. Default is NULL and spec_times and branch_times are then ignored.
   Otherwise
     \itemize{ 
-      \item"backbone1": the stems of subclades are included in subclade analyses;
-      \item"backbone2": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis.
     }
   }
   \item{spec_times}{
-  a numeric vector of the stem ages of subclades. Used only if backbone = "backbone1". Default is NULL.
+  a numeric vector of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
   }
   \item{branch_times}{
-  a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "backbone2". Default is NULL.
+  a list of numeric vectors. Each vector contains the stem and crown ages of subclades (in this order). Used only if backbone = "crown.shift". Default is NULL.
   }
  \item{cst.lamb}{
 logical: should be set to TRUE only if f.lamb is constant (i.e. does not depend on time) to use analytical instead of numerical computation in order to reduce computation time.
@@ -79,7 +78,7 @@ conditioning to use to fit the model:
 	Morlon, H., Parsons, T.L. and Plotkin, J.B. (2011) Reconciling molecular phylogenies with the fossil record \emph{Proc Nat Acad Sci} 108: 16327-16332
 }
 
-\author{H Morlon}
+\author{Hélène Morlon, Nathan Mazet}
 
 \examples{
 data(Cetacea)

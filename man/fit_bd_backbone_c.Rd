@@ -42,15 +42,15 @@
     character. Allows to analyse a backbone. Default is FALSE and spec_times and branch_times are then ignored.
     Otherwise
     \itemize{ 
-      \item"backbone1": the stems of subclades are included in subclade analyses;
-      \item"backbone2": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis.
     }
   }
   \item{spec_times}{
-    a numeric vector numeric of the stem ages of subclades. Used only if backbone = "backbone1". Default is NULL.
+    a numeric vector of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
   }
   \item{branch_times}{
-    a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "backbone2". Default is NULL.
+    a list of numeric vectors. Each vector contains the stem and crown ages of subclades (in this order). Used only if backbone = "crown.shift". Default is NULL.
   }
   \item{meth}{
     optimization to use to maximize the likelihood function, see \emph{optim} for more details.
@@ -104,6 +104,7 @@ this is that negative speciation/extinction rates estimates can be returned. The
 	
 	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 17:508-525
 	Morlon, H., Rolland, J. and Condamine, F. (2020) Response to Technical Comment ‘A cautionary note for users of linear diversification dependencies’, Eco Lett
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
 }
 \author{Hélène Morlon, Nathan Mazet}
 \seealso{

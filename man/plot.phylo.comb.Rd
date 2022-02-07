@@ -8,11 +8,11 @@
   Plots the phylogeny with colored branches according to shifts of diversification.
 }
 \usage{
-  plot.phylo.comb(phylo, data, sampling.fractions, shift.res, combi = 1,
-                 backbone.option = "crown.shift", main = NULL,
-                 col.sub = NULL, col.bck = "black", lad = T, leg = T,
-                 lty.bck = 1, tested_nodes = F, text.cex = 1, pch.cex = 1,
-                 ...)
+  plot.phylo.comb(phylo, data, sampling.fractions, shift.res,
+                  combi = 1, backbone.option = "crown.shift",
+                  main = NULL, col.sub = NULL, col.bck = "black",
+                  lty.bck = 1, tested_nodes = F, lad = T,
+                  leg = T, text.cex = 1, pch.cex = 1, ...)
 }
 
 \arguments{
@@ -20,7 +20,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    an object of class "data.frame" containing a database of monophyletic groups for which potential shift can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phylo.
+    a data.frame containing a database of monophyletic groups for which potential shift can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo. 
   }
   \item{sampling.fractions}{
     the output resulting from get.sampling.fractions.
@@ -32,7 +32,11 @@
     character or numeric. If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison.
   }
   \item{backbone.option}{
-    character. Define the type of backbone analysis done. "stem.shift" includes the stems of subclades in subclade analyses. "crown.shift" includes the stems of subclades in the backbone analysis.  
+    type of the backbone analysis:
+    \itemize{ 
+      \item"stem.shift": the stems of subclades are included in subclade analyses;
+      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
+    }
   }
   \item{col.sub}{
     character. A vector to specify colors of subclade(s). Can be let NULL (see details).
@@ -68,7 +72,7 @@ plot.phylo.comb returns the same invisible object as plot.phylo.
 }
 \details{
   If col.sub is not specified, color vector for subclades is c(c(brewer.pal(8, "Dark2"),brewer.pal(8, "Set1"),"darkmagenta","dodgerblue2", "orange", "forestgreen")). For multiple backbone, default vector is c("blue4", "orange4", "red4", "grey40", "coral4", "deeppink4", "khaki4", "darkolivegreen", "darkslategray",”black”).
-  ... allows to set different graphical parameters from plot.phylo such as cex for size of tip labels or lwd for the thickness of the phylogeny edges.
+  ... allows to set different graphical parameters from plot.phylo such as cex for size of tip labels or edge.width for the thickness of the phylogeny edges.
 
 }
 \references{
@@ -79,6 +83,7 @@ plot.phylo.comb returns the same invisible object as plot.phylo.
 \code{\link{shift.estimates}}}
 
 \examples{
+\dontrun{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")
@@ -104,4 +109,4 @@ plot.phylo.comb(phylo = Cetacea,
                 label.offset = 0.3,
                 main = "", lad = F,cex = 0.4)
 }
-
+}

@@ -8,15 +8,15 @@ Geological time scale
 Adds geological time scale to plots.
 }
 \usage{
-add.gts(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
+add.gts(Y1, quaternary = T, plot_dim = par("usr"), is.phylo = F,
               root.age = NULL, present = NULL, xpd.x = T,
-              time.interval = 1, direction = "rightwards", 
-              names = NULL, fill = T, cex = 1, padj = -0.5)
+              time.interval = 1, names = NULL, fill = T,
+              cex = 1, padj = -0.5, direction = "rightwards")
 }
 
 \arguments{
   \item{thickness}{  
-  numeric. Define the thickness of scale.
+  numeric. Define the thickness of the scale.
   }
   \item{quaternary}{
   bolean. Whether to merge Pleistocene and Holocene into Quaternary. Default is TRUE.
@@ -42,6 +42,9 @@ add.gts(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
   \item{cex}{
     numeric. Size of the names of geological periods.
   }
+  \item{padj}{
+    padj argument for the axis (see par() for more details).
+  }
   \item{direction}{
   character. Direct the geological time scale. Can be either "rightwards" (default) of "leftwards" (NOT IMPLEMENTED YET). 
   }
@@ -49,7 +52,6 @@ add.gts(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
 
 \details{
   This function plots a geological times scale (GTS). It has been designed for adding GTS to plot of phylogeny, diversification rates and paleodiversity dynamics through time but can be used with any R plot if present and root.age is correctly defined.
-
 }
 
 \value{
@@ -62,6 +64,7 @@ add.gts(Y1, quaternary = F, plot_dim = par("usr"), is.phylo = F,
 \author{Nathan Mazet}
 
 \examples{
+\dontrun{
 More to come soon...
 
 # with a phylogeny
@@ -80,5 +83,5 @@ mtext("Time (Myrs)", side = 1, line = 3, at = 18)
 
 # with diversity
 
-
+}
 }
