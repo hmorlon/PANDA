@@ -1,16 +1,17 @@
 phylosignal_sub_network <-
-function(network, tree_A, tree_B, method = "Jaccard_weighted", 
+function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", 
                                     nperm = 1000, correlation = "Pearson", minimum=10, degree=F){
   
   host_tree <- tree_A
   symbiont_tree <- tree_B
   
   if (!inherits(host_tree, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}
-  if (!inherits(symbiont_tree, "phylo")) {stop("object \"tree_B\" is not of class \"phylo\".")}
+  if (!is.null(tree_B)) {if (!inherits(symbiont_tree, "phylo")) {stop("object \"tree_B\" is not of class \"phylo\".")}}
   if (!method %in% c("Jaccard_weighted","Jaccard_binary", "Bray-Curtis", "GUniFrac", "UniFrac_unweighted")) {stop("Please provide a \"method\" to compute phylogenetic signals.")}
   
   if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop("Please provide a network with row names and columns names matching the species names.")}
   
+  if (method %in% c("GUniFrac", "UniFrac_unweighted")) {if (is.null(tree_B)) stop("Please provide a phylogenetic tree \"tree_B\" for guild B.")}
 
   if (!correlation %in% c("Pearson", "Spearman", "Kendall")) {stop("Please pick a \"correlation\" among Pearson, Spearman, and Kendall.")}
   
