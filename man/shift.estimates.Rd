@@ -42,7 +42,7 @@
     can be either FALSE (default), TRUE or "all": 
     \itemize{
     \item{FALSE: only combinations with simple backbone will be analyzed.}
-    \item{TRUE: only multiple backbones will be analyzed.}
+    \item{TRUE: only combinations with multiple backbones will be analyzed.}
     \item{"all", all combinations are analyzed.}
     }
   }
@@ -82,7 +82,7 @@ clade.size argument should be the same value for the whole procedure (same than 
 }
 \author{Nathan Mazet}
 \seealso{
-\code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}, code{\link{paleodiv}}
+\code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}, \code{\link{paleodiv}}
 }
 \examples{
 \dontrun{
