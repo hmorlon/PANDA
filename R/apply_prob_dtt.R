@@ -129,7 +129,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
   } else { # combination is not the whole tree
     
     comb <- unlist(strsplit(comb, split = "/"))
-    comb.sub <- unlist(strsplit(comb.sub[1], split = "[.]"))
+    comb.sub <- unlist(strsplit(comb[1], split = "[.]"))
     
     if(length(comb) > 1){
       comb.bck <- unlist(strsplit(comb[2], split = "[.]"))
