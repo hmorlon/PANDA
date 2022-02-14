@@ -6,7 +6,8 @@ Build the phylogenies for BipartiteEvol}
 Build the phylogenies from the output of BipartiteEvol and the corresponding genealogies}
 \usage{
 define_species.BipartiteEvol(genealogy, threshold = 1, 
-      distanceH = NULL, distanceP = NULL, verbose = T)
+      distanceH = NULL, distanceP = NULL, verbose = T,
+      monophyly = TRUE, seed = NULL)
 }
 \arguments{
   \item{genealogy}{
@@ -22,6 +23,12 @@ Distance (ie nb of mutations) matrix between the individual of clade H
 Distance (ie nb of mutations) matrix between the individual of clade P}
   \item{verbose}{
 Should the progression of the computation be printed?
+}
+  \item{monophyly}{ 
+Should the species delineations be strictly monophyletic species (TRUE) or not (FALSE)?
+}
+  \item{seed}{
+If monophyly==FALSE, the seed is used to pick one representative individual per (potentially non-monophyletic) species. 
 }
 }
 \value{
