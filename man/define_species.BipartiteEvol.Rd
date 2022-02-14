@@ -38,13 +38,23 @@ a list with
 \item{Pphylo}{The phylogeny for guild P}
 \item{Hphylo}{The phylogeny for guild H}
 }
-\references{
-Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592
 
-Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
+\details{
+If monophyly==TRUE, species delineation is performed using the model of Speciation by Genetic Differentiation (Manceau et al., 2015) where the `threshold` (the number of mutations needed to belong to different species) can vary. It results in monophyletic species.
+If monophyly==FALSE, we consider that each new mutation (i.e. each new combination of traits) gives rise to a new species (Perez-Lamarque et al., 2021). As a result, species are not necessarily formed by a monophyletic group of individuals. 
+}
+
+\references{
+
+Manceau, M., A. Lambert, and H. Morlon. (2015). Phylogenies support out-of-equilibrium models of biodiversity. Ecology letters 18:347–356.
+
+Maliet, O., Loeuille, N. and Morlon, H. (2020). An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592
+
+Perez‐Lamarque, B., Maliet, O., Pichon B., Selosse, M-A., Martos, F., Morlon H. (2021). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks. bioRxiv. doi: https://doi.org/10.1101/2021.08.30.458192
+
 }
 \author{
-O. Maliet
+O. Maliet & B. Perez-Lamarque
 }
 \seealso{
 \code{\link{sim.BipartiteEvol}}
