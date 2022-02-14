@@ -25,7 +25,7 @@ Distance (ie nb of mutations) matrix between the individual of clade P}
 Should the progression of the computation be printed?
 }
   \item{monophyly}{ 
-Should the species delineations be strictly monophyletic species (TRUE) or not (FALSE)?
+Should the species delineations be strictly monophyletic species (TRUE - default) or not (FALSE)? If not, the threshold must be equal to 1.
 }
   \item{seed}{
 If monophyly==FALSE, the seed is used to pick one representative individual per (potentially non-monophyletic) species. 
@@ -39,7 +39,10 @@ a list with
 \item{Hphylo}{The phylogeny for guild H}
 }
 \references{
-Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592}
+Maliet, O., Loeuille, N. and Morlon, H. (2020), An individual-based model for the eco-evolutionary emergence of bipartite interaction networks. Ecol Lett. doi:10.1111/ele.13592
+
+Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
+}
 \author{
 O. Maliet
 }

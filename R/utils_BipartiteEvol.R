@@ -106,8 +106,8 @@ compute.dist=function(gen, verbose=T){
 ######## Remove taxa when there are traits #########################
 
 # phy a phylo object
-# nodes the labels of the tips to supress 
-# traits a list of vector of traits corresopnding to the edges of the tree
+# nodes the labels of the tips to suppress 
+# traits a list of vector of traits corresponding to the edges of the tree
 # additiveTrait vector of indice of extensive traits (eg branch length, nmut...)
 
 
@@ -128,8 +128,8 @@ prune.with.traits=function(phy,nodes,traits,extensiveTrait=c()){
       edge=which(obj$tree$edge[,2]==which(obj$tree$tip.label==nodes[i]))   # edge leading to nodes[i]
       
       while(edge %in% edges){
-        # ie edge has already been supressed (all the sister clades of nodes[i] have ben supressed)
-        # we have to supress the parent edge
+        # ie edge has already been suppressed (all the sister clades of nodes[i] have been suppressed)
+        # we have to suppress the parent edge
         edge=which(obj$tree$edge[,2]==obj$tree$edge[edge,1])
       }
       
@@ -137,7 +137,7 @@ prune.with.traits=function(phy,nodes,traits,extensiveTrait=c()){
       sisterEdge=sisterEdge[which(!(sisterEdge %in% edges))]      # remaining sister edges of edge
       
       if(length(sisterEdge)<3){
-        # in that case we supress edge and its sister edge
+        # in that case we suppress edge and its sister edge
         edges=c(edges,sisterEdge)
         parent=which(obj$tree$edge[,2]==obj$tree$edge[edge,1])
         

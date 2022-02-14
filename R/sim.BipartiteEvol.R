@@ -602,7 +602,7 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
       if(length(vect)==1){return(vect)};
       sample(vect,1)})
       
-      tree=prune.with.traits(gen,gen$tip.label[-keep.tip],gen$x)               # supress the other tips
+      tree=prune.with.traits(gen,gen$tip.label[-keep.tip],gen$x)               # suppress the other tips
       tree$abundance=abundance[spec[as.integer(tree$tree$tip.label)]]
       tree$mean.trait=matrix(mean.trait[,spec[as.integer(tree$tree$tip.label)]], nrow = D, byrow = F)
       tree$tree$tip.label=spec[as.integer(tree$tree$tip.label)]
@@ -624,6 +624,11 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
       
       # first we define the genetic types of the individuals
       
+      if(threshold!=1){
+        print("Threshold set to 1 when monophyly==FALSE")
+        threshold <- 1}
+      
+      
       if(threshold==1){
         type=rep(1,N)             
         new.type=2
@@ -636,36 +641,6 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
               type[as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)]=new.type}
             new.type=new.type+1
           }
-        }
-      }else{ #threshold >1
-        if(is.null(distance)){
-          # we compute the distance matrix if it is not given as an argument
-          distance=matrix(0,nrow=N,ncol=N)
-          for(i in 1:nrow(gen$edge)){
-            if(gen$nMut[i]>0){
-              #add the number of mutation between the individuals separated by this edge
-              if(gen$edge[i,2]<=N){
-                tip=as.integer(gen$tip.label[gen$edge[i,2]])
-                distance[tip,(1:N)[-tip]]=distance[tip,(1:N)[-tip]]+gen$nMut[i]
-                distance[(1:N)[-tip],tip]=distance[(1:N)[-tip],tip]+gen$nMut[i]
-              }else{
-                tip=as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)
-                distance[tip,(1:N)[-tip]]=distance[tip,(1:N)[-tip]]+gen$nMut[i]
-                distance[(1:N)[-tip],tip]=distance[(1:N)[-tip],tip]+gen$nMut[i]
-              }
-            }
-          }
-          distance=distance[as.integer(gen$tip.label),as.integer(gen$tip.label)]
-        }
-        
-        # we use the distance matrix to define the genetic type of individuals
-        phylo=gen
-        phylo$edge.length=phylo$nMut
-        type=1:N
-        for(i in 1:N){
-          ind=((1:i)[distance[i,1:i]<threshold])[1]
-          type[phylo$tip.label[i]]=type[phylo$tip.label[ind]]
-          
         }
       }
       
