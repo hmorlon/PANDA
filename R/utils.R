@@ -207,3 +207,11 @@ transform_EB <- function(phy, beta, sigmasq){
     
     return(phy)
 }
+
+## Function to return GLS estimate
+.trendVarfun <- function(y, x, phy){
+    D <- model.matrix(~x)
+    invC <- solve(vcv.phylo(phy))
+    beta = solve(t(D)%*%invC%*%D)%*%t(D)%*%invC%*%y
+    return(beta)
+}

@@ -162,7 +162,7 @@ return(LL)
         # define sigma and beta
         sigma<-exp(param[1])
         beta<-param[2]
-        # because "times" assume that the root state is at 0 and funEnv is from the past to the present.
+        # because "times" assumes that the root state is at 0 and funEnv is from the past to the present.
         f<-function(x){sigma*exp(beta*funEnv((mtot+maxdiff)-x))}
         
     }else if(model=="EnvLin"){
