@@ -37,6 +37,10 @@ optimization method from \code{link{optim}}
 prints information to console during fit
 }
 
+  \item{...}{
+Optional arguments. e.g. "upper=xx", "lower=xx" to specify bounds on the parameter search. "fixedRoot=TRUE" to use an OU model where the root state is assumed fixed (instead of sampled from the stationary distribution)
+}
+
 }
 
 \value{

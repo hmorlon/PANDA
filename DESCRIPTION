@@ -1,34 +1,30 @@
 Package: RPANDA
-Version: 1.9
-Date: 2020-09-14
+Version: 2.0
+Date: 2021-11-07
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
     R (>= 2.14.2),
+    ape,
     picante,
     methods
 Suggests:
     testthat
 Imports:
-    ape,
     bipartite,
     cluster,
     coda,
-    corpcor,
     deSolve,
     fields,
     fpc,
-    geiger,
     glassoFast,
     graphics,
     grDevices,
     igraph,
     Matrix,
     mvMORPH (>= 1.1.0),
-    mvtnorm,
     parallel,
     phytools,
-    pracma,
     pspline,
     pvclust,
     raster,
@@ -71,7 +67,7 @@ Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Drury et al. (2017) <DOI:10.1093/sysbio/syx079>, Lewitus & Morlon (2017) <DOI:10.1093/sysbio/syx095>,
     Drury et al. (2018) <DOI:10.1371/journal.pbio.2003563>, Clavel et al. (2019) <DOI:10.1093/sysbio/syy045>, Maliet et al. (2019) <DOI:10.1038/s41559-019-0908-0>,
     Billaud et al. (2019) <DOI:10.1093/sysbio/syz057>, Lewitus et al. (2019) <DOI:10.1093/sysbio/syz061>,
-    Aristide & Morlon (2019) <DOI:10.1111/ele.13385>, and Maliet et al. (2020) <DOI:10.1111/ele.13592>.
+    Aristide & Morlon (2019) <DOI:10.1111/ele.13385>, Maliet et al. (2020) <DOI:10.1111/ele.13592> and Drury et al. (2021) <DOI:10.1371/journal.pbio.3001270>.
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
 Repository: CRAN

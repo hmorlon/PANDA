@@ -15,6 +15,9 @@ extern SEXP absToRel(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP absToRelSum(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP loglik(SEXP lambda, SEXP lambda2, SEXP sigma, SEXP alpha, SEXP times, SEXP internalAndRoots, SEXP nNodes, SEXP root_depth);
 extern SEXP fitnessFunction(SEXP X, SEXP x, SEXP r, SEXP alpha, SEXP Ncol, SEXP D, SEXP dSpace, SEXP Xs, SEXP Ys, SEXP I);
+extern SEXP C_panda_covar_ou_fixed(SEXP A, SEXP alpha, SEXP sigma);
+extern SEXP C_panda_covar_ou_random(SEXP A, SEXP alpha, SEXP sigma);
+extern SEXP C_panda_weights (SEXP nterm, SEXP epochs, SEXP lambda, SEXP S, SEXP S1, SEXP beta, SEXP root);
 
 static const R_CMethodDef CEntries[] = {
 	{"permute",				(DL_FUNC) &permute,     		8},
@@ -29,6 +32,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"absToRelSum",                 (DL_FUNC) &absToRelSum,                  3},
     {"loglik",                      (DL_FUNC) &loglik,                       8},
     {"fitnessFunction",             (DL_FUNC) &fitnessFunction,             10},
+    {"C_panda_covar_ou_fixed",      (DL_FUNC) &C_panda_covar_ou_fixed,       3},
+    {"C_panda_covar_ou_random",     (DL_FUNC) &C_panda_covar_ou_random,      3},
+    {"C_panda_weights",             (DL_FUNC) &C_panda_weights,              7},
     {NULL, NULL, 0}
 };
 

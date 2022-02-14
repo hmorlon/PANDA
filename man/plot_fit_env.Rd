@@ -35,7 +35,8 @@ Plots representing how the estimated speciation, extinction & net diversificatio
 }
 
 \examples{
-
+\donttest{
+if(require(pspline)){
 data(Balaenopteridae)
 tot_time<-max(node.age(Balaenopteridae)$ages)
 data(InfTemp)
@@ -52,4 +53,6 @@ mu_par<-c()
 
 # plot fitted rates
 #plot_fit_env(result, InfTemp, tot_time)
+    }
+  }
 }

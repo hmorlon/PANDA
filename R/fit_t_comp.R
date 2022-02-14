@@ -6,6 +6,7 @@ if(is.null(names(data))){stop("data missing taxa names")}
 if(!is.null(dim(data))){stop("data needs to be a single trait")}
 is_tip <- phylo$edge[,2] <= length(phylo$tip.label)
 if(sum(diff(phylo$edge[is_tip, 2])<0)>0){ stop('fit_t_comp cannot be used with ladderized phylogenies')}
+if(length(unique(ape::branching.times(phylo)))<length(ape::branching.times(phylo))){stop("fit_t_comp requires phylogenies where no nodes occur at precisely the same time [see ape::branching.times(phylo)]")}
 
 if(is.null(error)){
 	

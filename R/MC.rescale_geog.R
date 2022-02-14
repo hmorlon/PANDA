@@ -2,9 +2,6 @@
 ##this version updates the covariance equation to correctly deal with covariance between allopatric lineages
 ##this version also permits non-island types of biogeography
 
-require(geiger)
-require(phytools)
-require(deSolve)
 
 .VCV.rescale.geog<-function(phylo,sigma,alpha,sterm,geo.object){
 ##these are the three parameters that the equations use to produce the variance-covariance matrix, and will ultimately be estimated with ML

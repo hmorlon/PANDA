@@ -1,11 +1,11 @@
 # RPANDA
 ## R: Phylogenetic ANalyses of DiversificAtion
 
-Implements fits of diversification and phenotypic evolution models to phylogenetic data. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. Eco Lett (2015), Lewitus & Morlon Syst Biol (2016), Drury et al. Syst Biol (2016), Manceau et al. Syst Biol (2016), Clavel & Morlon PNAS (2017), Drury et al. Syst Biol (2017), Lewitus & Morlon Syst Biol (2017), Drury et al. PLoSB (2018), Clavel et al. Syst Biol (2019), Maliet et al. Nature Ecol Evol (2019), Condamine et al. Eco Lett (2019), Aristide & Morlon Eco Lett (2019), Billaud et al. Syst Biol (2019), Lewitus & Morlon Syst Biol (2019), Maliet et al. Eco Lett (2020).
+Implements fits of diversification and phenotypic evolution models to phylogenetic data. See Morlon et al. PLoSB (2010), Morlon et al. PNAS (2011), Condamine et al. Eco Lett (2013), Morlon et al. Eco Lett (2014), Manceau et al. Eco Lett (2015), Lewitus & Morlon Syst Biol (2016), Drury et al. Syst Biol (2016), Manceau et al. Syst Biol (2016), Clavel & Morlon PNAS (2017), Drury et al. Syst Biol (2017), Lewitus & Morlon Syst Biol (2017), Drury et al. PLoSB (2018), Clavel et al. Syst Biol (2019), Maliet et al. Nature Ecol Evol (2019), Condamine et al. Eco Lett (2019), Aristide & Morlon Eco Lett (2019), Billaud et al. Syst Biol (2019), Lewitus & Morlon Syst Biol (2019), Maliet et al. Eco Lett (2020), Drury et al. PloS B (2021).
 
 More information on the RPANDA package and worked examples can be found in [Morlon et al. (2016)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12526)
 
-The current stable version of the RPANDA package (1.9) is available on the CRAN repository.
+The current stable version of the RPANDA package (2.0) is available on the CRAN repository.
 [https://cran.r-project.org/package=RPANDA](https://cran.r-project.org/package=RPANDA)
 
 
@@ -36,7 +36,7 @@ This will produce the RPANDA tarball.
 
 Then, for compiling the binary:
 ```
-R CMD INSTALL --build RPANDA_1.X.tar.gz
+R CMD INSTALL --build RPANDA_2.X.tar.gz
 ```
 
 

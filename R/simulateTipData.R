@@ -15,7 +15,7 @@ setMethod(
         if( method == 1 ){
             if(v){ cat("Computes the tip distribution, and returns a simulated dataset drawn in this distribution.\n") }
             tipdistribution <- getTipDistribution(object, params)
-            X <- rmvnorm(1, tipdistribution$mean, tipdistribution$Sigma)
+            X <- rmvnorm_util(1, tipdistribution$mean, tipdistribution$Sigma)
             X <- matrix(data=X, ncol=1)
             rownames(X) <- object@tipLabels
 

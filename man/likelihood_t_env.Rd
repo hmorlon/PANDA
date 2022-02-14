@@ -89,14 +89,14 @@ likelihood_t_env(Cetacea,trait,param=c(0.1, 0), fun=InfTemp,
                   times=times, mtot=mtot, model="EnvExp")
 
 # Provide the environmental function rather than the dataset (faster if used recursively)
-
-spline_result <- sm.spline(InfTemp[,1],InfTemp[,2], df=50)
-env_func <- function(t){predict(spline_result,t)}
-t<-unique(InfTemp[,1])
+#require(pspline)
+#spline_result <- sm.spline(InfTemp[,1],InfTemp[,2], df=50)
+#env_func <- function(t){predict(spline_result,t)}
+#t<-unique(InfTemp[,1])
 # We build the interpolated smoothing spline function
-env_data<-splinefun(t,env_func(t))
+#env_data<-splinefun(t,env_func(t))
   
-likelihood_t_env(Cetacea, trait, param=c(0.1, 0), fun=env_data, 
-                 times=times, mtot=mtot, model="EnvExp")
+#likelihood_t_env(Cetacea, trait, param=c(0.1, 0), fun=env_data, 
+#                 times=times, mtot=mtot, model="EnvExp")
 	}  
 }
