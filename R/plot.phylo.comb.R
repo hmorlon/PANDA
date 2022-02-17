@@ -183,7 +183,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL, c
       main <- ""
     }
   }
-
+  
   plot(phylo1, edge.color = colors_clades,
        edge.lty = lty_clades, main = main, ...)
   

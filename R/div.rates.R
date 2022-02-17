@@ -30,7 +30,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
   if(comb == "whole_tree"){
     
     tot_time <- max(branching.times(phylo))
-    time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
+    time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
     
     rate_data <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc),]
     model <- as.character(rate_data$Models)
@@ -95,9 +95,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
     names(best_subclades_df_combi)[1] <- "Parts"
     tot_time <- max(branching.times(phylo))
     
-    #time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
-    #time.seq <- c(seq(tot_time,0,by=-1),0)
-    time.seq <- unlist(ifelse(round(tot_time) == floor(tot_time), list(seq(floor(tot_time),0,by=-1)), list(c(tot_time, seq(floor(tot_time),0,by=-1)))))
+    time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
     
     if(backbone.option == "stem.shift"){
       parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Parts), type = "parent")
@@ -113,7 +111,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
     best_backbones_df$Parts <- row.names(best_backbones_df)
     row.names(best_backbones_df) <- NULL
     best_backbones_df <- best_backbones_df[,c(10,1:8)]
-      
+    
     
     if(part == "backbone"){
       
@@ -156,11 +154,12 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
       
       model <- as.character(rate_data$Models[r])
       agei <- time_data[r]
-      time.seq_r <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
+      time.seq_r <- c(tot_time, seq(floor(agei),0,by=-1))
+      #time.seq_r <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
       
       rate_df <- matrix(NA,2, length(time.seq))
       row.names(rate_df) <- c("Speciation", "Extinction")
-        
+      
       if (grepl("BCST", model)){
         rate_spec <- rep(rate_data$Lambda[r], length(time.seq_r))
         rate_ext <- rep(NA, length(time.seq_r))
@@ -199,6 +198,6 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
       globalrate[[r]] <- rate_df[,ncol(rate_df):1]
     }
   }
-
+  
   return(globalrate)
 }

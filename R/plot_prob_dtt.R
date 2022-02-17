@@ -56,15 +56,16 @@ plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE,
   else {
     if (plot.prob == TRUE) 
       plot(pm[, 2], pm[, 1], col = pm[, 4], pch = 20, 
-           xlim = c(max(as.numeric(pm[, 2])), min(as.numeric(pm[, 
-                                                                2]))), ann = T, ...)
+           xlim = c(max(as.numeric(pm[, 2]))+1,
+                    min(as.numeric(pm[, 2]))), ann = T, ...)
   }
   if (plot.bound) {
     if (plot.prob == FALSE) {
       if (add == FALSE) {
         plot(as.numeric(colnames(mat)), bound.max, type = "l",lty = lty.bound,
-             col = col.bound, ann = T, lwd = lwd, xlim = c(max(as.numeric(pm[, 
-                                                                                 2])), min(as.numeric(pm[, 2]))), ...)
+             col = col.bound, ann = T, lwd = lwd,
+             xlim = c(max(as.numeric(pm[, 2]))+1,
+                      min(as.numeric(pm[, 2]))), ...)
         lines(as.numeric(colnames(mat)), bound.min,
               col = col.bound, lwd = lwd, lty = lty.bound)
       }
@@ -87,8 +88,9 @@ plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE,
     if (plot.prob == FALSE & plot.bound == FALSE) {
       if (add == FALSE) {
         plot(as.numeric(colnames(mat)), mean.val, type = "l", 
-             col = col.mean, ann = T, lwd = lwd, xlim = c(max(as.numeric(pm[, 
-                                                                                2])), min(as.numeric(pm[, 2]))), ...)
+             col = col.mean, ann = T, lwd = lwd,
+             xlim = c(max(as.numeric(pm[, 2]))+1,
+                      min(as.numeric(pm[, 2]))), ...)
       }
       else {
         lines(as.numeric(colnames(mat)), mean.val, col = col.mean, 

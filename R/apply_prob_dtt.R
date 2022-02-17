@@ -14,10 +14,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
   
   if(!inherits(sampling.fractions, "data.frame")){
     stop("object \"sampling.fractions\" is not of class \"data.frame\"")
-  } else {
-    if(any(names(sampling.fractions) == "taxo")){
-      names(sampling.fractions)[names(sampling.fractions) == "taxo"] <- "data"
-    }
   }
   
   if(any("Species" %in% colnames(data)) == F){
@@ -311,14 +307,14 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       # first attempt to get a minimum of 95% for the sum of the probabilities per Myr
       check_prob <- F
       cat("\t", i, "/", length(backbone_fit.bd), "\n")
-      m_range <- c(1, 2, 2.5, 3, 3.5, 4, 4.5, 5) # potential argument?
+      m_range <- c(2, 5, 7, 8, 10) # potential argument?
       l <- lin.node$n.tips_prev[lin.node$node == names(backbone_fit.bd)[i]]
       N0 <- lin.node$sp_tt_prev[lin.node$node == names(backbone_fit.bd)[i]]
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(backbone_fit.bd)[i]]
       
       while(check_prob == F){
-        # cat("\t\t", 9-length(m_range), "/ 9\n")
+        cat("\t\t", 9-length(m_range), "/ 9\n")
         prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
                                        time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
                                        method = method, l = l, N0 = N0,

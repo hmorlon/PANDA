@@ -1,5 +1,5 @@
 add.gts <- function(thickness, quaternary = T, is.phylo = F,
-                    root.age = NULL, present = NULL, xpd.x = T, time.interval = 1,
+                    xpd.x = T, time.interval = 1,
                     names = NULL, fill = T, cex = 1, direction = "rightwards", padj = -0.5){
   
   # BETA VERSION: SHOULD BE TESTED MORE DEEPLY
@@ -10,6 +10,9 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
     plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
     present <- plot.obj.phylo$xx[1]
     root.age <- 0
+  } else {
+    root.age <- plot_dim[1] + plot_dim[2]
+    present <- 0
   }
 
   # GTS
@@ -79,10 +82,12 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
       time.seq <- c(seq(root.age, present))
       present <- time.seq[length(time.seq)]
     } else {
-      time.seq <- c(seq(root.age, present),0)
-      present <- 0
+      if(root.age > 0){
+        time.seq <- unique(c(root.age, floor(root.age):present))
+      } else {
+        time.seq <- c(root.age, ceiling(root.age):present)
+      }
     }
-    
   }
   
   if(all(time.seq >= 0)){
@@ -96,6 +101,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
   ages$end  <- ages$end + present  
 
   if(direction == "leftwards"){
+    stop("NOT IMPLEMENTED YET.")
     xlimit <- ceiling(c(max(plot.obj.phylo$xx)+present)/5)*5
     ages <- ages[which(ages$start < xlimit),]
   } else {
@@ -106,7 +112,11 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
         ages <- ages[c(1:which(ages$end < root.age)[1]),]
       }
     } else {
-      ages <- ages[c(1:which(ages$end<0)[1]),]
+      if(root.age > 0){
+        ages <- ages[c(1:which(ages$end<0)[1]),]  
+      } else {
+        ages <- ages[which(ages$start > root.age),]  
+      }
     }
   }
   
@@ -125,16 +135,17 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
   }
   
   if(direction == "leftwards"){
+    stop("NOT IMPLEMENTED YET.")
     labels = as.character(-c(seq_time-present))
   } else{
     if(all(time.seq >= 0)){
       if(time.seq[1] > time.seq[2]){
-        labels <- as.character(-ceiling(time.seq))
+        labels <- as.character(-time.seq)
       } else {
-        labels <- rev(as.character(-ceiling(time.seq)))
+        labels <- rev(as.character(-time.seq))
       }
     } else {
-      labels <- as.character(ceiling(time.seq))
+      labels <- as.character(time.seq)
     }
     
     #min_time <- ifelse(xpd.x, min(ages[,c(1,2)]),0)
@@ -148,10 +159,34 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
     #seq_time <- rev(seq_time)
     
   }
+  if(is.phylo == F){
+    if(any(round(time.seq) != time.seq)){
+      labels <- labels[round(time.seq) == time.seq]
+      time.seq <- time.seq[round(time.seq) == time.seq]
+    }
+  } else {
+    if(time.seq[1] > time.seq[2]){
+      time.seq2 <- time.seq - time.seq[2]
+      if(present)
+      labels2 <- time.seq2 - floor(present)
+      
+      time.seq <- time.seq[round(time.seq2) == time.seq2]
+      labels <- as.character(labels2[round(time.seq2) == time.seq2])
+    } else {
+      
+      time.seq <- time.seq[round(time.seq) == time.seq]
+      labels <- time.seq
+    }
+    
+  }
   
   if(time.interval == 1){
     axis(side = 1, at = time.seq, labels = rep("", length(time.seq)), cex = cex, col.ticks = "grey", line = -0.5, pos = thickness, cex.axis = cex, padj = padj)
-    axis(side = 1, at = time.seq[seq(length(labels),1,-5)], labels = labels[seq(length(labels),1,-5)], cex = cex, line = -0.5, pos = thickness, cex.axis = cex, padj = padj)
+    
+    time.seq5 <- time.seq[seq(length(labels),1,-5)]
+    labels5 <- labels[seq(length(labels),1,-5)]
+    
+    axis(side = 1, at = time.seq5, labels = labels5, cex = cex, line = -0.5, pos = thickness, cex.axis = cex, padj = padj)
   } else {
     axis(side = 1, at = time.seq[seq(length(labels),1,-time.interval)], labels = labels[seq(length(labels),1,-time.interval)],
          cex = cex, pos = thickness, cex.axis = cex, padj = padj)
