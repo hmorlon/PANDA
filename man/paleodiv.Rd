@@ -1,5 +1,5 @@
 \name{paleodiv}
-\alias{div.rates}
+\alias{paleodiv}
 
 \title{
   Paleodiversity through time
