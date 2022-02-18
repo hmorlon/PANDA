@@ -66,9 +66,6 @@ remove.model <- function(shift.res, model){
   total2$delta_AICc <- total2$AICc - min(total2$AICc)
   total2 <- total2[order(total2$AICc),]
   row.names(total2) <- NULL
-  if(all(sapply(strsplit(total2$Combination, split = "/"), length) == 1)){
-    total2$Combination <- gsub("/", "",total2$Combination)
-  }
   
   shift.res2 <- list(whole_tree = whole, subclades = sub_list, backbones = bck_list, total = total2)
   

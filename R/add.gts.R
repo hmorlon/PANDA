@@ -165,19 +165,11 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
       time.seq <- time.seq[round(time.seq) == time.seq]
     }
   } else {
-    if(time.seq[1] > time.seq[2]){
-      time.seq2 <- time.seq - time.seq[2]
-      if(present)
-      labels2 <- time.seq2 - floor(present)
-      
-      time.seq <- time.seq[round(time.seq2) == time.seq2]
-      labels <- as.character(labels2[round(time.seq2) == time.seq2])
-    } else {
-      
-      time.seq <- time.seq[round(time.seq) == time.seq]
-      labels <- time.seq
-    }
+    time.seq2 <- time.seq - time.seq[2]
+    labels2 <- time.seq2 - floor(present)
     
+    time.seq <- time.seq[round(time.seq2) == time.seq2]
+    labels <- as.character(labels2[round(time.seq2) == time.seq2])
   }
   
   if(time.interval == 1){
