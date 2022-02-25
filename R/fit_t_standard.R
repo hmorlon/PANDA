@@ -42,7 +42,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB","BMtrend"), error
   
   # for OU1 et random root
   if(model=="OU" && two.regime==FALSE){
-      if(!is.ultrametric(phylo)) root = TRUE
+      if(!is.ultrametric(phylo)) root = TRUE else root = FALSE
       precalc<-mv.Precalc(phylo, nb.traits=1, param=list(model="OU1", root=root))
   }
   
