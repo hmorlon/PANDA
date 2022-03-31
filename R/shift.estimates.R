@@ -375,10 +375,6 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ALL_TOTAL$delta_AICc <- ALL_TOTAL$AICc - min(ALL_TOTAL$AICc)
   ALL_TOTAL <- ALL_TOTAL[order(ALL_TOTAL$delta_AICc),]
   row.names(ALL_TOTAL) <- NULL
-  if(multi.backbone == F){
-    ALL_TOTAL$Combination <- gsub("/","", ALL_TOTAL$Combination)
-  }
-  
   best_ALL_TOTAL <- ALL_TOTAL[ALL_TOTAL$delta_AICc < 2,]
   
   all_res[3] <- list(ALL_final3)
