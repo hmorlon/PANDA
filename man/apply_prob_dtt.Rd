@@ -9,7 +9,8 @@
 }
 \usage{
 apply_prob_dtt(phylo, data, sampling.fractions, shift.res,
-               combi = 1, backbone.option = "crown.shift")
+               combi = 1, backbone.option = "crown.shift",
+               m = NULL)
 }
 \arguments{
   \item{phylo}{
@@ -34,9 +35,15 @@ an object of type 'phylo' (see ape documentation)
   \item{combi}{
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
+  \item{m}{
+    NULL or numeric. The set of maxmimum values for m ranges. Should be as long as the number of parts in the combinaison. Default is NULL (see details).
+  }
+  
 }
 \details{
   This funcion calls the function prob_dtt() to calculate paleodiversity dynamics with the probabilistic approach for the different parts of a combination of diversification shifts.
+  
+  As explained in Billaud et al. (2020), all the sum of probabilities per million year must be equal to 1. However, it can be difficult to reach 1 for groups showing a paleodiversity decline because the range of paleodiversity over which we need to calculate the probabilities can be very large. To circumvent this issue, apply_prob_dtt() set the range of the paleodiversity to the maximum of the deterministic estimate from the function `paleodiv()` and successively multiplies this maximum by 2, 3, 5, 7 and 10 until the sums of probabilities for each million year reach a minimum of 95\%. In few cases, this value of 95\% is not reached for few million years. In this case, it might come from an extremely high range of m and maximum values can be manually set up with the argument m.
 }
 
 \value{

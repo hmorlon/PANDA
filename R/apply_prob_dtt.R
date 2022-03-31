@@ -1,5 +1,6 @@
 apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
-                           combi = 1, backbone.option = "crown.shift"){
+                           combi = 1, backbone.option = "crown.shift",
+                           m = NULL){
   
   # some checks ####
   if(!inherits(data, "data.frame")){
@@ -99,10 +100,17 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     return(fit.bd)
     
   }
+  no_decline <- function(x){
+    dif <- c()
+    for(i in 2:length(x)-1){
+      dif <- c(dif, x[i+1] - x[i] > 0)
+    }
+    return(all(dif))
+  }
   
   # core script ####
   comb <- shift.res$total$Combination[combi]
-  
+
   if(comb == "whole_tree"){
     
     whole_df <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc),]
@@ -113,12 +121,56 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     l <- sampling.fractions$sp_in[sampling.fractions$nodes == Ntip(phylo)+1]    
     
     whole_diversity <- paleodiv(phylo = phylo, data = data, split.div = F,
-                            sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
-    prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
-                                N0 = N0, l = l, type = type, prec = 10000,
-                                m = 1:max(whole_diversity)))
+                                sampling.fractions = sampling.fractions,
+                                shift.res = shift.res, combi = combi)
+    min_sumprob <- c()
+    check_prob <- F
+    cat("\t", i, "/", length(backbone_fit.bd), "\n")
+    if(no_decline(whole_diversity)){
+      m_range <- 1
+    } else{
+      m_range <- c(2, 3, 5, 7, 10) 
+    }
     
-    colSums(prob_whole[[1]])
+    while(check_prob == F){
+      
+      if(no_decline(whole_diversity)){
+        prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
+                                    N0 = N0, l = l, type = type, prec = 10000,
+                                    m = 1:max(whole_diversity)*m_range))
+      } else {
+        
+        prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
+                                    N0 = N0, l = l, type = type, prec = 10000,
+                                    m = 1:max(whole_diversity)*m_range[1]))
+      }
+      # adding diversities at present
+      prob_whole[[1]] <- cbind(prob_whole[[1]],rep(0, nrow(prob_whole[[1]])))
+      prob_whole[[1]][row.names(prob_whole[[1]]) == as.character(whole_diversity[length(whole_diversity)]),ncol(prob_whole[[1]])] <- 1
+      colnames(prob_whole[[1]])[ncol(prob_whole[[1]])] <- "0"
+      
+      m_range <- m_range[-1]
+      
+      min_sumprob <- c(min_sumprob, min(colSums(prob_whole[[1]])))
+      cat("\nMinimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
+      
+      if(min_sumprob[length(min_sumprob)] >= 0.95){
+        check_prob <- T
+      
+      } else {
+        if(length(m_range) == 0){
+          check_prob <- T
+          cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.
+                You should use another range of m for the backbone.")
+        }
+      }
+      if(length(min_sumprob) > 1){
+        if(min_sumprob[length(min_sumprob)] == min_sumprob[length(min_sumprob)-1]){
+          check_prob <- T
+          cat("\nWarnings: the sum of probabilities did not reach 95% for each time Myr.\n")
+        }
+      }
+    }
     
     return(prob_whole)
     
@@ -134,10 +186,18 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     }
     
     # Deterministic diversity to set the limit
-    diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
-                            sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
-    row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
-    max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = T))/10)*10
+    if(is.null(m)){
+      diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
+                              sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
+      row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
+      max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = T))/10)*10
+    } else {
+      diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
+                              sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
+      row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
+      max_diversities <- m
+      names(max_diversities) <- row.names(diversities)
+    }
    
     # subclade(s) ####
     tips_sub <- Descendants(phylo, as.numeric(comb.sub))
@@ -174,9 +234,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       N0 <- subclades_N0[i]
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(subclades_fit.bd)[i]]
-      if(max_div > 10000){
-        max_div <- 1000
-      }
+      
       prob_subclades[[i]] <- prob_dtt(fit.bd = subclades_fit.bd[[i]], tot_time = subclades_tot_times[i],
                                       time = 1:subclades_tot_times[i],
                                       N0 = N0, l = l, prec = 1000,
@@ -305,16 +363,22 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     prob_backbone <- list()
     for(i in 1:length(backbone_fit.bd)){
       # first attempt to get a minimum of 95% for the sum of the probabilities per Myr
+      min_sumprob <- c()
       check_prob <- F
       cat("\t", i, "/", length(backbone_fit.bd), "\n")
-      m_range <- c(2, 5, 7, 8, 10) # potential argument?
+      if(is.null(m)){
+         m_range <- c(2, 3, 5, 7, 10) 
+      } else{
+        m_range <- 1
+      }
+      
       l <- lin.node$n.tips_prev[lin.node$node == names(backbone_fit.bd)[i]]
       N0 <- lin.node$sp_tt_prev[lin.node$node == names(backbone_fit.bd)[i]]
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(backbone_fit.bd)[i]]
       
       while(check_prob == F){
-        cat("\t\t", 9-length(m_range), "/ 9\n")
+        cat("m maximum =", max_div*m_range[1], paste0("(max. deterministic value x",m_range[1],")"), "\n")
         prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
                                        time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
                                        method = method, l = l, N0 = N0,
@@ -326,9 +390,26 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         prob_backbone[[i]][row.names(prob_backbone[[i]]) == as.character(diversities[length(prob_subclades)+i,ncol(diversities)]),
                             ncol(prob_backbone[[i]])] <- 1
         colnames(prob_backbone[[i]])[ncol(prob_backbone[[i]])] <- "0"
+        min_sumprob <- c(min_sumprob, min(colSums(prob_backbone[[i]])))
         
-        if(min(colSums(prob_backbone[[i]])) >= 0.95){
+        if(min_sumprob[length(min_sumprob)] >= 0.95){
           check_prob <- T
+          cat("\nMinimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
+        } else {
+          if(length(m_range) == 0){
+            check_prob <- T
+            cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.
+                You should use another range of m for the backbone.")
+          }
+        }
+        
+        if(length(min_sumprob) > 1){
+          if(min_sumprob[length(min_sumprob)] == min_sumprob[length(min_sumprob)-1]){
+            check_prob <- T
+            cat("\nWarnings: the sum of probabilities did not reach 95% for each time Myr.\n")
+          }
+        } else {
+          cat("\tMinimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
         }
       }
     }
