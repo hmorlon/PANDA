@@ -152,7 +152,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       m_range <- m_range[-1]
       
       min_sumprob <- c(min_sumprob, min(colSums(prob_whole[[1]])))
-      cat("\nMinimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
+      cat(" -> minimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
       
       if(min_sumprob[length(min_sumprob)] >= 0.95){
         check_prob <- T
@@ -378,7 +378,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       max_div <- max_diversities[names(max_diversities) == names(backbone_fit.bd)[i]]
       
       while(check_prob == F){
-        cat("m maximum =", max_div*m_range[1], paste0("(max. deterministic value x",m_range[1],")"), "\n")
+        cat("with a maximum value of m =", max_div*m_range[1], paste0("(max. deterministic value x",m_range[1],")"), "\n")
         prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
                                        time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
                                        method = method, l = l, N0 = N0,
@@ -394,7 +394,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         
         if(min_sumprob[length(min_sumprob)] >= 0.95){
           check_prob <- T
-          cat("\nMinimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
+          cat(" -> minimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
         } else {
           if(length(m_range) == 0){
             check_prob <- T
@@ -409,7 +409,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
             cat("\nWarnings: the sum of probabilities did not reach 95% for each time Myr.\n")
           }
         } else {
-          cat("\tMinimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
+          cat(" -> minimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
         }
       }
     }

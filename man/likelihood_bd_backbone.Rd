@@ -32,7 +32,8 @@ the fraction of extant species included in the phylogeny
 }
   \item{backbone}{
   character. Allows to analyse a backbone. Default is NULL and spec_times and branch_times are then ignored.
-  Otherwise
+  
+  Otherwise:
     \itemize{ 
       \item"stem.shift": the stems of subclades are included in subclade analyses;
       \item"crown.shift": the stems of subclades are included in the backbone analysis.

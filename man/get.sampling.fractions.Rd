@@ -51,7 +51,7 @@
   \item{to_test}{the node IDs for nodes that are testable according to clade.size}
 }
 \details{
-  All described species should be included to properly calculate sampling fractions. The example of Cetacea uses a taxonomic database but groups can be defined on geography or traits as soon as they are monophyletic. If the taxonomy of the studied group is difficult to establish (e.i. taxonomic uncertainty, etc.), a "fake" taxonomic database can be created with random species names (Gen1_sp1, Gen1_sp2, Gen2_sp1, etc.) to circumvent taxonomic difficulties. 
+  All described species should be included to properly calculate sampling fractions. The example of Cetacea uses a taxonomic database but groups can be defined on geography or traits as soon as they are monophyletic. If the taxonomy of the studied group is difficult to establish (e.i. taxonomic uncertainty, etc.), a "fake" taxonomic database can be created with random species names (Gen1_sp1, Gen1_sp2, Gen2_sp1, etc.) to circumvent taxonomic difficulties. Note that sampling fractions of the backbones are calculated in the next step of the pipeline (function get.comb.shift).
 
 }
 \references{
@@ -67,7 +67,7 @@
 data("Cetacea")
 data("taxo_cetacea")
 
-# calculating sampling fractions
+# calculating sampling fractions with a plot
 taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
 f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
                                     data = taxo_cetacea_no_genus,

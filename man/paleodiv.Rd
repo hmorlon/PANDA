@@ -5,7 +5,7 @@
   Paleodiversity through time
 }
 \description{
-  Calculates paleodiversity through time from shift.estimates output with the determinsitic approach.
+  Calculates paleodiversity through time from shift.estimates output with the deterministic approach.
 }
 \usage{
   paleodiv(phylo, data, sampling.fractions, shift.res,
@@ -45,7 +45,6 @@
 
 \references{
 	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
-	
 }
 \author{Nathan Mazet}
 \seealso{
@@ -57,30 +56,16 @@
 data("Cetacea")
 data("taxo_cetacea")
 
-# main procedure
+# testing family and parvorder levels
 taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
-f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                       data = taxo_cetacea_no_genus,
-                                       plot = T, cex = 0.3)
 
-comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
-                                     data = taxo_cetacea_no_genus,
-                                     sampling.fractions = f_df_cetacea,
-                                     Ncores = 4)
-
-shifts_cetacea <- shift.estimates(phylo = Cetacea,
-                                  data = taxo_cetacea_no_genus,
-                                  sampling.fractions = f_df_cetacea,
-                                  comb.shift = comb.shift_cetacea,
-                                  models = c("BCST","BCST_DCST","BVAR",
-                                  "BVAR_DCST","BCST_DVAR"),
-                                  Ncores = 4)
-
+# with f_df_cetacea the output from get.sampling.fractions()
+# with shifts_cetacea the output from shift.estimates()
 # use of paleodiv
 paleodiversity <- paleodiv(phylo = Cetacea,
                            data = taxo_cetacea_no_genus,
                            sampling.fractions = f_df_cetacea,
-                           shift.res = shifts,
+                           shift.res = shifts_cetacea,
                            combi = 1, split.div = F)
 }
 }

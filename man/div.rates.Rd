@@ -50,26 +50,10 @@
 \examples{
 \dontrun{
 # loading data
-
 data("Cetacea")
-data("taxo_cetacea")
 
-# main procedure
-f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                             data = taxo[names(taxo) != "Genus"],
-                                             plot = T, cex = 0.3)
-
-comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, data = taxo[names(taxo) != "Genus"],
-                             sampling.fractions = f_df_cetacea, Ncores = 4)
-
-shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
-                          sampling.fractions = f_df_cetacea,
-                          comb.shift = comb.shift_cetacea,
-                          models = c("BCST","BCST_DCST","BVAR",
-                          "BVAR_DCST","BCST_DVAR"),
-                          backbone.option = "crown.shift", Ncores = 4)
-
-# use of div.rates
-rates <- div.rates(phylo = Cetacea, shift.res = shifts_cetacea, combi = 1, part = "all")
+# with shifts_cetacea the output from shift.estimates()
+rates <- div.rates(phylo = Cetacea, shift.res = shifts_cetacea,
+                   combi = 1, part = "all")
 }
 }

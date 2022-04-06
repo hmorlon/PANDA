@@ -1,5 +1,6 @@
 paleodiv <- function(phylo, data, sampling.fractions, shift.res,
-                     backbone.option = "crown.shift", combi = 1, split.div = F){
+                     backbone.option = "crown.shift", combi = 1,
+                     split.div = F){
 
   # Checking arguments ####
   # phylo

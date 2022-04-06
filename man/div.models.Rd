@@ -34,7 +34,7 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
     }
   }
   \item{spec_times}{
-  a numeric vector numeric of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
+  a numeric vector of the stem ages of subclades. Used only if backbone = "stem.shift". Default is NULL.
   }
   \item{branch_times}{
   a list of numeric vectors. Each vector contain the stem and crown ages of subclades (in this order). Used only if backbone = "crown.shift". Default is NULL.
@@ -60,7 +60,7 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   }  
 }
 \details{
-  Parameters of birth-death models are defined backward in time such as a positive alpha corresponds to a speciation rate decreasing through time from the past to present.
+  Parameters of birth-death models are defined backward in time such as a positive alpha corresponds to a speciation rate decreasing through time from the past to the present.
 }
 \value{
   A data.frame with number of parameters, likelihood, AICc and parameter values for all models.

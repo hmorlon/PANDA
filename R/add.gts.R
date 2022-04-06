@@ -1,6 +1,6 @@
 add.gts <- function(thickness, quaternary = T, is.phylo = F,
-                    xpd.x = T, time.interval = 1,
-                    names = NULL, fill = T, cex = 1, direction = "rightwards", padj = -0.5){
+                    xpd.x = T, time.interval = 1, names = NULL, fill = T,
+                    cex = 1, padj = -0.5, direction = "rightwards"){
   
   # BETA VERSION: SHOULD BE TESTED MORE DEEPLY
   par(xpd = T)

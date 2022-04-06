@@ -43,7 +43,7 @@
     \itemize{
     \item{FALSE: only combinations with simple backbone will be analyzed.}
     \item{TRUE: only combinations with multiple backbones will be analyzed.}
-    \item{"all", all combinations are analyzed.}
+    \item{"all": all combinations are analyzed.}
     }
   }
   \item{np.sub}{
@@ -69,7 +69,7 @@
   
 }
 \details{
-  The output for backbone is a list in which each element corresponds to the backbone model comparisons of a combination. This element contains a list with as one table of model comparion per backbone.
+  The output for backbone is a list in which each element corresponds to the backbone model comparisons of a combination. This element contains a list with one table of model comparion per backbone.
 
 We recommand to remove "BVAR_DVAR" model from the models set and to lead the first analysis with multi.backbone = F to limit the number of combination.
 
@@ -87,26 +87,21 @@ clade.size argument should be the same value for the whole procedure (same than 
 \examples{
 \dontrun{
   # loading data
-  
   data("Cetacea")
   data("taxo_cetacea")
   
   # main procedure
   taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
-  f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                             data = taxo_cetacea_no_genus,
-                                             plot = T, cex = 0.3)
   
-  comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
-                                       data = taxo[names(taxo) != "Genus"],
-                                       sampling.fractions = f_df_cetacea,
-                                       Ncores = 4)
-  
-  shifts_cetacea <- shift.estimates(phylo = Cetacea, data = taxo_cetacea,
-                          sampling.fractions = f_df_cetacea,
-                          comb.shift = comb.shift_cetacea,
-                          models = c("BCST","BCST_DCST","BVAR",
-                          "BVAR_DCST","BCST_DVAR"),
-                          backbone.option = "crown.shift", Ncores = 4)
+  # with f_df_cetacea the output from get.sampling.fractions
+  # with comb.shift_cetacea the output from get.comb.shift
+  shifts_cetacea <- shift.estimates(phylo = Cetacea,
+                                    data = taxo_cetacea_no_genus,
+                                    sampling.fractions = f_df_cetacea,
+                                    comb.shift = comb.shift_cetacea,
+                                    models = c("BCST","BCST_DCST","BVAR",
+                                    "BVAR_DCST","BCST_DVAR"),
+                                    backbone.option = "crown.shift",
+                                    Ncores = 4)
   }
 }

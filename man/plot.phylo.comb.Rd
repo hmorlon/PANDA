@@ -54,7 +54,7 @@
     numeric. Define lty for the backbone.
   }
   \item{tested_nodes}{
-    bolean. If TRUE, all the tested node are highlighted by a red point.
+    bolean. If TRUE, all the tested nodes are highlighted by a red point.
   }
   \item{text.cex}{
     numeric. Define the size of legend text.
@@ -68,7 +68,7 @@
 }
 
 \value{
-plot.phylo.comb returns the same invisible object as plot.phylo.
+plot the phylogeny and returns the same invisible object as plot.phylo.
 }
 \details{
   If col.sub is not specified, color vector for subclades is c(c(brewer.pal(8, "Dark2"),brewer.pal(8, "Set1"),"darkmagenta","dodgerblue2", "orange", "forestgreen")). For multiple backbone, default vector is c("blue4", "orange4", "red4", "grey40", "coral4", "deeppink4", "khaki4", "darkolivegreen", "darkslategray",”black”).
@@ -95,16 +95,15 @@ f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
                                              data = taxo_cetacea_no_genus,
                                              plot = T, cex = 0.3)
 taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
-comb.shift_cetacea <- get.comb.shift(phylo = Cetacea, 
-                                     data = taxo_cetacea_no_genus,
-                                     sampling.fractions = f_df_cetacea,
-                                     Ncores = 4)
 
-# use of plot.phylo.comb without models
+# use of plot.phylo.comb
+# without shift.estimates results but with comb.shift_cetacea
+# the output from get.comb.shift and with f_df_cetacea the output
+# from get.sampling.fractions
+
 plot.phylo.comb(phylo = Cetacea,
                 data = taxo_cetacea,
                 sampling.fractions = f_df_cetacea,
-                shift.res = shifts,
                 combi = comb.shift_cetacea[15],
                 label.offset = 0.3,
                 main = "", lad = F,cex = 0.4)
