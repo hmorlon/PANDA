@@ -125,7 +125,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
                                 shift.res = shift.res, combi = combi)
     min_sumprob <- c()
     check_prob <- F
-    cat("\t", i, "/", length(backbone_fit.bd), "\n")
     if(no_decline(whole_diversity)){
       m_range <- 1
     } else{
