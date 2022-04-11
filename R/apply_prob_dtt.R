@@ -407,8 +407,6 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
             check_prob <- T
             cat("\nWarnings: the sum of probabilities did not reach 95% for each time Myr.\n")
           }
-        } else {
-          cat(" -> minimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
         }
       }
     }
