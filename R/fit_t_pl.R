@@ -395,7 +395,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         start <- .starting_val(starting, model, method, SE)
     }
     # Initial guesses found we start the optimization
-    if(echo==TRUE) message("Start optimization. Please wait...")
+    if(echo==TRUE) message("\n","Start optimization. Please wait...")
     
     # Optimization of the cross-validated likelihood
     estimModel <- optim(start, fn = loocv, method="L-BFGS-B", upper=upperBound, lower=lowerBound)
@@ -584,7 +584,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
 
 
 # ------------------------------------------------------------------------- #
-# .transformTree                                                            #
+# .transformTree => see mvMORPH                                             #
 # options: phy, param, model, mserr=NULL, Y=NULL, X=NULL, REML=TRUE         #
 #                                                                           #
 # ------------------------------------------------------------------------- #
@@ -599,6 +599,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     extern <- (descendent <= n)
     N <- 2*n-2
     diagWeight <- NULL
+    flag <- FALSE
     
     # Model
     switch(model,
@@ -613,6 +614,7 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
             D = max(dis[1:n]) - dis[1:n]
             D = D - mean(D)
             phy$edge.length[extern] <- phy$edge.length[extern] + D[descendent[extern]]
+            flag <- TRUE
         }
         
         # Branching times (now the tree is ultrametric)
@@ -669,9 +671,10 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     C <- pruning(phy, trans=FALSE)
     Xi <- crossprod(C$sqrtM, X)
     Yi <- crossprod(C$sqrtM, Y)
-    
+   
     # Return the determinant
-    if(REML) deterM <- sum(log(C$varNode)) else deterM <- C$det
+     if(REML) deterM <- sum(log(C$varNode)) else deterM <- C$det
+     if(flag) deterM <- deterM + 2*sum(log(diagWeight))
     
     # Return the score, variances, and scaled tree
     return(list(phy = phy, diagWeight = diagWeight, X=Xi, Y=Yi, Xw=X, Yw=Y, det=deterM))

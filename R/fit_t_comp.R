@@ -79,7 +79,7 @@ if(is.null(error)){
 	
 	if(is.null(geography.object) & !is.null(regime.map)){ #two-slope version for sympatric clades
 		class.object<-try(CreateClassObject(regime.map))
-		if(class(class.object)=="try-error"){
+		if(inherits(class.object, "try-error")){
 			class.object<-CreateClassObject(regime.map,rnd=6)
 			}
 					
@@ -129,7 +129,7 @@ if(is.null(error)){
 		sgeo0<-.resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in code
 		
 		class.object<-try(CreateClassObject(regime.map))
-		if(class(class.object)=="try-error"){
+		if(inherits(class.object, "try-error")){
 			class.object<-CreateClassObject(regime.map,rnd=6)
 			}
 					
@@ -139,13 +139,13 @@ if(is.null(error)){
 		int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo0,S.matrix=smat0))	
 		
 		#some catches in case there are small rounding issues (happens when events anagenetic in biogeography or regimes happen at a very similar time)				
-		if(class(int)=="try-error"){
+		if(inherits(int, "try-error")){
 			int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo,S.matrix=smat,rnd=6))
 			}	
-		if(class(int)=="try-error"){
+		if(inherits(int, "try-error")){
 			int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo,S.matrix=smat,rnd=7))
 			}	
-		if(class(int)=="try-error"){
+		if(inherits(int, "try-error")){
 			int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo,S.matrix=smat,rnd=4))
 			}	
 		
@@ -285,7 +285,7 @@ if(!is.null(geography.object) & is.null(regime.map)){ #single-slope version with
 if(is.null(geography.object) & !is.null(regime.map)){ #multi-slope version for sympatric clades (i.e., no biogeography)
 	
 	class.object<-try(CreateClassObject(regime.map))
-	if(class(class.object)=="try-error"){
+	if(inherits(class.object, "try-error")){
 		class.object<-CreateClassObject(regime.map,rnd=6)
 		}
 				
@@ -339,7 +339,7 @@ if(!is.null(geography.object) & !is.null(regime.map)){ #multi-slope version with
 	sgeo0<-.resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in code
 	
 	class.object<-try(CreateClassObject(regime.map))
-	if(class(class.object)=="try-error"){
+	if(inherits(class.object, "try-error")){
 		class.object<-CreateClassObject(regime.map,rnd=6)
 		}
 				
@@ -349,13 +349,13 @@ if(!is.null(geography.object) & !is.null(regime.map)){ #multi-slope version with
 	int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo0,S.matrix=smat0))	
 	
 	#some catches in case there are small rounding issues (happens when events anagenetic in biogeography or regimes happen at a very similar time)				
-	if(class(int)=="try-error"){
+	if(inherits(int, "try-error")){
 		int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo,S.matrix=smat,rnd=6))
 		}	
-	if(class(int)=="try-error"){
+	if(inherits(int, "try-error")){
 		int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo,S.matrix=smat,rnd=7))
 		}	
-	if(class(int)=="try-error"){
+	if(inherits(int, "try-error")){
 		int<-try(.ReconcileGeoObjectSMatrix(geo.object=sgeo,S.matrix=smat,rnd=4))
 		}	
 	

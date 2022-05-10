@@ -114,7 +114,7 @@
 ###cls.df from CRAN version of BioGeoBEARS
 .cls.df<-function (dtf, printout = FALSE) 
 {
-    if (class(dtf) == "matrix") {
+    if (inherits(dtf, "matrix")) {
         dtf = as.data.frame(dtf, stringsAsFactors = FALSE)
     }
     dtf_names = names(dtf)
@@ -217,8 +217,8 @@
 	if(is.null(regime.simmap)){stop('provide regime.simmap')}
 	states<-colnames(regime.simmap$mapped.edge)
 	class.object<-try(CreateClassObject(regime.simmap))
-	if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(regime.simmap,rnd=6))}
-	if(class(class.object)=="try-error"){class.object<-CreateClassObject(regime.simmap,rnd=7)}
+	if(inherits(class.object, "try-error")){class.object<-try(CreateClassObject(regime.simmap,rnd=6))}
+	if(inherits(class.object, "try-error")){class.object<-CreateClassObject(regime.simmap,rnd=7)}
 	
 	funlist<-list()	
 	for(i in 1:length(states)){
