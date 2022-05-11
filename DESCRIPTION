@@ -22,7 +22,7 @@ Imports:
     grDevices,
     igraph,
     Matrix,
-    mvMORPH (>= 1.1.0),
+    mvMORPH (>= 1.1.6),
     parallel,
     phytools,
     pspline,
