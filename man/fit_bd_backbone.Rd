@@ -1,5 +1,5 @@
-\name{fit_bd_backbbone}
-\alias{fit_bd_backbbone}
+\name{fit_bd_backbone}
+\alias{fit_bd_backbone}
 
 \title{
 Maximum likelihood fit of the general birth-death model (backbone)
