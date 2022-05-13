@@ -9,7 +9,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
   
   div <- function(par, phylo, branch_times, model, backbone){
     
-    if(backbone == "backbone2"){
+    if(backbone == "crown.shift"){
       if(max(unlist(branch_times)) > max(branching.times(phylo))){
         tmrca <- max(unlist(branch_times))
       } else{

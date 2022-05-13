@@ -62,8 +62,30 @@ all_comb_models <- function(to){
       phylo_backbone_cut <- list(drop.tip(phylo, unlist(ALL_clade_names[clade_to_shift])))
       names(phylo_backbone_cut) <- paste0(paste(c(clade_to_shift),collapse = "."),"_bck")
       #branch_times_to_bck <- list(unlist(ALL_branch_times_to_bck[clade_to_shift], recursive = F))
+      root_ID_backbone_cut <- phylo_backbone_cut[[1]]$node.label[1]
       
-      branch_times_to_bck <- list(branch_times) # reuse branch_times for other parts
+      if(root_ID_backbone_cut != Ntip(phylo)+1){
+        
+        ances_backbone_cut <- Ancestors(phylo, root_ID_backbone_cut)
+        oldest_node_backbone_cut <- ances_backbone_cut[!ances_backbone_cut == Ntip(phylo)+1]
+        oldest_node_backbone_cut <- oldest_node_backbone_cut[length(oldest_node_backbone_cut)]
+        if(length(oldest_node_backbone_cut) != 0){
+          shift1 <- shift[names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")]
+          
+          branch_times1 <- get.branching.nodes(shift1, root_ID = oldest_node_backbone_cut)
+          branch_times1 <- c(branch_times1, unlist(shift[!names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")], recursive = F))
+          
+          for(nodeID in 1:length(branch_times1)){
+            branch_times1[[nodeID]] <- sapply(branch_times1[[nodeID]], get.node.ages)
+          }
+          branch_times_to_bck <- list(branch_times1) # reuse branch_times for other parts
+        } else {
+          branch_times_to_bck <- list(branch_times)
+        }
+        
+      } else {
+        branch_times_to_bck <- list(branch_times) # reuse branch_times for other parts
+      }
       names(branch_times_to_bck) <- paste(clade_to_shift, collapse = ".")
       int_nodes <- NULL
       
@@ -143,7 +165,7 @@ all_comb_models <- function(to){
           names(branch_times_to_bck)[sb] <- paste(c(clade_to_shift[clade_to_shift %in% Descendants(phylo, as.numeric(int_nodes[sb]), "all")]), collapse = ".")
         }
         
-        if(sb == length(int_nodes)){
+        if(sb == length(int_nodes)){ # deep backbone
           tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
           tips_last_bck <- unlist(ALL_clade_names[clade_to_shift[!clade_to_shift %in% sb.desc]])
           
