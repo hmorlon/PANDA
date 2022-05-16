@@ -26,6 +26,22 @@ get.branching.nodes <- function(shift, root_ID = Ntip(phylo)+1){
     shift <- c(shift, sibling_shift_node_bt)
   }
   
+  desc_shift <- Descendants(phylo, as.numeric(names(shift)), type = "all")
+  shiftsub <- names(shift)[!sapply(desc_shift, function(x) any(x %in% as.numeric(names(shift))))]
+  
+  # account for poor backbone resulting in a subclade
+  phylo_backbone_cut <- drop.tip(phylo, unlist(ALL_clade_names[shiftsub]))
+  sibling_shift_nodes <- unlist(Siblings(phylo, as.numeric(clade_to_shift)))
+  
+  which_sibling_shift_nodes <- sibling_shift_nodes %in% phylo_backbone_cut$node.label[1]
+  
+  if(any(which_sibling_shift_nodes)){
+    sibling_shift_node <- sibling_shift_nodes[which_sibling_shift_nodes]
+    sibling_shift_node_bt <- list(list(c(sibling_shift_node, Ancestors(phylo, sibling_shift_node, type = "parent"))))
+    names(sibling_shift_node_bt) <- sibling_shift_node
+    shift <- c(shift, sibling_shift_node_bt)
+  }
+  
   df_ALL <- as.data.frame(sapply(unlist(shift,recursive = F), function(m) m[2]))
   colnames(df_ALL) <- "node"
   row.names(df_ALL) <- 1:nrow(df_ALL)
