@@ -292,20 +292,11 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   for(clade in 1:length(all_tested_nodes)){
     
     parental_node <- Ancestors(phylo, as.numeric(all_tested_nodes[clade]), type = "parent")
-    if(parental_node == Ntip(phylo)+1){ # this clade is at the root
-      root_clade <- 1
-    } else {
-      root_clade <- 0
-    }
-    branch_times_clade <- unlist(list(rep(list(NULL),1 + root_clade)),recursive = F)
+    branch_times_clade <- unlist(list(rep(list(NULL),1)),recursive = F)
     
     bt_cl <- as.numeric(c(all_tested_nodes[clade], parental_node))
-    # if(is.na(bt_cl[2])){}
     branch_times_clade[1] <- list(bt_cl)
     
-    if(root_clade == 1){
-      branch_times_clade[1 + root_clade] <- list(c(Siblings(phylo, max(bt_cl)),min(bt_cl)))
-    }  
     ALL_branch_times_clades[[clade]] <- branch_times_clade
   }
   

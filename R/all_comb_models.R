@@ -139,7 +139,7 @@ all_comb_models <- function(to){
             names(branch_times_to_bck)[sb] <- paste(c(desc_sub_up_bck), collapse = ".")
           }
           
-        } else{
+        } else {
           
           branch_time_sb <- get.branching.nodes(ALL_branch_times_clades[desc_sub_up_bck], root_ID = int_nodes[sb])
           
@@ -191,15 +191,45 @@ all_comb_models <- function(to){
             
             branch_times_to_bck[sb+1] <- list(branch_time_deep)
             
+            # adding root branches if needed
+            root_ID_deep_backbone <- phylo_backbone_cut[[sb+1]]$node.label[1]
+            
+            if(root_ID_deep_backbone != Ntip(phylo)+1){
+              
+              ances_backbone_cut <- Ancestors(phylo, root_ID_deep_backbone)
+              oldest_node_backbone_cut <- ances_backbone_cut[!ances_backbone_cut == Ntip(phylo)+1]
+              oldest_node_backbone_cut <- oldest_node_backbone_cut[length(oldest_node_backbone_cut)]
+              if(length(oldest_node_backbone_cut) != 0){
+                # branching nodes from subclade combination of deeper backbone
+                shift1 <- shift[names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")]
+                
+                branch_times1 <- get.branching.nodes(shift1, root_ID = oldest_node_backbone_cut)
+                #branch_times1 <- c(branch_times1, unlist(shift[!names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")], recursive = F))
+                
+                for(nodeID in 1:length(branch_times1)){
+                  branch_times1[[nodeID]] <- sapply(branch_times1[[nodeID]], get.node.ages)
+                }
+                
+                root_children <- btt_bck[btt_bck %in% Descendants(phylo, Ntip(phylo)+1, "children")]
+                
+                if(length(root_children) > 0){
+                  
+                  branch_times1 <- c(branch_times1[!names(branch_times1) %in% root_children],
+                    unlist(ALL_branch_times_to_bck[root_children], recursive = F))
+                  
+                }
+                
+                branch_times_to_bck[sb+1] <- list(branch_times1) # reuse branch_times for other parts
+              }
+   
+            }
             names(branch_times_to_bck)[sb+1] <- paste(btt_bck, collapse = ".")
             
           } else {
             # no subgroup in the deep backbone
             branch_times_to_bck[sb+1] <- list(ALL_branch_times_to_bck[[ALL_bck_comb_to[[mb]][ALL_bck_comb_to[[mb]] %in% sb1.desc]]])
             names(branch_times_to_bck)[sb+1] <- paste(ALL_bck_comb_to[[mb]][ALL_bck_comb_to[[mb]] %in% sb1.desc], collapse = ".")
-            
           }
-          
         }
       }
     }
@@ -271,22 +301,22 @@ all_comb_models <- function(to){
       # CHECKED!
       tot_time3 <- max(c(node.age(phylo_backbone_cut[[btb]])$ages, unlist(branch_times_to_bck[[btb]])))
       
-      # for converting in backbone1: not fully working yet
+      # for converting in stem.shift
       if(backbone.option == "stem.shift"){
         
         spec_times <- sapply(branch_times_to_bck[[btb]], "[[", 2)
         cond <- "stem"
         
-        # conditioning backbone at root
-        if(length(grep("_bck", names(phylo_backbone_cut[btb]))) == 1){
-          cond <- "crown"
-        }
-        
-        branch_times_to_bck[[btb]] <- rep(list(NULL),1)
-        
         if(!is.null(phylo_backbone_cut[[btb]]$root.edge)){
           tot_time3 <- tot_time3[[1]] + phylo_backbone_cut[[btb]]$root.edge
         }
+        
+        # if deep backbone:
+        # conditioning backbone at crown 
+        if(length(grep("_bck", names(phylo_backbone_cut[btb]))) == 1){
+          cond <- "crown"
+        }
+        branch_times_to_bck[[btb]] <- rep(list(NULL),1)
       }
       
       #####################################
