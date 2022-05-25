@@ -1,352 +1,246 @@
 all_comb_models <- function(to){
   
-  if(multi.backbone == F){
-    names_ALL_bck_comb <- names(ALL_bck_comb)
-    ALL_bck_comb <- rep(list(NULL), length(ALL_bck_comb))
-    names(ALL_bck_comb) <- names_ALL_bck_comb
-  }
-  ALL_comb <- strsplit(names(ALL_bck_comb), "[.]")
+  # splitting combination into subclades and backbones
   
-  #ALL_bck_comb_to <- ALL_bck_comb[names(ALL_bck_comb) %in% paste(ALL_comb[[to]],collapse = ".")][[1]]
-  ALL_bck_comb_to <- ALL_bck_comb[to]
-  
-  clade_to_shift <- ALL_comb[[to]]
-  cat("\n", to, "/", length(ALL_comb))
-  shift <- ALL_branch_times_clades[c(clade_to_shift,unlist(ALL_bck_comb_to))]
-  
-  branch_times_to <- get.branching.nodes(shift)
-  branch_to_bck <- lapply(all_tested_nodes, function(x) get.branching.nodes(ALL_branch_times_clades[x]))
-  
-  # ~ Branching TIMES ##### 
-  branch_times <- branch_times_to
-  for(nodeID in 1:length(branch_times_to)){
-    branch_times[[nodeID]] <- sapply(branch_times_to[[nodeID]], get.node.ages)
-  }
-  
-  ALL_branch_times_to_bck <- branch_to_bck
-  
-  for(bID in 1:length(ALL_branch_times_to_bck)){
-    branch_times_nodeID <- NULL
-    for(nodeID in 1:length(ALL_branch_times_to_bck[[bID]])){
-      branch_times_nodeID[[nodeID]] <- sapply(ALL_branch_times_to_bck[[bID]][[nodeID]], get.node.ages)
-    }
-    ALL_branch_times_to_bck[[bID]] <- branch_times_nodeID
-  }
-  
-  names(ALL_branch_times_to_bck) <- all_tested_nodes
-  
-  # Muli backbone
-  
-  # create the backbone 
-  # MULTI-BACKBONE
-  if(is.null(ALL_bck_comb_to)){
-    ALL_multi_bck_to <- rep(list(NULL), 1)
-    phylo_backbone <- rep(list(NULL), 1)
-    branch_times_backbone <- rep(list(NULL), 1)
-    
+  comb1 <- strsplit(comb.shift[to], "/")[[1]]
+  comb.sub <- strsplit(comb1[[1]], "[.]")[[1]]
+  if(length(comb1) == 2){
+    comb.bck <- strsplit(comb.shift[to], "/")[[1]][2]
+    comb.bck <- strsplit(comb.bck, "[.]")[[1]]
   } else {
-    ALL_multi_bck_to <- rep(list(NULL), length(ALL_bck_comb_to))
-    names(ALL_multi_bck_to) <- sapply(ALL_bck_comb_to, function(x) paste(x, collapse = "."))
-    phylo_backbone <- rep(list(NULL), length(ALL_bck_comb_to))
-    names(phylo_backbone) <- sapply(ALL_bck_comb_to, function(x) paste(x, collapse = "."))
-    branch_times_backbone <- rep(list(NULL), length(ALL_bck_comb_to))
-    names(branch_times_backbone) <- sapply(ALL_bck_comb_to, function(x) paste(x, collapse = "."))
-    
+    comb.bck <- NULL
   }
   
-  for(mb in 1:length(ALL_multi_bck_to)){
+  cat("\n", to, "/", length(comb.shift))
+  
+  # plot to illustrate
+  # plot.phylo.comb(phylo, data, sampling.fractions, comb = comb.shift[to], cex = 0.8, label.offset = 0.2)
+  # nodes <- sampling.fractions$nodes[!is.na(sampling.fractions$to_test)]
+  # nodelabels(as.character(nodes), nodes)
+  
+  # create the backbone
+  # new way 
+ 
+  int_nodes <- comb.bck
+  # order from present to past
+  int_nodes <- names(branching.times(phylo)[order(branching.times(phylo))])[names(branching.times(phylo)[order(branching.times(phylo))]) %in% int_nodes]
+  branch_times_to_bck <- rep(list(NULL), length(comb.bck)+1)
+  phylo_backbone_cut <- rep(list(NULL), length(comb.bck)+1)
+  phylo_backbone_core <- drop.tip(phylo, unlist(ALL_clade_names[comb.sub]))
+  
+  res_bck <- rep(list(NULL), length(comb.bck)+1)
+  
+  sb.tips <- rep(list(NULL), length(int_nodes))
+  sb.desc <- rep(list(NULL), length(int_nodes))
+  names(sb.desc) <- int_nodes
+  
+  for(sb in 1:length(res_bck)){
     
-    if(is.null(ALL_bck_comb_to[[mb]])){
-      # No split in the backbone
+    if(is.null(comb.bck)){ # simple backbone
       
-      phylo_backbone_cut <- list(drop.tip(phylo, unlist(ALL_clade_names[clade_to_shift])))
-      names(phylo_backbone_cut) <- paste0(paste(c(clade_to_shift),collapse = "."),"_bck")
-      #branch_times_to_bck <- list(unlist(ALL_branch_times_to_bck[clade_to_shift], recursive = F))
-      root_ID_backbone_cut <- phylo_backbone_cut[[1]]$node.label[1]
+      phylo_backbone_cut <- list(phylo_backbone_core)
+      names(phylo_backbone_cut) <- paste0(paste0(comb.sub, collapse = "."),"_bck")
       
-      if(root_ID_backbone_cut != Ntip(phylo)+1){
+      branch_time_sb <- get.branching.nodes(comb.sub)
+      branch_times_to_bck <- list(branch_time_sb)
+      names(branch_times_to_bck) <- paste0(comb.sub, collapse = ".")
+      
+      # check the root? seems ok with parnassiinae
+      
+    } else { # multibackbone
+      
+      if(sb < length(phylo_backbone_cut)){ # before deep backbone
         
-        ances_backbone_cut <- Ancestors(phylo, root_ID_backbone_cut)
-        oldest_node_backbone_cut <- ances_backbone_cut[!ances_backbone_cut == Ntip(phylo)+1]
-        oldest_node_backbone_cut <- oldest_node_backbone_cut[length(oldest_node_backbone_cut)]
-        if(length(oldest_node_backbone_cut) != 0){
-          shift1 <- shift[names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")]
-          
-          branch_times1 <- get.branching.nodes(shift1, root_ID = oldest_node_backbone_cut)
-          branch_times1 <- c(branch_times1, unlist(shift[!names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")], recursive = F))
-          
-          for(nodeID in 1:length(branch_times1)){
-            branch_times1[[nodeID]] <- sapply(branch_times1[[nodeID]], get.node.ages)
-          }
-          branch_times_to_bck <- list(branch_times1) # reuse branch_times for other parts
-        } else {
-          branch_times_to_bck <- list(branch_times)
+        sb.desc[[sb]] <- Descendants(phylo, as.numeric(int_nodes[sb]), "all")
+        
+        if(sb > 1){ # removing descendant in previous int_nodes
+          sb.desc[[sb]] <- sb.desc[[sb]][!sb.desc[[sb]] %in% unlist(sb.desc[[1:c(sb-1)]])]
         }
         
-      } else {
-        branch_times_to_bck <- list(branch_times) # reuse branch_times for other parts
+        sb.desc_sb_sp <- phylo$tip.label[sb.desc[[sb]][sb.desc[[sb]] < Ntip(phylo)]]
+        sb.desc_sb_sp <- intersect(sb.desc_sb_sp, phylo_backbone_core$tip.label)
+        phylo_backbone_cut[[sb]] <- subtree(phylo_backbone_core, sb.desc_sb_sp)
+        names(phylo_backbone_cut)[sb] <- paste0(int_nodes[sb],"_sub")
+        
+        comb.multibackbone <- c(comb.sub[comb.sub %in% sb.desc[[sb]]], int_nodes[int_nodes %in% sb.desc_sb_sp])
+        
+        branch_time_sb <- get.branching.nodes(comb.multibackbone)
+        
+        # check that root of phylo_backbone_cut[[sb]] is int_node
+        if(phylo_backbone_cut[[sb]]$node.label[1] != int_nodes[sb] &
+           !phylo_backbone_cut[[sb]]$node.label[1] %in% names(branch_time_sb)){
+          
+          root_sb_to_int_nodes <- c(phylo_backbone_cut[[sb]]$node.label[1], Ancestors(phylo, phylo_backbone_cut[[sb]]$node.label[1]))
+          root_sb_to_int_nodes <- root_sb_to_int_nodes[1:c(which(root_sb_to_int_nodes == int_nodes[sb])-1)]
+          missed_sb_nodes <- root_sb_to_int_nodes[!root_sb_to_int_nodes %in% as.numeric(names(branch_time_sb))]
+          
+          for(msb in 1:length(missed_sb_nodes)){
+            branch_time_missing_sb <- list(c(missed_sb_nodes[msb], Ancestors(phylo, missed_sb_nodes[msb], "parent")))
+            names(branch_time_missing_sb) <- missed_sb_nodes[msb]
+            
+            branch_time_sb[length(branch_time_sb)+1] <- branch_time_missing_sb
+            names(branch_time_sb)[length(branch_time_sb)]<- as.character(missed_sb_nodes[msb])
+          }
+        }
+        
+        branch_times_to_bck[sb] <- list(branch_time_sb)
+        names(branch_times_to_bck)[sb] <- paste(comb.multibackbone, collapse = ".")
+        
+      } else {  # deep backbone
+        
+        tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
+        # remaining comb.sub in the deep backbone
+        tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
+        
+        phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_core, tips_up_bck)
+        names(phylo_backbone_cut)[sb] <- paste(int_nodes[sb-1],"bck", sep = "_")
+        
+        int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = F)]
+ 
+        comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
+  
+        branch_time_sb <- get.branching.nodes(comb_deep_backbone)
+  
+        branch_times_to_bck[sb] <- list(branch_time_sb)
+        names(branch_times_to_bck)[sb] <- paste(comb_deep_backbone, collapse = ".")
+        
+      } # deep backbone
+    } # multi backbone
+  }
+  
+  branch_nodes_to_bck <- branch_times_to_bck
+  for(bck in 1:length(branch_times_to_bck)){
+    for(nodeID in 1:length(branch_nodes_to_bck[[bck]])){
+      branch_times_to_bck[[bck]][[nodeID]] <- sapply(branch_nodes_to_bck[[bck]][[nodeID]], get.node.ages)
+    }  
+  }
+  
+  # Sampling fractions ####
+  
+  lin.node <- data.frame(node = c(comb.sub,comb.bck, Ntip(phylo)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
+  lin.node$node <- as.character(lin.node$node)
+  lin.node <- merge(lin.node, sampling.fractions[sampling.fractions$nodes %in% lin.node$node, c("nodes", "sp_tt"),],
+                    by.x = "node", by.y = "nodes")
+  
+  node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
+  node_order <- node_order[node_order %in% lin.node$node]
+  
+  lin.node <- lin.node[match(node_order, lin.node$node),]
+  
+  for(n.lin in 1:nrow(lin.node)){
+    desc.n.lin <- length(Descendants(phylo, as.numeric(lin.node$node[n.lin]))[[1]])
+    # whether this node is present in an other lineage
+    int.n.lin <- Descendants(phylo, as.numeric(lin.node$node[n.lin]), type = "all")
+    int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phylo)])
+    # Ntip
+    if(any(comb.sub %in% int.n.lin)){
+      lin.node$n.tips[n.lin] <- desc.n.lin - sum(lin.node$n.tips[lin.node$node %in% comb.sub[comb.sub %in% int.n.lin]])
+      lin.node$sp_tt[n.lin] <- lin.node$sp_tt[n.lin] - sum(lin.node$sp_tt[lin.node$node %in% comb.sub[comb.sub %in% int.n.lin]])
+    } else{
+      lin.node$n.tips[n.lin] <- desc.n.lin
+    }
+  }
+  
+  lin.node$n.tips_prev <- lin.node$n.tips
+  lin.node$sp_tt_prev <- lin.node$sp_tt
+  
+  lin.node_bck <- lin.node[!lin.node$node %in% comb.sub,]
+  
+  for(l.n in c(1:nrow(lin.node_bck))){
+    int.desc_lin <- unlist(Descendants(phylo, as.numeric(lin.node_bck$node[l.n]), "all"))
+    int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phylo)]
+    
+    if(any(lin.node_bck$node %in% int.desc_lin)){
+      
+      bck_up <- lin.node_bck[which(lin.node_bck$node %in% int.desc_lin),]
+      
+      ntip_bck_up <- sum(bck_up$n.tips_prev)
+      ntaxo_bck_up <- sum(bck_up$sp_tt_prev)
+      
+      lin.node_bck$n.tips_prev[l.n] <- lin.node_bck$n.tips[l.n] - ntip_bck_up
+      lin.node_bck$sp_tt_prev[l.n] <- lin.node_bck$sp_tt[l.n] - ntaxo_bck_up  
+      
+    }
+  }
+  lin.node[lin.node$node %in% lin.node_bck$node,] <- lin.node_bck
+  
+  lin.node <- lin.node[-(1:length(comb.sub)),]
+  
+  f <- as.list(lin.node$n.tips_prev/lin.node$sp_tt_prev)
+  names(f) <- names(phylo_backbone_cut)
+  
+  for(btb in 1:length(phylo_backbone_cut)){
+    
+    # by default backbone.option = "crown.shift"
+    backbone <- backbone.option
+    spec_times <- NULL
+    cond <- "crown"
+    
+    # CHECKED!
+    tot_time3 <- max(c(node.age(phylo_backbone_cut[[btb]])$ages, unlist(branch_times_to_bck[[btb]])))
+    
+    # for converting in stem.shift
+    if(backbone.option == "stem.shift"){
+      
+      spec_times <- sapply(branch_times_to_bck[[btb]], "[[", 2)
+      cond <- "stem"
+      
+      if(!is.null(phylo_backbone_cut[[btb]]$root.edge)){
+        tot_time3 <- max(node.age(phylo_backbone_cut[[btb]])$ages) + phylo_backbone_cut[[btb]]$root.edge
       }
-      names(branch_times_to_bck) <- paste(clade_to_shift, collapse = ".")
-      int_nodes <- NULL
       
-    } else {
-      # Split in the backbone
-      int_nodes <- ALL_bck_comb_to[[mb]]
-      # order from present to past
-      int_nodes <- names(branching.times(phylo)[order(branching.times(phylo))])[names(branching.times(phylo)[order(branching.times(phylo))]) %in% int_nodes]
-      branch_times_to_bck <- rep(list(NULL), length(int_nodes)+1)
-      phylo_backbone_cut <- rep(list(NULL), length(int_nodes)+1)
-      phylo_backbone_core <- drop.tip(phylo, unlist(ALL_clade_names[clade_to_shift]))
-      sb.tips <- rep(list(NULL), length(int_nodes))
-      
-      for(sb in 1:length(int_nodes)){
-        
-        sb.tips[[sb]] <- phylo_backbone_core$tip.label[phylo_backbone_core$tip.label %in% unlist(ALL_clade_names[int_nodes[sb]])]
-        #sb.tips[[sb]] <- sb.tips[[sb]][!sb.tips[[sb]]  %in% sb.tips[[-sb]]]
-        phylo_backbone_cut[[sb]] <- subtree(phylo_backbone_core, sb.tips[[sb]])
-        names(phylo_backbone_cut)[[sb]] <- paste(int_nodes[sb],"sub", sep = "_")
-        
-        sb.desc <- Descendants(phylo, as.numeric(int_nodes[sb]), type = "all")
-        desc_sub_up_bck <- c(clade_to_shift[clade_to_shift %in% sb.desc],int_nodes[int_nodes %in% sb.desc])
-        
-        if(sb > 1){
-          desc_sub_up_bck <- desc_sub_up_bck[!desc_sub_up_bck %in% unlist(strsplit(names(branch_times_to_bck)[!is.na(names(branch_times_to_bck))], "[.]"))]
-          phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_cut[[sb]], unlist(sb.tips[-sb]))
-          child <- Children(phylo, as.numeric(int_nodes[sb]))
-          
-          if(as.numeric(int_nodes[sb-1]) %in% child){ # Direct Descendant
-            
-            sis <- Siblings(phylo, as.numeric(int_nodes[sb-1]))
-            
-            branch_time_sb <- get.branching.nodes(ALL_branch_times_clades[c(desc_sub_up_bck, as.character(sis))], root_ID = int_nodes[sb])
-            
-            for(nodeID in 1:length(branch_time_sb)){
-              branch_time_sb[[nodeID]] <- sapply(branch_time_sb[[nodeID]], get.node.ages)
-            }
-            
-            branch_times_to_bck[sb] <- list(branch_time_sb)
-            
-            names(branch_times_to_bck)[sb] <- paste(c(desc_sub_up_bck), collapse = ".")
-          } else {
-            
-            branch_time_sb <- get.branching.nodes(ALL_branch_times_clades[desc_sub_up_bck], root_ID = int_nodes[sb])
-            
-            for(nodeID in 1:length(branch_time_sb)){
-              branch_time_sb[[nodeID]] <- sapply(branch_time_sb[[nodeID]], get.node.ages)
-            }
-            
-            branch_times_to_bck[sb] <- list(branch_time_sb)
-            names(branch_times_to_bck)[sb] <- paste(c(desc_sub_up_bck), collapse = ".")
-          }
-          
-        } else {
-          
-          branch_time_sb <- get.branching.nodes(ALL_branch_times_clades[desc_sub_up_bck], root_ID = int_nodes[sb])
-          
-          # check that root of phylo_backbone_cut[[sb]] is int_node
-          if(phylo_backbone_cut[[sb]]$node.label[1] != int_nodes[sb] &
-             !phylo_backbone_cut[[sb]]$node.label[1] %in% names(branch_time_sb)){
-            
-            root_sb_to_int_nodes <- c(phylo_backbone_cut[[sb]]$node.label[1], Ancestors(phylo, phylo_backbone_cut[[sb]]$node.label[1]))
-            root_sb_to_int_nodes <- root_sb_to_int_nodes[1:c(which(root_sb_to_int_nodes == int_nodes[sb])-1)]
-            missed_sb_nodes <- root_sb_to_int_nodes[!root_sb_to_int_nodes %in% as.numeric(names(branch_time_sb))]
-            
-            for(msb in 1:length(missed_sb_nodes)){
-              branch_time_sb[length(branch_time_sb)+msb] <- unlist(ALL_branch_times_clades[as.character(missed_sb_nodes[msb])], recursive = F)
-              names(branch_time_sb)[length(branch_time_sb)]<- as.character(missed_sb_nodes[msb])
-            }
-          }
-          
-          for(nodeID in 1:length(branch_time_sb)){
-            branch_time_sb[[nodeID]] <- sapply(branch_time_sb[[nodeID]], get.node.ages)
-          }
-          
-          branch_times_to_bck[sb] <- list(branch_time_sb)
-          names(branch_times_to_bck)[sb] <- paste(c(clade_to_shift[clade_to_shift %in% Descendants(phylo, as.numeric(int_nodes[sb]), "all")]), collapse = ".")
-        }
-        
-        if(sb == length(int_nodes)){ # deep backbone
-          tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
-          tips_last_bck <- unlist(ALL_clade_names[clade_to_shift[!clade_to_shift %in% sb.desc]])
-          
-          phylo_backbone_cut[[sb+1]] <- drop.tip(phylo_backbone_core, tips_up_bck)
-          names(phylo_backbone_cut)[sb+1] <- paste(int_nodes[sb],"bck", sep = "_")
-          
-          sb1.desc <- Descendants(phylo, Ntip(phylo)+1, type = "all")
-          sb1.desc <- sb1.desc[!sb1.desc %in% sb.desc]
-          sb1.desc <- sb1.desc[sb1.desc > Ntip(phylo)]
-          
-          if(!is.null(tips_last_bck)){  
-            # subgroup(s) in the deep backbone
-            btt_bck <- c(clade_to_shift[clade_to_shift %in% sb1.desc], ALL_bck_comb_to[[mb]][ALL_bck_comb_to[[mb]] %in% sb1.desc])
-            btt_bck <- btt_bck[!btt_bck %in% unlist(strsplit(names(branch_times_to_bck), "[.]"))]
-            
-            # Using get.branching.nodes to be sure to get all branches
-            
-            branch_time_deep <- get.branching.nodes(ALL_branch_times_clades[btt_bck], root_ID = Ntip(phylo)+1)
-            
-            for(nodeID in 1:length(branch_time_deep)){
-              branch_time_deep[[nodeID]] <- sapply(branch_time_deep[[nodeID]], get.node.ages)
-            }
-            
-            branch_times_to_bck[sb+1] <- list(branch_time_deep)
-            
-            # adding root branches if needed
-            root_ID_deep_backbone <- phylo_backbone_cut[[sb+1]]$node.label[1]
-            
-            if(root_ID_deep_backbone != Ntip(phylo)+1){
-              
-              ances_backbone_cut <- Ancestors(phylo, root_ID_deep_backbone)
-              oldest_node_backbone_cut <- ances_backbone_cut[!ances_backbone_cut == Ntip(phylo)+1]
-              oldest_node_backbone_cut <- oldest_node_backbone_cut[length(oldest_node_backbone_cut)]
-              if(length(oldest_node_backbone_cut) != 0){
-                # branching nodes from subclade combination of deeper backbone
-                shift1 <- shift[names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")]
-                
-                branch_times1 <- get.branching.nodes(shift1, root_ID = oldest_node_backbone_cut)
-                #branch_times1 <- c(branch_times1, unlist(shift[!names(shift) %in% Descendants(phylo, oldest_node_backbone_cut, "all")], recursive = F))
-                
-                for(nodeID in 1:length(branch_times1)){
-                  branch_times1[[nodeID]] <- sapply(branch_times1[[nodeID]], get.node.ages)
-                }
-                
-                root_children <- btt_bck[btt_bck %in% Descendants(phylo, Ntip(phylo)+1, "children")]
-                
-                if(length(root_children) > 0){
-                  
-                  branch_times1 <- c(branch_times1[!names(branch_times1) %in% root_children],
-                    unlist(ALL_branch_times_to_bck[root_children], recursive = F))
-                  
-                }
-                
-                branch_times_to_bck[sb+1] <- list(branch_times1) # reuse branch_times for other parts
-              }
-   
-            }
-            names(branch_times_to_bck)[sb+1] <- paste(btt_bck, collapse = ".")
-            
-          } else {
-            # no subgroup in the deep backbone
-            branch_times_to_bck[sb+1] <- list(ALL_branch_times_to_bck[[ALL_bck_comb_to[[mb]][ALL_bck_comb_to[[mb]] %in% sb1.desc]]])
-            names(branch_times_to_bck)[sb+1] <- paste(ALL_bck_comb_to[[mb]][ALL_bck_comb_to[[mb]] %in% sb1.desc], collapse = ".")
-          }
-        }
+      # if deep backbone, conditioning backbone at crown 
+      if(length(grep("_bck", names(phylo_backbone_cut[btb]))) == 1){
+        cond <- "crown"
       }
+      branch_times_to_bck[[btb]] <- rep(list(NULL),1)
     }
     
-    # tot time et spec time
-    res_bck <- rep(list(NULL),length(phylo_backbone_cut))
+    ##################################### models
     
-    # Sampling fractions ####
-    
-    lin.node <- data.frame(node = c(ALL_comb[[to]],int_nodes, Ntip(phylo)+1), n.tips = rep(NA, length(ALL_comb[[to]]) + length(int_nodes)+1))
-    lin.node$node <- as.character(lin.node$node)
-    lin.node <- merge(lin.node, sampling.fractions[sampling.fractions$nodes %in% lin.node$node, c("nodes", "sp_tt"),],
-                      by.x = "node", by.y = "nodes")
-    
-    node_order <- names(branching.times(phylo)[order(branching.times(phylo))])
-    node_order <- node_order[node_order %in% lin.node$node]
-    
-    lin.node <- lin.node[match(node_order, lin.node$node),]
-    
-    for(n.lin in 1:nrow(lin.node)){
-      desc.n.lin <- length(Descendants(phylo, as.numeric(lin.node$node[n.lin]))[[1]])
-      # whether this node is present in an other lineage
-      int.n.lin <- Descendants(phylo, as.numeric(lin.node$node[n.lin]), type = "all")
-      int.n.lin <- as.character(int.n.lin[int.n.lin > Ntip(phylo)])
-      # Ntip
-      if(any(ALL_comb[[to]] %in% int.n.lin)){
-        lin.node$n.tips[n.lin] <- desc.n.lin - sum(lin.node$n.tips[lin.node$node %in% ALL_comb[[to]][ALL_comb[[to]] %in% int.n.lin]])
-        lin.node$sp_tt[n.lin] <- lin.node$sp_tt[n.lin] - sum(lin.node$sp_tt[lin.node$node %in% ALL_comb[[to]][ALL_comb[[to]] %in% int.n.lin]])
-      } else{
-        lin.node$n.tips[n.lin] <- desc.n.lin
-      }
+    results <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
+                          backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
+                          cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = T)
+    if(btb < length(phylo_backbone_cut)){
+      # cond has to be changed to properly estimate likelihood of each part if they are not the last part
+      results1 <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
+                             backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
+                             cond = F, models = models, n.max = n.max, rate.max = rate.max, verbose = F)
+      
+      results2 <- merge(results1[,c(1:4)], results[,c(1,5:8)], by="Models")
+      results <- results2[match(results$Models, results2$Models),]
+      
+      # adding a parameter for the location of the shift (to modify for the printing)
+      results$AICc <- 2 * -results$logL + 2 * (results$Parameters+1) + (2 * (results$Parameters+1) * ((results$Parameters+1) + 1))/(Ntip(phylo_backbone_cut[[btb]]) - (results$Parameters+1) - 1)
+      results$Parameters <- results$Parameters+1
     }
     
-    lin.node$n.tips_prev <- lin.node$n.tips
-    lin.node$sp_tt_prev <- lin.node$sp_tt
-    
-    lin.node_bck <- lin.node[!lin.node$node %in% ALL_comb[[to]],]
-    
-    for(l.n in c(1:nrow(lin.node_bck))){
-      int.desc_lin <- unlist(Descendants(phylo, as.numeric(lin.node_bck$node[l.n]), "all"))
-      int.desc_lin <- int.desc_lin[int.desc_lin > Ntip(phylo)]
-      
-      if(any(lin.node_bck$node %in% int.desc_lin)){
-        
-        bck_up <- lin.node_bck[which(lin.node_bck$node %in% int.desc_lin),]
-        
-        ntip_bck_up <- sum(bck_up$n.tips_prev)
-        ntaxo_bck_up <- sum(bck_up$sp_tt_prev)
-        
-        lin.node_bck$n.tips_prev[l.n] <- lin.node_bck$n.tips[l.n] - ntip_bck_up
-        lin.node_bck$sp_tt_prev[l.n] <- lin.node_bck$sp_tt[l.n] - ntaxo_bck_up  
-        
-      }
-    }
-    lin.node[lin.node$node %in% lin.node_bck$node,] <- lin.node_bck
-    
-    lin.node <- lin.node[-(1:length(ALL_comb[[to]])),]
-    
-    f <- as.list(lin.node$n.tips_prev/lin.node$sp_tt_prev)
-    names(f) <- names(phylo_backbone_cut)
-    
-    for(btb in 1:length(phylo_backbone_cut)){
-      
-      # by default backbone.option = "crown.shift"
-      backbone <- backbone.option
-      spec_times <- NULL
-      cond <- "crown"
-      
-      # CHECKED!
-      tot_time3 <- max(c(node.age(phylo_backbone_cut[[btb]])$ages, unlist(branch_times_to_bck[[btb]])))
-      
-      # for converting in stem.shift
-      if(backbone.option == "stem.shift"){
-        
-        spec_times <- sapply(branch_times_to_bck[[btb]], "[[", 2)
-        cond <- "stem"
-        
-        if(!is.null(phylo_backbone_cut[[btb]]$root.edge)){
-          tot_time3 <- tot_time3[[1]] + phylo_backbone_cut[[btb]]$root.edge
-        }
-        
-        # if deep backbone:
-        # conditioning backbone at crown 
-        if(length(grep("_bck", names(phylo_backbone_cut[btb]))) == 1){
-          cond <- "crown"
-        }
-        branch_times_to_bck[[btb]] <- rep(list(NULL),1)
-      }
-      
-      #####################################
-      
-      results <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
-                            backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                            cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = T)
-      if(btb < length(phylo_backbone_cut)){
-        # cond has to be changed to properly estimate likelihood of each part if they are not the last part
-        results1 <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
-                               backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                               cond = F, models = models, n.max = n.max, rate.max = rate.max, verbose = F)
-        
-        results2 <- merge(results1[,c(1:4)], results[,c(1,5:8)], by="Models")
-        results <- results2[match(results$Models, results2$Models),]
-        
-        # adding a parameter for the location of the shift (to modify for the printing)
-        results$AICc <- 2 * -results$logL + 2 * (results$Parameters+1) + (2 * (results$Parameters+1) * ((results$Parameters+1) + 1))/(Ntip(phylo_backbone_cut[[btb]]) - (results$Parameters+1) - 1)
-        results$Parameters <- results$Parameters+1
-      }
-      
-      results[,-1] <- apply(results[,-1], 2, as.numeric)
-      res_bck[btb] <- list(results)
-    }
-    
-    names(res_bck) <- names(phylo_backbone_cut)
-    ALL_multi_bck_to[mb] <- list(res_bck)
-    
-  } # END BCK_COMB
-  #names(ALL_multi_bck_to) <- paste(clade_to_shift, collapse = ".")
-  return(ALL_multi_bck_to)
+    results[,-1] <- apply(results[,-1], 2, as.numeric)
+    res_bck[btb] <- list(results)
+  }
+  
+  desc_comb.sub <-  Descendants(phylo, as.numeric(comb.sub), "all")
+  desc_comb.sub <- lapply(desc_comb.sub, function(x) x[x > Ntip(phylo)])
+  
+  nodes_backbone_th <- setdiff(phylo$node.label, unlist(desc_comb.sub))
+  
+  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names = F)
+  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names = F)
+  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names = F)
+  
+  nodes_backbone_obs <- as.numeric(c(nodes_backbone_obs,
+                                     branch_nodes_to_bck,
+                                     all_branching_nodes_to))
+  
+  if(all(nodes_backbone_th %in% unique(nodes_backbone_obs))){
+    check <- T
+  }
+  
+  names(res_bck) <- names(phylo_backbone_cut)
+  
+  if(!check){
+    stop("\n#### Some branches are missing... ####\n")
+  }
+  return(res_bck)
   # Multi merge
 }
