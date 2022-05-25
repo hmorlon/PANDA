@@ -20,35 +20,36 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       tmrca <- max(branching.times(phylo))
     }
     
+    time_seq <- c(tmrca, seq(floor(tmrca),0,by=-1))
     if(model == "BCST"){
       lambda <- par[1]
-      res <- Ntip(phylo)/f[[1]]*exp(-abs(lambda)*c(seq(tmrca,0,by=-1),0))
+      res <- Ntip(phylo)/f[[1]]*exp(-abs(lambda)*time_seq)
     }
     
     if(model == "BCST_DCST"){
       lambda <- par[1]
       mu <- par[2]
-      res <- Ntip(phylo)/f[[1]]*exp(-abs(lambda)*c(seq(tmrca,0,by=-1),0)+abs(mu)*c(seq(tmrca,0,by=-1),0))
+      res <- Ntip(phylo)/f[[1]]*exp(-abs(lambda)*time_seq+abs(mu)*time_seq)
     }
     
     if(model == "BVAR"){
       lambda <- par[1]
       alpha <- par[2]
-      res <- Ntip(phylo)/f[[1]]*exp(abs(lambda)/alpha*(1-exp(alpha*c(seq(tmrca,0,by=-1),0))))
+      res <- Ntip(phylo)/f[[1]]*exp(abs(lambda)/alpha*(1-exp(alpha*time_seq)))
     }
     
     if(model == "BVAR_DCST"){
       lambda <- par[1]
       alpha <- par[2]
       mu <- par[3]
-      res <- Ntip(phylo)/f[[1]]*exp(abs(lambda)/alpha*(1-exp(alpha*c(seq(tmrca,0,by=-1),0)))+abs(mu)*c(seq(tmrca,0,by=-1),0))
+      res <- Ntip(phylo)/f[[1]]*exp(abs(lambda)/alpha*(1-exp(alpha*time_seq))+abs(mu)*time_seq)
     }
     
     if(model == "BCST_DVAR"){
       lambda <- par[1]
       mu <- par[2]
       beta <- par[3]
-      res <- Ntip(phylo)/f[[1]]*exp(-abs(lambda)*c(seq(tmrca,0,by=-1),0)-abs(mu)/beta*(1-exp(beta*c(seq(tmrca,0,by=-1),0))))
+      res <- Ntip(phylo)/f[[1]]*exp(-abs(lambda)*time_seq-abs(mu)/beta*(1-exp(beta*time_seq)))
     }
     
     if(model == "BVAR_DVAR"){
@@ -56,7 +57,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       alpha <- par[2]
       mu <- par[3]
       beta <- par[4]
-      res <- Ntip(phylo)/f[[1]]*exp(abs(lambda)/alpha*(1-exp(alpha*c(seq(tmrca,0,by=-1),0)))-abs(mu)/beta*(1-exp(beta*c(seq(tmrca,0,by=-1),0))))
+      res <- Ntip(phylo)/f[[1]]*exp(abs(lambda)/alpha*(1-exp(alpha*time_seq))-abs(mu)/beta*(1-exp(beta*time_seq)))
     }
     return(res)
   }

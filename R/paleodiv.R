@@ -6,8 +6,9 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   # phylo
   if(!inherits(phylo, "phylo")){
     stop("object \"phylo\" is not of class \"phylo\"")
+  } else {
+    phylo$node.label <- c(c(Ntip(phylo)+1):c(Ntip(phylo)+Nnode(phylo)))
   }
-  phylo$node.label <- NULL
   
   # data
   if(!inherits(data, "data.frame")){
@@ -135,6 +136,122 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     best_backbones_df$parts <- row.names(best_backbones_df)
     row.names(best_backbones_df) <- NULL
     best_backbones_df <- best_backbones_df[,c(10,1:8)]
+    all_tested_nodes <- c(comb.sub, comb.bck)
+    
+    ALL_clade_names <- rep(list(NULL), length(all_tested_nodes))
+    
+    for(pot_names in 1:length(ALL_clade_names)){
+      ALL_clade_names[pot_names] <- list(phylo$tip.label[unlist(Descendants(phylo, as.numeric(all_tested_nodes[pot_names])))])
+    }
+    names(ALL_clade_names) <- all_tested_nodes
+    ALL_nodes_ages <- as.data.frame(apply(data.frame(nodesID=names(branching.times(phylo)),ages=branching.times(phylo)), 2, as.numeric))
+    
+    ALL_branch_times_clades <- rep(list(NULL),length(all_tested_nodes))
+    names(ALL_branch_times_clades) <- all_tested_nodes
+    
+    for(clade in 1:length(all_tested_nodes)){
+      
+      parental_node <- Ancestors(phylo, as.numeric(all_tested_nodes[clade]), type = "parent")
+      branch_times_clade <- unlist(list(rep(list(NULL),1)),recursive = F)
+      
+      bt_cl <- as.numeric(c(all_tested_nodes[clade], parental_node))
+      branch_times_clade[1] <- list(bt_cl)
+      
+      ALL_branch_times_clades[[clade]] <- branch_times_clade
+    }
+    
+    int_nodes <- comb.bck
+    # order from present to past
+    int_nodes <- names(branching.times(phylo)[order(branching.times(phylo))])[names(branching.times(phylo)[order(branching.times(phylo))]) %in% int_nodes]
+    branch_times_to_bck <- rep(list(NULL), length(comb.bck)+1)
+    phylo_backbone_cut <- rep(list(NULL), length(comb.bck)+1)
+    phylo_backbone_core <- drop.tip(phylo, unlist(ALL_clade_names[comb.sub]))
+    
+    sb.tips <- rep(list(NULL), length(int_nodes))
+    sb.desc <- rep(list(NULL), length(int_nodes))
+    names(sb.desc) <- int_nodes
+    
+    for(sb in 1:length(phylo_backbone_cut)){
+      
+      if(is.null(comb.bck)){ # simple backbone
+        
+        phylo_backbone_cut <- list(phylo_backbone_core)
+        names(phylo_backbone_cut) <- paste0(paste0(comb.sub, collapse = "."),"_bck")
+        
+        branch_time_sb <- get.branching.nodes(comb.sub)
+        branch_times_to_bck <- list(branch_time_sb)
+        
+        names(branch_times_to_bck) <- paste0(comb.sub, collapse = ".")
+        
+        # check the root? seems ok with parnassiinae
+        
+      } else { # multibackbone
+        
+        if(sb < length(phylo_backbone_cut)){ # before deep backbone
+          
+          sb.desc[[sb]] <- Descendants(phylo, as.numeric(int_nodes[sb]), "all")
+          
+          if(sb > 1){ # removing descendant in previous int_nodes
+            sb.desc[[sb]] <- sb.desc[[sb]][!sb.desc[[sb]] %in% unlist(sb.desc[[1:c(sb-1)]])]
+          }
+          
+          sb.desc_sb_sp <- phylo$tip.label[sb.desc[[sb]][sb.desc[[sb]] < Ntip(phylo)]]
+          sb.desc_sb_sp <- intersect(sb.desc_sb_sp, phylo_backbone_core$tip.label)
+          phylo_backbone_cut[[sb]] <- subtree(phylo_backbone_core, sb.desc_sb_sp)
+          names(phylo_backbone_cut)[sb] <- paste0(int_nodes[sb],"_sub")
+          
+          comb.multibackbone <- c(comb.sub[comb.sub %in% sb.desc[[sb]]], int_nodes[int_nodes %in% sb.desc_sb_sp])
+          
+          branch_time_sb <- get.branching.nodes(comb.multibackbone)
+          
+          # check that root of phylo_backbone_cut[[sb]] is int_node
+          if(phylo_backbone_cut[[sb]]$node.label[1] != int_nodes[sb] &
+             !phylo_backbone_cut[[sb]]$node.label[1] %in% names(branch_time_sb)){
+            
+            root_sb_to_int_nodes <- c(phylo_backbone_cut[[sb]]$node.label[1], Ancestors(phylo, phylo_backbone_cut[[sb]]$node.label[1]))
+            root_sb_to_int_nodes <- root_sb_to_int_nodes[1:c(which(root_sb_to_int_nodes == int_nodes[sb])-1)]
+            missed_sb_nodes <- root_sb_to_int_nodes[!root_sb_to_int_nodes %in% as.numeric(names(branch_time_sb))]
+            
+            for(msb in 1:length(missed_sb_nodes)){
+              branch_time_missing_sb <- list(c(missed_sb_nodes[msb], Ancestors(phylo, missed_sb_nodes[msb], "parent")))
+              names(branch_time_missing_sb) <- missed_sb_nodes[msb]
+              
+              branch_time_sb[length(branch_time_sb)+1] <- branch_time_missing_sb
+              names(branch_time_sb)[length(branch_time_sb)]<- as.character(missed_sb_nodes[msb])
+            }
+          }
+          
+          branch_times_to_bck[sb] <- list(branch_time_sb)
+          names(branch_times_to_bck)[sb] <- paste(comb.multibackbone, collapse = ".")
+          
+        } else {  # deep backbone
+          
+          tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
+          # remaining comb.sub in the deep backbone
+          tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
+          
+          phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_core, tips_up_bck)
+          names(phylo_backbone_cut)[sb] <- paste(int_nodes[sb-1],"bck", sep = "_")
+          
+          int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = F)]
+          
+          comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
+          
+          branch_time_sb <- get.branching.nodes(comb_deep_backbone)
+          
+          branch_times_to_bck[sb] <- list(branch_time_sb)
+          names(branch_times_to_bck)[sb] <- paste(comb_deep_backbone, collapse = ".")
+          
+        } # deep backbone
+      } # multi backbone
+    }
+    
+    branch_nodes_to_bck <- branch_times_to_bck
+    for(bck in 1:length(branch_times_to_bck)){
+      for(nodeID in 1:length(branch_nodes_to_bck[[bck]])){
+        branch_times_to_bck[[bck]][[nodeID]] <- sapply(branch_nodes_to_bck[[bck]][[nodeID]], get.node.ages)
+      }  
+    }
     
     lin.node <- data.frame(node = c(comb.sub, comb.bck,Ntip(phylo)+1), n.tips = rep(NA, length(comb.sub) + length(comb.bck)+1))
     lin.node$node <- as.character(lin.node$node)
@@ -201,8 +318,8 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
           parental_nodes <- Ntip(phylo)+1
         }
         agei <- as.numeric(branching.times(phylo)[as.character(parental_nodes)])
-      } else {
-        agei <- as.numeric(branching.times(phylo)[lin.node$node[j]])
+      } else { # if branching times contain older branches
+        agei <- max(branching.times(phylo)[lin.node$node[j]], max(unlist(branch_times_to_bck[[j]], use.names = F)))
       }
       sizei <- lin.node$sp_tt_prev[j]
       
