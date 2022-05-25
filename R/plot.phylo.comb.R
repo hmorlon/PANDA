@@ -153,6 +153,9 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     if(!is.null(comb.bck)){
       for(j in 1:length(comb.bck)){
         clade_edges <- Descendants(phylo1, as.numeric(comb.bck[j]), type = "all")
+        if(backbone.option == "stem.shift"){
+          clade_edges <- c(as.numeric(comb.bck[j]),clade_edges)
+        }
         colors_clades[which(phylo1$edge[,2] %in% clade_edges)] <- ifelse(colors_clades[which(phylo1$edge[,2] %in% clade_edges)] %in% col.bck, col.bck[j], colors_clades[which(phylo1$edge[,2] %in% clade_edges)])
       }
     }
