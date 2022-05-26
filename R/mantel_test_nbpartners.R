@@ -29,24 +29,14 @@ function(network, tree_A, tree_B = NULL, method="Jaccard_binary", nperm=1000, co
   if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop("Please provide a \"network\" with row names and columns names matching the species names.")}
   
   if (!all(colnames(network) %in% tree_A$tip.label)){stop("Please provide a \"tree_A\" for all the species in clade A (the columns of the intercation network).")}
-  if (only_A==FALSE) { if (!all(rownames(network) %in% tree_B$tip.label)){stop("Please provide a \"tree_B\" for all the species in clade B (the rows of the intercation network).")}}
-  
+
   tree_A <- ape::drop.tip(tree_A,tip=tree_A$tip.label[which(!tree_A$tip.label %in% colnames(network))])
-  if (only_A==FALSE) { tree_B <- ape::drop.tip(tree_B,tip=tree_B$tip.label[which(!tree_B$tip.label %in% rownames(network))])}
-  
+
   
   if (!is.rooted(tree_A)){tree_A <- phytools::midpoint.root(tree_A) }
-  if (only_A==FALSE) { if (!is.rooted(tree_B)){tree_A <- phytools::midpoint.root(tree_B) }}
-  
-  if (only_A==TRUE) { 
-    network <- network[1:nrow(network),tree_A$tip.label]
-  } else {
-    network <- network[tree_B$tip.label,tree_A$tip.label]
-  }
-  
-  
-  
-  
+
+  network <- network[1:nrow(network),tree_A$tip.label]
+
   compute_eco_dist <- function(network){
     # binary Jaccard distances
     if (method=="Jaccard_binary"){
