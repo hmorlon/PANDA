@@ -18,7 +18,7 @@ function(tree_A, results_sub_clades, network=NULL, legend=TRUE, show.tip.label=F
   if ((Ntip(host_tree)+1)!=results_sub_clades$node[1]){
     stop("object \"tree_A\" contains more node than \"results_sub_clades\". Remove these nodes from \"tree_A\" before plotting.")
   }
-
+  
   plot(host_tree, show.tip.label=show.tip.label)
   # significant and R>=0.05
   nodes=results_sub_clades$node[intersect(which(results_sub_clades$pvalue_upper_corrected<=0.05),which(results_sub_clades$mantel_cor>=0.5))]

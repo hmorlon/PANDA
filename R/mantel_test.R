@@ -19,12 +19,12 @@ function(formula = formula(data), data = sys.parent(), correlation = "Pearson", 
   
   ymat <- as.vector(m[, 1])
   xmat <- as.vector(m[, 2])
-     
+  
   if (correlation %in% c("Spearman", "Kendall")){
-      ymat <- rank(ymat)
-      xmat <- rank(xmat)
+    ymat <- rank(ymat)
+    xmat <- rank(xmat)
   }
-
+  
   ycor <- ymat
   xcor <- xmat
   
@@ -57,7 +57,7 @@ function(formula = formula(data), data = sys.parent(), correlation = "Pearson", 
                      as.integer(rarray),
                      PACKAGE = "RPANDA")
     }
-      
+    
     if (correlation=="Kendall"){
       cresults <- .C("permuteKendall", as.double(xmat), as.double(ymat),
                      as.integer(n), as.integer(length(xmat)), as.integer(nperm), 
@@ -65,16 +65,16 @@ function(formula = formula(data), data = sys.parent(), correlation = "Pearson", 
                      as.integer(rarray),
                      PACKAGE = "RPANDA")
     }
-      
+    
     zstats <- cresults$zstats
-    pval1 <- length(which(zstats >= zstats[1]))/nperm
-    pval2 <- length(which(zstats <= zstats[1]))/nperm
+    pval1 <- min(c(length(which(zstats >= zstats[1]))/nperm,1))
+    pval2 <- min(c(length(which(zstats <= zstats[1]))/nperm,1))
     pval3 <- length(which(abs(zstats) >= abs(zstats[1])))/nperm
   } else {
     pval1 <- 0
     pval2 <- 0
     pval3 <- 0
   }
-
+  
   c(mantelr = mantelr, pval1 = pval1, pval2 = pval2, pval3 = pval3)
 }

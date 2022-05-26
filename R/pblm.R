@@ -221,7 +221,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
       if (d2==1){V2 <- initV2} # Brownian motion
       
       detV1 <- det(V1)
-    
+      
       if (detV1==0) {detV1=1e-300}
       detV2 <- det(V2) 
       if (detV2==0) {detV2=1e-300}
@@ -236,7 +236,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
           invV1 <- chol2inv(chol(V1))
           invV2 <- chol2inv(chol(V2))
           invV <- kronecker(invV2,invV1)  
-        
+          
           a<-solve((t(U)%*%invV%*%U),((t(U)%*%invV%*%A))) 
           E<-(A-U%*%a)
           MSE=t(E)%*%invV%*%E/(nassocs-1)
@@ -247,7 +247,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
     }
     # estimate d1 and d2 by minimizing MSE
     est<-optim(pstart,pegls,control=list(maxit=maxit, reltol=1e-4, abstol=1e-4))      
-
+    
     MSEFull<-est$value
     d1<-abs(est$par[1])
     d2<-abs(est$par[2])
@@ -331,7 +331,7 @@ function(assocs,tree1=NULL,tree2=NULL,covars1=NULL,covars2=NULL,bootstrap=FALSE,
         A<-invT%*%YY	# back-transformed data
         pstart<-dtrue+c(0,.1)
         estRand<-optim(pstart,pegls,control=list(maxit=maxit, reltol=1e-4, abstol=1e-4))      
-
+        
         MSEFullrand<-estRand$value
         d1rand<-abs(estRand$par[1])
         d2rand<-abs(estRand$par[2])
