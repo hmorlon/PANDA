@@ -68,7 +68,7 @@ Mantel, N. 1967. The detection of disease clustering and a generalized regressio
 \examples{
 
 # Measuring phylogenetic signal in species interactions using a Mantel test 
-# (do closely related species interact with similar partners?)
+# with permutations keeping constant the number of partners per species
 
 library(RPANDA)
 
