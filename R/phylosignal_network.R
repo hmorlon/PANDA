@@ -167,7 +167,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   
   # PBLM (non binary)
   if ((method=="PBLM")&(only_A==FALSE)){
-    model_pblm <- R.utils::withTimeout(RPANDA::pblm(assocs=network, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
+    model_pblm <- R.utils::withTimeout(pblm(assocs=network, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
     
     if (!is.null(model_pblm)) {
       results <- c(as.integer(nb_A), as.integer(nb_B), model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )
@@ -184,7 +184,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     network_binary <- network
     network_binary[network_binary>0] <- 1
     
-    model_pblm <- R.utils::withTimeout(RPANDA::pblm(assocs=network_binary, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
+    model_pblm <- R.utils::withTimeout(pblm(assocs=network_binary, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
     
     if (!is.null(model_pblm)) {
       results <- c(as.integer(nb_A), as.integer(nb_B), model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )
