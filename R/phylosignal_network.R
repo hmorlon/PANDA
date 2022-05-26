@@ -155,9 +155,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     
     if (permutation=="nbpartners"){
       mantel_A <- #RPANDA::
-        mantel_test_marginal(network, tree_A, tree_B, method, nperm, correlation)
+        mantel_test_nbpartners(network, tree_A, tree_B, method, nperm, correlation)
       if (only_A==FALSE) {mantel_B <- #RPANDA::
-        mantel_test_marginal(t(network), tree_B, tree_A, method, nperm, correlation)
+        mantel_test_nbpartners(t(network), tree_B, tree_A, method, nperm, correlation)
       }else{mantel_B <- c(NA, NA, NA)}
     }
     

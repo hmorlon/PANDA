@@ -14,7 +14,8 @@ Mantel tests measuring the phylogenetic signal in species interactions can be co
 \usage{
 phylosignal_network(network, tree_A, tree_B=NULL, 
 method = "Jaccard_weighted", nperm = 10000, 
-correlation = "Pearson", only_A = FALSE)
+correlation = "Pearson", permutation="shuffle",
+only_A = FALSE)
 }
 
 \arguments{
@@ -44,6 +45,11 @@ Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear M
 \item{nperm}{
 (optional) a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation. It only applies for the methods "Jaccard_weighted", "Bray-Curtis", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
 }
+
+\item{permutations}{
+(optional) indicates which permutations must be performed to evaluate the significance of the Mantel correlation: either "shuffle" (by default - i.e. random shufflying of the distance matrix) or "nbpartners" (i.e. keeping constant the number of partners per species and shuffling at random their identity).
+}
+
 
 \item{only_A}{
 (optional) indicates whether the signal should be only computed for guild A (and not for guild B). By default, it is computed for both guilds if "tree_B" is provided. 
@@ -105,7 +111,15 @@ phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi,
 method = "GUniFrac", correlation = "Pearson", nperm = 10000) # measured for both guilds
 
 
-# Step 2: Phylogenetic signal in the number of partners 
+# Step 2: Phylogenetic signal in species interactions when accouting for the signal in the number of partners 
+# Mantel test with permutations that keep constant the number of partners per species
+
+phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, 
+method = "GUniFrac", correlation = "Pearson", nperm = 1000, permutation = "nbpartners")
+
+
+
+# Other: Phylogenetic signal in the number of partners 
 # (do closely related species interact with the same number of partners?)
 
 phylosignal_network(network, tree_A = tree_orchids, method = "degree", 

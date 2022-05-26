@@ -1,4 +1,4 @@
-mantel_test_marginal <-
+mantel_test_nbpartners <-
 function(network, tree_A, tree_B, method="Jaccard_binary", nperm=1000, correlation="Pearson"){
   
   if (!correlation %in% c("Pearson", "Spearman")) {stop("\"correlation\" must be among 'Pearson' or 'Spearman'.")}
