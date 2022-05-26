@@ -25,9 +25,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   # only keep species having at least one interaction
   network <- network[rowSums(network)>0,]
   network <- network[,colSums(network)>0]
-  host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
+  host_tree <- ape::drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
   if (!is.null(symbiont_tree)){
-    symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+    symbiont_tree <- ape::drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
     network <- network[symbiont_tree$tip.label,host_tree$tip.label]
   }else{
     network <- network[,host_tree$tip.label]
@@ -36,9 +36,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   # check a second time (in case of a missing species) 
   network <- network[rowSums(network)>0,]
   network <- network[,colSums(network)>0]
-  host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
+  host_tree <- ape::drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
   if (!is.null(symbiont_tree)){
-    symbiont_tree <- drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
+    symbiont_tree <- ape::drop.tip(symbiont_tree, tip=symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(network)])
     network <- network[symbiont_tree$tip.label,host_tree$tip.label]
   }else{
     network <- network[,host_tree$tip.label]
@@ -50,22 +50,22 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   nb_sub_clades <- 0
   results_sub_clades <- c()
   for (i in sort(unique(host_tree$edge[,1]))){  # include root  and can be non binary
-    sub_host_tree <- extract.clade(host_tree, i)
+    sub_host_tree <- ape::extract.clade(host_tree, i)
     if (Ntip(sub_host_tree)>=minimum){
       sub_network <- network[,sub_host_tree$tip.label]
       sub_network <- sub_network[which(rowSums(sub_network)>0),,drop=F]
       if (!is.null(symbiont_tree)){
-        sub_symbiont_tree <- drop.tip(symbiont_tree, tip= symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(sub_network)])
+        sub_symbiont_tree <- ape::drop.tip(symbiont_tree, tip= symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(sub_network)])
       }else{sub_symbiont_tree <- NULL}
       
       if (nrow(sub_network)>1){
         nb_sub_clades <- nb_sub_clades+1
-        mantel_test <- phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = method, nperm = nperm, correlation = correlation, permutation = permutation)
+        mantel_test <- RPANDA::phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = method, nperm = nperm, correlation = correlation, permutation = permutation)
         
         if (degree==TRUE){
           mantel_degree <- rep("NA", 5)
           tryCatch({
-            mantel_degree <- phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = "degree", nperm = nperm, correlation = correlation)
+            mantel_degree <- RPANDA::phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = "degree", nperm = nperm, correlation = correlation)
           }, error=function(e){cat("clade ",i,": ", conditionMessage(e), "\n")})
           results_sub_clades <- rbind(results_sub_clades, c(i, mantel_test[1:5],NA,NA, mantel_degree[3:5] ))
         }else{

@@ -10,7 +10,7 @@ function(tree_A, results_sub_clades, network=NULL, legend=TRUE, show.tip.label=F
   if (!is.null(network)){
     network <- network[rowSums(network)>0,]
     network <- network[,colSums(network)>0]
-    host_tree <- drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
+    host_tree <- ape::drop.tip(host_tree, tip=host_tree$tip.label[!host_tree$tip.label %in% colnames(network)])
     network <- network[,host_tree$tip.label]
   }
   

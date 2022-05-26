@@ -1,8 +1,51 @@
 mantel_test_nbpartners <-
-function(network, tree_A, tree_B, method="Jaccard_binary", nperm=1000, correlation="Pearson"){
+function(network, tree_A, tree_B = NULL, method="Jaccard_binary", nperm=1000, correlation="Pearson"){
   
   if (!correlation %in% c("Pearson", "Spearman")) {stop("\"correlation\" must be among 'Pearson' or 'Spearman'.")}
   if (!is.numeric(nperm)) {stop("Please provide a numeric number of permutations (\"nperm\").")}
+  
+  if (!inherits(tree_A, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}
+  if (!is.null(tree_B)) {if (!inherits(tree_B, "phylo")) {stop("object \"tree_B\" is not of class \"phylo\".")}}
+  
+  if (is.null(method)) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'Bray-Curtis', 'GUniFrac', and 'UniFrac_unweighted'.")}
+  if (method %in% c("GUniFrac", "UniFrac_unweighted", "PBLM", "PBLM_binary")) {if (is.null(tree_B)) stop("Please provide a phylogenetic tree \"tree_B\" for guild B.")}
+  if (!method %in% c("Jaccard_weighted","Jaccard_binary", "Bray-Curtis", "GUniFrac", "UniFrac_unweighted")) {stop("Please provide a \"method\" to compute phylogenetic signals among 'Jaccard_weighted', 'Jaccard_binary', 'Bray-Curtis', 'GUniFrac', and 'UniFrac_unweighted'.")}
+  
+  if (nrow(network)<2){stop("Please provide a \"network\" with at least 2 species in clade B.")}
+  if (ncol(network)<2){stop("Please provide a \"network\" with at least 2 species in clade A.")}
+  
+  
+  # Only keep species with at least 1 interaction
+  network <- network[rowSums(network)>0,]
+  network <- network[,colSums(network)>0]
+  
+  # A in columns and B in rows
+  nb_A <- ncol(network)
+  nb_B <- nrow(network)
+  names(nb_A) <- "nb_A"
+  names(nb_B) <- "nb_B"
+  
+  # Check names
+  if (all(is.null(colnames(network)))|all(is.null(rownames(network)))) {stop("Please provide a \"network\" with row names and columns names matching the species names.")}
+  
+  if (!all(colnames(network) %in% tree_A$tip.label)){stop("Please provide a \"tree_A\" for all the species in clade A (the columns of the intercation network).")}
+  if (only_A==FALSE) { if (!all(rownames(network) %in% tree_B$tip.label)){stop("Please provide a \"tree_B\" for all the species in clade B (the rows of the intercation network).")}}
+  
+  tree_A <- ape::drop.tip(tree_A,tip=tree_A$tip.label[which(!tree_A$tip.label %in% colnames(network))])
+  if (only_A==FALSE) { tree_B <- ape::drop.tip(tree_B,tip=tree_B$tip.label[which(!tree_B$tip.label %in% rownames(network))])}
+  
+  
+  if (!is.rooted(tree_A)){tree_A <- phytools::midpoint.root(tree_A) }
+  if (only_A==FALSE) { if (!is.rooted(tree_B)){tree_A <- phytools::midpoint.root(tree_B) }}
+  
+  if (only_A==TRUE) { 
+    network <- network[1:nrow(network),tree_A$tip.label]
+  } else {
+    network <- network[tree_B$tip.label,tree_A$tip.label]
+  }
+  
+  
+  
   
   compute_eco_dist <- function(network){
     # binary Jaccard distances
@@ -45,7 +88,7 @@ function(network, tree_A, tree_B, method="Jaccard_binary", nperm=1000, correlati
   # Perform Mantel test:
   
   # cophenetic distances
-  cophe_A <- cophenetic.phylo(tree_A)
+  cophe_A <- ape::cophenetic.phylo(tree_A)
 
   nb_A <- ncol(network)
   nb_B <- nrow(network)

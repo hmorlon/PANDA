@@ -37,12 +37,12 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   if (!all(colnames(network) %in% tree_A$tip.label)){stop("Please provide a \"tree_A\" for all the species in clade A (the columns of the intercation network).")}
   if (only_A==FALSE) { if (!all(rownames(network) %in% tree_B$tip.label)){stop("Please provide a \"tree_B\" for all the species in clade B (the rows of the intercation network).")}}
   
-  tree_A <- drop.tip(tree_A,tip=tree_A$tip.label[which(!tree_A$tip.label %in% colnames(network))])
-  if (only_A==FALSE) { tree_B <- drop.tip(tree_B,tip=tree_B$tip.label[which(!tree_B$tip.label %in% rownames(network))])}
+  tree_A <- ape::drop.tip(tree_A,tip=tree_A$tip.label[which(!tree_A$tip.label %in% colnames(network))])
+  if (only_A==FALSE) { tree_B <- ape::drop.tip(tree_B,tip=tree_B$tip.label[which(!tree_B$tip.label %in% rownames(network))])}
   
   
-  if (!is.rooted(tree_A)){tree_A <- midpoint.root(tree_A) }
-  if (only_A==FALSE) { if (!is.rooted(tree_B)){tree_A <- midpoint.root(tree_B) }}
+  if (!is.rooted(tree_A)){tree_A <- phytools::midpoint.root(tree_A) }
+  if (only_A==FALSE) { if (!is.rooted(tree_B)){tree_A <- phytools::midpoint.root(tree_B) }}
   
   if (only_A==TRUE) { 
     network <- network[1:nrow(network),tree_A$tip.label]
@@ -111,8 +111,8 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
       # Perform Mantel test:
       
       # cophenetic distances
-      cophe_A <- cophenetic.phylo(tree_A)
-      if (only_A==FALSE) cophe_B <- cophenetic.phylo(tree_B)
+      cophe_A <- ape::cophenetic.phylo(tree_A)
+      if (only_A==FALSE) cophe_B <- ape::cophenetic.phylo(tree_B)
       
       results <- c(as.integer(nb_A), as.integer(nb_B), NA, NA, NA, NA, NA, NA)
       names(results) <-  c("nb_A","nb_B","mantel_cor_A","pvalue_upper_A","pvalue_lower_A", "mantel_cor_B", "pvalue_upper_B", "pvalue_lower_B")
@@ -154,10 +154,8 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     
     
     if (permutation=="nbpartners"){
-      mantel_A <- #RPANDA::
-        mantel_test_nbpartners(network, tree_A, tree_B, method, nperm, correlation)
-      if (only_A==FALSE) {mantel_B <- #RPANDA::
-        mantel_test_nbpartners(t(network), tree_B, tree_A, method, nperm, correlation)
+      mantel_A <- RPANDA::mantel_test_nbpartners(network, tree_A, tree_B, method, nperm, correlation)
+      if (only_A==FALSE) {mantel_B <- RPANDA::mantel_test_nbpartners(t(network), tree_B, tree_A, method, nperm, correlation)
       }else{mantel_B <- c(NA, NA, NA)}
     }
     
@@ -169,7 +167,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   
   # PBLM (non binary)
   if ((method=="PBLM")&(only_A==FALSE)){
-    model_pblm <- R.utils::withTimeout(pblm(assocs=network, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
+    model_pblm <- R.utils::withTimeout(RPANDA::pblm(assocs=network, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
     
     if (!is.null(model_pblm)) {
       results <- c(as.integer(nb_A), as.integer(nb_B), model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )
@@ -186,7 +184,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     network_binary <- network
     network_binary[network_binary>0] <- 1
     
-    model_pblm <- R.utils::withTimeout(pblm(assocs=network_binary, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
+    model_pblm <- R.utils::withTimeout(RPANDA::pblm(assocs=network_binary, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
     
     if (!is.null(model_pblm)) {
       results <- c(as.integer(nb_A), as.integer(nb_B), model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )
