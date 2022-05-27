@@ -1,13 +1,21 @@
-get.branching.nodes <- function(comb, phy = phylo, ALL_branch_times_clades = ALL_branch_times_clades){
+get.branching.nodes <- function(comb, ...){
   
-  root_ID = phy$node.label[1]
+  dots <- list(...)
+  if(!hasArg(phylo)) stop()
+    phylo <- dots$phylo
+  if(!hasArg(ALL_branch_times_clades)) stop()
+    ALL_branch_times_clades <- dots$ALL_branch_times_clades
+  if(!hasArg(ALL_clade_names)) stop()
+    ALL_clade_names <- dots$ALL_clade_names
+    
+  root_ID = phylo$node.label[1]
   
   root_clade <- 0
   root_node <-  NULL
   
   # account for poor backbone resulting in a subclade
-  phylo_backbone_sb <- drop.tip(phy, unlist(ALL_clade_names[comb]))
-  sibling_shift_nodes <- unlist(Siblings(phy, as.numeric(comb)))
+  phylo_backbone_sb <- drop.tip(phylo, unlist(ALL_clade_names[comb]))
+  sibling_shift_nodes <- unlist(Siblings(phylo, as.numeric(comb)))
   
   shift <- ALL_branch_times_clades[comb]
   
