@@ -1,4 +1,4 @@
-get.branching.nodes <- function(comb, phy = phylo){
+get.branching.nodes <- function(comb, phy = phylo, ALL_branch_times_clades = ALL_branch_times_clades){
   
   root_ID = phy$node.label[1]
   

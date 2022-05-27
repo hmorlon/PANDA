@@ -178,7 +178,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
         phylo_backbone_cut <- list(phylo_backbone_core)
         names(phylo_backbone_cut) <- paste0(paste0(comb.sub, collapse = "."),"_bck")
         
-        branch_time_sb <- get.branching.nodes(comb.sub)
+        branch_time_sb <- get.branching.nodes(comb.sub, phy = phylo, ALL_branch_times_clades)
         branch_times_to_bck <- list(branch_time_sb)
         
         names(branch_times_to_bck) <- paste0(comb.sub, collapse = ".")
@@ -202,7 +202,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
           
           comb.multibackbone <- c(comb.sub[comb.sub %in% sb.desc[[sb]]], int_nodes[int_nodes %in% sb.desc_sb_sp])
           
-          branch_time_sb <- get.branching.nodes(comb.multibackbone)
+          branch_time_sb <- get.branching.nodes(comb.multibackbone, phy = phylo, ALL_branch_times_clades)
           
           # check that root of phylo_backbone_cut[[sb]] is int_node
           if(phylo_backbone_cut[[sb]]$node.label[1] != int_nodes[sb] &
@@ -237,7 +237,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
           
           comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
           
-          branch_time_sb <- get.branching.nodes(comb_deep_backbone)
+          branch_time_sb <- get.branching.nodes(comb_deep_backbone, phy = phylo, ALL_branch_times_clades)
           
           branch_times_to_bck[sb] <- list(branch_time_sb)
           names(branch_times_to_bck)[sb] <- paste(comb_deep_backbone, collapse = ".")
