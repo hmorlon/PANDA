@@ -41,7 +41,9 @@ all_comb_models <- function(to){
       phylo_backbone_cut <- list(phylo_backbone_core)
       names(phylo_backbone_cut) <- paste0(paste0(comb.sub, collapse = "."),"_bck")
       
-      branch_time_sb <- get.branching.nodes(comb.sub)
+      branch_time_sb <- get.branching.nodes(comb.sub, phylo = phylo,
+                                            ALL_branch_times_clades = ALL_branch_times_clades,
+                                            ALL_clade_names = ALL_clade_names)
       branch_times_to_bck <- list(branch_time_sb)
       names(branch_times_to_bck) <- paste0(comb.sub, collapse = ".")
       
@@ -64,7 +66,9 @@ all_comb_models <- function(to){
         
         comb.multibackbone <- c(comb.sub[comb.sub %in% sb.desc[[sb]]], int_nodes[int_nodes %in% sb.desc_sb_sp])
         
-        branch_time_sb <- get.branching.nodes(comb.multibackbone)
+        branch_time_sb <- get.branching.nodes(comb.multibackbone, phylo = phylo,
+                                              ALL_branch_times_clades = ALL_branch_times_clades,
+                                              ALL_clade_names = ALL_clade_names)
         
         # check that root of phylo_backbone_cut[[sb]] is int_node
         if(phylo_backbone_cut[[sb]]$node.label[1] != int_nodes[sb] &
@@ -99,7 +103,9 @@ all_comb_models <- function(to){
  
         comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
   
-        branch_time_sb <- get.branching.nodes(comb_deep_backbone)
+        branch_time_sb <- get.branching.nodes(comb_deep_backbone, phylo = phylo,
+                                              ALL_branch_times_clades = ALL_branch_times_clades,
+                                              ALL_clade_names = ALL_clade_names)
   
         branch_times_to_bck[sb] <- list(branch_time_sb)
         names(branch_times_to_bck)[sb] <- paste(comb_deep_backbone, collapse = ".")
@@ -111,7 +117,7 @@ all_comb_models <- function(to){
   branch_nodes_to_bck <- branch_times_to_bck
   for(bck in 1:length(branch_times_to_bck)){
     for(nodeID in 1:length(branch_nodes_to_bck[[bck]])){
-      branch_times_to_bck[[bck]][[nodeID]] <- sapply(branch_nodes_to_bck[[bck]][[nodeID]], get.node.ages)
+      branch_times_to_bck[[bck]][[nodeID]] <- sapply(branch_nodes_to_bck[[bck]][[nodeID]], get.node.ages, phylo = phylo)
     }  
   }
   
