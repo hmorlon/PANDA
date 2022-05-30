@@ -91,8 +91,8 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   for(i in 1:nrow(best_subclades_df_combi)){
     clade <- as.character(best_subclades_df_combi$Clades[i])
     model <- as.character(best_subclades_df_combi$Models[i])
-    values <- as.numeric(best_subclades_df_combi[i,-c(1,2,9)])
-    names(values) <- names(best_subclades_df_combi[i,-c(1,2,9)])
+    values <- as.numeric(best_subclades_df_combi[i,-c(1,2,10)])
+    names(values) <- names(best_subclades_df_combi[i,-c(1,2,10)])
     
     lamb_pari <- as.numeric(c(values["Lambda"],values["Alpha"]))
     mu_pari <- as.numeric(c(values["Mu"],values["Beta"]))

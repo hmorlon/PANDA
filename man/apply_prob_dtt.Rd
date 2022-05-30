@@ -36,7 +36,7 @@ an object of type 'phylo' (see ape documentation)
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
   \item{m}{
-    NULL or numeric. The set of maxmimum values for m ranges. Should be as long as the number of parts in the combinaison. Default is NULL (see details).
+    NULL or numeric. The set of maximum values for m ranges. Should be as long as the number of parts in the combinaison. Default is NULL (see details).
   }
   
 }
