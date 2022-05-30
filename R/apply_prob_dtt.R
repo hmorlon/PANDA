@@ -196,6 +196,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
       max_diversities <- m
       names(max_diversities) <- row.names(diversities)
+      cat("\n#### Maximum values of m are manually specified: ####\n m =", paste0(m[-length(m)], ","), m[length(m)], "\n")
     }
    
     # subclade(s) ####
