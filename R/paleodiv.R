@@ -84,6 +84,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     
     totalsp2 <- as.list(sampling.fractions$sp_tt[sampling.fractions$nodes %in% as.numeric(comb.sub)])
     names(totalsp2) <- comb.sub
+    names(tot_time2) <- comb.sub
   }
   
   # Subclades diversity (RPANDA FONCTIONS !!!!)

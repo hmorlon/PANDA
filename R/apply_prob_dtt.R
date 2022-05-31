@@ -185,20 +185,20 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     }
     
     # Deterministic diversity to set the limit
+    diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
+                            sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
+    
     if(is.null(m)){
-      diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
-                              sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
       row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
       max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = T))/10)*10
     } else {
-      diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
-                              sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
+      
       row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
       max_diversities <- m
       names(max_diversities) <- row.names(diversities)
       cat("\n#### Maximum values of m are manually specified: ####\n m =", paste0(m[-length(m)], ","), m[length(m)], "\n")
     }
-   
+    
     # subclade(s) ####
     tips_sub <- Descendants(phylo, as.numeric(comb.sub))
     
@@ -367,7 +367,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       check_prob <- F
       cat("\t", i, "/", length(backbone_fit.bd), "\n")
       if(is.null(m)){
-         m_range <- c(2, 3, 5, 7, 10) 
+        m_range <- c(2, 3, 5, 7, 10) 
       } else{
         m_range <- 1
       }
@@ -398,15 +398,14 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         } else {
           if(length(m_range) == 0){
             check_prob <- T
-            cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.
-                You should use another range of m for the backbone.")
+            cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.\nYou should use another range of m for the backbone.")
           }
         }
         
         if(length(min_sumprob) > 1){
           if(min_sumprob[length(min_sumprob)] == min_sumprob[length(min_sumprob)-1]){
             check_prob <- T
-            cat("\nWarnings: the sum of probabilities did not reach 95% for each time Myr.\n")
+            cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.\nThe minimum value reached is m =", paste0(as.character(round(min_sumprob[length(min_sumprob)]*100, 2)), "%."))
           }
         }
       }
