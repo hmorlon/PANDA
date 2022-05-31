@@ -17,7 +17,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    a data.frame containing a database of monophyletic groups for which potential shift can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo.
+    a data.frame containing a database of monophyletic groups for which potential shifts can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo.
   }
   \item{sampling.fractions}{
     the output resulting from get.sampling.fractions.

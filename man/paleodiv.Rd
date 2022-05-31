@@ -18,7 +18,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    a data.frame containing a database of monophyletic groups for which potential shift can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phy.
+    a data.frame containing a database of monophyletic groups for which potential shifts can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phylo.
   }
   \item{shift.res}{
     the output resulting from shift.estimates.

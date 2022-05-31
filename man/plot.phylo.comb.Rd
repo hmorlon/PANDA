@@ -20,7 +20,7 @@
     an object of type 'phylo' (see ape documentation)
   }
   \item{data}{
-    a data.frame containing a database of monophyletic groups for which potential shift can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo. 
+    a data.frame containing a database of monophyletic groups for which potential shifts can be tested. This database should be based on taxonomy, ecology or traits and must contain a column named "Species" with species names as in phylo. 
   }
   \item{sampling.fractions}{
     the output resulting from get.sampling.fractions.
@@ -29,7 +29,7 @@
     the output resulting from shift.estimates or NULL (default). This latter case allows to represent combinations only from the output of \code{\link{get.comb.shift}} by specifying the combination (see argument combi).
   }
   \item{combi}{
-    character or numeric. If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison.
+    character or numeric. If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison (shift.res$total).
   }
   \item{backbone.option}{
     type of the backbone analysis:

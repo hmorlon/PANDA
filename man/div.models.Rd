@@ -44,7 +44,8 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   }
   \item{cond}{
     conditioning to use to fit the model:
-    \itemize{ \item FALSE: no conditioning (not recommended);
+    \itemize{
+      \item FALSE: no conditioning (not recommended);
       \item "stem": conditioning on the survival of the stem lineage (used when the stem age is known, in this case tot_time should be the stem age);
       \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (used when the stem age is not known, in this case tot_time should be the crown age).
     }
