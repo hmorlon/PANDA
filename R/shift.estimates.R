@@ -366,9 +366,9 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
       cat("\n No shift has been detected. \n")
     } else {
       if(which(best_ALL_TOTAL$Combination == "whole_tree")-1 == 1){
-        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combination has been detected. \n")
+        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combination is better than the homogeneous model (but non-significant). \n")
       } else {
-        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combinations have been detected. \n")
+        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combinations are better than the homogeneous model (but non-significant). \n")
       }
     }
   }
