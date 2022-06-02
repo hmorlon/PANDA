@@ -154,7 +154,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
       
       model <- as.character(rate_data$Models[r])
       agei <- time_data[r]
-      time.seq_r <- c(tot_time, seq(floor(agei),0,by=-1))
+      time.seq_r <- c(agei, seq(floor(agei),0,by=-1))
       #time.seq_r <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
       
       rate_df <- matrix(NA,2, length(time.seq))
