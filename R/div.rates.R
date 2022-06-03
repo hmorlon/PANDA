@@ -41,6 +41,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
     row.names(rate_df) <- c("Speciation", "Extinction")
     
     if (grepl("BCST", model)){
+      rate_spec <- rep(rate_data$Lambda, length(time.seq))
       rate_ext <- rep(NA, length(time.seq))
     }
     
