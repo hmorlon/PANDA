@@ -61,44 +61,17 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   
   if(any(comb.sub == "whole_tree")){
     
-    best_subclades_df_combi <- shift.res$whole_tree
-    best_subclades_df_combi <- best_subclades_df_combi[best_subclades_df_combi$AICc == min(best_subclades_df_combi$AICc),]
-    best_subclades_df_combi$Clades <- comb.sub
+    best_whole_tree_combi <- shift.res$whole_tree
+    best_whole_tree_combi <- best_whole_tree_combi[best_whole_tree_combi$AICc == min(best_whole_tree_combi$AICc),]
     
-    tot_time2 <- tot_time
-    names(tot_time2) <- comb.sub
-    totalsp2 <- totalsp
-    names(totalsp2) <- comb.sub
-    
-  } else {
-    
-    best_subclades_df_combi <- best_subclades_df[best_subclades_df$Clades %in% as.numeric(comb.sub),]
-    best_subclades_df_combi <- best_subclades_df_combi[match(comb.sub, best_subclades_df_combi$Clades), ]
-    
-    if(backbone.option == "stem.shift"){
-      parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Clades), type = "parent")
-      tot_time2 <- as.list(branching.times(phylo)[as.character(parental_nodes)])
-    } else {
-      tot_time2 <- as.list(branching.times(phylo)[best_subclades_df_combi$Clades])
-    }
-    
-    totalsp2 <- as.list(sampling.fractions$sp_tt[sampling.fractions$nodes %in% as.numeric(comb.sub)])
-    names(totalsp2) <- comb.sub
-    names(tot_time2) <- comb.sub
-  }
-  
-  # Subclades diversity (RPANDA FONCTIONS !!!!)
-  
-  for(i in 1:nrow(best_subclades_df_combi)){
-    clade <- as.character(best_subclades_df_combi$Clades[i])
-    model <- as.character(best_subclades_df_combi$Models[i])
-    values <- as.numeric(best_subclades_df_combi[i,-c(1,2,10)])
-    names(values) <- names(best_subclades_df_combi[i,-c(1,2,10)])
+    model <- as.character(best_whole_tree_combi$Models[1])
+    values <- as.numeric(best_whole_tree_combi[1,-c(1,2,9)])
+    names(values) <- names(best_whole_tree_combi[1,-c(1,2,9)])
     
     lamb_pari <- as.numeric(c(values["Lambda"],values["Alpha"]))
     mu_pari <- as.numeric(c(values["Mu"],values["Beta"]))
-    agei <- tot_time2[[clade]]
-    sizei <- totalsp2[[clade]]
+    agei <- tot_time
+    sizei <- totalsp[[1]]
     time_seq <- c(agei, seq(floor(agei),0,by=-1))
     
     if (grepl("BCST", model)){
@@ -126,11 +99,71 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     }
     
     div2 <- div[length(div):1]
-    globaldiv[i,1:length(div)]<-div2
+    globaldiv[1,1:length(div)]<-div2
+    
+    
+  } else {
+    
+    best_subclades_df_combi <- best_subclades_df[best_subclades_df$Clades %in% as.numeric(comb.sub),]
+    best_subclades_df_combi <- best_subclades_df_combi[match(comb.sub, best_subclades_df_combi$Clades), ]
+    
+    if(backbone.option == "stem.shift"){
+      parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Clades), type = "parent")
+      tot_time2 <- as.list(branching.times(phylo)[as.character(parental_nodes)])
+    } else {
+      tot_time2 <- as.list(branching.times(phylo)[best_subclades_df_combi$Clades])
+    }
+    
+    totalsp2 <- as.list(sampling.fractions$sp_tt[sampling.fractions$nodes %in% as.numeric(comb.sub)])
+    names(totalsp2) <- comb.sub
+    names(tot_time2) <- comb.sub
   }
+  
+  # Subclades diversity (RPANDA FONCTIONS !!!!)
+  
   
   if(all(comb.sub != "whole_tree")){
     # Backbone diversity
+    
+    for(i in 1:nrow(best_subclades_df_combi)){
+      clade <- as.character(best_subclades_df_combi$Clades[i])
+      model <- as.character(best_subclades_df_combi$Models[i])
+      values <- as.numeric(best_subclades_df_combi[i,-c(1,2,10)])
+      names(values) <- names(best_subclades_df_combi[i,-c(1,2,10)])
+      
+      lamb_pari <- as.numeric(c(values["Lambda"],values["Alpha"]))
+      mu_pari <- as.numeric(c(values["Mu"],values["Beta"]))
+      agei <- tot_time2[[clade]]
+      sizei <- totalsp2[[clade]]
+      time_seq <- c(agei, seq(floor(agei),0,by=-1))
+      
+      if (grepl("BCST", model)){
+        div <-sizei*exp(-abs(lamb_pari[1])*time_seq)
+      }
+      
+      if (grepl("BCST_DCST", model)){
+        div<-sizei*exp(-abs(lamb_pari[1])*time_seq+abs(mu_pari[1])*time_seq)
+      }
+      
+      if (grepl("BVAR", model)){
+        div<-sizei*exp(abs(lamb_pari[1])/lamb_pari[2]*(1-exp(lamb_pari[2]*time_seq)))
+      }
+      
+      if (grepl("BVAR_DCST", model)){
+        div<-sizei*exp(abs(lamb_pari[1])/lamb_pari[2]*(1-exp(lamb_pari[2]*time_seq))+abs(mu_pari[1])*time_seq)
+      }
+      
+      if (grepl("BCST_DVAR", model)){
+        div<-sizei*exp(-abs(lamb_pari[1])*time_seq-abs(mu_pari[1])/mu_pari[2]*(1-exp(mu_pari[2]*time_seq)))
+      }
+      
+      if (grepl("BVAR_DVAR", model)){
+        div<-sizei*exp(abs(lamb_pari[1])/lamb_pari[2]*(1-exp(lamb_pari[2]*time_seq))-abs(mu_pari[1])/mu_pari[2]*(1-exp(mu_pari[2]*time_seq)))
+      }
+      
+      div2 <- div[length(div):1]
+      globaldiv[i,1:length(div)]<-div2
+    }
     
     best_backbones <- shift.res$backbones[paste(paste(comb.sub, collapse = "."), paste(comb.bck, collapse = "."), sep = "/")][[1]]
     best_backbones_df <- do.call(rbind.data.frame, lapply(best_backbones, function(x) x[1,]))
