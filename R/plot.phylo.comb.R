@@ -84,16 +84,10 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     
   } else {
     
-    if(length(grep("/", comb)) == 1){
-      if(length(strsplit(comb, "/")[[1]]) > 1){
-        comb.sub <- strsplit(sapply(strsplit(comb, "/"), "[[", 1), "[.]")[[1]]
-        comb.bck <- strsplit(sapply(strsplit(comb, "/"), "[[", 2), "[.]")[[1]]
-      } else{
-        comb.sub <- strsplit(sapply(strsplit(comb, "/"), "[[", 1), "[.]")[[1]]
-        comb.bck <- NULL
-      }
-      
-    } else {
+    if(length(strsplit(comb, "/")[[1]]) > 1){
+      comb.sub <- strsplit(sapply(strsplit(comb, "/"), "[[", 1), "[.]")[[1]]
+      comb.bck <- strsplit(sapply(strsplit(comb, "/"), "[[", 2), "[.]")[[1]]
+    } else{
       comb.sub <- strsplit(sapply(strsplit(comb, "/"), "[[", 1), "[.]")[[1]]
       comb.bck <- NULL
     }
@@ -150,13 +144,18 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
       lty_clades[which(phylo1$edge[,2] %in% clade_edges)] <- 1
     }
     
+    clade_edges <- list()
     if(!is.null(comb.bck)){
       for(j in 1:length(comb.bck)){
-        clade_edges <- Descendants(phylo1, as.numeric(comb.bck[j]), type = "all")
+        clade_edges[[j]] <- Descendants(phylo1, as.numeric(comb.bck[j]), type = "all")
         if(backbone.option == "stem.shift"){
-          clade_edges <- c(as.numeric(comb.bck[j]),clade_edges)
+          clade_edges <- c(as.numeric(comb.bck[j]),clade_edges[[j]])
         }
-        colors_clades[which(phylo1$edge[,2] %in% clade_edges)] <- ifelse(colors_clades[which(phylo1$edge[,2] %in% clade_edges)] %in% col.bck, col.bck[j], colors_clades[which(phylo1$edge[,2] %in% clade_edges)])
+        if(j>1){
+          clade_edges[[j]] <- clade_edges[[j]][!clade_edges[[j]] %in% unlist(clade_edges[1:(j-1)])]
+        }
+        
+        colors_clades[which(phylo1$edge[,2] %in% clade_edges[[j]])] <- ifelse(colors_clades[which(phylo1$edge[,2] %in% clade_edges[[j]])] %in% col.bck, col.bck[j], colors_clades[which(phylo1$edge[,2] %in% clade_edges[[j]])])
       }
     }
     
