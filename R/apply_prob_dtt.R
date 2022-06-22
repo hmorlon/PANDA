@@ -327,14 +327,14 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     backbone_fit.bd <- lapply(backbones_df, mimic_fit.bd)
     
     names(backbone_fit.bd) <- names(max_diversities[!names(max_diversities) %in% comb.sub])
-    type <- rep(type, nrow(lin.node))
+    type <- rep(type, nrow(lin.node_bck))
     
     backbone_tot_times <- c()
-    for(i in 1:nrow(lin.node)){
+    for(i in 1:nrow(lin.node_bck)){
       if(backbone.option == "stem.shift"){
-        parental_nodes <- Ancestors(phylo, as.numeric(lin.node$node[i]), type = "parent")
+        parental_nodes <- Ancestors(phylo, as.numeric(lin.node_bck$node[i]), type = "parent")
         # last backbone should be "crown"
-        if(i == nrow(lin.node)){
+        if(i == nrow(lin.node_bck)){
           type[i] <- "crown"
         }
         if(parental_nodes == 0){
@@ -342,7 +342,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         }
         backbone_tot_times[i] <- as.numeric(branching.times(phylo)[as.character(parental_nodes)])
       } else {
-        backbone_tot_times[i] <- as.numeric(branching.times(phylo)[lin.node$node[i]])
+        backbone_tot_times[i] <- as.numeric(branching.times(phylo)[lin.node_bck$node[i]])
       }
     }
     
@@ -372,8 +372,8 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         m_range <- 1
       }
       
-      l <- lin.node$n.tips_prev[lin.node$node == names(backbone_fit.bd)[i]]
-      N0 <- lin.node$sp_tt_prev[lin.node$node == names(backbone_fit.bd)[i]]
+      l <- lin.node_bck$n.tips_prev[lin.node_bck$node == names(backbone_fit.bd)[i]]
+      N0 <- lin.node_bck$sp_tt_prev[lin.node_bck$node == names(backbone_fit.bd)[i]]
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(backbone_fit.bd)[i]]
       
