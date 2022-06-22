@@ -216,7 +216,6 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
                                               ALL_branch_times_clades = ALL_branch_times_clades,
                                               ALL_clade_names = ALL_clade_names)
         branch_times_to_bck <- list(branch_time_sb)
-        
         names(branch_times_to_bck) <- paste0(comb.sub, collapse = ".")
         
         # check the root? seems ok with parnassiinae
@@ -228,7 +227,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
           sb.desc[[sb]] <- Descendants(phylo, as.numeric(int_nodes[sb]), "all")
           
           if(sb > 1){ # removing descendant in previous int_nodes
-            sb.desc[[sb]] <- sb.desc[[sb]][!sb.desc[[sb]] %in% unlist(sb.desc[[1:c(sb-1)]])]
+            sb.desc[[sb]] <- sb.desc[[sb]][!sb.desc[[sb]] %in% unlist(sb.desc[1:c(sb-1)])]
           }
           
           sb.desc_sb_sp <- phylo$tip.label[sb.desc[[sb]][sb.desc[[sb]] < Ntip(phylo)]]
@@ -236,7 +235,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
           phylo_backbone_cut[[sb]] <- subtree(phylo_backbone_core, sb.desc_sb_sp)
           names(phylo_backbone_cut)[sb] <- paste0(int_nodes[sb],"_sub")
           
-          comb.multibackbone <- c(comb.sub[comb.sub %in% sb.desc[[sb]]], int_nodes[int_nodes %in% sb.desc_sb_sp])
+          comb.multibackbone <- c(comb.sub[comb.sub %in% sb.desc[[sb]]], int_nodes[int_nodes %in% sb.desc[[sb]]])
           
           branch_time_sb <- get.branching.nodes(comb.multibackbone, phylo = phylo,
                                                 ALL_branch_times_clades = ALL_branch_times_clades,
