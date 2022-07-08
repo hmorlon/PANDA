@@ -137,12 +137,15 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 }
 
 \examples{
+
+\dontshow{test = FALSE}
+if(test){
 data(Cetacea)
 data(InfTemp)
 
 # Simulate a trait with temperature dependence on the Cetacean tree
 set.seed(123)
-\donttest{
+
 trait <- sim_t_env(Cetacea, param=c(0.1,-0.2), env_data=InfTemp, model="EnvExp", 
 					root.value=0, step=0.001, plot=TRUE)
 
@@ -210,7 +213,6 @@ my_fun_ebac <- function(t, env_cont, param){
 res<-fit_t_env(Cetacea, trait, env_data=InfTemp, model=my_fun_ebac,
                 param=c(0.1,0), scale=TRUE)
 res # note that "r" is positive: it's the AC model (~OU model on ultrametric tree)
-
 
  }
 }

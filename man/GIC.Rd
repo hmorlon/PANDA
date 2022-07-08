@@ -52,19 +52,22 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 \examples{
 \donttest{
 if(require(mvMORPH)){
-set.seed(1)
-n <- 32 # number of species
-p <- 40 # number of traits
-
-tree <- pbtree(n=n) # phylogenetic tree
-R <- Posdef(p)      # a random symmetric matrix (covariance)
-# simulate a dataset
-Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
-
-fit1 <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
-fit2 <- fit_t_pl(Y, tree, model="OU", method="RidgeAlt")
-
-GIC(fit1); GIC(fit2)
+\dontshow{test = FALSE}
+if(test){
+      set.seed(1)
+      n <- 32 # number of species
+      p <- 40 # number of traits
+      
+      tree <- pbtree(n=n) # phylogenetic tree
+      R <- Posdef(p)      # a random symmetric matrix (covariance)
+      # simulate a dataset
+      Y <- mvSIM(tree, model="BM1", nsim=1, param=list(sigma=R))
+      
+      fit1 <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
+      fit2 <- fit_t_pl(Y, tree, model="OU", method="RidgeAlt")
+      
+      GIC(fit1); GIC(fit2)
+      }
 }
 }
 }

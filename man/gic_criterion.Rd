@@ -80,6 +80,8 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 }
 
 \examples{
+\dontshow{ test = FALSE}
+if(test){
 \donttest{
 if(require(mvMORPH)){
 set.seed(123)
@@ -98,6 +100,7 @@ gic_criterion(Y, tree, model="BM", method="ML", tuning=0) # ML
 # Compare with PL?
 #test <- fit_t_pl(Y, tree, model="BM", method="RidgeAlt")
 #GIC(test)
+}
 }
 }
 }
