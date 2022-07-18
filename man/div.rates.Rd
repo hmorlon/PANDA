@@ -22,7 +22,7 @@
   \item{combi}{
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
-  \item{parts}{
+  \item{part}{
     character. Specifies for which parts of the combination diversification rates has to be calculated. Default is "backbone" and provide only the backbone rate. Can be "all" for all the parts of a combination or "subclades" for subclades only.
   }
   \item{backbone.option}{
@@ -48,12 +48,11 @@
 \code{\link{shift.estimates}}
 }
 \examples{
-\dontrun{
 # loading data
 data("Cetacea")
+data("shifts_cetacea")
 
 # with shifts_cetacea the output from shift.estimates()
 rates <- div.rates(phylo = Cetacea, shift.res = shifts_cetacea,
                    combi = 1, part = "all")
-}
 }

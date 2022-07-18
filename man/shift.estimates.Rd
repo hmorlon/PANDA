@@ -85,23 +85,29 @@ clade.size argument should be the same value for the whole procedure (same than 
 \code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}, \code{\link{paleodiv}}
 }
 \examples{
-\dontrun{
-  # loading data
-  data("Cetacea")
-  data("taxo_cetacea")
-  
-  # main procedure
-  taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
-  
-  # with f_df_cetacea the output from get.sampling.fractions
-  # with comb.shift_cetacea the output from get.comb.shift
-  shifts_cetacea <- shift.estimates(phylo = Cetacea,
+\donttest{
+# loading data
+data("Cetacea")
+data("taxo_cetacea")
+
+# whole procedure
+taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
+f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
                                     data = taxo_cetacea_no_genus,
-                                    sampling.fractions = f_df_cetacea,
-                                    comb.shift = comb.shift_cetacea,
-                                    models = c("BCST","BCST_DCST","BVAR",
-                                    "BVAR_DCST","BCST_DVAR"),
-                                    backbone.option = "crown.shift",
-                                    Ncores = 4)
+                                    plot = T, cex = 0.3)
+
+comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
+                                     data = taxo_cetacea_no_genus,
+                                     sampling.fractions = f_cetacea,
+                                     Ncores = 4)
+                                     
+shifts_cetacea <- shift.estimates(phylo = Cetacea,
+                                  data = taxo_cetacea_no_genus,
+                                  sampling.fractions = f_cetacea,
+                                  comb.shift = comb.shift_cetacea,
+                                  models = c("BCST","BCST_DCST","BVAR",
+                                             "BVAR_DCST","BCST_DVAR"),
+                                  backbone.option = "crown.shift",
+                                  Ncores = 4)
   }
 }

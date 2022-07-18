@@ -51,7 +51,7 @@
   \item{lwd}{
     the line width, a positive number (default to 1)
 }
-  \item{lty.bound=1}{
+  \item{lty.bound}{
     style of the line for the bound (if added on a current plot)
   }
   \item{add.present}{

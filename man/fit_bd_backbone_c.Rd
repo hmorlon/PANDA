@@ -8,11 +8,11 @@
   Fits the birth-death model with potentially time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood. Notations follow Morlon et al. PNAS 2011. Modified version of fit_bd for backbones and to add constraints on rate estimtes.
 }
 \usage{
-  fit_bd_backbbone_c(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
-                     backbone = F, spec_times = NULL, branch_times = NULL,
-                     meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
-                     expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
-                     dt=0, cond = "crown", rate.max, n.max)
+  fit_bd_backbone_c(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1,
+                    backbone, spec_times, branch_times,
+                    meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
+                    expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
+                    dt=1e-3, cond = "crown", model, rate.max, n.max)
 }
 
 \arguments{
@@ -79,6 +79,9 @@
         \item "stem": conditioning on the survival of the stem lineage (use when the stem age is known, in this case tot_time should be the stem age);
         \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
       }
+  }
+  \item{model}{
+  character. The model name as defined in the function div.models.
   }
   \item{rate.max}{
   numeric. Set a limit of diversificaton rates in terme of rate values.

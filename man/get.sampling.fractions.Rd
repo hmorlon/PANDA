@@ -63,13 +63,14 @@
 
 \examples{
 # loading data
-
 data("Cetacea")
 data("taxo_cetacea")
 
+# no shifts tested at genus level
+taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
+
 # calculating sampling fractions with a plot
-taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
-f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
+f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = FALSE,
                                     data = taxo_cetacea_no_genus,
-                                    plot = T, cex = 0.3)
+                                    plot = TRUE, cex = 0.3)
 }

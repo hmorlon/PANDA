@@ -20,6 +20,9 @@
   \item{data}{
     a data.frame containing a database of monophyletic groups for which potential shifts can be investigated. This database should be based on taxonomy, ecology or traits and contain a column named "Species" with species name as in phylo.
   }
+  \item{sampling.fractions}{
+    the output resulting from get.sampling.fractions.
+  }
   \item{shift.res}{
     the output resulting from shift.estimates.
   }
@@ -51,21 +54,20 @@
 \code{\link{shift.estimates}, \link{apply_prob_dtt}}
 }
 \examples{
-\dontrun{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")
+data("shifts_cetacea")
 
-# testing family and parvorder levels
-taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
-
-# with f_df_cetacea the output from get.sampling.fractions()
-# with shifts_cetacea the output from shift.estimates()
+# no shifts tested at genus level
+taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
+f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = FALSE,
+                                    data = taxo_cetacea_no_genus,
+                                    plot = TRUE, cex = 0.3)
 # use of paleodiv
 paleodiversity <- paleodiv(phylo = Cetacea,
                            data = taxo_cetacea_no_genus,
-                           sampling.fractions = f_df_cetacea,
+                           sampling.fractions = f_cetacea,
                            shift.res = shifts_cetacea,
-                           combi = 1, split.div = F)
-}
+                           combi = 1, split.div = FALSE)
 }

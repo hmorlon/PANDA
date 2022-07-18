@@ -72,9 +72,7 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
 \author{Nathan Mazet}
 
 \examples{
-
 data("Cetacea")
 res <- div.models(Cetacea, tot_time = max(branching.times(Cetacea)),
                   f = 87/89, cond = "crown")
-res  
 }

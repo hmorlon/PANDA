@@ -1,7 +1,7 @@
 shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                             models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
                             backbone.option = "crown.shift", multi.backbone = F, 
-                            np.sub = 4, n.max = NULL, rate.max = NULL, Ncores = 1){
+                            np.sub = 4, rate.max = NULL, n.max = NULL, Ncores = 1){
   env.func <- environment()
   options(echo = T)
   

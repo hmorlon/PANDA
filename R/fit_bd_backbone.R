@@ -1,8 +1,8 @@
-fit_bd_backbone <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1, 
-                             backbone = backbone, spec_times = spec_times, branch_times = branch_times, # options for backbone analysis
-                             meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE, 
-                             expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE, dt = 1e-3, 
-                             cond = "crown", model) 
+fit_bd_backbone <- function(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f = 1, 
+                            backbone, spec_times, branch_times, # options for backbone analysis
+                            meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE, 
+                            expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE, dt = 1e-3, 
+                            cond = "crown", model) 
 {
   if (!inherits(phylo, "phylo"))
     stop("object \"phylo\" is not of class \"phylo\"")

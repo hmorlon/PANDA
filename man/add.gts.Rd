@@ -62,11 +62,10 @@ add.gts(thickness, quaternary = T, is.phylo = F,
 \examples{
 \dontrun{
 # with a phylogeny
-
 data("Cetacea")
 # first plot to get the dimensions of the gts
 plot(Cetacea, cex = 0.5, label.offset = 0.2, tip.color = "white")
-add.gts(-11, quaternary = T, is.phylo = T, xpd.x = F,
+add.gts(-3, quaternary = T, is.phylo = T, xpd.x = F,
         names = c("Q.", "Pli.", "Miocene", "Oligocene", "Eoc."))
 # second plot to display the tree on the gts
 par(new = T)

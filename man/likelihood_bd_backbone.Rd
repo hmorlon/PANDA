@@ -1,6 +1,5 @@
-
-\name{likelihood_bd}
-\alias{likelihood_bd}
+\name{likelihood_bd_backbone}
+\alias{likelihood_bd_backbone}
 
 \title{
 Likelihood of a phylogeny under the general birth-death model (backbone)
@@ -9,9 +8,10 @@ Likelihood of a phylogeny under the general birth-death model (backbone)
 Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011. Modified version of likelihoud_bd for backbones.
 }
 \usage{
-likelihood_bd(phylo, tot_time, f.lamb, f.mu, f,
-              backbone, spec_times, branch_times, cst.lamb = FALSE, cst.mu = FALSE,
-              expo.lamb = FALSE, expo.mu = FALSE, dt=0, cond = "crown")
+likelihood_bd_backbone(phylo, tot_time, f, f.lamb, f.mu, 
+                       backbone, spec_times, branch_times,
+                       cst.lamb = FALSE, cst.mu = FALSE,
+                       expo.lamb = FALSE, expo.mu = FALSE, dt=0, cond = "crown")
 }
 
 \arguments{
@@ -90,5 +90,8 @@ lamb_par <- c(0.1, 0.01)
 f.lamb <- function(t){lamb_par[1] * exp(lamb_par[2] * t)}
 f.mu <- function(t){0}
 f <- 87/89
-lh <- likelihood_bd(Cetacea,tot_time,f.lamb,f.mu,f,cst.mu=TRUE,expo.lamb=TRUE, dt=1e-3)
+# same as likelihood_bd in this case
+lh <- likelihood_bd_backbone(Cetacea, tot_time, f, f.lamb, f.mu, 
+                             backbone = FALSE, spec_times = NULL, branch_times = NULL,
+                             cst.mu = TRUE, expo.lamb = TRUE, dt = 1e-3)
 }

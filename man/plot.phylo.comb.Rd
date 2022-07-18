@@ -7,14 +7,14 @@
 \description{
   Plots the phylogeny with colored branches according to shifts of diversification.
 }
-\usage{
-  plot.phylo.comb(phylo, data, sampling.fractions, shift.res,
-                  combi = 1, backbone.option = "crown.shift",
-                  main = NULL, col.sub = NULL, col.bck = "black",
-                  lty.bck = 1, tested_nodes = F, lad = T,
-                  leg = T, text.cex = 1, pch.cex = 1, ...)
-}
 
+\usage{
+plot.phylo.comb(phylo, data, sampling.fractions, shift.res = NULL,
+                combi, backbone.option = "crown.shift",
+                main = NULL, col.sub = NULL, col.bck = "black",
+                lty.bck = 1, tested_nodes = F, lad = T,
+                leg = T, text.cex = 1, pch.cex = 1, \dots)
+}
 \arguments{
   \item{phylo}{
     an object of type 'phylo' (see ape documentation)
@@ -38,6 +38,9 @@
       \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
     }
   }
+  \item{main}{
+    Character. The name of the plot. Default is NULL and the combination rank with AICc will be printed if shift.res is not NULL.
+  }
   \item{col.sub}{
     character. A vector to specify colors of subclade(s). Can be let NULL (see details).
   }
@@ -53,6 +56,7 @@
   \item{lty.bck}{
     numeric. Define lty for the backbone.
   }
+
   \item{tested_nodes}{
     bolean. If TRUE, all the tested nodes are highlighted by a red point.
   }
@@ -83,29 +87,31 @@ plot the phylogeny and returns the same invisible object as plot.phylo.
 \code{\link{shift.estimates}}}
 
 \examples{
-\dontrun{
+\donttest{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")
 
-taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
+taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
 
 # main procedure
-f_df_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = F,
-                                             data = taxo_cetacea_no_genus,
-                                             plot = T, cex = 0.3)
-taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
+f_cetacea <- get.sampling.fractions(phylo = Cetacea, lad = FALSE,
+                                    data = taxo_cetacea_no_genus,
+                                    plot = TRUE, cex = 0.3)
+
+comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
+                                     data = taxo_cetacea_no_genus,
+                                     sampling.fractions = f_cetacea,
+                                     Ncores = 4)
 
 # use of plot.phylo.comb
 # without shift.estimates results but with comb.shift_cetacea
-# the output from get.comb.shift and with f_df_cetacea the output
-# from get.sampling.fractions
 
 plot.phylo.comb(phylo = Cetacea,
                 data = taxo_cetacea,
-                sampling.fractions = f_df_cetacea,
+                sampling.fractions = f_cetacea,
                 combi = comb.shift_cetacea[15],
                 label.offset = 0.3,
-                main = "", lad = F,cex = 0.4)
+                main = "", lad = FALSE ,cex = 0.4)
 }
 }

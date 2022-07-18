@@ -37,12 +37,11 @@
 \code{\link{shift.estimates}}
 }
 \examples{
-\dontrun{
+# loading data
+data("shifts_cetacea")
 
-# To remove "BVAR_DVAR" models if it was included before
-# with shifts_cetacea the output from shift.estimates
-shifts_cetacea_noBVAR_DVAR <- remove.models(shift.res = shifts_cetacea,
-                                            model = "BVAR_DVAR")
+# Removing "BVAR_DCST" model for the example
+shifts_cetacea_noBVAR_DCST <- remove.model(shift.res = shifts_cetacea,
+                                           model = "BVAR_DCST")
 
-}
 }

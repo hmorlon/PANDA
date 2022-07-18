@@ -36,6 +36,7 @@ importFrom(phangorn, Siblings, Ancestors, Descendants, Children)
 importFrom(RColorBrewer, brewer.pal)
 importFrom(ParallelLogger, clusterApply)
 importFrom(parallel, makeCluster, clusterExport, stopCluster)
+importFrom("graphics", "arrows", "legend", "rect")
 
 S3method(print, fit.env)
 S3method(print, fit.bd)
