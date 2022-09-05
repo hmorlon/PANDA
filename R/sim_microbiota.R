@@ -1,5 +1,5 @@
 sim_microbiota <-
-function(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300, proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10, geo_signal=0, stochastic_map=NULL, path=getwd(), seed=1, nb_cores=1, ...){
+function(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300, proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10, geo_signal=0, stochastic_map=NULL, path=getwd(), seed=1, nb_cores=1, scale=TRUE, delta=0, figure=FALSE, ...){
   if(!exists("name")) stop(print("Please provide the name of the simulations"))
   if(!exists("simul")) {simul  <- c(rep(0,5),rep(1,5),rep(3,5),rep(5,5),rep(10,5),rep("indep",5))}
   if(!exists("name_index")) {name_index  <- sapply(1:length(simul), function(i) paste("S",i,sep=""))}
@@ -26,9 +26,9 @@ function(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300, proport
   
   host_tree <- ladderize(host_tree)
   
-  host_tree$edge.length <- host_tree$edge.length/sum(host_tree$edge.length) #host tree scaled with total branch length=1
+  if (scale==TRUE) {host_tree$edge.length <- host_tree$edge.length/sum(host_tree$edge.length)} #host tree scaled with total branch length=1
   write.tree(host_tree,file=paste("host_tree_",name,".tre",sep=""))
   host_tree <- read.tree(file=paste("host_tree_",name,".tre",sep=""))
   n <- Ntip(host_tree)
-  output <- mclapply(1:length(name_index),simulate_OTU_alignment,mc.cores=nb_cores,host_tree=host_tree,name=name,seed=seed,name_index=name_index,mu=mu,n=n,N=N,proportion_variant=proportion_variant,simul=simul,model=model,mean=mean,sd=sd,host_signal=host_signal,geo_signal=geo_signal,stochastic_map=stochastic_map,path=path)
+  output <- mclapply(1:length(name_index),simulate_OTU_alignment,mc.cores=nb_cores,host_tree=host_tree,name=name,seed=seed,name_index=name_index,mu=mu,n=n,N=N,proportion_variant=proportion_variant,simul=simul,model=model,mean=mean,sd=sd,host_signal=host_signal,geo_signal=geo_signal,stochastic_map=stochastic_map,path=path,delta=delta,figure=figure)
 }

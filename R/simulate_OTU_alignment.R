@@ -1,5 +1,5 @@
 simulate_OTU_alignment <-
-function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=getwd(),mean=0.5,sd=0.01,host_signal=10,geo_signal=0,stochastic_map=NULL,...){
+function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=getwd(),mean=0.5,sd=0.01,host_signal=10,geo_signal=0,stochastic_map=NULL,delta=0, figure=FALSE,...){
   if(!exists("path")) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
@@ -12,10 +12,22 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
     ksi <- 0
     indep_tree <- pbtree(n=n)
     indep_tree$tip.label <- sample(host_tree$tip.label)
-    indep_tree$edge.length <- indep_tree$edge.length/sum(indep_tree$edge.length)  #host tree scaled with total branch length=1
+    
+    indep_tree$edge.length <- indep_tree$edge.length/sum(indep_tree$edge.length)*sum(host_tree$edge.length)  #host tree scaled with total branch length=1
+    
     write.tree(indep_tree,file=paste("independent_tree_",name,"_",index,".tre",sep=""))
     tree <- host_tree <- indep_tree
   } else {ksi <- as.numeric(simul[iter])} # normal simulations
+  
+  # duplications
+  if (delta>0) {
+    output <- sim_duplications_tree(host_tree, delta)
+    tree <- host_tree <- output[[1]]
+    print(paste0("Number of duplication events: ", output[2]))
+    write.tree(host_tree,file=paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
+    tree <- host_tree <- read.tree(paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
+    n <- Ntip(host_tree)
+  }
   
   simulated_mu <- mu
   maxlen <- max(node.depth.edgelength(host_tree))
@@ -34,11 +46,11 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
     write.tree(tree,file=paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
     
     tree <- read.tree(file=paste("simulations/symbiont_tree_",name,"_",index,".tre",sep=""))
-    invisible(capture.output(plot_simulated_switches(n=n,host_tree=host_tree,name=name,index=index,switches=switches)))
+    if (figure==TRUE) {invisible(capture.output(plot_simulated_switches(n=n,host_tree=host_tree,name=name,index=index,switches=switches)))}
     
     switches[1,] <- as.character(switches[1,])
     switches[2,] <- as.character(switches[2,])
-    write.table(switches, paste("simulations/simulated_switches_",name,"_",index,".txt",sep=""),col.names=F,row.names = F) 
+    write.table(switches, paste("simulations/simulated_switches_",name,"_",index,".txt",sep=""),col.names=F,row.names = F, quote=F)
   }
   
   maxlen <- max(node.depth.edgelength(tree))
@@ -53,27 +65,32 @@ function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,mod
   diag(Q) <- - apply(Q,1,sum)
   Q <- -Q/Q[4,4]
   eigQ <- eigen(Q)
-  eig_val <- eigen(Q)$values
-  eig_vect <- eigen(Q)$vectors
+  eig_val <- eigQ$values
+  eig_val_mu <- mu*eig_val
+  eig_vect <- eigQ$vectors
   ivp <- solve(eig_vect)
-  nodes<-order(node.depth.edgelength(tree),decreasing=F)[-1]
+  nodes <- order(node.depth.edgelength(tree),decreasing=F)[-1]
   original_sequences <-  matrix(0,nrow=n,ncol=N)
+  list_nuc <- c("a","c","g","t")
+  list_possible_nuc <- rep(list_nuc,n)
+  
   for (nu in 1:N){
     if (runif(1,0,1)<proportion_variant){
       L <-  matrix(0,nrow=(2*n-1),ncol=4)
       L[n+1,sample(1:4,size=1)] <- 1
       for(i in nodes) {
-        v <- tree$edge[which(tree$edge[,2]==i),1]
-        t <- as.numeric(tree$edge.length[which(tree$edge[,2]==i)])
-        proba_nu <-  L[v,]%*%eigQ$vectors%*%diag(exp(t*mu*eigQ$values))%*%ivp
+        ind <- which(tree$edge[,2]==i)
+        v <- tree$edge[ind,1]
+        t <- tree$edge.length[ind]
+        proba_nu <-  L[v,]%*%eig_vect%*%diag(exp(t*eig_val_mu))%*%ivp
         L[i,sample(1:4,size=1,prob=proba_nu)] <- 1}
-      n_seq <- rep(c("a","c","g","t"),n)[as.logical(t(L[1:n,]))]
+      n_seq <- list_possible_nuc[as.logical(t(L[1:n,]))]
       original_sequences[,nu]<- t(t(n_seq))
-    } else {original_sequences[1:n,nu] <- sample(c("a","c","g","t"),size=1)}}
+    } else {original_sequences[1:n,nu] <- sample(list_nuc,size=1)}}
   row.names(original_sequences) <- tree$tip.label
   write.dna(original_sequences,paste("alignment_",name,"_",index,".fas",sep=""), format = "fasta",nbcol = -1,colsep="",colw=N)
   
-  ####  compute simulated likelihood 
+  ####  compute simulated likelihood
   variant_sequences <-  read.dna(paste("alignment_",name,"_",index,".fas",sep=""),format="fasta",as.character=T)
   rownames(variant_sequences) <- gsub(" ","",rownames(variant_sequences))
   for (missing in setdiff(tree$tip.label,rownames(variant_sequences))){tree <-drop.tip(tree,missing)}
