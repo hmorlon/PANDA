@@ -31,6 +31,6 @@ plot_fit_env <- function(fit.env, env_data, tot_time)
     dev.new()
     plot(-t, sapply(t,fit.env$f.lamb), type='l', xlab="time", ylab="net diversification rate", main="Fitted net diversification rate")
     dev.new()
-    plot(env_func(t), apply(t,fit.env$f.lamb), xlab="Environmental data", ylab="net diversification rate", main="Fitted net diversification rate")
+    plot(env_func(t), sapply(t,fit.env$f.lamb), xlab="Environmental data", ylab="net diversification rate", main="Fitted net diversification rate")
   }
 }
