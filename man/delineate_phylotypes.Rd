@@ -63,7 +63,7 @@ data(woodmouse)
 
 alignment <- as.character(woodmouse) # nucleotidic alignment 
 
-tree <- midpoint.root(nj(dist.dna(woodmouse, pairwise.deletion = T, model = "K80"))) # rooted neighbor-joining tree
+tree <- midpoint.root(nj(dist.dna(woodmouse, pairwise.deletion = TRUE, model = "K80"))) # rooted neighbor-joining tree
 
 pi_estimator(alignment)
 
