@@ -12,11 +12,10 @@ Mantel tests can be computed using quantified or binary networks, with the Jacca
 }
 
 \usage{
-phylosignal_sub_network(network, tree_A, tree_B,
-    method = "Jaccard_weighted", 
-    correlation = "Pearson", 
-    nperm = 1000, permutation="shuffle",
-    minimum=10, degree=F)
+phylosignal_sub_network(network, tree_A, tree_B = NULL, 
+method = "Jaccard_weighted", nperm = 1000, 
+correlation = "Pearson", minimum = 10, degree = FALSE, 
+permutation = "shuffle")
 }
 
 \arguments{
@@ -43,7 +42,7 @@ indicates which correlation (R) must be used in the Mantel test, among Pearson (
 a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation.
 }
 
-\item{permutations}{
+\item{permutation}{
 (optional) indicates which permutations must be performed to evaluate the significance of the Mantel correlation: either "shuffle" (by default - i.e. random shufflying of the distance matrix) or "nbpartners" (i.e. keeping constant the number of partners per species and shuffling at random their identity).
 }
 

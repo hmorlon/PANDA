@@ -1,5 +1,5 @@
-\name{mantel_test}
-\alias{mantel_test}
+\name{mantel_test_nbpartners}
+\alias{mantel_test_nbpartners}
 
 \title{
 Compute Mantel test

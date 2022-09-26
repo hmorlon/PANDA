@@ -10,8 +10,8 @@ This function computes a Mantel test between two dissimilarity matrices. The ava
 }
 
 \usage{
-mantel_test(formula = formula(data), data = sys.parent(), 
-nperm = 1000, correlation = "Pearson")
+mantel_test(formula = formula(data), data = sys.parent(),
+correlation = "Pearson", nperm = 1000)
 }
 
 \arguments{

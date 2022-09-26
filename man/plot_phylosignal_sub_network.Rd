@@ -11,8 +11,7 @@ This function plots the clade-specific phylogenetic signals in species interacti
 }
 
 \usage{
-plot_phylosignal_sub_network <- function(tree_A, results_sub_clades, network, legend=TRUE, show.tip.label=FALSE, where="bottomleft")
-
+plot_phylosignal_sub_network(tree_A, results_sub_clades, network, legend=TRUE, show.tip.label=FALSE, where="bottomleft")
 }
 
 \arguments{

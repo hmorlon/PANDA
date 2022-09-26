@@ -12,10 +12,9 @@ Mantel tests measuring the phylogenetic signal in species interactions can be co
 }
 
 \usage{
-phylosignal_network(network, tree_A, tree_B=NULL, 
+phylosignal_network(network, tree_A, tree_B = NULL, 
 method = "Jaccard_weighted", nperm = 10000, 
-correlation = "Pearson", permutation="shuffle",
-only_A = FALSE)
+correlation = "Pearson", only_A = FALSE, permutation = "shuffle")
 }
 
 \arguments{
@@ -46,7 +45,7 @@ Alternatively (not recommended), you can use the Phylogenetic Bipartite Linear M
 (optional) a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation. It only applies for the methods "Jaccard_weighted", "Bray-Curtis", "Jaccard_binary", "GUniFrac", "UniFrac_unweighted", or "degree".
 }
 
-\item{permutations}{
+\item{permutation}{
 (optional) indicates which permutations must be performed to evaluate the significance of the Mantel correlation: either "shuffle" (by default - i.e. random shufflying of the distance matrix) or "nbpartners" (i.e. keeping constant the number of partners per species and shuffling at random their identity).
 }
 
