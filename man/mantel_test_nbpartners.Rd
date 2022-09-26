@@ -52,7 +52,7 @@ a number of permutations to evaluate the significance of the correlation. By def
 }
 
 \references{
-Perez‐Lamarque, B., Maliet, O., Selosse, M-A., Martos, F., Morlon H. (in prep). Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks.
+Perez-Lamarque B, Maliet O, Pichon B, Selosse M-A, Martos F, Morlon H. 2022. Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks. bioRxiv, 2021.08.30.458192, ver. 6 peer- reviewed and recommended by Peer Community in Evolutionary Biology. https://doi.org/10.1101/2021.08 .30.458192
 
 Mantel, N. 1967. The detection of disease clustering and a generalized regression approach. Cancer Research 27:209-220.
 
