@@ -78,7 +78,8 @@ data(mycorrhizal_network)
 network <- mycorrhizal_network[[1]] # bipartite interaction matrix 
 tree_orchids <- mycorrhizal_network[[2]] # phylogenetic tree (phylo object)
 
-#mantel_test_nbpartners(network, tree_orchids, method="Jaccard_weighted", correlation="Pearson",  nperm = 1000)
+# mantel_test_nbpartners(network, tree_orchids, method="Jaccard_weighted", 
+# correlation="Pearson",  nperm = 1000)
       
 }
 

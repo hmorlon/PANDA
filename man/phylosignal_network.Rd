@@ -112,7 +112,8 @@ phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi,
 method = "GUniFrac", correlation = "Pearson", nperm = 10000) # measured for both guilds
 
 
-# Step 2: Phylogenetic signal in species interactions when accouting for the signal in the number of partners 
+# Step 2: Phylogenetic signal in species interactions when accouting 
+# for the signal in the number of partners 
 # Mantel test with permutations that keep constant the number of partners per species
 
 phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, 
