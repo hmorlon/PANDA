@@ -79,6 +79,8 @@
 data(Balaenopteridae)
 tot_time<-max(node.age(Balaenopteridae)$ages)
 
+\dontshow{test = FALSE}
+if(test){
 # Fit the pure birth model (no extinction) with exponential variation of the speciation rate
 # with time
 f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
@@ -96,4 +98,5 @@ colSums(prob)
 
 # Plot Diversity through time
 plot_prob_dtt(prob)
+}
 }

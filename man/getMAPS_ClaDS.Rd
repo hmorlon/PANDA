@@ -41,7 +41,8 @@ O. Maliet
 \examples{
 data("Caprimulgidae_ClaDS2")
 
-\donttest{
+\dontshow{test = FALSE}
+if(test){
 MAPS = getMAPS_ClaDS(Caprimulgidae_ClaDS2$sampler, thin = 1)
 
 print(paste0("sigma = ", MAPS[1], " ; alpha = ", 

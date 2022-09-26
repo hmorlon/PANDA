@@ -62,6 +62,10 @@ O. Maliet & B. Perez-Lamarque
 \examples{
 # run the model
 set.seed(1)
+
+\dontshow{test <- FALSE}
+if(test){
+
 mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 800,
                         D = 3, muP = 0.1 , muH = 0.1,
                         alphaP = 0.12,alphaH = 0.12,
@@ -108,6 +112,8 @@ net = build_network.BipartiteEvol(gen, phy1)
 
 trait.id = 1
 plot_net.BipartiteEvol(gen,phy1,trait.id, net,mod, nx = 10, spatial = FALSE)
+
+}
 
 }
 

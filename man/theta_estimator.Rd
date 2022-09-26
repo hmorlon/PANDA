@@ -41,8 +41,6 @@ Ana C. Afonso Silva & Benoît Perez-Lamarque}
 }
 \examples{
 
-library(RPANDA)
-
 data(woodmouse)
 
 alignment <- as.character(woodmouse) # nucleotidic alignment 

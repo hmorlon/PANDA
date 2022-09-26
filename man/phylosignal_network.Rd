@@ -100,6 +100,8 @@ network <- mycorrhizal_network[[1]] # interaction matrix
 tree_orchids <- mycorrhizal_network[[2]] # phylogenetic tree (phylo object)
 tree_fungi <- mycorrhizal_network[[3]] # phylogenetic tree (phylo object)
 
+\dontshow{test = FALSE}
+if(test){
 
 # Using Mantel tests: 
 
@@ -132,5 +134,6 @@ correlation = "Pearson", nperm = 10000) # for guild B
 
 # phylosignal_network(network, tree_A = tree_orchids, tree_B = tree_fungi, method = "PBLM") 
 
+}
 }
 

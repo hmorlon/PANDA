@@ -87,6 +87,9 @@ f.lamb <-function(t,y){y[1] * exp(y[2] * t)}
 f.mu<-function(t,y){0}
 lamb_par<-c(0.08, 0.01)
 mu_par<-c()
+
+\dontshow{test = FALSE}
+if(test){
 result <- fit_bd(Balaenopteridae,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=1,
                      expo.lamb = TRUE, fix.mu=TRUE)
                      
@@ -95,4 +98,5 @@ prob <- prob_dtt(result, tot_time, 1:tot_time, N0=9, type="crown")
 
 # Check that the sums of probabilities are equal to 1
 colSums(prob)
+}
 }

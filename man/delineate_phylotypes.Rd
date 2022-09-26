@@ -57,7 +57,6 @@ Watterson GA , On the number of segregating sites in genetical models without re
 \examples{
 
 library(phytools)
-library(RPANDA)
 
 data(woodmouse)
 
@@ -65,11 +64,7 @@ alignment <- as.character(woodmouse) # nucleotidic alignment
 
 tree <- midpoint.root(nj(dist.dna(woodmouse, pairwise.deletion = TRUE, model = "K80"))) # rooted neighbor-joining tree
 
-pi_estimator(alignment)
-
-theta_estimator(alignment)
-
-delineate_phylotypes(tree, thresh = 99, alignment, method = "pi")
+# delineate_phylotypes(tree, thresh = 99, alignment, method = "pi")
 
 }
 

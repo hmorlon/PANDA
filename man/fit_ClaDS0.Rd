@@ -59,9 +59,11 @@ O. Maliet
    \code{\link{getMAPS_ClaDS0}}, \code{\link{plot_ClaDS0_chains}}, \code{\link{fit_ClaDS}}
 }
 \examples{
-\dontrun{
 
 set.seed(1)
+
+\dontshow{test = FALSE}
+if(test){
 
 obj= sim_ClaDS( lambda_0=0.1,    
                 mu_0=0.5,      
@@ -91,5 +93,6 @@ MAPS = getMAPS_ClaDS0(tree, sampler, thin = 10)
 # plot the simulated (on the left) and inferred speciation rates (on the right)
 # on the same color scale
 plot_ClaDS_phylo(tree, speciation_rates, MAPS[-(1:3)])
-              
-}}
+     
+}         
+}
