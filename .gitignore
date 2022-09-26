@@ -11,3 +11,4 @@ src/RPANDA_init.o
 src/RPANDA.so
 src/permute.o
 src/fitness.o
+src/.DS_Store
