@@ -4,7 +4,7 @@
   options(show.error.messages=FALSE)
   res <- try((integrate(...)));
   options(show.error.messages=op)
-  if (class(res) == 'try-error')
+  if (inherits(res, "try-error"))
   {
     return(-Inf)
   }

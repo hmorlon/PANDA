@@ -4,7 +4,7 @@ prob_dtt<- function(fit.bd, tot_time, time, N0, l=N0, f = l/N0, m = seq(N0), met
   
   tryIntegrate <- function(...){
     res <- try(integrate(...));
-    if (class(res) == 'try-error'){
+    if (inherits(res, "try-error")){
       return(-Inf)
     }else{
       return(res$value)

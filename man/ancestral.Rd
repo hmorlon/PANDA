@@ -8,12 +8,15 @@ Estimation of traits ancestral states.
 Reconstruct the ancestral states at the root (and possibly for each nodes) of a phylogenetic tree from models fit obtained using the \code{fit_t_XX} functions.}
 \usage{
 
-ancestral(object)
+ancestral(object, ...)
   
 }
 \arguments{
   \item{object}{
 A model fit object obtained by the \code{fit_t_XX} class of functions.
+}
+\item{...}{
+Further arguments to be passed through (not used yet).
 }
 }
  
@@ -27,10 +30,10 @@ A model fit object obtained by the \code{fit_t_XX} class of functions.
   }
 
 \details{
-\code{ancestral} is an S3 method that reconstruct the ancestral states at the root and possibly for each nodes of a phylogenetic tree from the models fit obtained by the \code{fit_t_XX} class of functions (e.g., \code{fit_t_pl}, \code{fit_t_comp} and \code{fit_t_env}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
+\code{ancestral} reconstructs the ancestral states at the root and possibly for each nodes of a phylogenetic tree from the models fit obtained by the \code{fit_t_XX} class of functions (e.g., \code{fit_t_pl}, \code{fit_t_comp} and \code{fit_t_env}). Ancestral states are estimated using generalized least squares (GLS; Martins & Hansen 1997, Cunningham et al. 1998 ).}
 
 \note{
-	The function is used internally in \code{phyl.pca_pl}.}
+	The function is used internally in \code{phyl.pca_pl} (Clavel et al. 2019).}
 \references{
 
 Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for high-dimensional phylogenetic comparative methods and an application to new-world monkeys brain evolution. Syst. Biol. 68: 93-116.

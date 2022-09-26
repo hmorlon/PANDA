@@ -1,6 +1,6 @@
 Package: RPANDA
-Version: 2.0
-Date: 2021-11-07
+Version: 2.1
+Date: 2022-07-07
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
@@ -22,7 +22,7 @@ Imports:
     grDevices,
     igraph,
     Matrix,
-    mvMORPH (>= 1.1.0),
+    mvMORPH (>= 1.1.6),
     parallel,
     phytools,
     pracma,

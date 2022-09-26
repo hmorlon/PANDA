@@ -9,7 +9,7 @@ if(is.null(regime.map)){
 	stop("provide a regime.map (see ?sim_t_tworegime())")
 } else {
 	class.object<-try(CreateClassObject(regime.map))
-	if(class(class.object)=="try-error"){
+	if(inherits(class.object, "try-error")){
 		class.object<-CreateClassObject(regime.map,rnd=6)
 		}
 				

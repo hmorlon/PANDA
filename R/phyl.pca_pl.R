@@ -8,7 +8,7 @@
 ################################################################################
 
 # GLS estimation of ancestral states returned by the PL functions
-ancestral.fit_pl.rpanda <- function(object){
+ancestral.fit_pl.rpanda <- function(object, ...){
 
   # extract objects
   if(!inherits(object,"fit_pl.rpanda")) stop("only works with \"fit_pl.rpanda\" class objects. See ?fit_t_pl")

@@ -75,11 +75,10 @@ Note: if including known measurement error, the model fit incorporates this know
 }
 
 \examples{
-data(Cetacea_clades)
-
-
+\dontshow{test=FALSE}
 \donttest{
-
+if(test){
+data(Cetacea_clades)
 data<-sim_t_tworegime(Cetacea_clades,pars=c(sig2=0.01,r1=-0.01,r2=-0.02),
 	root.value=0,Nsegments=1000,model="EB")
 error<-rep(0.05,length(Cetacea_clades$tip.label))
@@ -94,6 +93,7 @@ EB1.fit<-fit_t_standard(Cetacea_clades,data,model="EB",error,two.regime=FALSE)
 BM2.fit<-fit_t_standard(Cetacea_clades,data,model="BM",error,two.regime=TRUE)
 OU2.fit<-fit_t_standard(Cetacea_clades,data,model="OU",error,two.regime=TRUE)
 EB2.fit<-fit_t_standard(Cetacea_clades,data,model="EB",error,two.regime=TRUE)
+  }
 }
 
 }

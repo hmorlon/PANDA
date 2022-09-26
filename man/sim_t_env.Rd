@@ -68,6 +68,8 @@ Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold clima
 \examples{
 
 \donttest{
+\dontshow{test = FALSE}
+if(test){
 data(Cetacea)
 data(InfTemp)
 
@@ -105,6 +107,7 @@ trait3 <- sim_t_env(Cetacea, param=param, env_data=env_data, model=my_fun,
                      root.value=0, step=0.001, plot=TRUE)
 fit3 <- fit_t_env(Cetacea, trait3, env_data=InfTemp, model=my_fun, param=c(0.1,0))
 fit3
+}
 }
 
   }

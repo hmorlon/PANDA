@@ -8,10 +8,10 @@
 ################################################################################
 
 # S3 generic method "ancestral" for reconstructing or retrieving ancestral states (see phyl.pca_pl.R) # should I use "predict" instead?
-ancestral <- function(object) UseMethod("ancestral")
+#ancestral <- function(object) UseMethod("ancestral")
 
 # S3 for the fit_t_env class
-ancestral.fit_t.env <- function(object){
+ancestral.fit_t.env <- function(object, ...){
     
     # extract objects
     if(!inherits(object,"fit_t.env")) stop("only works with \"fit_t.env\" class objects. See ?fit_t_env")
@@ -28,7 +28,7 @@ ancestral.fit_t.env <- function(object){
 
 # S3 for the fit_t_comp class?
 # TODO
-ancestral.fit_t.comp <- function(object){
+ancestral.fit_t.comp <- function(object, ...){
     
     # extract objects
     if(!inherits(object,"fit_t.comp")) stop("only works with \"fit_t.comp\" class objects. See ?fit_t_comp")
