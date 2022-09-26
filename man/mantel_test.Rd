@@ -77,7 +77,7 @@ tree_orchids <- mycorrhizal_network[[2]] # phylogenetic tree (phylo object)
 
 network <- network[,tree_orchids$tip.label]
 
-ecological_distances <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=F))
+ecological_distances <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=FALSE))
     
 phylogenetic_distances <- cophenetic.phylo(tree_orchids)
 
