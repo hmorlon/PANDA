@@ -38,6 +38,8 @@ Olivier Billaud <olivier.billaud@agroparistech.fr>
 Odile Maliet <maliet@biologie.ens.fr>
 
 Leandro Aristide <aristide@biologie.ens.fr>
+
+Benoît Perez-Lamarque <benoit.perez@ens.psl.eu>
 }
 
 \references{
@@ -78,6 +80,11 @@ Billaud, O., Moen, D. S., Parsons, T. L., Morlon, H. (2019) Estimating Diversity
 Lewitus, E., Aristide, L., Morlon, H. (2019) Characterizing and Comparing Phylogenetic Trait Data from Their Normalized Laplacian Spectrum Systematic Biology 69: 234–248
 
 Maliet, O., Loeuille, N., Morlon, H. (2020) An individual-based model for the eco-evolutionary emergence of bipartite interaction networks Ecology Letters 
+
+Perez-Lamarque, B., Öpik, M., Maliet, O., Afonso Silva, A.C., Selosse, M-A., Martos, F., Morlon, H. (2022), Analysing diversification dynamics using barcoding data: The case of an obligate mycorrhizal symbiont, Molecular Ecology, 31:3496–512.
+
+Perez-Lamarque, B., Maliet, O., Pichon, B., Selosse, M-A., Martos, F., Morlon, H. (2022) Do closely related species interact with similar partners? Testing for phylogenetic signal in bipartite interaction networks. bioRxiv, 2021.08.30.458192, ver. 6 peer-reviewed and recommended by Peer Community in Evolutionary Biology.
+
 }
 %\keyword{ phylogeny }
 
