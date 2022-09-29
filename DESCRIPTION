@@ -47,7 +47,7 @@ Author: Hélène Morlon [aut, cre, cph],
    	Olivier Billaud [aut, cph],
 	Odile Maliet [aut, cph],
 	Leandro Aristide [aut, cph],
-	Benoit Perez Lamarque [aut, cph]
+	Benoit Perez-Lamarque [aut, cph]
 Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email = "helene.morlon@bio.ens.psl.eu"),
 	person("Eric", "Lewitus", role = c("aut", "cph")),
 	person("Fabien", "Condamine", role = c("aut", "cph")),
@@ -57,7 +57,7 @@ Authors@R: c(person("Hélène", "Morlon", role = c("aut", "cre", "cph"), email =
   	person("Olivier", "Billaud", role = c("aut", "cph")),
 	person("Odile", "Maliet", role = c("aut", "cph")),
 	person("Leandro", "Aristide", role = c("aut", "cph")),
-	person("Benoit", "Perez Lamarque", role = c("aut", "cph")))
+	person("Benoit", "Perez-Lamarque", role = c("aut", "cph")))
 Maintainer: Hélène Morlon <helene.morlon@bio.ens.psl.eu>
 Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Morlon et al. (2010) <DOI:10.1371/journal.pbio.1000493>, Morlon et al. (2011)
@@ -69,7 +69,7 @@ Description: Implements macroevolutionary analyses on phylogenetic trees. See
     Drury et al. (2018) <DOI:10.1371/journal.pbio.2003563>, Clavel et al. (2019) <DOI:10.1093/sysbio/syy045>, Maliet et al. (2019) <DOI:10.1038/s41559-019-0908-0>,
     Billaud et al. (2019) <DOI:10.1093/sysbio/syz057>, Lewitus et al. (2019) <DOI:10.1093/sysbio/syz061>,
     Aristide & Morlon (2019) <DOI:10.1111/ele.13385>, Maliet et al. (2020) <DOI:10.1111/ele.13592>, Drury et al. (2021) <DOI:10.1371/journal.pbio.3001270>,
-    Perez Lamarque & Morlon (2022) <DOI:10.1111/mec.16478> and Perez Lamarque et al. (2022) <DOI:10.1101/2021.08.30.458192>.
+    Perez-Lamarque & Morlon (2022) <DOI:10.1111/mec.16478> and Perez-Lamarque et al. (2022) <DOI:10.1101/2021.08.30.458192>.
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
 Repository: CRAN
