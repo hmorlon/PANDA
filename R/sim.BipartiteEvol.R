@@ -458,166 +458,250 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=T){
 # if NULL it is computed within the function
 
 
-define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,distanceP=NULL, verbose=T){
+define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,distanceP=NULL, verbose=T, monophyly=TRUE, seed=NULL){
   
-  D=length(genealogy$P$x)       # dimention of trait space
-  
-  # auxiliary function to define the species for one type
-  aux=function(gen,distance){
-    N=length(gen$tip.label)    # number of individuals
+  if (monophyly==TRUE){
     
-    # first we define the genetic types of the individuals
+    D=length(genealogy$P$x)       # dimension of trait space
     
-    if(threshold==1){
-      type=rep(1,N)             
-      new.type=2
-      for(i in 1:nrow(gen$edge)){
-        if(gen$nMut[i]>0){
-          if(gen$edge[i,2]<=N){
-            type[gen$tip.label[gen$edge[i,2]]]=new.type
-            new.type=new.type+1
-          }else{
-            type[as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)]=new.type}
-          new.type=new.type+1
-        }
-      }
+    # auxiliary function to define the species for one type
+    aux = function(gen,distance){
+      N=length(gen$tip.label)    # number of individuals
       
-    }else{
+      # first we define the genetic types of the individuals
       
-      if(is.null(distance)){
-        
-        # we compute the distance matrix if it is not given as an argument
-        distance=matrix(0,nrow=N,ncol=N)
+      if(threshold==1){
+        type=rep(1,N)             
+        new.type=2
         for(i in 1:nrow(gen$edge)){
           if(gen$nMut[i]>0){
-            #add the number of mutation between the individuals separated by this edge
-            if (verbose) cat("\r",i,"\r")
             if(gen$edge[i,2]<=N){
-              tip=as.integer(gen$tip.label[gen$edge[i,2]])
-              distance[tip,(1:N)[-tip]]=distance[tip,(1:N)[-tip]]+gen$nMut[i]
-              distance[(1:N)[-tip],tip]=distance[(1:N)[-tip],tip]+gen$nMut[i]
+              type[gen$tip.label[gen$edge[i,2]]]=new.type
+              new.type=new.type+1
             }else{
-              tip=as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)
-              distance[tip,(1:N)[-tip]]=distance[tip,(1:N)[-tip]]+gen$nMut[i]
-              distance[(1:N)[-tip],tip]=distance[(1:N)[-tip],tip]+gen$nMut[i]
-            }
+              type[as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)]=new.type}
+            new.type=new.type+1
           }
         }
-        distance=distance[as.integer(gen$tip.label),as.integer(gen$tip.label)]
-      }
-      
-      # we use the distance matrix to define the genetic type of individuals
-      phylo=gen
-      phylo$edge.length=phylo$nMut
-      type=1:N
-      for(i in 1:N){
-        ind=((1:i)[distance[i,1:i]<threshold])[1]
-        type[phylo$tip.label[i]]=type[phylo$tip.label[ind]]
-        if (verbose) cat("\r",i,"\r")
-      }
-    }
-    
-    # species are then defined as monophyletic types
-    species=rep(1,N)        # the species of each tip
-    newSpecies=2
-    nextNode=N+1
-    
-    # test of the tips descendig from a particular node _ main loop
-    while(length(nextNode)>0){
-      i=nextNode[1]                                       # candidate node
-      nextNode=nextNode[-1]                               # update candidate nodes vector
-      
-      a=extract.clade(gen,i)                              # subtree with root i
-      ty=as.integer(gen$tip.label)
-      ty=ty[(!(ty %in% as.integer(a$tip.label)))]
-      ty=type[ty]                                         # type of tips not in a
-      
-      if(length(intersect(type[as.integer(a$tip.label)],ty))==0){
-        n=length(a$tip.label)                             # number of tips in the subtree
-        offspring=gen$edge[gen$edge[,1]==i,2]             # offspring nodes of i in the main tree
-        offspringSubTree=a$edge[a$edge[,1]==(n+1),2]      # offspring node of i in the subtree
+      }else{ 
         
-        if(length(offspringSubTree)>1){
-
-          for(j in 1:(length(offspringSubTree))){
-            
-            if(offspringSubTree[j]<=n){
-              # ie offspringSubTree[j] is a tip
-              
-              ty=as.integer(a$tip.label)
-              ty=ty[(!(ty %in% as.integer(a$tip.label[offspringSubTree[j]])))]
-              ty=type[ty]                                  # type of tips in a that are not offspring[j]
-              if(!(type[as.integer(a$tip.label[offspringSubTree[j]])] %in% ty)){
-                # offspringSubTree[j] is a species
-                species[as.integer(a$tip.label[offspringSubTree[j]])]=newSpecies
-                newSpecies=newSpecies+1
-              }
-              
-            }else{
-              # ie offspringSubTree[j] is an internal node
-              a1=extract.clade(a,offspringSubTree[j])
-              ty=as.integer(a$tip.label)                  
-              ty=ty[(!(ty %in% as.integer(a1$tip.label)))]
-              ty=type[ty]                                # type of tips in a but not in a1
-              if(length(intersect(type[as.integer(a1$tip.label)],ty))==0){
-                # the tips in a1 are in a different species than the other tips in a
-                nextNode=c(nextNode,offspring[j])        # new candidate node
-                species[as.integer(a1$tip.label)]=newSpecies
-                newSpecies=newSpecies+1
+        if(is.null(distance)){
+          
+          # we compute the distance matrix if it is not given as an argument
+          distance=matrix(0,nrow=N,ncol=N)
+          for(i in 1:nrow(gen$edge)){
+            if(gen$nMut[i]>0){
+              #add the number of mutation between the individuals separated by this edge
+              if (verbose) cat("\r",i,"\r")
+              if(gen$edge[i,2]<=N){
+                tip=as.integer(gen$tip.label[gen$edge[i,2]])
+                distance[tip,(1:N)[-tip]]=distance[tip,(1:N)[-tip]]+gen$nMut[i]
+                distance[(1:N)[-tip],tip]=distance[(1:N)[-tip],tip]+gen$nMut[i]
+              }else{
+                tip=as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)
+                distance[tip,(1:N)[-tip]]=distance[tip,(1:N)[-tip]]+gen$nMut[i]
+                distance[(1:N)[-tip],tip]=distance[(1:N)[-tip],tip]+gen$nMut[i]
               }
             }
           }
-        }else{print("error : one node has only one offspring... ???")}
-      }else{print(paste("error : this node should not be in next node :",i))}
-    }   # end of main loop
-    
-    # rename the species so that there is no gap in the names
-    M=rep(0,max(species))
-    name=1
-    for(i in 1:length(species)){
-      if(M[species[i]]==0){
-        M[species[i]]=name
-        name=name+1
+          distance=distance[as.integer(gen$tip.label),as.integer(gen$tip.label)]
+        }
+        
+        # we use the distance matrix to define the genetic type of individuals
+        phylo=gen
+        phylo$edge.length=phylo$nMut
+        type=1:N
+        for(i in 1:N){
+          ind=((1:i)[distance[i,1:i]<threshold])[1]
+          type[phylo$tip.label[i]]=type[phylo$tip.label[ind]]
+          if (verbose) cat("\r",i,"\r")
+        }
       }
-      species[i]=M[species[i]]
+      
+      # species are then defined as monophyletic types
+      species=rep(1,N)        # the species of each tip
+      newSpecies=2
+      nextNode=N+1
+      
+      # test of the tips descendig from a particular node _ main loop
+      while(length(nextNode)>0){
+        i=nextNode[1]                                       # candidate node
+        nextNode=nextNode[-1]                               # update candidate nodes vector
+        
+        a=extract.clade(gen,i)                              # subtree with root i
+        ty=as.integer(gen$tip.label)
+        ty=ty[which(!(ty %in% as.integer(a$tip.label)))]
+        ty=type[ty]                                         # type of tips not in a
+        
+        if(length(intersect(type[as.integer(a$tip.label)],ty))==0){
+          # seeing how nextNode is built, this should always be the case... Test needed
+          n=length(a$tip.label)                             # number of tips in the subtree
+          offspring=gen$edge[gen$edge[,1]==i,2]             # offspring nodes of i in the main tree
+          offspringSubTree=a$edge[a$edge[,1]==(n+1),2]      # offspring node of i in the subtree
+          
+          if(length(offspringSubTree)>1){
+            
+            for(j in 1:(length(offspringSubTree))){
+              
+              if(offspringSubTree[j]<=n){
+                # ie offspringSubTree[j] is a tip
+                
+                ty=as.integer(a$tip.label)
+                ty=ty[which(!(ty %in% as.integer(a$tip.label[offspringSubTree[j]])))]
+                ty=type[ty]                                  # type of tips in a that are not offspring[j]
+                if(!(type[as.integer(a$tip.label[offspringSubTree[j]])] %in% ty)){
+                  # offspringSubTree[j] is a species
+                  species[as.integer(a$tip.label[offspringSubTree[j]])]=newSpecies
+                  newSpecies=newSpecies+1
+                }
+                
+              }else{
+                # ie offspringSubTree[j] is an internal node
+                a1=extract.clade(a,offspringSubTree[j])
+                ty=as.integer(a$tip.label)                  
+                ty=ty[which(!(ty %in% as.integer(a1$tip.label)))]
+                ty=type[ty]                                # type of tips in a but not in a1
+                if(length(intersect(type[as.integer(a1$tip.label)],ty))==0){
+                  # the tips in a1 are in a different species than the other tips in a
+                  nextNode=c(nextNode,offspring[j])        # new candidate node
+                  species[as.integer(a1$tip.label)]=newSpecies
+                  newSpecies=newSpecies+1
+                }
+              }
+            }
+          }else{print("error : one node has only one offspring... ???")}
+        }else{print(paste("error : this node should not be in next node :",i))}
+      }   # end of main loop
+      
+      # rename the species so that there is no gap in the names
+      M=rep(0,max(species))
+      name=1
+      for(i in 1:length(species)){
+        if(M[species[i]]==0){
+          M[species[i]]=name
+          name=name+1
+        }
+        species[i]=M[species[i]]
+      }
+      
+      return(species)
     }
     
-    return(species)
+    # auxiliary function to build the species tree from the genealogy and the species of each tip
+    make.phylo=function(gen,spec){
+      
+      N=length(gen$tip.label)                                                                             # number of individuals
+      abundance=sapply(unique(spec),function(i){sum(spec==i)})                                            # abundance of each species
+      mean.trait=sapply(unique(spec),function(i){sapply(1:D,function(e){mean(gen$x.tip[e,spec[gen$tip.label]==i])})})    # mean trait of each species
+      if(D == 1){mean.trait = matrix(mean.trait,nrow = D)}
+      
+      if(max(spec)==1){return(list(abundance=abundance,mean.trait=mean.trait))}
+      
+      keep.tip=c()                                                                                        # which tips will be in the species tree
+      keep.tip=sapply(unique(spec),function(i){vect=(1:N)[spec[gen$tip.label]==i];
+      if(length(vect)==1){return(vect)};
+      sample(vect,1)})
+      
+      tree=prune.with.traits(gen,gen$tip.label[-keep.tip],gen$x)               # suppress the other tips
+      tree$abundance=abundance[spec[as.integer(tree$tree$tip.label)]]
+      tree$mean.trait=matrix(mean.trait[,spec[as.integer(tree$tree$tip.label)]], nrow = D, byrow = F)
+      tree$tree$tip.label=spec[as.integer(tree$tree$tip.label)]
+      return(tree)
+    }
+    
+    P=aux(genealogy$P,distanceP)
+    H=aux(genealogy$H,distanceH)
+    Pphylo=make.phylo(genealogy$P,P)
+    Hphylo=make.phylo(genealogy$H,H)
+    
+  } else {   # Monophyly == False
+    
+    D=length(genealogy$P$x)       # dimention of trait space
+    
+    # auxiliary function to define the species for one type
+    aux = function(gen,distance){
+      N=length(gen$tip.label)    # number of individuals
+      
+      # first we define the genetic types of the individuals
+      
+      if(threshold!=1){
+        print("Threshold set to 1 when monophyly==FALSE")
+        threshold <- 1}
+      
+      
+      if(threshold==1){
+        type=rep(1,N)             
+        new.type=2
+        for(i in 1:nrow(gen$edge)){
+          if(gen$nMut[i]>0){
+            if(gen$edge[i,2]<=N){
+              type[gen$tip.label[gen$edge[i,2]]]=new.type
+              new.type=new.type+1
+            }else{
+              type[as.integer(extract.clade(gen,gen$edge[i,2])$tip.label)]=new.type}
+            new.type=new.type+1
+          }
+        }
+      }
+      
+      # rename the species (=type) so that there is no gap in the names
+      M=rep(0,max(type))
+      name=1
+      for(i in 1:length(type)){
+        if(M[type[i]]==0){
+          M[type[i]]=name
+          name=name+1
+        }
+        type[i]=M[type[i]]
+      }
+      
+      return(type)
+    }
+    
+    # auxiliary function to build the species tree from the genealogy and the species of each tip
+    make.phylo=function(gen,spec){
+      
+      N=length(gen$tip.label)  
+      list_species <- unique(spec)
+      unique_type <- c()
+      pruned_gen <- gen
+      pruned_gen$tip.label <- as.character(pruned_gen$tip.label)
+      pruned_gen <- multi2di(pruned_gen)
+      
+      if (!is.null(seed)) {
+        set.seed(seed)
+        sampled_tips <- sample(1:N)} else {sampled_tips <- 1:N}
+      
+      for (i in sampled_tips){
+        if (spec[i] %in% unique_type){
+          pruned_gen <- drop.tip(pruned_gen,tip=as.character(i), trim.internal = TRUE)
+        }else{unique_type <- c(unique_type, spec[i])}
+      }
+      
+      pruned_gen$tip.label <- spec[as.numeric(pruned_gen$tip.label)]
+      
+      abundance=sapply(unique(spec),function(i){sum(spec==i)})   # abundance of each species
+      mean.trait=sapply(unique(spec),function(i){sapply(1:D,function(e){mean(gen$x.tip[e,spec[gen$tip.label]==i])})})    # mean trait of each species
+      if(D == 1){mean.trait = matrix(mean.trait,nrow = D)}
+      if(max(spec)==1){return(list(abundance=abundance,mean.trait=mean.trait))}
+      
+      
+      tree=list(tree=pruned_gen) 
+      tree$abundance=abundance[tree$tree$tip.label]
+      tree$mean.trait=matrix(mean.trait[,tree$tree$tip.label], nrow = D, byrow = F)
+      # tree$mean.trait and tree$abundance order like tree$tree$tip.label
+      return(tree)
+    }
+    
+    P=aux(genealogy$P,distanceP)
+    H=aux(genealogy$H,distanceH)
+    Pphylo=make.phylo(genealogy$P,P)
+    Hphylo=make.phylo(genealogy$H,H)
+    
   }
   
-  # auxiliary function to build the species tree from the genealogy and the species of each tip
-  make.phylo=function(gen,spec){
-    
-    N=length(gen$tip.label)                                                                             # number of individuals
-    abundance=sapply(unique(spec),function(i){sum(spec==i)})                                            # abundance of each species
-    mean.trait=sapply(unique(spec),function(i){sapply(1:D,function(e){mean(gen$x.tip[e,spec[gen$tip.label]==i])})})    # mean trait of each species
-    if(D == 1){mean.trait = matrix(mean.trait,nrow = D)}
-    
-    if(max(spec)==1){return(list(abundance=abundance,mean.trait=mean.trait))}
-    
-    keep.tip=c()                                                                                        #  tips will be in the species tree
-    keep.tip=sapply(unique(spec),function(i){vect=(1:N)[spec[gen$tip.label]==i];
-    if(length(vect)==1){return(vect)};
-    sample(vect,1)})
-    
-    tree=prune.with.traits(gen,gen$tip.label[-keep.tip],gen$x)               # supress the other tips
-    tree$abundance=abundance[spec[as.integer(tree$tree$tip.label)]]
-    tree$mean.trait=matrix(mean.trait[,spec[as.integer(tree$tree$tip.label)]], nrow = D, byrow = F)
-    tree$tree$tip.label=spec[as.integer(tree$tree$tip.label)]
-    return(tree)
-  }
-  
-  P=aux(genealogy$P,distanceP)
-  if(verbose) cat(".")
-  H=aux(genealogy$H,distanceH)
-  if(verbose) cat(".")
-  Pphylo=make.phylo(genealogy$P,P)
-  if(verbose) cat(".")
-  Hphylo=make.phylo(genealogy$H,H)
-  if(verbose) cat(".")
   return(list(P=P,H=H,Pphylo=Pphylo,Hphylo=Hphylo))
 }
-
 
 
 ######## Build the network ##################

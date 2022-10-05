@@ -36,6 +36,9 @@ O. Maliet
 \code{\link{sim.BipartiteEvol}}
 }
 \examples{
+
+\dontshow{test = FALSE}
+if(test){
 # run the model
 set.seed(1)
 mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 800,
@@ -85,4 +88,5 @@ net = build_network.BipartiteEvol(gen, phy1)
 trait.id = 1
 plot_net.BipartiteEvol(gen,phy1,trait.id, net,mod, nx = 10, spatial = FALSE)
 
+}
 }

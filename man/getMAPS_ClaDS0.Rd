@@ -45,6 +45,8 @@ O. Maliet
 \examples{
 set.seed(1)
 
+\dontshow{test = FALSE}
+if(test){
 obj= sim_ClaDS( lambda_0=0.1,    
                 mu_0=0.5,      
                 sigma_lamb=0.7,         
@@ -68,4 +70,5 @@ MAPS = getMAPS_ClaDS0(ClaDS0_example$tree,
 plot_ClaDS_phylo(ClaDS0_example$tree, 
           ClaDS0_example$speciation_rates, 
           MAPS[-(1:3)])
+}
 }

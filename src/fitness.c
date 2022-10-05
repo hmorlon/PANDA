@@ -1,9 +1,9 @@
-// C functions Odile
 #include <R.h>
 #include <Rinternals.h>
 #include <Rdefines.h>
 
 SEXP fitnessFunction(SEXP X, SEXP x, SEXP r, SEXP alpha, SEXP Ncol, SEXP D, SEXP dSpace, SEXP Xs, SEXP Ys, SEXP I){
+    
     int n, i, j, d, pos;
     
     n=INTEGER(Ncol)[0];
@@ -76,3 +76,4 @@ SEXP fitnessFunction(SEXP X, SEXP x, SEXP r, SEXP alpha, SEXP Ncol, SEXP D, SEXP
     return fitness;
     
 }
+

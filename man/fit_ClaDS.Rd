@@ -103,7 +103,9 @@ O. Maliet
 \code{\link{fit_ClaDS0}}, \code{\link{plot_ClaDS_chains}}.
 }
 \examples{
-\dontrun{
+
+\dontshow{test = FALSE}
+if(test){
 data("Caprimulgidae")
 
 sample_fraction = 0.61

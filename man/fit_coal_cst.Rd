@@ -76,6 +76,10 @@ Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett
 
 \examples{
 data(Cetacea)
+
+\dontshow{test <- FALSE}
+if(test){
 result <- fit_coal_cst(Cetacea, tau0=1.e-3, gamma=-1, cst.rate=FALSE, N0=89)
 print(result)
+}
 }

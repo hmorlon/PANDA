@@ -17,6 +17,6 @@ Morlon, H., Parsons, T.L., Plotkin, J.B. (2011) Reconciling molecular phylogenie
 \examples{
 data(Phocoenidae)
 print(Phocoenidae)
-plot(Phocoenidae)
+#plot(Phocoenidae)
 }
 \keyword{datasets}

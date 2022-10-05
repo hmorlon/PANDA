@@ -4,6 +4,10 @@
 #include <R_ext/Rdynload.h>
 
 
+/* .C calls */
+extern void permute(void *, void *, void *, void *, void *, void *, void *, void *);
+extern void permuteKendall(void *, void *, void *, void *, void *, void *, void *, void *);
+
 /* .Call calls */
 extern SEXP relToAbs(SEXP lambda, SEXP parents, SEXP length);
 extern SEXP relToAbsSum(SEXP lambda, SEXP parents, SEXP length);
@@ -14,6 +18,12 @@ extern SEXP fitnessFunction(SEXP X, SEXP x, SEXP r, SEXP alpha, SEXP Ncol, SEXP 
 extern SEXP C_panda_covar_ou_fixed(SEXP A, SEXP alpha, SEXP sigma);
 extern SEXP C_panda_covar_ou_random(SEXP A, SEXP alpha, SEXP sigma);
 extern SEXP C_panda_weights (SEXP nterm, SEXP epochs, SEXP lambda, SEXP S, SEXP S1, SEXP beta, SEXP root);
+
+static const R_CMethodDef CEntries[] = {
+	{"permute",				(DL_FUNC) &permute,     		8},
+	{"permuteKendall",    	(DL_FUNC) &permuteKendall,     	8},
+    {NULL, NULL, 0}
+};
 
 static const R_CallMethodDef CallEntries[] = {
     {"relToAbs",                    (DL_FUNC) &relToAbs,                     3},
@@ -30,6 +40,6 @@ static const R_CallMethodDef CallEntries[] = {
 
 void R_init_RPANDA(DllInfo *dll)
 {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

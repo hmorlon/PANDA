@@ -93,6 +93,9 @@ m = 20
 
 pars <- c(lambda1, tau0, beta, mu0, mubg,mui0, muibg, alpha1, alpha2, sig2, m)
 
+\dontshow{test = FALSE}
+if(test){
+
 #1000 steps, unbounded
 res <- sim_MCBD(pars, age.max=10, step.size=0.01) 
 
@@ -104,6 +107,8 @@ pars <- c(lambda1, tau0, beta, mu0, mubg, mui0, muibg, alpha1, alpha2, sig2=0, m
 res <- sim_MCBD(pars, age.max=10)
 
 plot(res$gsp_extant$tree)
+
+}
 
 }
 

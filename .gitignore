@@ -2,3 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
+man/.DS_Store
+src/C_panda-covar-ou.o
+src/diversif_lognormal.o
+tests/.DS_Store
+src/symbols.rds
+src/RPANDA_init.o
+src/RPANDA.so
+src/permute.o
+src/fitness.o
+src/.DS_Store

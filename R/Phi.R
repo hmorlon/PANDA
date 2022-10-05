@@ -1,6 +1,6 @@
 .Phi <- function(t,f.lamb,f.mu,f,cst.lamb=FALSE,cst.mu=FALSE,expo.lamb=FALSE,expo.mu=FALSE,dt=0)
 {
-
+  
   if ((cst.lamb==TRUE) & (cst.mu==TRUE))
   {
     lamb <- f.lamb(0)
@@ -9,7 +9,7 @@
     res <- 1-r*exp(r*t)/(r/f+lamb*(exp(r*t)-1))
     return(res)
   }
-
+  
   if ((cst.lamb==TRUE) & (expo.mu==TRUE))
   {
     lamb0 <- f.lamb(0)
@@ -23,7 +23,7 @@
     res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
     return(res)
   }
-
+  
   if ((expo.lamb==TRUE) & (cst.mu==TRUE))
   {
     lamb0 <- f.lamb(0)
@@ -37,7 +37,7 @@
     res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
     return(res)
   }
-
+  
   if ((expo.lamb==TRUE) & (expo.mu==TRUE))
   {
     lamb0 <- f.lamb(0)
@@ -52,7 +52,7 @@
     res <- 1-exp(r.int(0,t))/(1/f+r.int.int(0,t))
     return(res)
   }
-
+  
   else
   {
     if (dt==0)

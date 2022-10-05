@@ -50,6 +50,9 @@ O. Maliet
 \examples{
 # run the model
 set.seed(1)
+
+\dontshow{test = FALSE}
+if(test){
 mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 1000,
                         D = 3, muP = 0.1 , muH = 0.1,
                         alphaP = 0.12,alphaH = 0.12,
@@ -65,4 +68,5 @@ phy1 = define_species.BipartiteEvol(gen,threshold=1)
 
 #plot the result
 plot_div.BipartiteEvol(gen,phy1, 1)
+}
 }
