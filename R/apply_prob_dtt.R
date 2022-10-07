@@ -217,9 +217,9 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     names(subclades_fit.bd) <- names(subclades_trees) <- comb.sub
     
     # can be done without subclades trees
-    subclades_tot_times <- sapply(subclades_trees, function(x) max(node.age(x)$ages))
+    subclades_tot_times <- sapply(subclades_trees, function(x) max(branching.times(x)))
     if(backbone.option == "stem.shift"){
-      subclades_tot_times <- sapply(subclades_trees, function(x) max(node.age(x)$ages)+max(x$root.edge))
+      subclades_tot_times <- sapply(subclades_trees, function(x) max(branching.times(x))+max(x$root.edge))
       type <- "stem"
     }
     
