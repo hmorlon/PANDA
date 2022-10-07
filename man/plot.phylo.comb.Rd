@@ -29,7 +29,7 @@ plot.phylo.comb(phylo, data, sampling.fractions, shift.res = NULL,
     the output resulting from shift.estimates or NULL (default). This latter case allows to represent combinations only from the output of \code{\link{get.comb.shift}} by specifying the combination (see argument combi).
   }
   \item{combi}{
-    character or numeric. If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison (shift.res$total).
+    character or numeric. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison (shift.res$total). If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. This latter manner to specify combination allows to visualize a combination of shifts before having results.
   }
   \item{backbone.option}{
     type of the backbone analysis:
