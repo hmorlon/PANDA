@@ -8,7 +8,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
   
   if(is.phylo){
     plot.obj.phylo<-get("last_plot.phylo",envir=.PlotPhyloEnv)
-    present <- plot.obj.phylo$xx[1]
+    present <- max(plot.obj.phylo$xx)
     root.age <- 0
   } else {
     root.age <- plot_dim[1] + plot_dim[2]

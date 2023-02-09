@@ -78,7 +78,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   cat("\n","Sampling fraction =",  paste0(Ntip(phylo), "/", nrow(data), " (",round(f1,3)*100," %)"), "\n") 
   
-  res_phylo <- div.models(phylo = phylo, tot_time = max(node.age(phylo)$ages), f = f1,
+  res_phylo <- div.models(phylo = phylo, tot_time = max(branching.times(phylo)), f = f1,
                           cond = "crown", models = models, n.max = n.max, rate.max = rate.max)
   
   res_phylo[,-1] <- apply(res_phylo[,-1], 2, as.numeric)
