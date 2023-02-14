@@ -234,9 +234,13 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       N0 <- subclades_N0[i]
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(subclades_fit.bd)[i]]
-      
+      if(length(1:subclades_tot_times[i]) != 1){
+        time <- c(1:subclades_tot_times[i])
+      } else {
+        time <- c(1:subclades_tot_times[i],subclades_tot_times[i]) 
+      }
       prob_subclades[[i]] <- prob_dtt(fit.bd = subclades_fit.bd[[i]], tot_time = subclades_tot_times[i],
-                                      time = 1:subclades_tot_times[i],
+                                      time = time,
                                       N0 = N0, l = l, prec = 1000,
                                       m = 1:round(max_div))
       # adding diversities at present
