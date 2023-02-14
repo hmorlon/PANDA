@@ -37,7 +37,7 @@
 }
 
 \details{
-  Some combinations of shifts might be complexe case to simulate because the backbone must be rich enough to graft subclades. Some simulations will not satisfy this condition and will then be discarded. In consequence, the number of simulated phylogenies in the output will not be equal to n for complex simulations. This is why the value of n is high by default (n = 10000), to ensure to have enough simulations (around 500) to test the presence.
+  Some combinations of shifts might be complexe cases to simulate because the backbone have to be rich enough to graft subclades. Some simulations will not satisfy this condition and will then be discarded. In consequence, the number of simulated phylogenies in the output will not be equal to n for complex simulations. This is why the value of n is high by default (n = 10000), to ensure to have enough simulations (around 500) to test the presence.
 
 clade.size argument should be the same value for the whole procedure in the empirical case (same than for get.sampling.fraction and get.comb.shift).
 
