@@ -287,8 +287,9 @@ simul_posteriors <- function(n = 10000, phylo, sampling.fractions,
   # grafting on a backbone
   cat("Shifts grafting...\n")
   all_new_tree <- c()
+  pb = txtProgressBar(min = 0, max = length(all_parts_ok), initial = 0, style = 3)
   for(j in 1:length(all_parts_ok)){
-    cat(j, "/", length(all_parts_ok), "\n")
+    setTxtProgressBar(pb,j)
     all_loc_j <- unique(as.numeric(names(all_shift_nodes_ok[[j]])))
     
     for(bck in all_loc_j){
@@ -324,6 +325,7 @@ simul_posteriors <- function(n = 10000, phylo, sampling.fractions,
     }
     all_new_tree[[j]] <- ladderize(new_tree)
   } 
+  close(pb)
   
   to_keep <- sapply(all_new_tree, function(x){
     
