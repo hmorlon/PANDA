@@ -66,7 +66,8 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
     # Parameters
     if(ncol(Y)==1) stop("Only works with multivariate datasets")
     n <- nO <- nrow(Y)
-    if(model=="OU" & !is.ultrametric(tree)) nC <- n else nC <- n-1
+    #if(model=="OU" & !is.ultrametric(tree)) nC <- n else nC <- n-1 # because previous version did not used a pruning algorithm?
+    nC <- n-1
     p <- ncol(Y)
     if(REML==TRUE) n <- n-1
     
