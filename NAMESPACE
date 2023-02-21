@@ -21,7 +21,7 @@ importFrom(igraph, graph.adjacency, graph.laplacian)
 importFrom(Matrix, Matrix)
 importFrom(mvMORPH, mvLL, pruning, mvSIM, GIC, mv.Precalc)
 importFrom(parallel, mclapply)
-importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap,reorderSimmap)
+importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap,reorderSimmap,splitTree)
 importFrom(picante, node.age)
 importFrom(pvclust,pvclust,pvrect)
 importFrom(raster, as.raster)
@@ -65,7 +65,7 @@ export(plot_ClaDS_phylo, sim_ClaDS, fit_ClaDS0, plot_ClaDS0_chains, plot_ClaDS_c
 export(sim_MCBD)
 export(sim.BipartiteEvol,make_gen.BipartiteEvol,define_species.BipartiteEvol,build_network.BipartiteEvol,
        plot_div.BipartiteEvol, plot_net.BipartiteEvol)
-export(add.gts, all_comb_models, apply_prob_dtt, div.models, div.rates, extract.clade.ln, fit_bd_backbone_c, fit_bd_backbone, get.branching.nodes, get.comb.shift, get.node.ages, get.sampling.fractions, likelihood_bd_backbone, paleodiv, plot.phylo.comb, plot_prob_dtt, remove.model, shift.estimates, subtree, apply_prob_dtt, simul_posteriors)
+export(add.gts, all_comb_models, apply_prob_dtt, div.models, div.rates, extract.clade.ln, fit_bd_backbone_c, fit_bd_backbone, get.branching.nodes, get.comb.shift, get.node.ages, get.sampling.fractions, likelihood_bd_backbone, paleodiv, plot.phylo.comb, plot_prob_dtt, remove.model, shift.estimates, subtree, apply_prob_dtt, simul.comb.shift)
 
 exportClasses("PhenotypicModel", "PhenotypicACDC", "PhenotypicADiag", "PhenotypicBM", "PhenotypicDD", "PhenotypicGMM", "PhenotypicOU", "PhenotypicPM")
 

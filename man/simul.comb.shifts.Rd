@@ -1,15 +1,15 @@
-\name{simul_posteriors}
-\alias{simul_posteriors}
+\name{simul.comb.shifts}
+\alias{simul.comb.shifts}
 
 \title{
-  Simulating posteriors from shift.estimates() results
+  Simulating trees from shift.estimates() results to test model adequacy
 }
 \description{
   Simulates trees with combination of shifts from shifts.estimates() output.
 }
 \usage{
-  simul_posteriors(n = 10000, phylo, sampling.fractions,
-                   shift.res, combi = 1, clade.size = 5)
+  simul.comb.shifts(n = 10000, phylo, sampling.fractions,
+                    shift.res, combi = 1, clade.size = 5)
 }
 \arguments{
   \item{n}{
@@ -37,7 +37,7 @@
 }
 
 \details{
-  Some combinations of shifts might be complexe cases to simulate because the backbone have to be rich enough to graft subclades. Some simulations will not satisfy this condition and will then be discarded. In consequence, the number of simulated phylogenies in the output will not be equal to n for complex simulations. This is why the value of n is high by default (n = 10000), to ensure to have enough simulations (around 500) to test the presence.
+  Some combinations of shifts might be complex cases to simulate because the backbone needs to be rich enough to graft subclades. Some simulations will not satisfy this condition and will then be discarded. In consequence, the number of simulated phylogenies in the output will not be equal to n for complex simulations. This is why the value of n is high by default (n = 10000), to ensure to have enough simulations (around 500) to test the presence.
 
 clade.size argument should be the same value for the whole procedure in the empirical case (same than for get.sampling.fraction and get.comb.shift).
 
