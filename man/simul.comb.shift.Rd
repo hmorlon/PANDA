@@ -1,5 +1,5 @@
-\name{simul.comb.shifts}
-\alias{simul.comb.shifts}
+\name{simul.comb.shift}
+\alias{simul.comb.shift}
 
 \title{
   Simulating trees from shift.estimates() results to test model adequacy

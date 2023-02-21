@@ -1,4 +1,4 @@
-simul.comb.shifts <- function(n = 10000, phylo, sampling.fractions,
+simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
                              shift.res, combi = 1, clade.size = 5){
   
   #### argument check ####
