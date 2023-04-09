@@ -1,6 +1,6 @@
 simulate_OTU_alignment <-
-function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=getwd(),mean=0.5,sd=0.01,host_signal=10,geo_signal=0,stochastic_map=NULL,delta=0, figure=FALSE,...){
-  if(!exists("path")) {path <- getwd()}
+function(iter,name_index,name,host_tree,mu,n,seed,N,proportion_variant,simul,model,path=NULL,mean=0.5,sd=0.01,host_signal=10,geo_signal=0,stochastic_map=NULL,delta=0, figure=FALSE,...){
+  if(is.null(path)) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
   

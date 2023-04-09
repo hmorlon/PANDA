@@ -1,9 +1,9 @@
 sim_microbiota <-
-function(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300, proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10, geo_signal=0, stochastic_map=NULL, path=getwd(), seed=1, nb_cores=1, scale=TRUE, delta=0, figure=FALSE, ...){
+function(name, name_index, simul, mu=1, n=20, provided_tree=NULL, N=300, proportion_variant=0.1, model="uniform", mean=0.5, sd=0.01, host_signal=10, geo_signal=0, stochastic_map=NULL, path=NULL, seed=1, nb_cores=1, scale=TRUE, delta=0, figure=FALSE, ...){
   if(!exists("name")) stop(print("Please provide the name of the simulations"))
   if(!exists("simul")) {simul  <- c(rep(0,5),rep(1,5),rep(3,5),rep(5,5),rep(10,5),rep("indep",5))}
   if(!exists("name_index")) {name_index  <- sapply(1:length(simul), function(i) paste("S",i,sep=""))}
-  if(!exists("path")) {path <- getwd()}
+  if(is.null(path)) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
   
