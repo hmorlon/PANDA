@@ -1,13 +1,13 @@
 HOME_model <-
-function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,tolerance=0.05,overwrite=TRUE,figure=FALSE,path=getwd(),path_alignment=getwd(),...){
+function(name,name_index,nb_cores=1,seed=3,nb_tree=5000,lambda=c(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,25),raref=FALSE,empirical=TRUE,randomize=TRUE,nb_random=10,provided_tree=NULL,tolerance=0.05,overwrite=TRUE,figure=FALSE,path=NULL,path_alignment=NULL,...){
   
   if(!exists("name")) stop(print("Please provide the name of the dataset "))
   if(!exists("name_index")) stop(print("Please provide the name of the different OTU alignments "))
-  if(!exists("path")) {path <- getwd()}
+  if(is.null(path)) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   setwd(path)
   
-  if (!exists("path_alignment")){ path_alignment <- path}
+  if (is.null(path_alignment)){ path_alignment <- path}
   
   if (is.null(provided_tree)){
     if (!file.exists(paste("host_tree_",name,".tre",sep=""))){stop(print("Please provide the host tree (format .tre) in the working directory"))}

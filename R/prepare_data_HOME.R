@@ -1,6 +1,6 @@
 prepare_data_HOME <-
-function(iter,name,name_index,provided_tree=NULL,...){ 
-  if(!exists("path")) {path <- getwd()}
+function(iter,name,name_index,provided_tree=NULL,path=NULL, path_alignment=NULL,...){ 
+  if(is.null(path)) {path <- getwd()}
   if(!is.character(path)) {path <- getwd()}
   dir.create(file.path(path, "results/"), showWarnings = FALSE)
   dir.create(file.path(path, "data/"), showWarnings = FALSE)
@@ -14,7 +14,7 @@ function(iter,name,name_index,provided_tree=NULL,...){
   setwd(path)
   set.seed(1)
   
-  if (!exists("path_alignment")){ path_alignment <- path}
+  if (is.null(path_alignment)){ path_alignment <- path}
   
   #### Step 1 : Load the host tree ####
   if (is.null(provided_tree)){
