@@ -149,7 +149,7 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
       for(j in 1:length(comb.bck)){
         clade_edges[[j]] <- Descendants(phylo1, as.numeric(comb.bck[j]), type = "all")
         if(backbone.option == "stem.shift"){
-          clade_edges <- c(as.numeric(comb.bck[j]),clade_edges[[j]])
+          clade_edges[[j]] <- c(as.numeric(comb.bck[j]),clade_edges[[j]])
         }
         if(j>1){
           clade_edges[[j]] <- clade_edges[[j]][!clade_edges[[j]] %in% unlist(clade_edges[1:(j-1)])]
