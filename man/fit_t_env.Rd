@@ -57,7 +57,7 @@ Arguments to be passed to the function. See details.
   \item{env_func}{the environmental function}
   \item{tot_time}{the root age of the tree}
   \item{model}{the fitted model (default models or user specified)}
-  \item{SE}{the estimated SE for species mean when "error=NA"}
+  \item{nuisance}{maximum-likelihood estimate of \code{nuisance}, the unknown, nuisance contribution to measurement error when \code{error} argument is used (i.e., NA or a vector provided by the user)}
 }
 
 \details{

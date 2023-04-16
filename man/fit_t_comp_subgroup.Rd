@@ -10,7 +10,7 @@ Fits matching competition (MC), diversity dependent linear (DDlin), or diversity
 \usage{
 
 fit_t_comp_subgroup(full.phylo, ana.events, clado.events, stratified=FALSE, map,data, 
-	trim.class, model=c("MC","DDexp","DDlin"), par=NULL, method="Nelder-Mead", 
+	trim.class, model=c("MC","DDexp","DDlin"), error=NULL, par=NULL, method="Nelder-Mead", 
 	bounds=NULL)
 	
 }
@@ -41,6 +41,9 @@ a named vector of trait values for subgroup members with names matching \code{fu
   \item{model}{
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
 }
+ \item{error}{
+A named vector with standard error (SE) for each species (with names matching \code{"phylo$tip.label"}). Default is NULL, if NA, then the SE is estimated from the data (a nuisance parameter for unknown errors). Note: When standard error are provided the nuisance parameter is also estimated.
+}
   \item{par}{
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
 }
@@ -65,6 +68,7 @@ optimization algorithm to use (see \code{\link{optim}})
   \item{r}{maximum-likelihood estimate of \code{r} parameter of exponential diversity dependence model}
   \item{z0}{maximum-likelihood estimate of \code{z0}, the value at the root of the tree}
   \item{convergence}{convergence diagnostics from \code{\link{optim}} function (see optim documentation)}
+  \item{nuisance}{maximum-likelihood estimate of \code{nuisance}, the unknown, nuisance contribution to measurement error when \code{error} argument is used (that is NA or a vector provided by the user)}
 }
 
 \details{

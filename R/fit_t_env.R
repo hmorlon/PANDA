@@ -240,7 +240,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         # If the model is defined by the user we return a customized result
         estimated_param <- estim$par
         if(error_param) estimated_param=estimated_param[-length(estimated_param)]
-        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = estimated_param, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, SE=error_value)
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = estimated_param, root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, nuisance=error_value)
         
     }else if(model=="EnvExp"){
         
@@ -251,7 +251,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         beta = estim$par[2]
         
         # results
-        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = c(sig2, beta), root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, SE=error_value)
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = c(sig2, beta), root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, nuisance=error_value)
         
     }else if(model=="EnvLin"){
         # sig2
@@ -261,7 +261,7 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         beta = exp(estim$par[2])
         
         # results
-        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = c(sig2, beta), root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, SE=error_value)
+        results<-list(LH = LL, aic = AIC, aicc = AICc, free.parameters = nparam, param = c(sig2, beta), root = root, convergence = estim$convergence, hess.value=hess.value, env_func=env_data, tot_time=tot_time, model=model, nuisance=error_value)
     
     }
     
