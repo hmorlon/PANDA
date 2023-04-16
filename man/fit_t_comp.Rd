@@ -73,6 +73,8 @@ For two-regime fits, particularly under the matching competition model, we recom
 }
 
 \references{
+	Drury, J., Clavel, J., Tobias, J., Rolland, J., Sheard, C., & Morlon, H. (2021). Tempo and mode of morphological evolution are decoupled from latitude in birds. PLoS Biology, 19(8), e3001270.
+	
 	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. 
 \emph{Systematic Biology} 65:700-710
 
