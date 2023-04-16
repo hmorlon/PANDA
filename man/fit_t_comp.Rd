@@ -20,7 +20,7 @@ an object of type 'phylo' (see ape documentation)
 a named vector of trait values with names matching \code{phylo$tip.label}
 }
   \item{error}{
-A named vector with standard error (SE) for each species (with names matching \code{"phylo$tip.label"}). Default is NULL, if NA, then the SE is estimated from the data (a nuisance parameter for unknown errors). Note: When standard error are provided the nuisance parameter is also estimated.
+A named vector with standard errors (SE) of trait values for each species (with names matching \code{"phylo$tip.label"}). The default is NULL, in this case potential error is ignored in the fit. If set to NA, the SE is estimated from the data (to be used when there are no error measurements, a nuisance parameter is estimated). Note: When standard errors are provided, a nuisance parameter is also estimated.
 }
 
   \item{model}{
@@ -73,6 +73,8 @@ For two-regime fits, particularly under the matching competition model, we recom
 }
 
 \references{
+	Drury, J., Clavel, J., Tobias, J., Rolland, J., Sheard, C., & Morlon, H. (2021). Tempo and mode of morphological evolution are decoupled from latitude in birds. PLoS Biology, 19(8), e3001270.
+	
 	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. 
 \emph{Systematic Biology} 65:700-710
 
