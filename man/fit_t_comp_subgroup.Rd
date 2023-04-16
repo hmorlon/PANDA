@@ -78,7 +78,7 @@ should be the log(sqrt()) of the desired sig2 starting value.
 
 \references{
 	
-	Drury, J., Tobias, J., Burns, K., Mason, N., Shultz, A., and Morlon, H. in review. Contrasting impacts of competition on ecological and social trait evolution in songbirds. \emph{PLOS Biology} 16(1): e2003563.
+	Drury, J., Tobias, J., Burns, K., Mason, N., Shultz, A., and Morlon, H. 2018. Contrasting impacts of competition on ecological and social trait evolution in songbirds. \emph{PLOS Biology} 16(1): e2003563.
 
 	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} 65: 700-710
 
