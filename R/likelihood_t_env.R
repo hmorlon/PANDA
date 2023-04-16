@@ -123,11 +123,11 @@ likelihood_t_env<-function(phylo, data, model=c("EnvExp", "EnvLin"), ...){
    
     # Add measurement error
     if(is_error){
-        if(error_param){
-            phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$param[length(par$param)]*par$param[length(par$param)] # estimate the error
-        }else{
-            phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$error^2 # assume the "se" are provided in the error vector
-        }
+       # if(error_param){
+            phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$param[length(par$param)]*par$param[length(par$param)] + par$error^2# estimate the error
+        #}else{
+        #    phylo$edge.length[par$index_error]<-phylo$edge.length[par$index_error]+par$error^2 # assume the "se" are provided in the error vector
+        #}
     }
    
  

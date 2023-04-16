@@ -1,4 +1,4 @@
-fit_t_comp<-function(phylo,data,error=NULL, model=c("MC","DDexp","DDlin"),pars=NULL,geography.object=NULL, regime.map=NULL){
+fit_t_comp<-function(phylo, data, error=NULL, model=c("MC","DDexp","DDlin"),pars=NULL,geography.object=NULL, regime.map=NULL){
 
 #check to make sure data are univariate, with names matching phylo object
 if(length(data)!=length(phylo$tip.label)){stop("length of data does not match length of tree")}
@@ -197,6 +197,12 @@ if(is.null(error)){
 	
 } else {
 
+  # if NA is provided to "error", then we can estimate nuisance even if we don't have known measurement errors
+  if(any(is.na(error))){
+    error <- rep(0, Ntip(phylo))
+    names(error) = phylo$tip.label
+  } 
+  
 if(is.null(geography.object) & is.null(regime.map)){ #single-slope version for sympatric clades
 
 

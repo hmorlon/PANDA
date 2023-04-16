@@ -1,4 +1,4 @@
-fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regime=FALSE, method="Nelder-Mead", echo=TRUE, ...){
+fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two.regime=FALSE, method="Nelder-Mead", echo=TRUE, ...){
   pars = NULL
   model = match.arg(model)[1]
   args = list(...)
@@ -25,8 +25,16 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
     ## Index error
     nuisance=TRUE
     index_error<-sapply(1:nobs, function(x){ which(phylo$edge[,2]==x)})
+    
+    # if NA is provided to "error", then we can estimate nuisance even if we don't have known measurement errors
+    if(any(is.na(error))){
+      error <- rep(0, Ntip(phylo))
+      names(error) = phylo$tip.label
+    } 
+    
   } else {
-	stop("provide measurement error")	
+    nuisance = FALSE
+	#stop("provide measurement error")	
   }
   
   # for OUM
@@ -101,11 +109,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                   phy$edge.length <- phy$edge.length*sigma2 # scaling for BM sigma
                   
                       if(!is.null(error) & nuisance==TRUE){
-                          nuisance = exp(par[2])
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuisance
-                      }else{
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
-                      }
+                          nuis = exp(par[2])
+                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
+                      }#else{
+                       #    phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
+                       #}
                   
                   # ll computation
                   llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE))
@@ -115,11 +123,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                  phy$edge.length <- phy$mapped.edge%*%sigma2 # scaling for BMM sigma
                   
                       if(!is.null(error) & nuisance==TRUE){
-                          nuisance = exp(par[regimes+1])
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuisance
-                      }else{
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
-                      }
+                          nuis = exp(par[regimes+1])
+                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
+                      }#else{
+                       #    phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
+                       #}
                   
                   # ll computation
                   llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 
@@ -135,11 +143,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                   phy$edge.length <- phy$edge.length*sigma2 
                   
                       if(!is.null(error) & nuisance==TRUE){
-                          nuisance = exp(par[3])
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuisance
-                      }else{
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
-                      }
+                          nuis = exp(par[3])
+                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
+                      }#else{
+                       #    phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
+                       #}
                   
                   # ll computation
                   llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 
@@ -149,11 +157,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                    V<-.Call(C_panda_covar_ou_random, A=precalc$C1, alpha=alpha, sigma=sigma2)
                     
                    if(!is.null(error) & nuisance==TRUE){
-                     nuisance = exp(par[3])
-                     diag(V) <- diag(V) + error^2 + nuisance
-                   }else{
-                     diag(V) <- diag(V) + error^2   
-                   }
+                     nuis = exp(par[3])
+                     diag(V) <- diag(V) + error^2 + nuis
+                   }#else{
+                    # diag(V) <- diag(V) + error^2   
+                   #}
                   
                   # design matrix
                   W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
@@ -182,11 +190,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                    else  V<-.Call(C_panda_covar_ou_random, A=precalc$C1, alpha=alpha, sigma=sigma2)
                   
                    if(!is.null(error) & nuisance==TRUE){
-                     nuisance = exp(par[3])
-                     diag(V) <- diag(V) + error^2 + nuisance
-                   }else{
-                     diag(V) <- diag(V) + error^2   
-                   }
+                     nuis = exp(par[3])
+                     diag(V) <- diag(V) + error^2 + nuis
+                   }#else{
+                    # diag(V) <- diag(V) + error^2   
+                   #}
                   
                   # design matrix
                   W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
@@ -205,11 +213,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error, two.regi
                 phy_temp = transform_EB(phy, beta=rate, sigmasq=sigma2)
                 
               	if(!is.null(error) & nuisance==TRUE){
-                          nuisance = exp(par[3])
-                          phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2 + nuisance
-                      }else{
-                          phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2
-                      }
+                          nuis = exp(par[3])
+                          phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2 + nuis
+                      }#else{
+                       #   phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2
+                      #}
                   
                   # ll computation
                   llik <- mvLL(phy_temp, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 

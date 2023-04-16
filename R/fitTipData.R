@@ -42,7 +42,7 @@ setMethod(
 		            V<-tipdistribution$Sigma
 		            if(!is.null(error)){
             			error<-error[rownames(tipdistribution$Sigma)]
-            			V<- V + diag(error^2) + diag(rep(exp(params[length(params)]),n))
+            			V<- V + diag(error^2 + exp(params[length(params)]), n) 
 					}
 		            data<-data[rownames(V)]
 		  			op <- getOption("show.error.messages")
@@ -88,7 +88,8 @@ setMethod(
 		    
 		    if(!is.null(error)){
 		    	error<-error[rownames(tipdistribution$Sigma)]
-            	V<- V + diag(error^2) + diag(rep(exp(inferredParams[length(inferredParams)]),n))
+                nuisance <- exp(inferredParams[length(inferredParams)])
+            	V<- V + diag(error^2 + nuisance, n)
 			}
 			
 		  	op <- getOption("show.error.messages")

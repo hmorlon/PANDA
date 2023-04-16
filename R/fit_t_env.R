@@ -79,8 +79,10 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
           }else{
               error<-error[phylo$tip.label]
           }
-        error_param <- FALSE
+        error_param <- TRUE # previous versions were error_param <- FALSE; to harmonize with fit_t_standard and fit_t_comp
       }else{
+        # if NA is provided to "error", then we can estimate nuisance even if we don't have known measurement errors
+        error <- rep(0, Ntip(phylo))
         error_param <- TRUE
       }
       is_error<-TRUE
@@ -213,13 +215,14 @@ fit_t_env<-function(phylo, data, env_data, error=NULL, model=c("EnvExp", "EnvLin
         # Root value function
         return_root<-function(param, mtot, times, fun, model, tips, is_error){
             phylo <- .CLIMtransform(phylo, param=param, mtot=mtot, times=times, funEnv=fun, model=model, tips=tips, subdivisions=subdivisions, maxdiff=maxdiff)
+            
             # Add measurement error
             if(is_error){
-                if(error_param){
-                    phylo$edge.length[index_error]<-phylo$edge.length[index_error]+param[length(param)]*param[length(param)] # estimate the error
-                }else{
-                    phylo$edge.length[index_error]<-phylo$edge.length[index_error]+error^2 # assume the "se" are provided in the error vector
-                }
+               # if(error_param){
+               #     phylo$edge.length[index_error]<-phylo$edge.length[index_error]+param[length(param)]*param[length(param)] # estimate the error
+               # }else{
+                    phylo$edge.length[index_error]<-phylo$edge.length[index_error]+param[length(param)]*param[length(param)]+error^2 # assume the "se" are provided in the error vector
+               # }
             }
             
             root<-mvLL(tree=phylo,data=data,method="pic",param=list(estim=FALSE, check=FALSE, mu=NULL, sigma=1))$theta

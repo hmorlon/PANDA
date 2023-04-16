@@ -8,7 +8,7 @@ Fits standard models of trait evolution incorporating known and nuisance measure
 Fits Brownian motion (BM), Ornstein-Uhlenbeck (OU), or early burst (EB) models of trait evolution to a given dataset and phylogeny.
 }
 \usage{
-fit_t_standard(phylo, data, model=c("BM","OU","EB"), error, two.regime=FALSE, 
+fit_t_standard(phylo, data, model=c("BM","OU","EB"), error=NULL, two.regime=FALSE, 
 		method="Nelder-Mead", echo=TRUE, ...)
 }
 
@@ -24,7 +24,7 @@ model chosen to fit trait data, \code{"BM"} is the Brownian motion model, \code{
 }
 
   \item{error}{
-if including measurement error, a named vector of error values (the standard error of the [intraspecific] mean) with names matching \code{phylo$tip.label}
+A named vector with standard error (SE) for each species (with names matching \code{"phylo$tip.label"}). Default is NULL, if NA, then the SE is estimated from the data (a nuisance parameter for unknown errors). Note: When standard error are provided the nuisance parameter is also estimated.
 }
   \item{two.regime}{
 if \code{TRUE}, fits a two-regime model

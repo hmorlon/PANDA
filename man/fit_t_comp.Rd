@@ -20,7 +20,7 @@ an object of type 'phylo' (see ape documentation)
 a named vector of trait values with names matching \code{phylo$tip.label}
 }
   \item{error}{
-if including measurement error, a named vector of error values (the standard error of the [intraspecific] mean) with names matching \code{phylo$tip.label}
+A named vector with standard error (SE) for each species (with names matching \code{"phylo$tip.label"}). Default is NULL, if NA, then the SE is estimated from the data (a nuisance parameter for unknown errors). Note: When standard error are provided the nuisance parameter is also estimated.
 }
 
   \item{model}{
