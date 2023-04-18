@@ -242,11 +242,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
     theta <- as.numeric(llik(estimModel$par, phy=phylo, data=data, mod=mod, error=error)$theta)
     
     # param
-    if(model=="EB1"){
+    if(mods=="EB1"){
     	param = exp(estimModel$par)
-    	param[2] = -abs(log(param[2]))
+    	param[2] = -abs(estimModel$par[2])
     } else {
-    param = exp(estimModel$par)
+        param = exp(estimModel$par)
     }
     
     if(nuisance){
@@ -278,11 +278,11 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
     
     res <- list(logl=LL, AIC=AIC, AICc=AICc, param=param, theta=theta, nb_param=nparam, opt=estimModel)
     
-    if(mod=="BM1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = 3, sig2 = ",as.numeric(res$param[1]),", nuisance = ",as.numeric(res$param[2]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
-    if(mod=="OU1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = 4, sig2 = ",as.numeric(res$param[1]),", alpha = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
-    if(mod=="EB1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = 4, sig2 = ",as.numeric(res$param[1]),", r = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
-    if(mod=="BMM"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = 4, sig2_",colnames(phylo$mapped.edge)[1]," = ",as.numeric(res$param[1]),", sig2_",colnames(phylo$mapped.edge)[2]," = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
-    if(mod=="OUM"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = 5, sig2 = ",as.numeric(res$param[1]),", alpha = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0_",names(res$theta)[1]," = ",as.numeric(res$theta[1]),", z0_",names(res$theta)[2]," = ",as.numeric(res$theta[2]),", convergence = ",res$opt$convergence,")")))}
+    if(mod=="BM1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = ",nparam, ", sig2 = ",as.numeric(res$param[1]),", nuisance = ",as.numeric(res$param[2]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
+    if(mod=="OU1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = ",nparam, ", sig2 = ",as.numeric(res$param[1]),", alpha = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
+    if(mod=="EB1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters =",nparam, ", sig2 = ",as.numeric(res$param[1]),", r = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
+    if(mod=="BMM"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = ",nparam, ", sig2_",colnames(phylo$mapped.edge)[1]," = ",as.numeric(res$param[1]),", sig2_",colnames(phylo$mapped.edge)[2]," = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
+    if(mod=="OUM"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = ",nparam, ", sig2 = ",as.numeric(res$param[1]),", alpha = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0_",names(res$theta)[1]," = ",as.numeric(res$theta[1]),", z0_",names(res$theta)[2]," = ",as.numeric(res$theta[2]),", convergence = ",res$opt$convergence,")")))}
     
     }
     return(res)
