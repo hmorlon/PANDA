@@ -283,7 +283,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
     
     # return results
     
-    res <- list(logl=LL, AIC=AIC, AICc=AICc, param=param, theta=theta, nb_param=nparam, opt=estimModel)
+    res <- list(logl=LL, aic=AIC, aicc=AICc, param=param, theta=theta, nb_param=nparam, opt=estimModel)
     
     if(mod=="BM1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = ",nparam, ", sig2 = ",as.numeric(res$param[1]),", nuisance = ",as.numeric(res$param[2]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
     if(mod=="OU1"){eval(parse(text=paste0("results<-list(LH = ",res$logl,", aic = ",res$AIC,", aicc = ",res$AICc,", free.parameters = ",nparam, ", sig2 = ",as.numeric(res$param[1]),", alpha = ",as.numeric(res$param[2]),", nuisance = ",as.numeric(res$param[3]),", z0 = ",res$theta,", convergence = ",res$opt$convergence,")")))}
