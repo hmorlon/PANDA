@@ -227,6 +227,13 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
         return(llik)
     }
     
+    # single variable optimization uses analyttical solution instead?
+    #if(mod=="BM1" & is.null(error)) {
+    #    estimModelfit <- mvLL(phylo, data, method="pic", param=list(estim=TRUE, check=TRUE))
+    #    estimModel$par <- log(estimModelfit$sigma)
+    #    estimModel$theta <- estimModelfit$theta
+    #    estimModel$value <- estimModelfit$logl
+    #}else{
     # optimization
     if(echo==TRUE) message("Start optimization. Please wait...")
     estimModel <- optim(pars,
@@ -242,7 +249,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
     theta <- as.numeric(llik(estimModel$par, phy=phylo, data=data, mod=mod, error=error)$theta)
     
     # param
-    if(mods=="EB1"){
+    if(mod=="EB1"){
     	param = exp(estimModel$par)
     	param[2] = -abs(estimModel$par[2])
     } else {
