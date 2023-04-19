@@ -114,12 +114,12 @@
 				#need to find a way to look up old node
 				#oldnode=old.edge[which(phylo$edge[,1]==node)][1]
 				delbr<-clado.events[which(round(clado.events[,9],8)==round(nodeDist[i],8)),1]
-				left=clado.events[which(clado.events[,1]==delbr),15]
+				left=clado.events[which(clado.events[,1]==delbr),16] #### TO CHECK it's now column 16 (04/2023) was 15 in previous releases
 				left=desc.mat[which(desc.mat[,1]==left),2]
-				right=clado.events[which(clado.events[,1]==delbr),16]
+				right=clado.events[which(clado.events[,1]==delbr),17] #### TO CHECK it's now column 17 (04/2023) was 16 in previous releases
 				right=desc.mat[which(desc.mat[,1]==right),2]
-				m<-regexpr("->",clado.events[which(clado.events[,1]==delbr),20])
-				regs<-regmatches(clado.events[which(clado.events[,1]==delbr),20],m,invert=TRUE)[[1]][2]
+				m<-regexpr("->",clado.events[which(clado.events[,1]==delbr),21]) #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
+				regs<-regmatches(clado.events[which(clado.events[,1]==delbr),21],m,invert=TRUE)[[1]][2] #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
 				p<-regexpr(",",regs)	
 				sides<-regmatches(regs,p,invert=TRUE)
 				lside<-sides[[1]][1]
@@ -156,10 +156,10 @@
 				}} else{
 				IN<-nat[[i-1]][,1]
 				delbr<-clado.events[which(round(clado.events[,9],8)==round(nodeDist[i],8)),1]
-				left=clado.events[which(clado.events[,1]==delbr),15]
-				right=clado.events[which(clado.events[,1]==delbr),16]
-				m<-regexpr("->",clado.events[which(clado.events[,1]==delbr),20])
-				regs<-regmatches(clado.events[which(clado.events[,1]==delbr),20],m,invert=TRUE)[[1]][2]
+				left=clado.events[which(clado.events[,1]==delbr),16] #### TO CHECK it's now column 16 (04/2023) was 15 in previous releases
+				right=clado.events[which(clado.events[,1]==delbr),17] #### TO CHECK it's now column 17 (04/2023) was 16 in previous releases
+				m<-regexpr("->",clado.events[which(clado.events[,1]==delbr),21]) #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
+				regs<-regmatches(clado.events[which(clado.events[,1]==delbr),21],m,invert=TRUE)[[1]][2] #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
 				p<-regexpr(",",regs)	
 				sides<-regmatches(regs,p,invert=TRUE)
 				lside<-sides[[1]][1]
