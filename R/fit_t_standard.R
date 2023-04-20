@@ -111,9 +111,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                       if(!is.null(error) & nuisance==TRUE){
                           nuis = exp(par[2])
                           phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
-                      }#else{
-                       #    phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
-                       #}
+                      }
                   
                   # ll computation
                   llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE))
@@ -125,9 +123,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                       if(!is.null(error) & nuisance==TRUE){
                           nuis = exp(par[regimes+1])
                           phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
-                      }#else{
-                       #    phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
-                       #}
+                      }
                   
                   # ll computation
                   llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 
@@ -137,7 +133,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                   alpha = exp(par[2])
                   
                   # Tree transformation
-                if(fixedRoot){ # to add later?
+                if(fixedRoot & is.ultrametric(phy)){ # to add later?
                     
                   phy <- .phyOU(phy, alpha)
                   phy$edge.length <- phy$edge.length*sigma2 
@@ -145,9 +141,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                       if(!is.null(error) & nuisance==TRUE){
                           nuis = exp(par[3])
                           phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
-                      }#else{
-                       #    phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2
-                       #}
+                      }
                   
                   # ll computation
                   llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 
@@ -159,9 +153,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                    if(!is.null(error) & nuisance==TRUE){
                      nuis = exp(par[3])
                      diag(V) <- diag(V) + error^2 + nuis
-                   }#else{
-                    # diag(V) <- diag(V) + error^2   
-                   #}
+                   }
                   
                   # design matrix
                   W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
@@ -192,9 +184,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                    if(!is.null(error) & nuisance==TRUE){
                      nuis = exp(par[3])
                      diag(V) <- diag(V) + error^2 + nuis
-                   }#else{
-                    # diag(V) <- diag(V) + error^2   
-                   #}
+                   }
                   
                   # design matrix
                   W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
@@ -215,9 +205,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
               	if(!is.null(error) & nuisance==TRUE){
                           nuis = exp(par[3])
                           phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2 + nuis
-                      }#else{
-                       #   phy_temp$edge.length[index_error]<-phy_temp$edge.length[index_error]+ error^2
-                      #}
+                      }
                   
                   # ll computation
                   llik <- mvLL(phy_temp, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 
@@ -228,12 +216,14 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
     }
     
     # single variable optimization uses analyttical solution instead?
-    #if(mod=="BM1" & is.null(error)) {
-    #    estimModelfit <- mvLL(phylo, data, method="pic", param=list(estim=TRUE, check=TRUE))
-    #    estimModel$par <- log(estimModelfit$sigma)
-    #    estimModel$theta <- estimModelfit$theta
-    #    estimModel$value <- estimModelfit$logl
-    #}else{
+    if(mod=="BM1" & is.null(error)) {
+        estimModelfit <- mvLL(phylo, data, method="pic", param=list(estim=TRUE, check=TRUE))
+        estimModel <- list(par=log(estimModelfit$sigma), theta=estimModelfit$theta, value=estimModelfit$logl)
+        estimModel$par <- log(as.numeric(estimModelfit$sigma))
+        estimModel$theta <- estimModelfit$theta
+        estimModel$value <- -estimModelfit$logl
+        estimModel$convergence <- 0
+    }else{
     # optimization
     if(echo==TRUE) message("Start optimization. Please wait...")
     estimModel <- optim(pars,
@@ -243,6 +233,7 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                         lower=lower,
                         control=list(maxit=2000)
                         )
+    }
     
     # ancestral states/optimums
     if(echo==TRUE) message("Done. retrieve parameters and results...")
