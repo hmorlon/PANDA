@@ -43,7 +43,12 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
   }
   
   # for OU1 et random root
-  if(model=="OU" && two.regime==FALSE && fixedRoot==FALSE){
+  if((model=="OU" && two.regime==FALSE && fixedRoot==FALSE)){
+      precalc<-mv.Precalc(phylo, nb.traits=1, param=list(model="OU1", root=FALSE))
+  }
+  
+  # do the same if the tree is not ultrametric
+  if(model=="OU" && two.regime==FALSE && !is.ultrametric(phylo)){
       precalc<-mv.Precalc(phylo, nb.traits=1, param=list(model="OU1", root=FALSE))
   }
   
@@ -133,19 +138,36 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
                   alpha = exp(par[2])
                   
                   # Tree transformation
-                if(fixedRoot & is.ultrametric(phy)){ # to add later?
-                    
-                  phy <- .phyOU(phy, alpha)
-                  phy$edge.length <- phy$edge.length*sigma2 
-                  
-                      if(!is.null(error) & nuisance==TRUE){
-                          nuis = exp(par[3])
-                          phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
-                      }
-                  
-                  # ll computation
-                  llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE)) 
-                  
+                if(fixedRoot){ # to add later?
+                
+                    if(is.ultrametric(phy)){
+                        phy <- .phyOU(phy, alpha)
+                        phy$edge.length <- phy$edge.length*sigma2
+                        
+                        if(!is.null(error) & nuisance==TRUE){
+                            nuis = exp(par[3])
+                            phy$edge.length[index_error]<-phy$edge.length[index_error]+ error^2 + nuis
+                        }
+                        
+                        # ll computation
+                        llik <- mvLL(phy, data, method="pic", param=list(estim=FALSE, sigma=1, check=TRUE))
+                    }else{
+                        
+                        V<-.Call(C_panda_covar_ou_fixed, A=precalc$C1, alpha=alpha, sigma=sigma2)
+                        # error
+                         if(!is.null(error) & nuisance==TRUE){
+                           nuis = exp(par[3])
+                           diag(V) <- diag(V) + error^2 + nuis
+                         }
+                        
+                        # design matrix
+                        W <- .Call(C_panda_weights, nterm=as.integer(nobs), epochs=precalc$epochs,
+                                 lambda=alpha, S=1, S1=1,
+                                 beta=precalc$listReg, root=as.integer(0))
+                        
+                        # ll computation
+                        llik <- mvLL(V, data, method="rpf", param=list(D=W))
+                    }
                   }else{
                   
                    V<-.Call(C_panda_covar_ou_random, A=precalc$C1, alpha=alpha, sigma=sigma2)
@@ -218,11 +240,12 @@ fit_t_standard <- function(phylo, data, model=c("BM","OU","EB"), error=NULL, two
     # single variable optimization uses analyttical solution instead?
     if(mod=="BM1" & is.null(error)) {
         estimModelfit <- mvLL(phylo, data, method="pic", param=list(estim=TRUE, check=TRUE))
-        estimModel <- list(par=log(estimModelfit$sigma), theta=estimModelfit$theta, value=estimModelfit$logl)
+        estimModel <- list(par=log(estimModelfit$sigma), value=estimModelfit$logl, counts=0, message="analytical solution")
         estimModel$par <- log(as.numeric(estimModelfit$sigma))
         estimModel$theta <- estimModelfit$theta
         estimModel$value <- -estimModelfit$logl
         estimModel$convergence <- 0
+        
     }else{
     # optimization
     if(echo==TRUE) message("Start optimization. Please wait...")
