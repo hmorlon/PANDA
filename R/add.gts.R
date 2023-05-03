@@ -35,8 +35,8 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
   ages[14,] <- -c(251.9, 298.9)
   ages[15,] <- -c(298.9, 358.9)
   
-  if(direction == "leftwards"){
-    stop("NOT IMPLEMENTED YET.")
+  if(direction != "rightwards"){
+    stop("Rightwards is the only direction implemented yet.")
     ages[,c(1,2)] <- apply(ages[,c(1,2)], 2, function(x) -x)
   }
   
@@ -99,9 +99,10 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
     
   ages$start  <- ages$start + present
   ages$end  <- ages$end + present  
+  
+  if(direction != "rightwards"){
+    stop("Rightwards is the only direction implemented yet.")
 
-  if(direction == "leftwards"){
-    stop("NOT IMPLEMENTED YET.")
     xlimit <- ceiling(c(max(plot.obj.phylo$xx)+present)/5)*5
     ages <- ages[which(ages$start < xlimit),]
   } else {
@@ -134,8 +135,8 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
     }
   }
   
-  if(direction == "leftwards"){
-    stop("NOT IMPLEMENTED YET.")
+  if(direction != "rightwards"){
+    stop("Rightwards is the only direction implemented yet.")
     labels = as.character(-c(seq_time-present))
   } else{
     if(all(time.seq >= 0)){
@@ -199,7 +200,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
       text(mean_i, thickness, labels = ages$names[i], pos = 3,
            cex = cex, adj = c(0.5, 0.5))
     } else {
-      if(direction == "leftwards"){
+      if(direction != "rightwards"){
         text(mean(as.numeric(c(ages[i, c(1)],plot_dim[2]))), thickness, labels = ages$names[i], pos = 3,
              cex = cex, adj = c(0.5, 0.5))
       } else {
