@@ -23,23 +23,23 @@
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
   \item{part}{
-    character. Specifies for which parts of the combination diversification rates has to be calculated. Default is "backbone" and provide only the backbone rate. Can be "all" for all the parts of a combination or "subclades" for subclades only.
+    character. Specifies for which parts of the combination diversification rates has to be calculated. Default is "backbone" and provides only the backbone rate. Can be "all" for all the parts of a combination or "subclades" for subclades only.
   }
   \item{backbone.option}{
-    type of the backbone analysis:
+  type of the backbone analysis (see backbone.option in shift.estimates for more details):
     \itemize{ 
-      \item"stem.shift": the stems of subclades are included in subclade analyses;
-      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
+      \item"stem.shift": rates are calculated from the stem age for subclades.
+      \item"crown.shift": rates are calculated from the crown age for subclades.
     }
   }
 }
 
 \value{
-  a list of matrix with two rows (speciation and extinction) and as many columnS as million years from the root to the present.
+  a list of matrix with two rows (speciation and extinction) and as many columns as million years from the root to the present.
 }
 
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+		Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
 }
 
 \author{Nathan Mazet}

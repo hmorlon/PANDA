@@ -42,8 +42,8 @@ the fraction of extant species included in the phylogeny
     character. Allows to analyse a backbone. Default is FALSE and spec_times and branch_times are then ignored.
     Otherwise
     \itemize{ 
-      \item"stem.shift": the stems of subclades are included in subclade analyses;
-      \item"crown.shift": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": for every shift, the probability of the speciation event at the stem age of the subclade is included in the likelihood of the backbone thanks to the argument spec_times.
+      \item"crown.shift": for every shift, both the probability of the speciation event at the stem age of the subclade and the probability that the stem of the subclade survives to the crown age are included in the likelihood of the backbone thanks to the argument branch_times.
     }
   }
   \item{spec_times}{
@@ -77,7 +77,7 @@ the default value is 0. In this case, integrals in the likelihood are computed u
     conditioning to use to fit the model:
     \itemize{ \item FALSE: no conditioning (not recommended);
       \item "stem": conditioning on the survival of the stem lineage (use when the stem age is known, in this case tot_time should be the stem age);
-      \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
+      \item "crown" (default): conditioning on a speciation event at the crown age and survival of the two daugther lineages (use when the stem age is not known, in this case tot_time should be the crown age).
     }
   }
   \item{model}{

@@ -29,8 +29,8 @@
   \item{backbone.option}{
     type of the backbone analysis:
     \itemize{ 
-      \item"stem.shift": the stems of subclades are included in subclade analyses;
-      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
+      \item"stem.shift": paleodiversity dynamics are calculated from the stem age for subclades.
+      \item"crown.shift": paleodiversity dynamics are calculated from the crown age for subclades.
     }
   }
   
@@ -47,7 +47,7 @@
 }
 
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
 }
 \author{Nathan Mazet}
 \seealso{

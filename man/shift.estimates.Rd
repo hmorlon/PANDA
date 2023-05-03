@@ -2,7 +2,7 @@
 \alias{shift.estimates}
 
 \title{
-  Estimating shifts of diversification
+  Estimating clade-shifts of diversification
 }
 \description{
   Applies models of diversification to each part of all combinations of shifts to detect the best combination of subclades and backbone(s).
@@ -29,13 +29,13 @@
     the output resulting from get.comb.shift.
   }
   \item{models}{
-    a vector of character that specifies the set of model of diversification to apply. Default is c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR").
+    a vector of character that specifies the set of models of diversification to apply. Default is c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR").
   }
   \item{backbone.option}{
     type of the backbone analysis:
     \itemize{ 
-      \item"stem.shift": the stems of subclades are included in subclade analyses;
-      \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).
+      \item"stem.shift": for every shift, the probability of the speciation event at the stem age of the subclade is included in the likelihood of the backbone thanks to the argument spec_times.
+      \item"crown.shift": for every shift, both the probability of the speciation event at the stem age of the subclade and the probability that the stem of the subclade survives to the crown age are included in the likelihood of the backbone thanks to the argument branch_times.
     }
   }
   \item{multi.backbone}{
@@ -69,7 +69,7 @@
   
 }
 \details{
-  The output for backbone is a list in which each element corresponds to the backbone model comparisons of a combination. This element contains a list with one table of model comparion per backbone.
+  The output for backbone is a list in which each element corresponds to the backbone model comparisons of a combination. This element contains a list with one table of model comparison per backbone.
 
 We recommand to remove "BVAR_DVAR" model from the models set and to lead the first analysis with multi.backbone = F to limit the number of combination.
 
@@ -77,7 +77,7 @@ clade.size argument should be the same value for the whole procedure (same than 
 
 }
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
 	
 }
 \author{Nathan Mazet}

@@ -9,7 +9,7 @@ This taxonomy lists all species of Cetaceans to properly calculate sampling frac
 }
 
 \source{
-Mazet et al. (2022) Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies, \emph{BioRxiv}
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
 }
 
 \references{

@@ -5,7 +5,7 @@
 Likelihood of a phylogeny under the general birth-death model (backbone)
 }
 \description{
-Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011. Modified version of likelihoud_bd for backbones.
+Computes the likelihood of a phylogeny under a birth-death model with potentially time-varying rates and potentially missing extant species. Notations follow Morlon et al. PNAS 2011. Modified version of likelihood_bd for backbones.
 }
 \usage{
 likelihood_bd_backbone(phylo, tot_time, f, f.lamb, f.mu, 
@@ -35,8 +35,8 @@ the fraction of extant species included in the phylogeny
   
   Otherwise:
     \itemize{ 
-      \item"stem.shift": the stems of subclades are included in subclade analyses;
-      \item"crown.shift": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": for every shift, the probability of the speciation event at the stem age of the subclade is included in the likelihood of the backbone thanks to the argument spec_times.
+      \item"crown.shift": for every shift, both the probability of the speciation event at the stem age of the subclade and the probability that the stem of the subclade survives to the crown age are included in the likelihood of the backbone thanks to the argument branch_times.
     }
   }
   \item{spec_times}{

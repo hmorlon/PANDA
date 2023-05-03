@@ -39,7 +39,7 @@ add.gts(thickness, quaternary = T, is.phylo = F,
     numeric. Size of the names of geological periods.
   }
   \item{padj}{
-    padj argument for the axis (see par() for more details).
+    padj argument defining space between the axis and the values of the axis (see par() for more details).
   }
   \item{direction}{
   character. Direct the geological time scale. Can be either "rightwards" (default) of "leftwards" (NOT IMPLEMENTED YET). 
@@ -54,7 +54,7 @@ add.gts(thickness, quaternary = T, is.phylo = F,
   Draws geological time scale on x axis.
 }
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep)
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
 }
 
 \author{Nathan Mazet}
@@ -72,7 +72,7 @@ par(new = T)
 plot(Cetacea, cex = 0.5, label.offset = 0.2)
 mtext("Time (Myrs)", side = 1, line = 3, at = 18)
 
-# see Appendix S3 from Mazet et al. (in prep) for more examples.
+# see Appendix S4 from Mazet et al. (2023) for more examples.
 
 }
 }

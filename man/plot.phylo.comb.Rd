@@ -32,7 +32,7 @@ plot.phylo.comb(phylo, data, sampling.fractions, shift.res = NULL,
     character or numeric. If shift.res is provided, this argument is a numeric and corresponds to the rank of the combination in the global comparison (shift.res$total). If shift.res is NULL, this argument should be a character giving a combination of node IDs as in get.comb.shift output. This latter manner to specify combination allows to visualize a combination of shifts before having results.
   }
   \item{backbone.option}{
-    type of the backbone analysis:
+    type of the backbone analysis (see backbone.option in shift.estimates for more details):
     \itemize{ 
       \item"stem.shift": the stems of subclades are included in subclade analyses;
       \item"crown.shift": the stems of subclades are included in the backbone analysis (Default).

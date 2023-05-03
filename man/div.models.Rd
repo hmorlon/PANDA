@@ -29,8 +29,8 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   character. Allows to analyse a backbone. Default is FALSE and spec_times and branch_times are then ignored.
   Otherwise:
     \itemize{ 
-      \item"stem.shift": the stems of subclades are included in subclade analyses;
-      \item"crown.shift": the stems of subclades are included in the backbone analysis.
+      \item"stem.shift": for every shift, the probability of the speciation event at the stem age of the subclade is included in the likelihood of the backbone thanks to the argument spec_times.
+      \item"crown.shift": for every shift, both the probability of the speciation event at the stem age of the subclade and the probability that the stem of the subclade survives to the crown age are included in the likelihood of the backbone thanks to the argument branch_times.
     }
   }
   \item{spec_times}{
@@ -47,14 +47,14 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
     \itemize{
       \item FALSE: no conditioning (not recommended);
       \item "stem": conditioning on the survival of the stem lineage (used when the stem age is known, in this case tot_time should be the stem age);
-      \item "crown" (default): conditioning on a speciation event at the crown age and survival of the 2 daugther lineages (used when the stem age is not known, in this case tot_time should be the crown age).
+      \item "crown" (default): conditioning on a speciation event at the crown age and on survival of the two daugther lineages (used when the stem age is not known, in this case tot_time should be the crown age).
     }
   }
   \item{verbose}{
   bolean. Wether to print model names and AICc values during the calculation.
   }
   \item{rate.max}{
-  numeric. Set a limit of diversificaton rates in terme of rate values.
+  numeric. Set a limit of diversificaton rates in terms of rate values.
   }
   \item{n.max}{
   numeric. Set a limit of diversificaton rates in terms of diversity estimates with the deterministic approach.
@@ -67,12 +67,12 @@ numeric. The sampling fraction given as the number of species in the phylogeny o
   A data.frame with number of parameters, likelihood, AICc and parameter values for all models.
 }
 \references{
-  Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep)
+  Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
 }
 \author{Nathan Mazet}
 
 \examples{
 data("Cetacea")
-res <- div.models(Cetacea, tot_time = max(branching.times(Cetacea)),
+res <- div.models(Cetacea, tot_time = max(node.age(Cetacea)$ages),
                   f = 87/89, cond = "crown")
 }

@@ -26,7 +26,7 @@
     bolean. If TRUE, the tree is plotted and testable nodes are highlighted with red dots. Default is FALSE.
   }
   \item{lad}{
-    bolean. Define which way the tree should be represented if plot = T. If TRUE, the smallest clade is at the bottom plot. If FALSE, it is at the the top of the plot. Default is TRUE.
+    bolean. Define which way the tree should be represented if plot = T. If TRUE, the smallest clade is at the bottom plot. If FALSE, it is at the top of the plot. Default is TRUE.
   }
     
   \item{text.cex}{
@@ -51,11 +51,11 @@
   \item{to_test}{the node IDs for nodes that are testable according to clade.size}
 }
 \details{
-  All described species should be included to properly calculate sampling fractions. The example of Cetacea uses a taxonomic database but groups can be defined on geography or traits as soon as they are monophyletic. If the taxonomy of the studied group is difficult to establish (e.i. taxonomic uncertainty, etc.), a "fake" taxonomic database can be created with random species names (Gen1_sp1, Gen1_sp2, Gen2_sp1, etc.) to circumvent taxonomic difficulties. Note that sampling fractions of the backbones are calculated in the next step of the pipeline (function get.comb.shift).
+  All described species should be included to properly calculate sampling fractions. The example of Cetacea uses a taxonomic database but groups can be defined on geography or traits as soon as they are monophyletic. If the taxonomy of the studied group is difficult to establish (e.i. taxonomic uncertainty, etc.), a "fake" taxonomic database can be created with random species names (Gen1_sp1, Gen1_sp2, Gen2_sp1, etc.) to circumvent taxonomic difficulties. Note that sampling fractions of the backbones are calculated in the next step of the pipeline (function get.comb.shift()).
 
 }
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv. 
 }
 \author{Nathan Mazet}
 \seealso{
