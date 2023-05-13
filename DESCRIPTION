@@ -26,6 +26,7 @@ Imports:
     mvtnorm,
     parallel,    
     phytools,
+    phangorn,
     pracma,
     pspline,
     pvclust,
