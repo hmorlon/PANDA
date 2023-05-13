@@ -24,8 +24,7 @@ Imports:
     Matrix,
     mvMORPH (>= 1.1.6),
     mvtnorm,
-    parallel,
-    ParallelLogger,
+    parallel,    
     phytools,
     pracma,
     pspline,
@@ -37,7 +36,8 @@ Imports:
     R.utils,
 	stats,
 	TESS,
-	utils
+	utils,
+	snow
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],

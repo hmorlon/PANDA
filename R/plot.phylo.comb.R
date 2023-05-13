@@ -118,7 +118,9 @@ plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     }
     
     if(is.null(col.sub)){
-      col.sub <- c(c(brewer.pal(8, "Dark2"),brewer.pal(8, "Set1"),"darkmagenta","dodgerblue2" , "orange", "forestgreen"))[c(1:length(comb.sub))]
+      col.sub <- c(c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "#666666",
+                     "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF",
+                     "darkmagenta","dodgerblue2" , "orange", "forestgreen"))[c(1:length(comb.sub))]
     } 
     
     if(!is.null(comb.bck) & length(col.bck) == 1){
