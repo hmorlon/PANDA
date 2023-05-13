@@ -18,13 +18,14 @@ importFrom(fields, image.plot)
 importFrom(fpc,pamk)
 importFrom(graphics, lines, mtext, par, plot, matplot,
            matlines, abline, text, points, polygon, layout, title,
-           plot.new, rasterImage, axis, image)
+           plot.new, rasterImage, axis, image, arrows, legend, rect)
 importFrom(grDevices, dev.new, rainbow, terrain.colors,
            colorRampPalette, colors, grey)
 importFrom(igraph, graph.adjacency, graph.laplacian)
 importFrom(Matrix, Matrix)
 importFrom(mvMORPH, mvLL, pruning, mvSIM, GIC, mv.Precalc, ancestral)
 importFrom(parallel, mclapply)
+importFrom(phangorn, Siblings, Ancestors, Descendants, Children)
 importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap,reorderSimmap)
 importFrom(picante, node.age)
 importFrom(pvclust,pvclust,pvrect)
@@ -35,7 +36,7 @@ importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun,
            sd, var, reorder, rexp, cov2cor, rlnorm, density, fft, optimize, dist,
            cor, cov, model.matrix, quantile)
 importFrom(TESS, tess.sim.age, tess.likelihood)
-importFrom(utils, combn, tail, flush.console, read.table, write.table)
+importFrom(utils, combn, tail, flush.console, read.table, write.table, setTxtProgressBar, txtProgressBar)
 importFrom(Rmpfr, mpfr, chooseMpfr)
 importFrom(parallel, mclapply)
 importFrom(Matrix, Matrix)
@@ -76,7 +77,6 @@ export(sim.BipartiteEvol,make_gen.BipartiteEvol,define_species.BipartiteEvol,bui
        plot_div.BipartiteEvol, plot_net.BipartiteEvol)
 
 export(add.gts, apply_prob_dtt, div.models, div.rates, fit_bd_backbone_c, fit_bd_backbone, get.comb.shift, get.sampling.fractions, likelihood_bd_backbone, paleodiv, plot_prob_dtt, remove.model, shift.estimates, apply_prob_dtt, simul.comb.shift)
-export(plot.phylo.comb)
 
 exportClasses("PhenotypicModel", "PhenotypicACDC", "PhenotypicADiag", "PhenotypicBM", "PhenotypicDD", "PhenotypicGMM", "PhenotypicOU", "PhenotypicPM")
 
