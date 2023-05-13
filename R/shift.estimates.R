@@ -302,7 +302,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                          "branching.times", "ALL_clade_names", "sampling.fractions", "backbone.option", "models", "ALL_final3", "rate.max",
                          "Children", "extract.clade.ln", "expand.grid", "get.branching.nodes"), envir = env.func)
   
-  ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(comb.shift), all_comb_models, progressBar = T, stopOnError = T)
+  ALL_final3 <- clusterApply(cl, seq_along(comb.shift), all_comb_models, progressBar = T, stopOnError = T)
   stopCluster(cl)
   
   #ALL_final3 <- ParallelLogger::clusterApply(cl, 1, all_comb_models, progressBar = T, stopOnError = T)

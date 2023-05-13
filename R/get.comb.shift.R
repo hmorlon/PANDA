@@ -98,7 +98,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   cl <- parallel::makeCluster(Ncores, type="SOCK")
   clusterExport(cl, list("phylo","Descendants", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste", "clade.size"),
                 envir = env.func)
-  ALL_comb <- unlist(ParallelLogger::clusterApply(cl, seq_along(n_clade_comb), get.all.comb, progressBar = T))
+  ALL_comb <- unlist(clusterApply(cl, seq_along(n_clade_comb), get.all.comb, progressBar = T))
   stopCluster(cl)
   
   names(ALL_comb) <- NULL
@@ -134,7 +134,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
                          "branching.times"),
                 envir = env.func)
   
-  ALL_bck_comb <- ParallelLogger::clusterApply(cl, seq_along(ALL_comb), function(comb){
+  ALL_bck_comb <- clusterApply(cl, seq_along(ALL_comb), function(comb){
     
     cat(comb, "/",length(ALL_comb), "\n")
     names(ALL_bck_comb)[comb] <- paste(ALL_comb[[comb]], collapse = ".")
