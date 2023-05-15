@@ -43,7 +43,8 @@ importFrom(pracma,ifft)
 importFrom(vegan,vegdist)
 importFrom(GUniFrac,GUniFrac)
 importFrom(R.utils,withTimeout)
-importFrom(snow, sendCall)
+importFrom(snow, sendCall, recvOneResult)
+importFrom(ParallelLogger, clusterApply)
 
 
 S3method(print, fit.env)
