@@ -177,7 +177,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
   else {
     init <- c(lamb_par)
     p <- length(init)
-    optimLH <- function(init, phylo. = phylo, backbone. = backbone, tot_time. = tot_time, branch_times. = branch_times, model. = model) {
+    optimLH <- function(init, phylo. = phylo, backbone. = backbone, tot_time. = tot_time, branch_times. = branch_times, model. = model, n.max. = n.max, rate.max. = rate.max) {
       lamb_par <- init[1:length(lamb_par)]
       f.lamb.par <- function(t) {
         abs(f.lamb(t, lamb_par))
