@@ -1,4 +1,4 @@
-fit_t_comp_subgroup<-function(full.phylo,ana.events,clado.events,stratified=FALSE,map,data,trim.class,model=c("MC","DDexp","DDlin"),error=NULL,par=NULL,method="Nelder-Mead",bounds=NULL){
+fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC","DDexp","DDlin"),ana.events=NULL,clado.events=NULL,stratified=FALSE,regime.map=NULL,error=NULL,par=NULL,method="Nelder-Mead",bounds=NULL){
 
 	if(is.null(names(data))){stop("data missing taxa names")}
 	if(!is.null(dim(data))){stop("data needs to be a single trait")}
@@ -11,7 +11,129 @@ fit_t_comp_subgroup<-function(full.phylo,ana.events,clado.events,stratified=FALS
         bounds$upper = Inf
     }
     
-	GeoByClassObject<-CreateGeobyClassObject(full.phylo,map,trim.class,ana.events,clado.events,stratified=stratified)
+    if(model=="MC" && (is.null(ana.events) || is.null (clado.events))){stop("MC model without biogeography is currently not implemented, please supply ana.events and clado.events")}
+    if(model=="MC" && !is.null(regime.map)){stop("two-regime version of MC model with subgroup pruning is currently not implemented")}
+    
+    if((is.null(ana.events) || !is.null(clado.events))||(!is.null(ana.events) || is.null(clado.events))) {stop("please provide both ana.events and clado.events when fitting models with biogeography (see ?fit_t_comp_subgroup)")}
+    if(!is.null(ana.events) && !is.null(regime.map)){ stop("two-regime models with biogeography and subgroup pruning currently not implemented")}
+    if(is.null(ana.events)){ #subgroup pruning for DD models without biogeography
+    
+    	if(is.null(regime.map)){ #single regime subgroup DD models without biogeography
+			if(model=="DDexp"){ 
+			   	if(is.null(pars)){
+					sigma=NULL
+					beta=NULL
+				} else {
+					sigma=pars[1]
+					beta=pars[2]
+				}
+
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,bounds=bounds)
+    			
+    			sig2<-opt$rates["sigma",]
+				r<-opt$rates["beta",]
+				z0<-opt$anc
+				if(!is.null(opt$error)){ 
+					mserr = opt$error
+					npar=4
+					}else{
+					mserr = NA
+					npar=3
+					}
+				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = npar, sig2 = as.numeric(sig2), r = as.numeric(r), z0 = as.numeric(z0), convergence = opt$convergence, nuisance=mserr)
+				return(results)
+			} 
+			
+			if(model=="DDlin"){
+				if(is.null(pars)){
+					sigma=NULL
+					beta=NULL
+				} else {
+					sigma=pars[1]
+					beta=pars[2]
+				}
+
+				
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,bounds=bounds)
+    			
+    			sig2<-opt$rates["sigma",subgroup]
+				b<-opt$rates["beta",subgroup]
+				z0<-opt$anc
+				if(!is.null(opt$error)){ 
+					mserr = opt$error
+					npar=4
+					}else{
+					mserr = NA
+					npar=3
+					}
+				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = npar, sig2 = as.numeric(sig2), b = as.numeric(b), z0 = as.numeric(z0), convergence = opt$convergence, nuisance=mserr)
+				return(results)
+			
+			
+			}
+			
+			
+		} else { #two-regime models
+		
+			if(model=="DDexp"){ 
+			    if(is.null(pars)){
+					sigma=NULL
+					beta=NULL
+				} else {
+					sigma=pars[1]
+					beta=pars[2]
+				}
+
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,bounds=bounds)
+     			sig2<-opt$rates["sigma",1]
+				r1<-opt$rates["beta",1]
+				r2<-opt$rates["beta",2]
+				z0<-opt$anc
+				if(!is.null(opt$error)){ 
+					mserr = opt$error
+					npar=5
+					}else{
+					mserr = NA
+					npar=4
+					}
+					
+				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[1]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[2]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				return(results)
+			} 
+			
+			if(model=="DDlin"){
+			    if(is.null(pars)){
+					sigma=NULL
+					beta=NULL
+				} else {
+					sigma=pars[1]
+					beta=pars[2]
+				}
+
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,bounds=bounds)
+    			sig2<-opt$rates["sigma",1]
+				b1<-opt$rates["beta",1]
+				b2<-opt$rates["beta",2]
+				z0<-opt$anc
+				if(!is.null(opt$error)){ 
+					mserr = opt$error
+					npar=5
+					}else{
+					mserr = NA
+					npar=4
+					}
+					
+				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[1]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[2]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				return(results)
+			}
+
+		
+		
+		}	
+    	
+    }
+
+	GeoByClassObject<-CreateGeobyClassObject(full.phylo,subgroup.map,trim.class,ana.events,clado.events,stratified=stratified)
 
 	phylo<-GeoByClassObject$map
 	

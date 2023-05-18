@@ -655,4 +655,332 @@ if(is.null(regime.map)){ 	# single slope version
 	}
 }
 
+.fit_t_DD<-function(phylo,data,model=c("exponential","linear","both"),geo.map=NULL,subgroup.map=NULL,subgroup=NULL,regime.map=NULL,error=NULL, beta=NULL, sigma=NULL, method=c("Nelder-Mead","L-BFGS-B","BB"), upper=Inf, lower=-Inf, control=list(maxit=20000), diagnostic=FALSE, echo=FALSE){
+	
+	if(!model%in%c("exponential","linear","both")){ stop("model must be stated as 'exponential' , 'linear', or 'both' ")}
+	
+if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slope version without BioGeoBEARS biogeography or subgroup pruning
+	
+		hold<-rep("A",length(phylo$tip.label))
+		hold[1]<-"B"
+		names(hold)<-phylo$tip.label
+		smap<-make.simmap(phylo,hold,message=F)
+		new.maps<-list()
+		for(i in 1:length(phylo$edge.length)){
+			new.maps[[i]]<-phylo$edge.length[i]
+			names(new.maps[[i]])<-"A"
+			}
+		new.mapped.edge<- as.matrix(rowSums(smap$mapped.edge))
+		colnames(new.mapped.edge)<-"A"	
+		smap$maps<-new.maps
+		smap$mapped.edge<-new.mapped.edge
+	
+		times = as.numeric(sort(max(branching.times(smap))-branching.times(smap)))
+		
+		class.df<-return.class.df_sympatric(smap)
+		new_list_function<-create.function.list(smap,times=times,df=class.df)
 
+		sigma.constraint<-rep(1, dim(smap$mapped.edge)[2])
+		beta.constraint<-rep(1, dim(smap$mapped.edge)[2])
+
+		if(model%in%c("exponential","linear")){
+			out<-fit_t_general(tree=smap,data=data,fun=new_list_function,class.df=class.df,input.times=times,error=error, sigma=sigma, beta=beta, model=model,method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))	
+		} else {
+			out.exp<-fit_t_general(tree=smap,data=data,fun=new_list_function,class.df=class.df,input.times=times,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))	
+			out.lin<-fit_t_general(tree=smap,data=data,fun=new_list_function,class.df=class.df,input.times=times,error=error, sigma=sigma, beta=beta, model="linear",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))	
+			out<-list(exponential.fit=out.exp,linear.fit=out.lin)
+		}
+
+		
+}  else if (is.null(geo.map)&&is.null(subgroup.map)&&!is.null(regime.map)) { # two slope version without BioGeoBEARS biogeography or subgroup pruning
+
+		if(!all(as.phylo(phylo)$tip.label == as.phylo(regime.map)$tip.label)) { stop("regime map doesn't match phylogeny")}
+		if(length(data) != length(as.phylo(regime.map)$tip.label)) { stop("number of lineages in data and regime map don't match")}
+		if(! all (names(data) %in% as.phylo(regime.map)$tip.label)) { stop("names of lineages in data and regime map don't match")}
+		if(! all (as.phylo(regime.map)$tip.label %in% names(data)) ) { stop("names of lineages in data and regime map don't match")}
+		
+		class.object<-try(CreateClassObject(regime.map))
+		if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(regime.map,rnd=6))}
+		if(class(class.object)=="try-error"){class.object<-CreateClassObject(regime.map,rnd=7)}
+
+		class.df<-return.class.df_subgroup(regime.map,class.object)
+		new_list_function<-create.function.list(regime.map,times=class.object$times,df=class.df)
+				
+		sigma.constraint<-rep(1, dim(regime.map$mapped.edge)[2])
+		beta.constraint<-seq(1,by=1,length.out=dim(regime.map$mapped.edge)[2])
+		
+		if(model%in%c("exponential","linear")){
+		out<-fit_t_general(tree=regime.map,data=data,fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model=model,method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		} else{
+		out.exp=fit_t_general(tree=regime.map,data=data,fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out.lin=fit_t_general(tree=regime.map,data=data,fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="linear",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out<-list(exponential.fit=out.exp,linear.fit=out.lin)
+		}
+		
+}  else if (is.null(subgroup.map)&&is.null(regime.map)&&!is.null(geo.map)) { # single slope version with BioGeoBEARS biogeography but no subgroup pruning
+
+		geo.simmap<-geo.map
+		hold<-CreateClassObject(geo.simmap)
+		geo.class.df<-return.class.df(geo.simmap,hold)
+		class.object=hold
+		class.df=geo.class.df
+		new_list_function <- create.function.list(geo.simmap=geo.simmap, df=class.df,times=class.object$times)
+
+		sigma.constraint<-rep(1, dim(geo.map$mapped.edge)[2])
+		beta.constraint<-rep(1, dim(geo.map$mapped.edge)[2])
+		
+		if(model%in%c("exponential","linear")){
+		out<-fit_t_general(tree=geo.map,data=data,fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model=model,method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		} else{
+		out.exp<-fit_t_general(tree=geo.map,data=data,fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out.lin<-fit_t_general(tree=geo.map,data=data,fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="linear",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out<-list(exponential.fit=out.exp,linear.fit=out.lin)
+		}
+		
+}  else if (is.null(subgroup.map)&&!is.null(regime.map)&&!is.null(geo.map)) {  # two slope version with BioGeoBEARS biogeography but no subgroup pruning
+	
+		#need to add other cases down the line
+		stop("two-slope with biogeography not currently implemented")
+	
+}  else if (is.null(geo.map)&&is.null(regime.map)&&!is.null(subgroup.map)) { # single slope version with subgroup pruning but no BioGeoBEARS biogeography
+				
+		if(!all(phylo$tip.label %in% as.phylo(subgroup.map)$tip.label)) { stop("some lineages in phylogeny don't appear in subgroup map")}
+		if( is.null(subgroup) || (!subgroup%in%colnames(subgroup.map$mapped.edge))){ stop("specify a subgroup that appears as a mapped regime in subgroup.map")}
+		trimclass.subgroup.trimmed<-.trimSimmap(subgroup.map,trim.class=subgroup)
+		
+		if(length(colnames(trimclass.subgroup.trimmed$mapped.edge))==1){ return("FLAG")}
+		
+		class.object<-try(CreateClassObject(trimclass.subgroup.trimmed))
+		
+		if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(trimclass.subgroup.trimmed,rnd=6))}
+		if(class(class.object)=="try-error"){class.object<-CreateClassObject(trimclass.subgroup.trimmed,rnd=7)}
+
+		subgroup.class.df<-return.class.df_subgroup(trimclass.subgroup.trimmed,class.object)
+		
+		subgroup.class.df[,which(colnames(trimclass.subgroup.trimmed$mapped.edge)!=subgroup)+1]=1 
+	
+		
+		trimclass.subgroup.trimmed.tips<-drop.tip.simmap(trimclass.subgroup.trimmed,trimclass.subgroup.trimmed$tip.label[which(!trimclass.subgroup.trimmed$tip.label%in%names(data))])
+		subgroup.class.df.trimmed<-subgroup.class.df[,c(1,match(colnames(trimclass.subgroup.trimmed.tips$mapped.edge),colnames(trimclass.subgroup.trimmed$mapped.edge))+1)]		
+	
+		subgroup.map.region.root=max(nodeHeights(trimclass.subgroup.trimmed))
+		trimclass.subgroup.trimmed.tips.root=max(nodeHeights(trimclass.subgroup.trimmed.tips))
+
+		if(round(subgroup.map.region.root,5)!=round(trimclass.subgroup.trimmed.tips.root,5)){
+
+			trimmed.class.object<-try(CreateClassObject(trimclass.subgroup.trimmed.tips))
+			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-try(CreateClassObject(trimclass.subgroup.trimmed.tips,rnd=6))}
+			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-CreateClassObject(trimclass.subgroup.trimmed.tips,rnd=7)}
+
+			shifted.times<-trimmed.class.object$times+(subgroup.map.region.root-trimclass.subgroup.trimmed.tips.root)
+			new.subgroup.class.df.trimmed<-subgroup.class.df.trimmed[c(which(round(class.object$times,5)==round(min(shifted.times),5)):dim(subgroup.class.df.trimmed)[1]),]
+			
+			new.subgroup.class.df.trimmed$interval<-c(1:dim(new.subgroup.class.df.trimmed)[1])
+			class.object$times<-class.object$times[which(round(class.object$times,5)>=round(min(shifted.times),5))]-round(subgroup.map.region.root-trimclass.subgroup.trimmed.tips.root,5)
+			#forces time to start at root of trimmed tree; would be better to pass times directly to new_list_function to avoid overwriting this slot of the out object, which could lead to errors
+			subgroup.class.df.trimmed<-new.subgroup.class.df.trimmed
+		}
+	
+		class.df=subgroup.class.df.trimmed
+		new_list_function<-create.function.list(trimclass.subgroup.trimmed.tips,times=class.object$times,df=class.df)
+				
+		sigma.constraint<-rep(1, dim(trimclass.subgroup.trimmed.tips$mapped.edge)[2])
+		beta.constraint<-rep(NA, dim(trimclass.subgroup.trimmed.tips$mapped.edge)[2])
+		beta.constraint[which(colnames(trimclass.subgroup.trimmed.tips$mapped.edge)==subgroup)]<-1
+		
+		if(model%in%c("exponential","linear")){
+		out<-fit_t_general(tree=trimclass.subgroup.trimmed.tips, data=data, fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model=model,method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		} else{
+		out.exp=fit_t_general(tree=trimclass.subgroup.trimmed.tips, data=data, fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out.lin=fit_t_general(tree=trimclass.subgroup.trimmed.tips, data=data, fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="linear",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out<-list(exponential.fit=out.exp,linear.fit=out.lin)
+		}
+		
+}  else if (is.null(geo.map)&&!is.null(regime.map)&&!is.null(subgroup.map)) {  # two slope version with subgroup pruning but no BioGeoBEARS biogeography
+
+		if(!all(phylo$tip.label %in% as.phylo(subgroup.map)$tip.label)) { stop("some lineages in phylogeny don't appear in subgroup map")}
+		if( is.null(subgroup) || (!subgroup%in%colnames(subgroup.map$mapped.edge))){ stop("specify a subgroup that appears as a mapped regime in subgroup.map")}
+
+		class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup))
+		if(class(class.by.class.object)=="try-error"){class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=6))}
+		if(class(class.by.class.object)=="try-error"){class.by.class.object<-.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=7)}
+		regime.class.df<-return.class.df_subgroup(class.by.class.object$regime.simmap,class.by.class.object$regime.class.object)
+		regime.class.df[,which(colnames(class.by.class.object$regime.simmap$mapped.edge)=='Z')+1]=1
+
+		regime.simmap.region.trimmed<-drop.tip.simmap(class.by.class.object$regime.simmap,class.by.class.object$regime.simmap$tip.label[which(!class.by.class.object$regime.simmap$tip.label%in%names(data))])
+		
+		regime.class.df.trimmed<-regime.class.df[,c(1,match(colnames(regime.simmap.region.trimmed$mapped.edge),colnames(class.by.class.object$regime.simmap$mapped.edge))+1)]		
+
+		regime.simmap.region.root=max(nodeHeights(class.by.class.object$regime.simmap))
+		regime.simmap.region.trimmed.root=max(nodeHeights(regime.simmap.region.trimmed))
+
+		if(round(regime.simmap.region.root,5)!=round(regime.simmap.region.trimmed.root,5)){
+		
+			trimmed.class.object<-try(CreateClassObject(regime.simmap.region.trimmed,rnd=5))
+			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-try(CreateClassObject(regime.simmap.region.trimmed,rnd=6))}
+			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-CreateClassObject(regime.simmap.region.trimmed,rnd=7)}
+
+			shifted.times<-trimmed.class.object$times+(regime.simmap.region.root-regime.simmap.region.trimmed.root)
+			new.regime.class.df.trimmed<-regime.class.df.trimmed[c(which(round(class.by.class.object$regime.class.object$times,5)==round(min(shifted.times),5)):dim(regime.class.df.trimmed)[1]),]
+			
+			new.regime.class.df.trimmed$interval<-c(1:dim(new.regime.class.df.trimmed)[1])
+			class.by.class.object$regime.class.object$times<-class.by.class.object$regime.class.object$times[which(round(class.by.class.object$regime.class.object$times,5)>=round(min(shifted.times),5))]-round(regime.simmap.region.root-regime.simmap.region.trimmed.root,5)
+			#forces time to start at root of trimmed tree; would be better to pass times directly to new_list_function to avoid overwriting this slot of the class.by.class.object object, which could lead to errors
+			regime.class.df.trimmed<-new.regime.class.df.trimmed
+		}
+		class.df=regime.class.df.trimmed
+		class.object=class.by.class.object$regime.class.object
+		
+		new_list_function<-create.function.list(regime.simmap.region.trimmed,df=class.df,times=class.object$times)
+		
+		sigma.constraint<-rep(1, dim(regime.simmap.region.trimmed$mapped.edge)[2])
+		beta.constraint<-rep(NA, dim(regime.simmap.region.trimmed$mapped.edge)[2])
+		beta.constraint[which(colnames(regime.simmap.region.trimmed$mapped.edge)!="Z")]<-1:(dim(regime.simmap.region.trimmed$mapped.edge)[2]-1)
+		
+		if(model%in%c("exponential","linear")){
+		out<-fit_t_general(tree=regime.simmap.region.trimmed, data=data, fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model=model,method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		} else{
+		out.exp<-fit_t_general(tree=regime.simmap.region.trimmed, data=data, fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="exponential",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out.lin<-fit_t_general(tree=regime.simmap.region.trimmed, data=data, fun=new_list_function,input.times=class.object$times,class.df=class.df,error=error, sigma=sigma, beta=beta, model="linear",method=method, upper=upper, lower=lower, control=control,diagnostic=diagnostic, echo=echo,constraint=list(sigma=sigma.constraint, beta=beta.constraint))
+		out<-list(exponential.fit=out.exp,linear.fit=out.lin)
+		}
+}  else if (is.null(regime.map)&&!is.null(subgroup.map)&&!is.null(geo.map)) { # single slope version with subgroup pruning and BioGeoBEARS biogeography
+	
+		#need to add other cases down the line (check 20180802_testing.R and CreateGeoByClassObject.R for inspiration)
+		stop("single slope version with subgroup pruning and BioGeoBEARS biogeography not yet implemented")
+	
+	}  else if (!is.null(regime.map)&&!is.null(subgroup.map)&&!is.null(geo.map)) {  # two slope version with subgroup pruning and BioGeoBEARS biogeography
+	
+		#need to add other cases down the line
+		stop("two slope version with subgroup pruning and BioGeoBEARS biogeography not yet implemented")
+	}
+		return(out)
+}
+
+
+
+.CreateClassbyClassObject_mvMORPH<-function(map.guild,map.regime,trim.class,rnd=5){
+
+trc=trim.class
+
+##trim tree
+
+new.map<-trimSimmap(map.guild,trc)
+
+##create class.object if not provided
+
+class.object.guild<-CreateClassObject(new.map,rnd=rnd)
+
+#trim regime to match guild
+
+map.regime.trimmed<-drop.tip.simmap(map.regime,map.regime$tip.label[which(!map.regime$tip.label%in%new.map$tip.label)])
+
+class.object.regime<-CreateClassObject(map.regime.trimmed,rnd=rnd,return.mat=TRUE)
+
+##first concatenate geo.object and class.object timings 
+	regt<-round(class.object.regime$times,rnd)
+	guit<-round(class.object.guild$times,rnd)
+	nodeDist<-sort(unique(c(regt,guit)))
+	nodeDiff<-diff(nodeDist)
+	if(any(nodeDiff<= (2*(10^-rnd)))){stop("potential rounding error, two time bins very similar, try changing rnd digits")}
+	
+
+#initialize counter for geo.class.object and class.object
+u<-0 #guild class object
+y<-0 #regime class object
+
+
+###NEED TO UPDATE THIS so that only class objects are reconciled, not multiplied against one another
+hold.guild<-list()
+hold.regime<-list()
+
+for(i in 1:length(nodeDiff)){
+
+	if((nodeDist[i]%in%regt) && (nodeDist[i]%in%guit)){ #if timing is the same for both
+		u = u+1
+		y = y+1
+		gui.int<-class.object.guild$class.object[[u]]
+		reg.int<-class.object.regime$class.object[[y]]
+		reg.int[which(gui.int[,2]!=trc),2]<-'Z'
+		hold.guild[[i]]<-gui.int
+		hold.regime[[i]]<-reg.int
+	}
+	if((nodeDist[i]%in%regt) && (!nodeDist[i]%in%guit)){ #this means that geo.object changes but class object doesn't
+		y = y+1
+		gui.int<-class.object.guild$class.object[[u]]
+		reg.int<-class.object.regime$class.object[[y]]
+		reg.int[which(gui.int[,2]!=trc),2]<-'Z'
+		hold.guild[[i]]<-gui.int
+		hold.regime[[i]]<-reg.int
+	}
+	if((!nodeDist[i]%in%regt) && (nodeDist[i]%in%guit)){ #this means that class.object changes but geo object doesn't
+		u = u+1
+		gui.int<-class.object.guild$class.object[[u]]
+		reg.int<-class.object.regime$class.object[[y]]
+		reg.int[which(gui.int[,2]!=trc),2]<-'Z'
+		hold.guild[[i]]<-gui.int
+		hold.regime[[i]]<-reg.int
+	}
+	}
+
+
+	phylo<-class.object.regime$phylo
+	mat<-class.object.regime$mat
+	maps.list=list()
+	
+	for(k in 1:length(phylo$edge.length)){
+		
+		#identify branch from edge matrix
+		#lookup the name of this branch in the 'mat' matrix compiled above
+		#lookup which nat elements have the name of this branch
+		#write a vector of the nodeDiff values named with the ranges for each of these elements
+
+		
+		lf<-phylo$edge[k,1]
+		ri<-phylo$edge[k,2]
+		br<-mat[which(mat[,1]==lf & mat[,3]==ri),2]
+		natis<-which(sapply(hold.regime,function(x)br%in%x[,1]))
+		out.vec<-nodeDiff[natis]
+		name.vec<-vector()
+		for(n in 1:length(out.vec)){
+			name.vec<-c(name.vec,hold.regime[[natis[n]]][which(hold.regime[[natis[n]]][,1]==br),2])	
+		}	
+		names(out.vec)<-name.vec
+		
+		#sum adjacent elements with the same name
+		
+		out.vec.simple<-vector()
+		counter=1
+		for(i in 1: length(out.vec)){
+			if(i == 1 || i == (counter+1)){
+				while((length(out.vec)>counter) && (names(out.vec[i])==names(out.vec[counter+1]))){
+					counter=counter+1
+					}
+				hold<-sum(out.vec[i:counter])
+				names(hold)<-names(out.vec[i])
+				out.vec.simple<-c(out.vec.simple,hold)	
+				}
+		}
+		
+		
+		maps.list[[k]]<-out.vec.simple
+	
+	}
+
+	mapped.edge<-matrix(nrow=dim(phylo$edge)[1],ncol=length(unique(names(unlist(maps.list)))))
+	colnames(mapped.edge)<-unique(names(unlist(maps.list)))
+	
+	for(k in 1:dim(phylo$edge)[1]){
+		for(j in 1:dim(mapped.edge)[2]){
+			hold<-which(names(maps.list[[k]])==colnames(mapped.edge)[j])
+			mapped.edge[k,j]<-ifelse(length(hold)==0,0,sum(maps.list[[k]][hold]))
+		}
+	}
+	
+	outsmap<-list(edge=phylo$edge,edge.length=phylo$edge.length,tip.label=phylo$tip.label,Nnode=phylo$Nnode,maps=maps.list,mapped.edge=mapped.edge,Q="NA",logL="NA")
+	class(outsmap)<-c("phylo","simmap")
+
+	
+return(list(subgroup.simmap=new.map,subgroup.class.object=list(class.object=hold.guild,times=nodeDist,spans=nodeDiff),regime.simmap=outsmap,regime.class.object=list(class.object=hold.regime,times=nodeDist,spans=nodeDiff)))#new phylo object, #new times, #new spans, #new geo object
+
+}
