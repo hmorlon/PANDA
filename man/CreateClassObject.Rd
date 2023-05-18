@@ -12,17 +12,20 @@ passed to \code{\link{CreateGeobyClassObject}}
 }
 \usage{
 
-CreateClassObject(simmap,rnd=5)
+CreateClassObject(simmap,rnd=5,return.mat=FALSE)
 
 }
 
 \arguments{
 
-  \item{simmap}{
+  \item{map}{
   stochastic map from \code{\link{make.simmap}} in \code{phytools}
 }
   \item{rnd}{ 
   integer indicating the number of decimal places to which times should be rounded (default value is 5) (see \code{\link{round}})
+}
+  \item{return.mat}{ 
+  logical indicating whether to return simmap in a format to be passed to other internal functions (usually FALSE)
 }
 
 }
