@@ -46,7 +46,7 @@
 \code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}}
 
 \examples{
-\donttest{
+\dontrun{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")

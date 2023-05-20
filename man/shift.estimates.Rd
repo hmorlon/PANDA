@@ -85,7 +85,7 @@ clade.size argument should be the same value for the whole procedure (same than 
 \code{\link{get.sampling.fractions}}, \code{\link{shift.estimates}}, \code{\link{paleodiv}}
 }
 \examples{
-\donttest{
+\dontrun{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")

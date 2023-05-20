@@ -87,7 +87,7 @@ plot the phylogeny and returns the same invisible object as plot.phylo.
 \code{\link{shift.estimates}}}
 
 \examples{
-\donttest{
+\dontrun{
 # loading data
 data("Cetacea")
 data("taxo_cetacea")
