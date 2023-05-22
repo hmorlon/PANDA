@@ -678,7 +678,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		times = as.numeric(sort(max(branching.times(smap))-branching.times(smap)))
 		
 		class.df<-.return.class.df_sympatric(smap)
-		new_list_function<-create.function.list(smap,times=times,df=class.df)
+		new_list_function<-.create.function.list(smap,times=times,df=class.df)
 
 		sigma.constraint<-rep(1, dim(smap$mapped.edge)[2])
 		beta.constraint<-rep(1, dim(smap$mapped.edge)[2])
@@ -704,7 +704,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if(class(class.object)=="try-error"){class.object<-CreateClassObject(regime.map,rnd=7)}
 
 		class.df<-.return.class.df_subgroup(regime.map,class.object)
-		new_list_function<-create.function.list(regime.map,times=class.object$times,df=class.df)
+		new_list_function<-.create.function.list(regime.map,times=class.object$times,df=class.df)
 				
 		sigma.constraint<-rep(1, dim(regime.map$mapped.edge)[2])
 		beta.constraint<-seq(1,by=1,length.out=dim(regime.map$mapped.edge)[2])
@@ -724,7 +724,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		geo.class.df<-.return.class.df(geo.simmap,hold)
 		class.object=hold
 		class.df=geo.class.df
-		new_list_function <- create.function.list(geo.simmap=geo.simmap, df=class.df,times=class.object$times)
+		new_list_function <- .create.function.list(geo.simmap=geo.simmap, df=class.df,times=class.object$times)
 
 		sigma.constraint<-rep(1, dim(geo.map$mapped.edge)[2])
 		beta.constraint<-rep(1, dim(geo.map$mapped.edge)[2])
@@ -782,7 +782,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		}
 	
 		class.df=subgroup.class.df.trimmed
-		new_list_function<-create.function.list(trimclass.subgroup.trimmed.tips,times=class.object$times,df=class.df)
+		new_list_function<-.create.function.list(trimclass.subgroup.trimmed.tips,times=class.object$times,df=class.df)
 				
 		sigma.constraint<-rep(1, dim(trimclass.subgroup.trimmed.tips$mapped.edge)[2])
 		beta.constraint<-rep(NA, dim(trimclass.subgroup.trimmed.tips$mapped.edge)[2])
@@ -831,7 +831,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		class.df=regime.class.df.trimmed
 		class.object=class.by.class.object$regime.class.object
 		
-		new_list_function<-create.function.list(regime.simmap.region.trimmed,df=class.df,times=class.object$times)
+		new_list_function<-.create.function.list(regime.simmap.region.trimmed,df=class.df,times=class.object$times)
 		
 		sigma.constraint<-rep(1, dim(regime.simmap.region.trimmed$mapped.edge)[2])
 		beta.constraint<-rep(NA, dim(regime.simmap.region.trimmed$mapped.edge)[2])
