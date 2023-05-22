@@ -97,7 +97,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					npar=4
 					}
 					
-				eval(pare(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[1]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[2]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[1]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[2]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
 				return(results)
 			} 
 			
@@ -123,7 +123,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					npar=4
 					}
 					
-				eval(pare(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[1]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[2]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[1]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[2]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
 				return(results)
 			}
 
