@@ -677,7 +677,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 	
 		times = as.numeric(sort(max(branching.times(smap))-branching.times(smap)))
 		
-		class.df<-return.class.df_sympatric(smap)
+		class.df<-.return.class.df_sympatric(smap)
 		new_list_function<-create.function.list(smap,times=times,df=class.df)
 
 		sigma.constraint<-rep(1, dim(smap$mapped.edge)[2])
@@ -703,7 +703,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(regime.map,rnd=6))}
 		if(class(class.object)=="try-error"){class.object<-CreateClassObject(regime.map,rnd=7)}
 
-		class.df<-return.class.df_subgroup(regime.map,class.object)
+		class.df<-.return.class.df_subgroup(regime.map,class.object)
 		new_list_function<-create.function.list(regime.map,times=class.object$times,df=class.df)
 				
 		sigma.constraint<-rep(1, dim(regime.map$mapped.edge)[2])
@@ -721,7 +721,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 
 		geo.simmap<-geo.map
 		hold<-CreateClassObject(geo.simmap)
-		geo.class.df<-return.class.df(geo.simmap,hold)
+		geo.class.df<-.return.class.df(geo.simmap,hold)
 		class.object=hold
 		class.df=geo.class.df
 		new_list_function <- create.function.list(geo.simmap=geo.simmap, df=class.df,times=class.object$times)
@@ -755,7 +755,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(trimclass.subgroup.trimmed,rnd=6))}
 		if(class(class.object)=="try-error"){class.object<-CreateClassObject(trimclass.subgroup.trimmed,rnd=7)}
 
-		subgroup.class.df<-return.class.df_subgroup(trimclass.subgroup.trimmed,class.object)
+		subgroup.class.df<-.return.class.df_subgroup(trimclass.subgroup.trimmed,class.object)
 		
 		subgroup.class.df[,which(colnames(trimclass.subgroup.trimmed$mapped.edge)!=subgroup)+1]=1 
 	
@@ -804,7 +804,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup))
 		if(class(class.by.class.object)=="try-error"){class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=6))}
 		if(class(class.by.class.object)=="try-error"){class.by.class.object<-.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=7)}
-		regime.class.df<-return.class.df_subgroup(class.by.class.object$regime.simmap,class.by.class.object$regime.class.object)
+		regime.class.df<-.return.class.df_subgroup(class.by.class.object$regime.simmap,class.by.class.object$regime.class.object)
 		regime.class.df[,which(colnames(class.by.class.object$regime.simmap$mapped.edge)=='Z')+1]=1
 
 		regime.simmap.region.trimmed<-drop.tip.simmap(class.by.class.object$regime.simmap,class.by.class.object$regime.simmap$tip.label[which(!class.by.class.object$regime.simmap$tip.label%in%names(data))])
@@ -983,4 +983,31 @@ for(i in 1:length(nodeDiff)){
 	
 return(list(subgroup.simmap=new.map,subgroup.class.object=list(class.object=hold.guild,times=nodeDist,spans=nodeDiff),regime.simmap=outsmap,regime.class.object=list(class.object=hold.regime,times=nodeDist,spans=nodeDiff)))#new phylo object, #new times, #new spans, #new geo object
 
+}
+
+.return.class.df<-function(simmap,class.object){
+	states<-colnames(simmap$mapped.edge)
+	for(i in 1:length(states)){
+		st.id=paste("c(",paste(which(grepl(paste(strsplit(states[i],split="")[[1]],collapse="|"),states)),collapse=","),")",sep="") #this gives the columns to extract from class.df
+		#eval(parse(text=paste('d',i,'<-sapply(class.object$class.object,function(x)sum(x[,2]==states[',i,']))',sep="")))
+		eval(parse(text=paste('d',i,'<-sapply(class.object$class.object,function(x)sum(x[,2]%in%states[',st.id,']))',sep="")))
+	}
+	eval(parse(text=paste('return(data.frame(interval=1:length(d1),',paste('d',1:length(states),sep="",collapse=','),'))',sep="")))
+}
+
+.return.class.df_sympatric<-function(simmap){
+	states<-colnames(simmap$mapped.edge)
+	d1<-2:length(simmap$tip.label)
+	eval(parse(text=paste('return(data.frame(interval=1:length(d1),',paste('d',1:length(states),sep="",collapse=','),'))',sep="")))
+}
+
+
+.return.class.df_subgroup<-function(simmap,class.object){
+	states<-colnames(simmap$mapped.edge)
+	for(i in 1:length(states)){
+		st.id=i #this gives the columns to extract from class.df
+		#eval(parse(text=paste('d',i,'<-sapply(class.object$class.object,function(x)sum(x[,2]==states[',i,']))',sep="")))
+		eval(parse(text=paste('d',i,'<-sapply(class.object$class.object,function(x)sum(x[,2]%in%states[',st.id,']))',sep="")))
+	}
+	eval(parse(text=paste('return(data.frame(interval=1:length(d1),',paste('d',1:length(states),sep="",collapse=','),'))',sep="")))
 }
