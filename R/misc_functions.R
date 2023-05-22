@@ -865,7 +865,7 @@ trc=trim.class
 
 ##trim tree
 
-new.map<-trimSimmap(map.guild,trc)
+new.map<-.trimSimmap(map.guild,trc)
 
 ##create class.object if not provided
 
