@@ -86,8 +86,8 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 
 				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",sigma=sigma,beta=beta,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,lower=bounds$upper, upper=bounds$upper)
      			sig2<-opt$rates["sigma",1]
-				r1<-opt$rates["beta",2]
-				r2<-opt$rates["beta",3]
+				r1<-opt$rates["beta",which(colnames(opt$rates)!="Z")[1]]
+				r2<-opt$rates["beta",which(colnames(opt$rates)!="Z")[2]]
 				z0<-opt$anc
 				if(!is.null(opt$error)){ 
 					mserr = opt$error
@@ -97,7 +97,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					npar=4
 					}
 					
-				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[2]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[3]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[which(colnames(opt$rates)!="Z")[1]]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[which(colnames(opt$rates)!="Z")[2]]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
 				return(results)
 			} 
 			
@@ -112,8 +112,8 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 
 				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",sigma=sigma,beta=beta,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,lower=bounds$upper, upper=bounds$upper)
     			sig2<-opt$rates["sigma",1]
-				b1<-opt$rates["beta",2]
-				b2<-opt$rates["beta",3]
+				b1<-opt$rates["beta",which(colnames(opt$rates)!="Z")[1]]
+				b2<-opt$rates["beta",which(colnames(opt$rates)!="Z")[2]]
 				z0<-opt$anc
 				if(!is.null(opt$error)){ 
 					mserr = opt$error
@@ -123,7 +123,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					npar=4
 					}
 					
-				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[2]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[3]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[which(colnames(opt$rates)!="Z")[1]]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[which(colnames(opt$rates)!="Z")[2]]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
 				return(results)
 			}
 
