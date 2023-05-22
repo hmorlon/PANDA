@@ -28,7 +28,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					beta=par[2]
 				}
 
-				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,bounds=bounds)
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,lower=bounds$upper, upper=bounds$upper)
     			
     			sig2<-opt$rates["sigma",]
 				r<-opt$rates["beta",]
@@ -54,7 +54,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 				}
 
 				
-				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,bounds=bounds)
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,lower=bounds$upper, upper=bounds$upper)
     			
     			sig2<-opt$rates["sigma",subgroup]
 				b<-opt$rates["beta",subgroup]
@@ -84,7 +84,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					beta=par[2]
 				}
 
-				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,bounds=bounds)
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,lower=bounds$upper, upper=bounds$upper)
      			sig2<-opt$rates["sigma",1]
 				r1<-opt$rates["beta",1]
 				r2<-opt$rates["beta",2]
@@ -110,7 +110,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					beta=par[2]
 				}
 
-				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,bounds=bounds)
+				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,lower=bounds$upper, upper=bounds$upper)
     			sig2<-opt$rates["sigma",1]
 				b1<-opt$rates["beta",1]
 				b2<-opt$rates["beta",2]
