@@ -433,7 +433,7 @@ if(is.null(geography.object) & !is.null(regime.map)){ #multi-slope version for s
 				sigma=pars[1]
 				beta=pars[2]
 			}
-			opt<-.fit_t_DD(phylo,data,model="exponential",regime.map=regime.map,sigma=sigma,beta=beta)
+			opt<-.fit_t_DD(phylo,data,error=error,model="exponential",regime.map=regime.map,sigma=sigma,beta=beta)
 			sig2<-opt$rates["sigma",1]
 			r1<-opt$rates["beta",1]
 			r2<-opt$rates["beta",2]
@@ -451,7 +451,7 @@ if(is.null(geography.object) & !is.null(regime.map)){ #multi-slope version for s
 				sigma=pars[1]
 				beta=pars[2]
 			}
-			opt<-.fit_t_DD(phylo,data,model="linear",regime.map=regime.map,sigma=sigma,beta=beta)
+			opt<-.fit_t_DD(phylo,data,error=error,model="linear",regime.map=regime.map,sigma=sigma,beta=beta)
 			sig2<-opt$rates["sigma",1]
 			b1<-opt$rates["beta",1]
 			b2<-opt$rates["beta",2]
