@@ -20,12 +20,12 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
     
     	if(is.null(regime.map)){ #single regime subgroup DD models without biogeography
 			if(model=="DDexp"){ 
-			   	if(is.null(pars)){
+			   	if(is.null(par)){
 					sigma=NULL
 					beta=NULL
 				} else {
-					sigma=pars[1]
-					beta=pars[2]
+					sigma=par[1]
+					beta=par[2]
 				}
 
 				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,method=method,bounds=bounds)
@@ -45,12 +45,12 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 			} 
 			
 			if(model=="DDlin"){
-				if(is.null(pars)){
+				if(is.null(par)){
 					sigma=NULL
 					beta=NULL
 				} else {
-					sigma=pars[1]
-					beta=pars[2]
+					sigma=par[1]
+					beta=par[2]
 				}
 
 				
@@ -76,12 +76,12 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 		} else { #two-regime models
 		
 			if(model=="DDexp"){ 
-			    if(is.null(pars)){
+			    if(is.null(par)){
 					sigma=NULL
 					beta=NULL
 				} else {
-					sigma=pars[1]
-					beta=pars[2]
+					sigma=par[1]
+					beta=par[2]
 				}
 
 				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,bounds=bounds)
@@ -97,17 +97,17 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					npar=4
 					}
 					
-				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[1]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[2]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				eval(pare(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", r1_",colnames(opt$rates)[1]," = ",as.numeric(r1),", r2_",colnames(opt$rates)[2]," = ",as.numeric(r2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
 				return(results)
 			} 
 			
 			if(model=="DDlin"){
-			    if(is.null(pars)){
+			    if(is.null(par)){
 					sigma=NULL
 					beta=NULL
 				} else {
-					sigma=pars[1]
-					beta=pars[2]
+					sigma=par[1]
+					beta=par[2]
 				}
 
 				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="linear",par=par,subgroup=subgroup,subgroup.map=subgroup.map,regime.map=regime.map,method=method,bounds=bounds)
@@ -123,7 +123,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 					npar=4
 					}
 					
-				eval(parse(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[1]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[2]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
+				eval(pare(text=paste0("results<-list(LH = ",opt$LogLik,", aic = ",opt$AIC,", aicc = ",opt$AICc,", free.parameters =",npar,", sig2 = ",as.numeric(sig2),", b1_",colnames(opt$rates)[1]," = ",as.numeric(b1),", b2_",colnames(opt$rates)[2]," = ",as.numeric(b2),", z0 = ",as.numeric(z0),", convergence = ",opt$convergence,", nuisance = ",mserr,")")))
 				return(results)
 			}
 
@@ -133,7 +133,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
     	
     }
 
-	GeoByClassObject<-CreateGeobyClassObject(full.phylo,subgroup.map,trim.class,ana.events,clado.events,stratified=stratified)
+	GeoByClassObject<-CreateGeobyClassObject(full.phylo,subgroup.map,trim.class=subgroup,ana.events,clado.events,stratified=stratified)
 
 	phylo<-GeoByClassObject$map
 	
