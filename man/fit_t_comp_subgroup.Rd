@@ -137,7 +137,7 @@ Canidae.A<-Canidae.data[which(dummy.group=="A")]
 #Fit model with subgroup pruning and biogeography
 MC.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events, 
 clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,subgroup.map=Canidae.simmap, 
-data=Canidae.A,subgroup="A",model="DDexp")
+data=Canidae.A,subgroup="A",model="MC")
 
 DDexp.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events, 
 clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,subgroup.map=Canidae.simmap, 
