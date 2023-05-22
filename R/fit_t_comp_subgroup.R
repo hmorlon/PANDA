@@ -30,8 +30,8 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 
 				opt<-.fit_t_DD(phylo=full.phylo,data=data, error= error,model="exponential",sigma=sigma,beta=beta,subgroup=subgroup,subgroup.map=subgroup.map,method=method,lower=bounds$upper, upper=bounds$upper)
     			
-    			sig2<-opt$rates["sigma",]
-				r<-opt$rates["beta",]
+    			sig2<-opt$rates["sigma",subgroup]
+				r<-opt$rates["beta",subgroup]
 				z0<-opt$anc
 				if(!is.null(opt$error)){ 
 					mserr = opt$error
