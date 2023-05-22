@@ -147,7 +147,7 @@ data=Canidae.A,subgroup="A",model="DDexp")
 #Prepare regime map for fitting two-regime models
 regime<-c(rep("regime1",15),rep("regime2",19))
 names(regime)<-Canidae.phylo$tip.label
-regime.map<-make.simmap(Canidae.phylo,regime)p
+regime.map<-make.simmap(Canidae.phylo,regime)
 
 #Fit model with subgroup pruning and two-regimes
 fitA<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,data=Canidae.A,subgroup="A",

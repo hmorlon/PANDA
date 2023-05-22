@@ -14,7 +14,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
     if(model=="MC" && (is.null(ana.events) || is.null (clado.events))){stop("MC model without biogeography is currently not implemented, please supply ana.events and clado.events")}
     if(model=="MC" && !is.null(regime.map)){stop("two-regime version of MC model with subgroup pruning is currently not implemented")}
     
-    if((is.null(ana.events) || !is.null(clado.events))||(!is.null(ana.events) || is.null(clado.events))) {stop("please provide both ana.events and clado.events when fitting models with biogeography (see ?fit_t_comp_subgroup)")}
+    if((is.null(ana.events) && !is.null(clado.events))||(!is.null(ana.events) && is.null(clado.events))) {stop("please provide both ana.events and clado.events when fitting models with biogeography (see ?fit_t_comp_subgroup)")}
     if(!is.null(ana.events) && !is.null(regime.map)){ stop("two-regime models with biogeography and subgroup pruning currently not implemented")}
     if(is.null(ana.events)){ #subgroup pruning for DD models without biogeography
     
