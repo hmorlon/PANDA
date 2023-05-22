@@ -10,7 +10,7 @@ Create biogeography object using a stochastic map created from any model in BioG
 }
 \usage{
 CreateGeoObject_BioGeoBEARS( full.phylo, trimmed.phylo = NULL, ana.events,
-clado.events, stratified=FALSE)
+clado.events, stratified=FALSE, simmap.out=FALSE)
 }
 
 
@@ -30,6 +30,9 @@ the "clado.events" table produced in BioGeoBEARS that lists cladogenetic events 
   \item{stratified}{
 logical indicating whether the stochastic map was built from a stratified analysis in BioGeoBEARS
 }
+  \item{stratified}{
+logical indicating whether output should be a stochastic map (simmap) object (see note)
+}
 
 }
 \value{
@@ -38,6 +41,14 @@ logical indicating whether the stochastic map was built from a stratified analys
   \item{times}{a vector containing the time since the root of the tree at which nodes or changes in biogeography occur (used internally in other functions)}
   \item{spans}{a vector specifying the distances between times (used internally in other functions)}
 }
+
+\details{
+
+Note: generating a stochastic map output using \code{simmap.out=TRUE} and passing to \link{fit_t_comp} for diversity dependent models with biogeography greatly speeds up model 
+fitting compared to output generated when \code{simmap.out=FALSE}. This cannot be used for matching competition or any two-regime models with biogeography.
+
+}
+
 
 \references{
 	Drury, J., Clavel, J., Manceau, M., and Morlon, H. 2016. Estimating the effect of competition on trait evolution using maximum likelihood inference. \emph{Systematic Biology} doi 10.1093/sysbio/syw020

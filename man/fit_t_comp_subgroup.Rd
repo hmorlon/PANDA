@@ -76,7 +76,7 @@ If unspecified, \code{par} takes the default values of \code{var(data)/max(nodeH
 \code{b} for the linear diversity dependence model, or \code{r} for the exponential diversity dependence model. Values can be manually entered as a vector with the first element
 equal to the desired starting value for sig2 and the second value equal to the desired starting value for either \code{S}, \code{b}, or \code{r}. Note: since likelihood optimization
 uses sig rather than sig2, and since the starting value for is exponentiated to stabilize the likelihood search, if you input a \code{par} value, the first value specifying sig2 
-should be the log(sqrt()) of the desired sig2 starting value.
+should be the log(sqrt()) of the desired sig2 starting value. We recommend running ML optimization with several different starting values to ensure convergence.
 
 Currently, this function can be used to implement the following models:
 1. Subgroup pruning with biogeography: matching competition, diversity dependent
