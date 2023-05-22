@@ -18,7 +18,7 @@
 	ghost.nodes=desc[which(!desc%in%c(nn,tips))]
 	ana.events<-ana.events[which(ana.events$node%in%desc[which(desc!=subclade.root)]),]
 	clado.events<-clado.events[which(clado.events$node%in%subnodes),]
-	nodes=unique(round(clado.events[,9],8))
+	nodes=unique(round(clado.events$node_ht,8))
 	events=unique(round(totheight.anc-ana.events$abs_event_time,8))
 	nodeDist=sort(c(nodes,events,totheight.anc))
 	nodeDiff=diff(nodeDist)
@@ -106,20 +106,20 @@
 	nodecount=1
 	for(i in 1:length(nodeDiff)){
 		if(nodeDist[i]%in%nodes){ #a new species appears, this is a node
-			if(clado.events[which(round(clado.events[,9],8)==round(nodeDist[i],8)),1]%in%nn){## node has two descendants because of subtree trimming
+			if(clado.events$node[which(round(clado.events$node_ht,8)==round(nodeDist[i],8))]%in%nn){## node has two descendants because of subtree trimming
 				IN<-vector()
 				node<-totlen+nodecount
 				P<-mat[as.numeric(mat[,1])<=(node),c(2,3)]
 				IN<-c(IN, P[P[,2]=="0",1],P[as.numeric(P[,2])>(node),1])
 				#need to find a way to look up old node
 				#oldnode=old.edge[which(phylo$edge[,1]==node)][1]
-				delbr<-clado.events[which(round(clado.events[,9],8)==round(nodeDist[i],8)),1]
-				left=clado.events[which(clado.events[,1]==delbr),16] #### TO CHECK it's now column 16 (04/2023) was 15 in previous releases
+				delbr<-clado.events$node[which(round(clado.events$node_ht,8)==round(nodeDist[i],8))]
+				left=clado.events$left_desc_nodes[which(clado.events$node==delbr)] 
 				left=desc.mat[which(desc.mat[,1]==left),2]
-				right=clado.events[which(clado.events[,1]==delbr),17] #### TO CHECK it's now column 17 (04/2023) was 16 in previous releases
+				right=clado.events$right_desc_nodes[which(clado.events$node==delbr)] 
 				right=desc.mat[which(desc.mat[,1]==right),2]
-				m<-regexpr("->",clado.events[which(clado.events[,1]==delbr),21]) #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
-				regs<-regmatches(clado.events[which(clado.events[,1]==delbr),21],m,invert=TRUE)[[1]][2] #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
+				m<-regexpr("->",clado.events$clado_event_txt[which(clado.events$node==delbr)]) 
+				regs<-regmatches(clado.events$clado_event_txt[which(clado.events$node==delbr)],m,invert=TRUE)[[1]][2] 
 				p<-regexpr(",",regs)	
 				sides<-regmatches(regs,p,invert=TRUE)
 				lside<-sides[[1]][1]
@@ -155,11 +155,11 @@
 					nat[[i]]<-cbind(IN,geo.vector)			
 				}} else{
 				IN<-nat[[i-1]][,1]
-				delbr<-clado.events[which(round(clado.events[,9],8)==round(nodeDist[i],8)),1]
-				left=clado.events[which(clado.events[,1]==delbr),16] #### TO CHECK it's now column 16 (04/2023) was 15 in previous releases
-				right=clado.events[which(clado.events[,1]==delbr),17] #### TO CHECK it's now column 17 (04/2023) was 16 in previous releases
-				m<-regexpr("->",clado.events[which(clado.events[,1]==delbr),21]) #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
-				regs<-regmatches(clado.events[which(clado.events[,1]==delbr),21],m,invert=TRUE)[[1]][2] #### TO CHECK it's now column 21 (04/2023) was 20 in previous releases
+				delbr<-clado.events[which(round(clado.events$node_ht,8)==round(nodeDist[i],8)),1]
+				left=clado.events$left_desc_nodes[which(clado.events$node==delbr)] 
+				right=clado.events$right_desc_nodes[which(clado.events$node==delbr)] 
+				m<-regexpr("->",clado.events$clado_event_txt[which(clado.events$node==delbr)]) 
+				regs<-regmatches(clado.events$clado_event_txt[which(clado.events$node==delbr)],m,invert=TRUE)[[1]][2] 
 				p<-regexpr(",",regs)	
 				sides<-regmatches(regs,p,invert=TRUE)
 				lside<-sides[[1]][1]
@@ -198,7 +198,7 @@
 				geo.vector[elno]<-ana.events[delbr,]$new_rangetxt
 				nat[[i]]<-cbind(IN,geo.vector)			
 			}
-	if(nodeDist[i+1]%in%nodes && clado.events[which(round(clado.events[,9],8)==round(nodeDist[i+1],8)),1]%in%nn){nodecount=nodecount+1}
+	if(nodeDist[i+1]%in%nodes && clado.events$node[which(round(clado.events$node_ht,8)==round(nodeDist[i+1],8))]%in%nn){nodecount=nodecount+1}
 	if(any(nat[[i]][,2]==FALSE)){stop("ERROR:'FALSE' recorded as range")}
 	}			
 	
