@@ -24,7 +24,7 @@ div.models <- function(phylo, tot_time, f,
     while(class(test) == "try-error"){
       
       if(is.null(n.max) & is.null(rate.max)){
-        name <- models[res_l]
+        name <- "BCST"
         suppressWarnings(test <- try(
           treei_BCST <- fit_bd_backbone(phylo, tot_time, f=f,
                                         backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -34,7 +34,7 @@ div.models <- function(phylo, tot_time, f,
           silent = T
         ))
       } else{
-        name <- paste0(models[res_l],"c")
+        name <- "BCSTc"
         suppressWarnings(test <- try(
           treei_BCST <- fit_bd_backbone_c(phylo, tot_time, f=f,
                                           backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -64,7 +64,7 @@ div.models <- function(phylo, tot_time, f,
     class(test) <- "try-error"
     while(class(test) == "try-error"){
       if(is.null(n.max) & is.null(rate.max)){
-        name <- models[res_l]
+        name <- "BCST_DCST"
         test <- tryCatch(
           treei_BCST_DCST <- fit_bd_backbone(phylo, tot_time, f=f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -73,7 +73,7 @@ div.models <- function(phylo, tot_time, f,
                                              cst.lamb=T, cst.mu=T, expo.lamb=F, expo.mu=F, fix.mu=F, cond=cond, model = models[res_l])
         )
       } else {
-        name <- paste0(models[res_l],"c")
+        name <- "BCST_DCSTc"
         test <- try(
           treei_BCST_DCST <- fit_bd_backbone_c(phylo, tot_time, f=f,
                                                backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -99,7 +99,7 @@ div.models <- function(phylo, tot_time, f,
     class(test) <- "try-error"
     while(class(test) == "try-error"){
       if(is.null(n.max) & is.null(rate.max)){
-        name <- models[res_l]
+        name <- "BVAR"
         test <- try(
           treei_BVAR <- fit_bd_backbone(phylo, tot_time, f=f,
                                         backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -111,7 +111,7 @@ div.models <- function(phylo, tot_time, f,
         
         
       } else {
-        name <- paste0(models[res_l],"c")
+        name <- "BVARc"
         test <- try(
           treei_BVAR <- fit_bd_backbone_c(phylo, tot_time, f=f,
                                           backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -139,7 +139,7 @@ div.models <- function(phylo, tot_time, f,
     class(test) <- "try-error"
     while(class(test) == "try-error"){
       if(is.null(n.max) & is.null(rate.max)){
-        name <- models[res_l]
+        name <- "BVAR_DCST"
         test <- try(
           treei_BVAR_DCST <- fit_bd_backbone(phylo, tot_time, f=f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -149,7 +149,7 @@ div.models <- function(phylo, tot_time, f,
           silent = T
         )
       } else {
-        name <- paste0(models[res_l],"c")
+        name <- "BVAR_DCSTc"
         test <- try(
           treei_BVAR_DCST <- fit_bd_backbone_c(phylo, tot_time, f=f,
                                                backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -176,7 +176,7 @@ div.models <- function(phylo, tot_time, f,
     while(class(test) == "try-error"){
       
       if(is.null(n.max) & is.null(rate.max)){
-        name <- models[res_l]
+        name <- "BCST_DVAR"
         test <- try(
           treei_BCST_DVAR <- fit_bd_backbone(phylo, tot_time, f=f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -186,7 +186,7 @@ div.models <- function(phylo, tot_time, f,
           silent = T
         )
       } else {
-        name <- paste0(models[res_l],"c")
+        name <- "BCST_DVARc"
         test <- try(
           treei_BCST_DVAR <- fit_bd_backbone_c(phylo, tot_time, f=f,
                                                backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -212,7 +212,7 @@ div.models <- function(phylo, tot_time, f,
     class(test) <- "try-error"
     while(class(test) == "try-error"){
       if(is.null(n.max) & is.null(rate.max)){
-        name <- models[res_l]
+        name <- "BVAR_DVAR"
         test <- try(
           treei_BVAR_DVAR <- fit_bd_backbone(phylo, tot_time, f=f,
                                              backbone = backbone, spec_times = spec_times, branch_times = branch_times,
@@ -222,7 +222,7 @@ div.models <- function(phylo, tot_time, f,
           silent = T
         )
       } else {
-        name <- paste0(models[res_l],"c")
+        name <- "BVAR_DVARc"
         test <- try(
           treei_BVAR_DVAR <- fit_bd_backbone_c(phylo, tot_time, f=f,
                                                backbone = backbone, spec_times = spec_times, branch_times = branch_times,
