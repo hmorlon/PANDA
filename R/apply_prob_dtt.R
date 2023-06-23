@@ -1,6 +1,6 @@
 apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
                            combi = 1, backbone.option = "crown.shift",
-                           m = NULL){
+                           time.interval = 1, m = NULL){
   
   # some checks ####
   if(!inherits(data, "data.frame")){
@@ -134,12 +134,12 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     while(check_prob == F){
       
       if(no_decline(whole_diversity)){
-        prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
+        prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, seq(1,tot_time, time.interval),
                                     N0 = N0, l = l, type = type, prec = 10000,
                                     m = 1:max(whole_diversity)*m_range))
       } else {
         
-        prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
+        prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, seq(1,tot_time, time.interval),
                                     N0 = N0, l = l, type = type, prec = 10000,
                                     m = 1:max(whole_diversity)*m_range[1]))
       }
@@ -234,10 +234,10 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       N0 <- subclades_N0[i]
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(subclades_fit.bd)[i]]
-      if(length(1:subclades_tot_times[i]) != 1){
-        time <- c(1:subclades_tot_times[i])
+      if(length(seq(1,subclades_tot_times[i], time.interval)) != 1){
+        time <- seq(1,subclades_tot_times[i], time.interval)
       } else {
-        time <- c(1:subclades_tot_times[i],subclades_tot_times[i]) 
+        time <- c(seq(1,subclades_tot_times[i], time.interval),subclades_tot_times[i]) 
       }
       prob_subclades[[i]] <- prob_dtt(fit.bd = subclades_fit.bd[[i]], tot_time = subclades_tot_times[i],
                                       time = time,
@@ -384,7 +384,8 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       while(check_prob == F){
         cat("with a maximum value of m =", max_div*m_range[1], paste0("(max. deterministic value x",m_range[1],")"), "\n")
         prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
-                                       time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
+                                       time = seq(1,backbone_tot_times[i], time.interval),
+                                       type = type[i], prec = 1000,
                                        method = method, l = l, N0 = N0,
                                        m = 1:round(max_div*m_range[1]))
         m_range <- m_range[-1]

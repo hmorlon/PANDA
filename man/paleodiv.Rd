@@ -37,6 +37,9 @@
   \item{combi}{
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
+  \item{time.interval}{
+  numeric. Define the time interval (in million years) at which paleodiversity values are calculated. Default is 1 for a value at each million year.
+  }
   \item{split.div}{
     bolean. Specifies if paleodiversity should be plitted by parts of the selected combination (TRUE) or not. 
   }

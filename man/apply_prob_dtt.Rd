@@ -35,6 +35,9 @@ an object of type 'phylo' (see ape documentation)
   \item{combi}{
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
+  \item{time.interval}{
+  numeric. Define the time interval (in million years) at which paleodiversity values are calculated. Default is 1 for a value at each million year.
+  }
   \item{m}{
     NULL or numeric. The set of maximum values for m ranges. Should be as long as the number of parts in the combinaison. Default is NULL (see details).
   }

@@ -1,5 +1,5 @@
 div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
-                      backbone.option = "crown.shift"){
+                      time.interval = 1, backbone.option = "crown.shift"){
   
   # Checking arguments ####
   # phylo
@@ -30,7 +30,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
   if(comb == "whole_tree"){
     
     tot_time <- max(branching.times(phylo))
-    time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
+    time.seq <- c(tot_time, seq(floor(tot_time),0,by=-time.interval))
     
     rate_data <- shift.res$whole_tree[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc),]
     model <- as.character(rate_data$Models)
@@ -96,7 +96,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
     names(best_subclades_df_combi)[1] <- "Parts"
     tot_time <- max(branching.times(phylo))
     
-    time.seq <- c(tot_time, seq(floor(tot_time),0,by=-1))
+    time.seq <- c(tot_time, seq(floor(tot_time),0,by=-time.interval))
     
     if(backbone.option == "stem.shift"){
       parental_nodes <- Ancestors(phylo, as.numeric(best_subclades_df_combi$Parts), type = "parent")
@@ -155,7 +155,7 @@ div.rates <- function(phylo, shift.res, combi = 1, part = "backbone",
       
       model <- as.character(rate_data$Models[r])
       agei <- time_data[r]
-      time.seq_r <- c(agei, seq(floor(agei),0,by=-1))
+      time.seq_r <- c(agei, seq(floor(agei),0,by=-time.interval))
       #time.seq_r <- unlist(ifelse(round(agei) == floor(agei), list(seq(floor(agei),0,by=-1)), list(c(agei, seq(floor(agei),0,by=-1)))))
       
       rate_df <- matrix(NA,2, length(time.seq))

@@ -25,6 +25,9 @@
   \item{part}{
     character. Specifies for which parts of the combination diversification rates has to be calculated. Default is "backbone" and provides only the backbone rate. Can be "all" for all the parts of a combination or "subclades" for subclades only.
   }
+  \item{time.interval}{
+  numeric. Define the time interval (in million years) at which diversification rates are calculated. Default is 1 for a value at each million year.
+  }
   \item{backbone.option}{
   type of the backbone analysis (see backbone.option in shift.estimates for more details):
     \itemize{ 
