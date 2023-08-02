@@ -11,12 +11,14 @@ Depends:
 Suggests:
     testthat
 Imports:
+    BB,
     bipartite,
     cluster,
     coda,
     deSolve,
     fields,
     fpc,
+    geiger,
     glassoFast,
     graphics,
     grDevices,
