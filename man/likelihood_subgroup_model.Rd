@@ -43,7 +43,7 @@ logical indicating whether to return an estimate of the trait value at the root 
 when fitting \code{DDlin} model, it is necessary to specify the maximum number of sympatric lineages to ensure that the rate returned does not correspond to negative sig2 values at any point in time (see Details).
 }
 
-}  \item{error}{
+ \item{error}{
 A named vector with standard errors (SE) of trait values for each species (with names matching \code{"phylo$tip.label"}). The default is NULL, in this case potential error is ignored in the fit. If set to NA, the SE is estimated from the data (to be used when there are no error measurements, a nuisance parameter is estimated). Note: When standard errors are provided, a nuisance parameter is also estimated.
 }
 
