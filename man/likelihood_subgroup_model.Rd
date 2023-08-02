@@ -46,6 +46,7 @@ when fitting \code{DDlin} model, it is necessary to specify the maximum number o
  \item{error}{
 A named vector with standard errors (SE) of trait values for each species (with names matching \code{"phylo$tip.label"}). The default is NULL, in this case potential error is ignored in the fit. If set to NA, the SE is estimated from the data (to be used when there are no error measurements, a nuisance parameter is estimated). Note: When standard errors are provided, a nuisance parameter is also estimated.
 }
+}
 
 
 \details{
