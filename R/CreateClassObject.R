@@ -1,4 +1,4 @@
-CreateClassObject<-function(map,both.category=NULL,rnd=5,return.mat=FALSE){
+CreateClassObject<-function(map,rnd=5,return.mat=FALSE){
   if(any(grepl("___",map$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
   paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
   paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS

@@ -12,7 +12,7 @@ passed to \code{\link{CreateGeobyClassObject}}
 }
 \usage{
 
-CreateClassObject(simmap,rnd=5,return.mat=FALSE)
+CreateClassObject(map,rnd=5,return.mat=FALSE)
 
 }
 

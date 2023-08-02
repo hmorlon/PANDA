@@ -30,9 +30,10 @@ the "clado.events" table produced in BioGeoBEARS that lists cladogenetic events 
   \item{stratified}{
 logical indicating whether the stochastic map was built from a stratified analysis in BioGeoBEARS
 }
-  \item{stratified}{
+  \item{simmap.out}{
 logical indicating whether output should be a stochastic map (simmap) object (see note)
 }
+
 
 }
 \value{

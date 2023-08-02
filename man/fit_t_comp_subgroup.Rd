@@ -41,6 +41,10 @@ the "clado.events" table produced in BioGeoBEARS that lists cladogenetic events 
   \item{stratified}{
 logical indicating whether the stochastic map was built from a stratified analysis in BioGeoBEARS
 }
+  \item{regime.map}{
+a phylo object created using \code{\link{make.simmap}} in phytools that contains reconstructed competitive regime membership (see Details)
+}
+
  \item{error}{
 A named vector with standard error (SE) for each species (with names matching \code{"phylo$tip.label"}). Default is NULL, if NA, then the SE is estimated from the data (a nuisance parameter for unknown errors). Note: When standard error are provided the nuisance parameter is also estimated.
 }
