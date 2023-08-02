@@ -52,7 +52,7 @@ A named vector with standard error (SE) for each species (with names matching \c
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
 }
   \item{method}{
-optimization algorithm to use (see \code{\link{optim}}; for DD models without biogeography, \code{\link{BB}} is also supported)
+optimization algorithm to use (see \code{\link{optim}}; for DD models without biogeography, \code{method="BB"} is also supported, which uses \link{spg})
 }
   \item{bounds}{
 (optional) list of bounds to pass to optimization algorithm (see details at \code{\link{optim}})

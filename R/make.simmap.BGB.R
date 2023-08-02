@@ -1,5 +1,5 @@
 .get.lineage.vec<-function(tree,node){
-	if(is.root(node,tree)){
+	if(geiger::is.root(node,tree)){
 	return(node)
 	}else{
 	if(length(node)>1){stop("node should be a single integer value corresponding to node number")}

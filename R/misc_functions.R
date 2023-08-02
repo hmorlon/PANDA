@@ -523,9 +523,12 @@ if(is.null(regime.map)){ 	# single slope version
   
   ##------------------------------------Optimization-------------------------------##
   phyloTrans=NULL
-  if(method=="L-BFGS-B" | method=="Nelder-Mead"){
+   phyloTrans=NULL
+  if(method=="BB"){
+    estim<-BB::spg(par=startval,fn=function(par){clikCLIM(param=par,dat=data,phy,mtot=mtot,times=times,fun=fun,model)},control=control ,method=3, lower=lower, upper=upper)
+ 
+   }else if(method=="L-BFGS-B" | method=="Nelder-Mead"){
     estim<-optim(par=startval,fn=function(par){clikCLIM(param=par,dat=data,phy,mtot=mtot,times=times,fun=fun,model)},control=control, hessian=TRUE, method=method, lower=lower, upper=upper)
-    
   }else if(method=="fixed"){
     estim <- list()
     estim$par <- param <- c(beta,log(sigma))
