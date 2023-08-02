@@ -43,6 +43,9 @@ importFrom(pracma,ifft)
 importFrom(vegan,vegdist)
 importFrom(GUniFrac,GUniFrac)
 importFrom(R.utils,withTimeout)
+importFrom(geiger,is.root)
+importFrom(BB,spg)
+
 
 S3method(print, fit.env)
 S3method(print, fit.bd)
