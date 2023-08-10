@@ -59,7 +59,7 @@ if(is.null(error)){
 	
 	if(!is.null(geography.object) & is.null(regime.map)){ #single-slope version with biogeography
 		
-		if(names(geography.object)[1]=="geography.object"){
+		if(class(geography.object)[1]=="list"){
 			if(is.null(pars)){pars<-c(log(sqrt(var(data)/max(nodeHeights(phylo)))),0)}
 			params0<-c(0,pars)
 			if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have fewer components than internode intervals in phylo")}
@@ -93,7 +93,7 @@ if(is.null(error)){
 				}
 		}
 		
-		if(names(geography.object)[1]=="geo.simmap"){
+		if(class(geography.object)[1]=="simmap"){
 			if(model=="MC"){stop("MC fits not supported with simmap geo.object (see ?fit_t_comp)")}
 			if(model=="DDexp"){
 				if(is.null(pars)){
@@ -107,7 +107,7 @@ if(is.null(error)){
 				sig2<-opt$rates["sigma",]
 				r<-opt$rates["beta",]
 				z0<-opt$anc
-				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 3, sig2 = as.numeric(sig2), r = as.numeric(r), z0 = as.numeric(z0), convergence = opt$convergence)
+				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 3, sig2 = as.numeric(sig2)[1], r = as.numeric(r)[1], z0 = as.numeric(z0), convergence = opt$convergence)
 				return(results)
 				} 
 				
@@ -123,7 +123,7 @@ if(is.null(error)){
 				sig2<-opt$rates["sigma",]
 				r<-opt$rates["beta",]
 				z0<-opt$anc
-				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 3, sig2 = as.numeric(sig2), r = as.numeric(r), z0 = as.numeric(z0), convergence = opt$convergence)
+				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 3, sig2 = as.numeric(sig2)[1], r = as.numeric(r)[1], z0 = as.numeric(z0), convergence = opt$convergence)
 				return(results)
 				} 
 
@@ -373,7 +373,7 @@ if(!is.null(geography.object) & is.null(regime.map)){ #single-slope version with
 				r<-opt$rates["beta",]
 				z0<-opt$anc
 				nuisance<-opt$error
-				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 4, sig2 = as.numeric(sig2), r = as.numeric(r), nuisance=as.numeric(nuisance), z0 = as.numeric(z0), convergence = opt$convergence)
+				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 4, sig2 = as.numeric(sig2)[1], r = as.numeric(r)[1], nuisance=as.numeric(nuisance), z0 = as.numeric(z0), convergence = opt$convergence)
 				return(results)
 				} 
 				
@@ -390,7 +390,7 @@ if(!is.null(geography.object) & is.null(regime.map)){ #single-slope version with
 				r<-opt$rates["beta",]
 				z0<-opt$anc
 				nuisance<-opt$error
-				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 4, sig2 = as.numeric(sig2), r = as.numeric(r), nuisance=as.numeric(nuisance), z0 = as.numeric(z0), convergence = opt$convergence)
+				results<-list(LH = opt$LogLik, aic = opt$AIC, aicc = opt$AICc, free.parameters = 4, sig2 = as.numeric(sig2)[1], r = as.numeric(r)[1], nuisance=as.numeric(nuisance), z0 = as.numeric(z0), convergence = opt$convergence)
 				return(results)
 				} 
 
