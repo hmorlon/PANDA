@@ -317,7 +317,7 @@ if(is.null(geography.object) & is.null(regime.map)){ #single-slope version for s
 
 if(!is.null(geography.object) & is.null(regime.map)){ #single-slope version with biogeography
 
-	if(names(geography.object)[1]=="geography.object"){
+	if(class(geography.object)[1]=="list"){
 		if(length(geography.object$geography.object)<phylo$Nnode){stop("geography object cannot have fewer components than internode intervals in phylo")}
 		sgeo<-.resortGeoObject(phylo,geography.object) #resorts geo.object to match tip label order in code
 		if(model=="MC"){
@@ -358,7 +358,7 @@ if(!is.null(geography.object) & is.null(regime.map)){ #single-slope version with
 			}
 		}
 	
-		if(names(geography.object)[1]=="geo.simmap"){
+		if(class(geography.object)[1]=="simmap"){
 			if(model=="MC"){stop("MC fits not supported with simmap geo.object (see ?fit_t_comp)")}
 			if(model=="DDexp"){
 				if(is.null(pars)){
