@@ -9,16 +9,7 @@ RPANDA
 Implements macroevolutionary analyses on phylogenetic trees
 }
 \details{
-\tabular{ll}{
-Package: \tab RPANDA\cr
-Type: \tab Package\cr
-Version: \tab 2.2\cr
-Date: \tab 2023-04-16\cr
-License: \tab GPL (>= 2)\cr
-}
-
 More information on the RPANDA package and worked examples can be found in \href{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12526}{Morlon et al. (2016)}
-
 }
 \author{
 Hélène Morlon <helene.morlon@bio.ens.psl.eu>
