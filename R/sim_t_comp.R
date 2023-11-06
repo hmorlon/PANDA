@@ -1,7 +1,7 @@
 
 sim_t_comp<-function(phylo,pars,root.value,Nsegments=1000,model="MC,DDexp,DDlin"){
 #return error if non-ultrametric tree
-if(phylo$Nnode!=(length(phylo$tip.label)-1)){stop("phylo object must be ultrametric")}
+if(!is.ultrametric(phylo)){stop("phylo object must be ultrametric")}
 if(length(pars)!=2){stop("pars must be a vector with a value for sig2 and either S for MC model, r for DDexp model, or b for DDlin model")}
 if(model=="MC"){sterm=pars[2]}
 if(model=="DDlin"){slope=pars[2]}
