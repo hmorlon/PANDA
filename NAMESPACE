@@ -6,37 +6,43 @@ import(methods)
 import(glassoFast)
 
 
+importFrom(BB,spg)
 importFrom(bipartite,plotweb)
 importFrom(cluster,pam)
 importFrom(coda, mcmc.list, mcmc, gelman.diag, densplot)
 importFrom(deSolve, ode)
 importFrom(fields, image.plot)
 importFrom(fpc,pamk)
-importFrom(graphics, lines, mtext, par, plot, matplot, 
+importFrom(geiger,is.root)
+importFrom(graphics, lines, mtext, par, plot, matplot,
            matlines, abline, text, points, polygon, layout, title,
-           plot.new, rasterImage, axis, image)
-importFrom(grDevices, dev.new, rainbow, terrain.colors, 
+           plot.new, rasterImage, axis, image, arrows, legend, rect)
+importFrom(grDevices, dev.new, rainbow, terrain.colors,
            colorRampPalette, colors, grey)
+importFrom(GUniFrac,GUniFrac)
 importFrom(igraph, graph.adjacency, graph.laplacian)
 importFrom(Matrix, Matrix)
-importFrom(mvMORPH, mvLL, pruning, mvSIM, GIC, mv.Precalc)
-importFrom(parallel, mclapply)
-importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap,reorderSimmap,splitTree)
+importFrom(mvMORPH, mvLL, pruning, mvSIM, GIC, mv.Precalc, ancestral)
+importFrom(mvtnorm, rmvnorm)
+importFrom(ParallelLogger, clusterApply)
+importFrom(parallel, mclapply, makeCluster, clusterExport, stopCluster)
+importFrom(phangorn, Siblings, Ancestors, Descendants, Children)
+importFrom(phytools,plotSimmap,make.simmap,nodeHeights,findMRCA,getDescendants,drop.tip.simmap,midpoint.root,reorderSimmap,splitTree)
 importFrom(picante, node.age)
+importFrom(pracma,ifft)
 importFrom(pvclust,pvclust,pvrect)
 importFrom(raster, as.raster)
+importFrom(RColorBrewer, brewer.pal)
 importFrom(Rmpfr, mpfr, chooseMpfr)
-importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun, 
-           as.dist, bw.nrd0, dnorm, heatmap, kmeans, na.omit, pnorm, predict, 
+importFrom(R.utils,withTimeout)
+importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun,
+           as.dist, bw.nrd0, dnorm, heatmap, kmeans, na.omit, pnorm, predict,
            sd, var, reorder, rexp, cov2cor, rlnorm, density, fft, optimize, dist,
-           cor)
+           cor, cov, model.matrix, quantile)
 importFrom(TESS, tess.sim.age, tess.likelihood)
 importFrom(utils, combn, tail, flush.console, read.table, write.table)
-importFrom(phangorn, Siblings, Ancestors, Descendants, Children)
-importFrom(RColorBrewer, brewer.pal)
-importFrom(ParallelLogger, clusterApply)
-importFrom(parallel, makeCluster, clusterExport, stopCluster)
-importFrom("graphics", "arrows", "legend", "rect")
+importFrom(vegan,vegdist)
+
 
 S3method(print, fit.env)
 S3method(print, fit.bd)
