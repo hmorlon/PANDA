@@ -75,7 +75,7 @@ taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
 # apply_prob_dtt() needs the sampling fractions
 f_df_cetacea <- get.sampling.fractions(phylo = Cetacea,
                                        data = taxo_cetacea_no_genus,
-                                       plot = T, cex = 0.3, lad = F)
+                                       plot = TRUE, cex = 0.3, lad = FALSE)
 
 # use of apply_prob_dtt()
 prob_dtt_cetacea <- apply_prob_dtt(phylo = Cetacea,
