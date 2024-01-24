@@ -70,7 +70,7 @@ data("Cetacea")
 data("taxo_cetacea")
 data("shifts_cetacea")
 
-taxo_cetacea_no_genus <- taxo[names(taxo) != "Genus"]
+taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
 
 # apply_prob_dtt() needs the sampling fractions
 f_df_cetacea <- get.sampling.fractions(phylo = Cetacea,
