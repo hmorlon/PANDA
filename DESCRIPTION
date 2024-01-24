@@ -24,7 +24,8 @@ Imports:
 	grDevices, 
 	igraph, 
 	Matrix,
-	mMORPH (>= 1.1.6),
+	mvtnorm
+	mvMORPH (>= 1.1.6),
 	GUniFrac,
 	parallel, 
 	ParallelLogger, 
