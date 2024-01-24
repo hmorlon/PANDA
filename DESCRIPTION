@@ -32,7 +32,7 @@ Imports:
 	phytools, 
 	pracma,
 	pspline, 
-	puclust,
+	pvclust,
 	raster, 
 	RColorBrewer,
 	R.utils,
