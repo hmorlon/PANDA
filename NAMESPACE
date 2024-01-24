@@ -74,7 +74,7 @@ export(theta_estimator,pi_estimator,delineate_phylotypes)
 
 export(sim.BipartiteEvol,make_gen.BipartiteEvol,define_species.BipartiteEvol,build_network.BipartiteEvol,
        plot_div.BipartiteEvol, plot_net.BipartiteEvol)
-
+export(add.gts, all_comb_models, apply_prob_dtt, div.models, div.rates, extract.clade.ln, fit_bd_backbone_c, fit_bd_backbone, get.branching.nodes, get.comb.shift, get.node.ages, get.sampling.fractions, likelihood_bd_backbone, paleodiv, plot.phylo.comb, plot_prob_dtt, remove.model, shift.estimates, subtree, apply_prob_dtt, simul.comb.shift)
 
 exportClasses("PhenotypicModel", "PhenotypicACDC", "PhenotypicADiag", "PhenotypicBM", "PhenotypicDD", "PhenotypicGMM", "PhenotypicOU", "PhenotypicPM")
 

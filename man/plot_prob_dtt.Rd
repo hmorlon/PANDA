@@ -11,7 +11,7 @@
   plot_prob_dtt(mat, grain =0.1, plot.prob = TRUE, 
                 plot.mean = TRUE, int = TRUE, plot.bound=FALSE,
                 conf = 0.95, add = FALSE, col.mean = "red", col.bound = "blue",
-                lty="solid", lwd=1)
+                lty="solid", lwd=1, lty.bound=1, add.present=T, ...)
 }
 
 \arguments{
@@ -50,6 +50,15 @@
 }
   \item{lwd}{
     the line width, a positive number (default to 1)
+}
+  \item{lty.bound}{
+    style of the line for the bound (if added on a current plot)
+  }
+  \item{add.present}{
+    whether or not to add the present diversity value to the plot. Default is TRUE.
+}
+  \item{...}{
+    further arguments to be passed to plot or to plot.phylo.
 }
 }
 \value{
