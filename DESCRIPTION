@@ -39,8 +39,7 @@ Imports:
 	Rmpfr,
 	stats, 
 	TESS, 
-	utils,
-	vegan 
+	utils
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],
