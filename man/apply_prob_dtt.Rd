@@ -79,6 +79,7 @@ f_df_cetacea <- get.sampling.fractions(phylo = Cetacea,
 
 # use of apply_prob_dtt()
 prob_dtt_cetacea <- apply_prob_dtt(phylo = Cetacea,
+                                   data = taxo_cetacea_no_genus,
                                    shift.res = shifts_cetacea,
                                    sampling.fractions = f_df_cetacea,
                                    combi = 1)
