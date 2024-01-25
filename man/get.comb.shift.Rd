@@ -38,7 +38,7 @@
   clade.size argument should be the same value for the whole procedure (same that for get.sampling.fraction and shift.estimates).
 }
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (2023). Estimating clade-specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. BioRχiv.
+	Mazet, N., Morlon, H., Fabre, P., Condamine, F.L., (2023). Estimating clade‐specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. \emph{Methods in Ecology and in Evolution} 14, 2575–2591. https://doi.org/10.1111/2041-210X.14195
 	
 }
 \author{Nathan Mazet}

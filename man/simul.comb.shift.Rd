@@ -8,8 +8,8 @@
   Simulates trees with combination of shifts from shifts.estimates() output.
 }
 \usage{
-  simul.comb.shifts(n = 10000, phylo, sampling.fractions,
-                    shift.res, combi = 1, clade.size = 5)
+  simul.comb.shift(n = 10000, phylo, sampling.fractions,
+                   shift.res, combi = 1, clade.size = 5)
 }
 \arguments{
   \item{n}{
@@ -43,12 +43,12 @@ clade.size argument should be the same value for the whole procedure in the empi
 
 }
 \references{
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+	Mazet, N., Morlon, H., Fabre, P., Condamine, F.L., (2023). Estimating clade‐specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. \emph{Methods in Ecology and in Evolution} 14, 2575–2591. https://doi.org/10.1111/2041-210X.14195
 	
 }
 \author{Nathan Mazet}
 \seealso{
-\code{\code{\link{shift.estimates}}}
+\code{\link{shift.estimates}}
 }
 \examples{
 \donttest{

@@ -107,7 +107,7 @@ this is that negative speciation/extinction rates estimates can be returned. The
 	
 	Morlon, H. (2014) Phylogenetic approaches for studying diversification, Eco Lett 17:508-525
 	Morlon, H., Rolland, J. and Condamine, F. (2020) Response to Technical Comment ‘A cautionary note for users of linear diversification dependencies’, Eco Lett
-	Mazet, N., Morlon, H., Fabre, P-H. Condamine, F. (in prep) 
+	Mazet, N., Morlon, H., Fabre, P., Condamine, F.L., (2023). Estimating clade‐specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. \emph{Methods in Ecology and in Evolution} 14, 2575–2591. https://doi.org/10.1111/2041-210X.14195
 }
 \author{Hélène Morlon, Nathan Mazet}
 \seealso{
