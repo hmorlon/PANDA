@@ -125,7 +125,7 @@ The various options are passed through "...".
 	The speed of convergence of the fit might depend on the degree of freedom chosen to define the spline. 
 }
 \references{
-Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, 114(16): 4183-4188.
+Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Sciences, 114(16): 4183-4188.
 }
 
 \author{J. Clavel}
