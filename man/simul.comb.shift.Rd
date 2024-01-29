@@ -57,7 +57,7 @@ data("Cetacea")
 data("taxo_cetacea")
 # with the results from shifts.estimates()
 
-all_posteriors_cetacea <- simul_posteriors(phylo = Cetacea,
+all_posteriors_cetacea <- simul.comb.shift(phylo = Cetacea,
                                            sampling.fractions = f_cetacea,
                                            shift.res = shifts_cetacea)
   }
