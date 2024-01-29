@@ -5,7 +5,7 @@ fit_t_comp_subgroup<-function(full.phylo,data,subgroup,subgroup.map,model=c("MC"
 	is_tip <- full.phylo$edge[,2] <= length(full.phylo$tip.label)
 	if(sum(diff(full.phylo$edge[is_tip, 2])<0)>0){ stop('fit_t_comp_subgroup cannot be used with ladderized full.phylogenies')}
 	if(length(unique(ape::branching.times(full.phylo)))<length(ape::branching.times(full.phylo))){stop("fit_t_comp requires phylogenies where no nodes occur at precisely the same time [see ape::branching.times(phylo)]")}
-	if(!is.ultrametric(full.phylo)){stop("phylo object must be ultrametric")}
+	if(!is.ultrametric(full.phylo,option=2)){stop("phylo object must be ultrametric")}
 
 	if(is.null(bounds[["lower"]]) & is.null(bounds[["upper"]])){
         bounds$lower = -Inf
