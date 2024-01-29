@@ -80,4 +80,4 @@ Description: Implements macroevolutionary analyses on phylogenetic trees. See
 License: GPL-2
 URL: https://github.com/hmorlon/PANDA
 Repository: CRAN
-RoxygenNote: 6.1.1
+RoxygenNote: 7.2.3
