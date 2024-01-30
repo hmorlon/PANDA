@@ -44,5 +44,5 @@ R CMD INSTALL --build RPANDA_2.X.tar.gz
 Any bugs encountered when using the package can be reported [here](https://github.com/hmorlon/PANDA/issues)
 
 ### **Continuous integration**
-Travis-CI Build Status:
-[![Build Status](https://travis-ci.org/hmorlon/PANDA.svg?branch=master)](https://travis-ci.org/hmorlon/PANDA)
+#Travis-CI Build Status:
+#[![Build Status](https://travis-ci.org/hmorlon/PANDA.svg?branch=master)](https://travis-ci.org/hmorlon/PANDA)
