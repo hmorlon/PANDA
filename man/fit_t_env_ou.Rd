@@ -154,9 +154,9 @@ sim_theta = 4        # value of the optimum if the relationship to the climate c
 sim_sigma2 = 0.025   # variance of the scatter = sigma^2
 sim_alpha = 0.36     # alpha value = strength of the OU; quite high here...
 delta = 0.001        # time step used for the forward simulations => here its 1000y steps
-tree <- pbtree(n=200, d=0.3) # simulate a bd tree with some extinct lineages
+tree <- phytools::pbtree(n=200, d=0.3) # simulate a bd tree with some extinct lineages
 root_age = 60        # height of the root (almost all the Cenozoic here)
-tree$edge.length <- root_age*tree$edge.length/max(nodeHeights(tree)) 
+tree$edge.length <- root_age*tree$edge.length/max(phytools::nodeHeights(tree)) 
 # here - for this contrived example - I scale the tree so that the root is at 60 Ma
 
 trait <- sim_t_env_ou(tree, sigma=sqrt(sim_sigma2), alpha=sim_alpha, theta0=sim_theta, 
