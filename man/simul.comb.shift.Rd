@@ -55,7 +55,15 @@ clade.size argument should be the same value for the whole procedure in the empi
 # loading data
 data("Cetacea")
 data("taxo_cetacea")
+data("shifts_cetacea")
+
 # with the results from shifts.estimates()
+
+# no shifts tested at genus level
+taxo_cetacea_no_genus <- taxo_cetacea[names(taxo_cetacea) != "Genus"]
+
+f_cetacea <- get.sampling.fractions(phylo = Cetacea,
+                                    data = taxo_cetacea_no_genus)
 
 all_posteriors_cetacea <- simul.comb.shift(phylo = Cetacea,
                                            sampling.fractions = f_cetacea,
