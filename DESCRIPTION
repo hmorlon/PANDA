@@ -4,7 +4,7 @@ Date: 2024-01-22
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
-	R (>= 2.14.2),
+	R (>= 3.5.0),
     ape,
     picante,
     methods,
