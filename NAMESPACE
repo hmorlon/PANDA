@@ -42,7 +42,7 @@ importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun,
 importFrom(TESS, tess.sim.age, tess.likelihood)
 importFrom(utils, combn, tail, flush.console, read.table, write.table)
 importFrom(vegan,vegdist)
-
+importFrom("utils", "setTxtProgressBar", "txtProgressBar")
 
 S3method(print, fit.env)
 S3method(print, fit.bd)
@@ -78,7 +78,7 @@ export(theta_estimator,pi_estimator,delineate_phylotypes)
 
 export(sim.BipartiteEvol,make_gen.BipartiteEvol,define_species.BipartiteEvol,build_network.BipartiteEvol,
        plot_div.BipartiteEvol, plot_net.BipartiteEvol)
-export(add.gts, all_comb_models, apply_prob_dtt, div.models, div.rates, extract.clade.ln, fit_bd_backbone_c, fit_bd_backbone, get.branching.nodes, get.comb.shift, get.node.ages, get.sampling.fractions, likelihood_bd_backbone, paleodiv, plot.phylo.comb, plot_prob_dtt, remove.model, shift.estimates, subtree, apply_prob_dtt, simul.comb.shift)
+export(add.gts, apply_prob_dtt, div.models, div.rates, fit_bd_backbone_c, fit_bd_backbone, get.comb.shift, get.sampling.fractions, likelihood_bd_backbone, paleodiv, plot.phylo.comb, plot_prob_dtt, remove.model, shift.estimates, apply_prob_dtt, simul.comb.shift)
 
 exportClasses("PhenotypicModel", "PhenotypicACDC", "PhenotypicADiag", "PhenotypicBM", "PhenotypicDD", "PhenotypicGMM", "PhenotypicOU", "PhenotypicPM")
 
