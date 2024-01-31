@@ -110,25 +110,29 @@ phylo<-Anolis.data$phylo
 regime.map<-Anolis.data$regime.map
 
 \donttest{
-#Fit three models without biogeography to pPC1 data
+# Fit three models without biogeography to pPC1 data
 MC.fit<-fit_t_comp(phylo, pPC1, model="MC")
 DDlin.fit<-fit_t_comp(phylo, pPC1, model="DDlin")
 DDexp.fit<-fit_t_comp(phylo, pPC1, model="DDexp")
 
-#Now fit models that incorporate biogeography, NOTE these models take longer to fit
+# Now fit models that incorporate biogeography, NOTE these models take longer to fit
 MC.geo.fit<-fit_t_comp(phylo, pPC1, model="MC", geography.object=geography.object)
 DDlin.geo.fit<-fit_t_comp(phylo, pPC1,model="DDlin", geography.object=geography.object)
 DDexp.geo.fit<-fit_t_comp(phylo, pPC1, model="DDexp", geography.object=geography.object)
 
-#Now fit models that estimate parameters separately according to different 'regimes'
+# Now fit models that estimate parameters separately according to different 'regimes'
 MC.two_regime.fit<-fit_t_comp(phylo, pPC1, model="MC", regime.map=regime.map)
 DDlin.two_regime.fit<-fit_t_comp(phylo, pPC1,model="DDlin", regime.map=regime.map)
 DDexp.two_regime.fit<-fit_t_comp(phylo, pPC1, model="DDexp", regime.map=regime.map)
 
-#Now fit models that estimate parameters separately according to different 'regimes', including biogeography
-MC.two_regime.geo.fit<-fit_t_comp(phylo, pPC1, model="MC", geography.object=geography.object, regime.map=regime.map)
-DDlin.two_regime.geo.fit<-fit_t_comp(phylo, pPC1,model="DDlin", geography.object=geography.object, regime.map=regime.map)
-DDexp.two_regime.geo.fit<-fit_t_comp(phylo, pPC1, model="DDexp", geography.object=geography.object, regime.map=regime.map)
+# Now fit models that estimate parameters separately according to different 'regimes', 
+# including biogeography
+MC.two_regime.geo.fit<-fit_t_comp(phylo, pPC1, model="MC", 
+  geography.object=geography.object, regime.map=regime.map)
+DDlin.two_regime.geo.fit<-fit_t_comp(phylo, pPC1,model="DDlin", 
+  geography.object=geography.object, regime.map=regime.map)
+DDexp.two_regime.geo.fit<-fit_t_comp(phylo, pPC1, model="DDexp", 
+  geography.object=geography.object, regime.map=regime.map)
 }
 
 }

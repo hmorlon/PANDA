@@ -703,8 +703,8 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if(! all (as.phylo(regime.map)$tip.label %in% names(data)) ) { stop("names of lineages in data and regime map don't match")}
 		
 		class.object<-try(CreateClassObject(regime.map))
-		if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(regime.map,rnd=6))}
-		if(class(class.object)=="try-error"){class.object<-CreateClassObject(regime.map,rnd=7)}
+		if(inherits(class.object, "try-error")){class.object<-try(CreateClassObject(regime.map,rnd=6))}
+		if(inherits(class.object, "try-error")){class.object<-CreateClassObject(regime.map,rnd=7)}
 
 		class.df<-.return.class.df_subgroup(regime.map,class.object)
 		new_list_function<-.create.function.list(regime.map,times=class.object$times,df=class.df)
@@ -755,8 +755,8 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		
 		class.object<-try(CreateClassObject(trimclass.subgroup.trimmed))
 		
-		if(class(class.object)=="try-error"){class.object<-try(CreateClassObject(trimclass.subgroup.trimmed,rnd=6))}
-		if(class(class.object)=="try-error"){class.object<-CreateClassObject(trimclass.subgroup.trimmed,rnd=7)}
+		if(inherits(class.object, "try-error")){class.object<-try(CreateClassObject(trimclass.subgroup.trimmed,rnd=6))}
+		if(inherits(class.object, "try-error")){class.object<-CreateClassObject(trimclass.subgroup.trimmed,rnd=7)}
 
 		subgroup.class.df<-.return.class.df_subgroup(trimclass.subgroup.trimmed,class.object)
 		
@@ -772,8 +772,8 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if(round(subgroup.map.region.root,5)!=round(trimclass.subgroup.trimmed.tips.root,5)){
 
 			trimmed.class.object<-try(CreateClassObject(trimclass.subgroup.trimmed.tips))
-			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-try(CreateClassObject(trimclass.subgroup.trimmed.tips,rnd=6))}
-			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-CreateClassObject(trimclass.subgroup.trimmed.tips,rnd=7)}
+			if(inherits(trimmed.class.object, "try-error")){trimmed.class.object<-try(CreateClassObject(trimclass.subgroup.trimmed.tips,rnd=6))}
+			if(inherits(trimmed.class.object, "try-error")){trimmed.class.object<-CreateClassObject(trimclass.subgroup.trimmed.tips,rnd=7)}
 
 			shifted.times<-trimmed.class.object$times+(subgroup.map.region.root-trimclass.subgroup.trimmed.tips.root)
 			new.subgroup.class.df.trimmed<-subgroup.class.df.trimmed[c(which(round(class.object$times,5)==round(min(shifted.times),5)):dim(subgroup.class.df.trimmed)[1]),]
@@ -805,8 +805,8 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if( is.null(subgroup) || (!subgroup%in%colnames(subgroup.map$mapped.edge))){ stop("specify a subgroup that appears as a mapped regime in subgroup.map")}
 
 		class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup))
-		if(class(class.by.class.object)=="try-error"){class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=6))}
-		if(class(class.by.class.object)=="try-error"){class.by.class.object<-.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=7)}
+		if(inherits(class.by.class.object,"try-error")){class.by.class.object<-try(.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=6))}
+		if(inherits(class.by.class.object, "try-error")){class.by.class.object<-.CreateClassbyClassObject_mvMORPH(map.guild=subgroup.map,map.regime=regime.map,trim.class=subgroup,rnd=7)}
 		regime.class.df<-.return.class.df_subgroup(class.by.class.object$regime.simmap,class.by.class.object$regime.class.object)
 		regime.class.df[,which(colnames(class.by.class.object$regime.simmap$mapped.edge)=='Z')+1]=1
 
@@ -820,8 +820,8 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		if(round(regime.simmap.region.root,5)!=round(regime.simmap.region.trimmed.root,5)){
 		
 			trimmed.class.object<-try(CreateClassObject(regime.simmap.region.trimmed,rnd=5))
-			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-try(CreateClassObject(regime.simmap.region.trimmed,rnd=6))}
-			if(class(trimmed.class.object)=="try-error"){trimmed.class.object<-CreateClassObject(regime.simmap.region.trimmed,rnd=7)}
+			if(inherits(trimmed.class.object, "try-error")){trimmed.class.object<-try(CreateClassObject(regime.simmap.region.trimmed,rnd=6))}
+			if(inherits(trimmed.class.object, "try-error")){trimmed.class.object<-CreateClassObject(regime.simmap.region.trimmed,rnd=7)}
 
 			shifted.times<-trimmed.class.object$times+(regime.simmap.region.root-regime.simmap.region.trimmed.root)
 			new.regime.class.df.trimmed<-regime.class.df.trimmed[c(which(round(class.by.class.object$regime.class.object$times,5)==round(min(shifted.times),5)):dim(regime.class.df.trimmed)[1]),]

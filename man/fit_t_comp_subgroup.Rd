@@ -9,9 +9,10 @@ Fits matching competition (MC), diversity dependent linear (DDlin), or diversity
 }
 \usage{
 
-fit_t_comp_subgroup(full.phylo, data, subgroup, subgroup.map, model=c("MC","DDexp","DDlin"),
-	ana.events=NULL, clado.events=NULL, stratified=FALSE, regime.map=NULL,error=NULL, 
-	par=NULL, method="Nelder-Mead", bounds=NULL)
+fit_t_comp_subgroup(full.phylo, data, subgroup, subgroup.map,
+  model=c("MC","DDexp","DDlin"), ana.events=NULL, clado.events=NULL,
+  stratified=FALSE, regime.map=NULL,error=NULL, par=NULL, 
+  method="Nelder-Mead", bounds=NULL)
 	
 }
 
@@ -139,24 +140,30 @@ Canidae.A<-Canidae.data[which(dummy.group=="A")]
 
 
 #Fit model with subgroup pruning and biogeography
-MC.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events, 
-clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,subgroup.map=Canidae.simmap, 
-data=Canidae.A,subgroup="A",model="MC")
+MC.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  ana.events=BGB.examples$Canidae.ana.events,
+  clado.events=BGB.examples$Canidae.clado.events,
+  stratified=FALSE,subgroup.map=Canidae.simmap, 
+  data=Canidae.A,subgroup="A",model="MC")
 
-DDexp.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events, 
-clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,subgroup.map=Canidae.simmap, 
-data=Canidae.A,subgroup="A",model="DDexp")
+DDexp.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  ana.events=BGB.examples$Canidae.ana.events, 
+  clado.events=BGB.examples$Canidae.clado.events,
+  stratified=FALSE,subgroup.map=Canidae.simmap, 
+  data=Canidae.A,subgroup="A",model="DDexp")
 
-DDlin.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,ana.events=BGB.examples$Canidae.ana.events, 
-clado.events=BGB.examples$Canidae.clado.events,stratified=FALSE,subgroup.map=Canidae.simmap, 
-data=Canidae.A,subgroup="A",model="DDlin")
+DDlin.fit_subgroup_geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  ana.events=BGB.examples$Canidae.ana.events, 
+  clado.events=BGB.examples$Canidae.clado.events,
+  stratified=FALSE,subgroup.map=Canidae.simmap, 
+  data=Canidae.A,subgroup="A",model="DDlin")
 
 #Fit model with subgroup pruning and no biogeography (for DD models only)
-DDexp.fit_subgroup_no.geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,data=Canidae.A,subgroup="A",
-subgroup.map=Canidae.simmap,model="DDexp")
+DDexp.fit_subgroup_no.geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  data=Canidae.A, subgroup="A", subgroup.map=Canidae.simmap,model="DDexp")
 
-DDlin.fit_subgroup_no.geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,data=Canidae.A,subgroup="A",
-subgroup.map=Canidae.simmap,model="DDlin")
+DDlin.fit_subgroup_no.geo<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  data=Canidae.A, subgroup="A", subgroup.map=Canidae.simmap,model="DDlin")
 
 
 #Prepare regime map for fitting two-regime models with subgroup pruning (for DD models only)
@@ -165,11 +172,13 @@ names(regime)<-Canidae.phylo$tip.label
 regime.map<-phytools::make.simmap(Canidae.phylo,regime)
 
 #Fit model with subgroup pruning and two-regimes (for DD models only)
-DDexp.fit_subgroup_two.regime<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,data=Canidae.A,subgroup="A",
-subgroup.map=Canidae.simmap,model="DDexp",regime.map=regime.map)
+DDexp.fit_subgroup_two.regime<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  data=Canidae.A,subgroup="A", subgroup.map=Canidae.simmap,
+  model="DDexp", regime.map=regime.map)
 
-DDlin.fit_subgroup_two.regime<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,data=Canidae.A,subgroup="A",
-subgroup.map=Canidae.simmap,model="DDlin",regime.map=regime.map)
+DDlin.fit_subgroup_two.regime<-fit_t_comp_subgroup(full.phylo=Canidae.phylo,
+  data=Canidae.A, subgroup="A", subgroup.map=Canidae.simmap,
+  model="DDlin",regime.map=regime.map)
 
 	
 }
