@@ -1,4 +1,4 @@
-plot.phylo.comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
+plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
                             combi, backbone.option = "crown.shift",
                             main = NULL, col.sub = NULL, col.bck = "black",
                             lty.bck = 1, tested_nodes = F, lad = T,

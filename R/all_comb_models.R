@@ -14,7 +14,7 @@ all_comb_models <- function(to){
   cat("\n", to, "/", length(comb.shift))
   
   # plot to illustrate
-  # plot.phylo.comb(phylo, data, sampling.fractions, comb = comb.shift[to], cex = 0.8, label.offset = 0.2)
+  # plot_phylo_comb(phylo, data, sampling.fractions, comb = comb.shift[to], cex = 0.8, label.offset = 0.2)
   # nodes <- sampling.fractions$nodes[!is.na(sampling.fractions$to_test)]
   # nodelabels(as.character(nodes), nodes)
   

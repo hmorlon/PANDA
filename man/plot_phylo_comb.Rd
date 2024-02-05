@@ -1,5 +1,5 @@
-\name{plot.phylo.comb}
-\alias{plot.phylo.comb}
+\name{plot_phylo_comb}
+\alias{plot_phylo_comb}
 
 \title{
   Plot shifts of diversifcation on a phylogeny
@@ -9,7 +9,7 @@
 }
 
 \usage{
-plot.phylo.comb(phylo, data, sampling.fractions, shift.res = NULL,
+plot_phylo_comb(phylo, data, sampling.fractions, shift.res = NULL,
                 combi, backbone.option = "crown.shift",
                 main = NULL, col.sub = NULL, col.bck = "black",
                 lty.bck = 1, tested_nodes = F, lad = T,
@@ -104,10 +104,10 @@ comb.shift_cetacea <- get.comb.shift(phylo = Cetacea,
                                      sampling.fractions = f_cetacea,
                                      Ncores = 4)
 
-# use of plot.phylo.comb
+# use of plot_phylo_comb
 # without shift.estimates results but with comb.shift_cetacea
 
-plot.phylo.comb(phylo = Cetacea,
+plot_phylo_comb(phylo = Cetacea,
                 data = taxo_cetacea,
                 sampling.fractions = f_cetacea,
                 combi = comb.shift_cetacea[15],
