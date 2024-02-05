@@ -98,21 +98,15 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
       }
     }
     
-    names_leg <- sampling.fractions$data[sampling.fractions$nodes %in% comb.sub]
-    for(j in 1:length(names_leg)){
-      if(is.na(names_leg[j])){
-        names_leg_NA <- sampling.fractions$data[unlist(Descendants(phylo1, as.numeric(comb.sub[j]), "children"))]
-        if(length(names_leg_NA) > 3 | any(is.na(names_leg_NA))){
-          names_leg_NA <- paste0("node ", comb.sub[j])
-        }
-        names_leg[j] <- paste(names_leg_NA, collapse = " + ")
-      }
-    }
+    names_leg <- sampling.fractions[sampling.fractions$nodes %in% comb.sub,]
+    names_leg <- names_leg$data[match(comb.sub, names_leg$nodes)]
     
     if(is.null(comb.bck)){
       names_leg <- c(names_leg,"Backbone")
-    }else{
-      names_leg1 <- c(paste("Backbone of", sampling.fractions$data[sampling.fractions$nodes %in% comb.bck]),"Deep backbone")
+    } else{
+      names_leg1 <- sampling.fractions[sampling.fractions$nodes %in% comb.bck,]
+      names_leg1 <- names_leg1$data[match(comb.bck, names_leg1$nodes)]
+      names_leg1 <- c(paste("Backbone of", names_leg1),"Deep backbone")
       names_leg <- c(names_leg,names_leg1)
     }
     
