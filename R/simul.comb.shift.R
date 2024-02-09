@@ -154,7 +154,8 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   backbones <- rep(list(NULL),length(comb.bck)+1)
   cat("Backbone simulations...\n")
   for(cb in 1:length(backbones)){
-    if(length(backbones) > 1){
+    cat("\t backbone", cb, "/", length(backbones),"\n")
+    if(cb != length(backbones)){
       comb.sub_bybck[[cb]] <- comb.sub[sapply(anc_sub, function(x) comb.bck[cb] %in% x)]
       model_backbone <- shift.res$backbones[shift.res$total$Combination[combi]][[1]][[cb]]$Models[1]
       param_backbone <- shift.res$backbones[shift.res$total$Combination[combi]][[1]][[cb]][1, c("Lambda", "Alpha", "Mu", "Beta")]
@@ -168,11 +169,9 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
                              mu = equation_backbone$extinction, age = ages_bck[cb])
       bck_cb <- bck_cb[sapply(bck_cb, Ntip) > clade.size+length(comb.sub_bybck[[cb]])*2] # five tips in the backbone (maybe more)
       backbones[[cb]] <- lapply(bck_cb, ladderize)
-    }
-    
-    # deep backbone
-    if(cb == length(backbones)){
-      comb.sub_bybck[[cb]] <- c(comb.sub[!comb.sub %in% unlist(comb.sub_bybck[[cb]])], comb.bck)
+    } else {
+      # deep backbone
+      comb.sub_bybck[[cb]] <- c(comb.sub[!comb.sub %in% unlist(comb.sub_bybck)], comb.bck)
       model_backbone <- shift.res$backbones[shift.res$total$Combination[combi]][[1]][[cb]]$Models[1]
       param_backbone <- shift.res$backbones[shift.res$total$Combination[combi]][[1]][[cb]][1, c("Lambda", "Alpha", "Mu", "Beta")]
       equation_backbone <- param_equation(model_backbone, param_backbone, ages_bck[cb])
@@ -184,6 +183,7 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
       # five tips in the backbone + the one we will prune (maybe more)
       backbones[[cb]] <- lapply(bck_cb, ladderize)
     }
+    
   }
   if(length(backbones) > 1){
     names(backbones) <- c(comb.bck, Ntip(phylo)+1)
@@ -215,7 +215,6 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   }
   names(all_subclades) <- comb.sub
   
-  
   all_parts <- c(all_subclades, backbones)
   all_parts <- lapply(1:min(sapply(all_parts, length)), function(j) lapply(all_parts, function(x) x[[j]]))
   
@@ -235,9 +234,10 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
         subtree_bck$tip.label <- gsub("t", letters[length(letters) - length(all_parts[[j]]) + i], subtree_bck$tip.label)
         all_parts[[j]][[i]] <- subtree_bck
       }
-      if(i != length(all_parts[[j]])){
+      if(i != length(all_parts[[j]])){ # location for nested shifts (so except the deeper backbone)
         subtree_bck_loc <- which(sapply(all_comb.sub_bybck, function(x) names(all_parts[[j]])[i] %in% x))
-        tree <- all_parts[[j]][subtree_bck_loc][[1]]
+        subtree_bck_loc <- subtree_bck_loc[1] # taking the more recent one
+        tree <- all_parts[[j]][[subtree_bck_loc]]
         
         # selecting nodes
         
@@ -248,7 +248,7 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
         edge_selection <- edge_selection[order(sapply(edge_selection[,2], function(x) length(Descendants(tree, x)[[1]]))),]
         
         # CHANGE THIS
-        if(i > 1){
+        if(i > 1){ # because i=1: no shift grafted yet
           if(subtree_bck_loc %in% as.numeric(names(shift_nodes))){
             shift_nodes1 <- shift_nodes[names(shift_nodes) == as.character(subtree_bck_loc)] # of this tree
             shift_nodes_and_anc <- c(shift_nodes1, unique(unlist(sapply(shift_nodes1[!is.na(shift_nodes1)], function(x) Ancestors(tree, x)))))
@@ -257,7 +257,7 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
         
         edge_selection <- edge_selection[!edge_selection[,2] %in% shift_nodes_and_anc,]
         
-        if(is.vector(edge_selection)){
+        if(is.vector(edge_selection)){ # only one node possible
           if(!edge_selection[2] %in% shift_nodes_and_anc){
             node <- edge_selection[2]
           } else {
@@ -279,6 +279,7 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
     all_shift_nodes[[j]] <- shift_nodes
   }
   
+  # Check if some grafting were impossible
   sum(sapply(all_shift_nodes, anyNA) == F)
   
   all_shift_nodes_ok <- all_shift_nodes[sapply(all_shift_nodes, anyNA) == F]
@@ -291,6 +292,7 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   for(j in 1:length(all_parts_ok)){
     setTxtProgressBar(pb,j)
     all_loc_j <- unique(as.numeric(names(all_shift_nodes_ok[[j]])))
+    all_loc_j <- sort(all_loc_j) # to start with the more recent backbone
     
     for(bck in all_loc_j){
       tree <- all_parts_ok[[j]][[bck]]
@@ -321,6 +323,7 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
           tree_pruned1 <- new_tree
         }
       }
+      # last backbone is full at this point
       all_parts_ok[[j]][[bck]] <- new_tree
     }
     all_new_tree[[j]] <- ladderize(new_tree)
