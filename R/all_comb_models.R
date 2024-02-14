@@ -94,7 +94,7 @@ all_comb_models <- function(to){
         
         tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
         # remaining comb.sub in the deep backbone
-        tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
+        #tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
         
         phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_core, tips_up_bck)
         names(phylo_backbone_cut)[sb] <- paste(int_nodes[sb-1],"bck", sep = "_")
@@ -119,6 +119,24 @@ all_comb_models <- function(to){
     for(nodeID in 1:length(branch_nodes_to_bck[[bck]])){
       branch_times_to_bck[[bck]][[nodeID]] <- sapply(branch_nodes_to_bck[[bck]][[nodeID]], get.node.ages, phylo = phylo)
     }  
+  }
+  
+  # checking all branches are taken into account
+  desc_comb.sub <-  Descendants(phylo, as.numeric(comb.sub), "all")
+  desc_comb.sub <- lapply(desc_comb.sub, function(x) x[x > Ntip(phylo)])
+  
+  nodes_backbone_th <- setdiff(phylo$node.label, unlist(desc_comb.sub))
+  
+  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names = F)
+  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names = F)
+  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names = F)
+  
+  nodes_backbone_obs <- as.numeric(c(nodes_backbone_obs,
+                                     branch_nodes_to_bck,
+                                     all_branching_nodes_to))
+  
+  if(!all(nodes_backbone_th %in% unique(nodes_backbone_obs))){
+    stop("\n#### Some branches are missing... ####\n")
   }
   
   # Sampling fractions ####
@@ -225,28 +243,8 @@ all_comb_models <- function(to){
     res_bck[btb] <- list(results)
   }
   
-  desc_comb.sub <-  Descendants(phylo, as.numeric(comb.sub), "all")
-  desc_comb.sub <- lapply(desc_comb.sub, function(x) x[x > Ntip(phylo)])
-  
-  nodes_backbone_th <- setdiff(phylo$node.label, unlist(desc_comb.sub))
-  
-  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names = F)
-  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names = F)
-  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names = F)
-  
-  nodes_backbone_obs <- as.numeric(c(nodes_backbone_obs,
-                                     branch_nodes_to_bck,
-                                     all_branching_nodes_to))
-  
-  if(all(nodes_backbone_th %in% unique(nodes_backbone_obs))){
-    check <- T
-  }
-  
   names(res_bck) <- names(phylo_backbone_cut)
-  
-  if(!check){
-    stop("\n#### Some branches are missing... ####\n")
-  }
+
   return(res_bck)
   # Multi merge
 }
