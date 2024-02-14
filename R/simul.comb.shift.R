@@ -343,6 +343,12 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   })
   all_new_tree <- all_new_tree[to_keep]
   
-  return(all_new_tree)
+  if(length(all_new_tree) == 0){
+    cat("Did not success to simulate valid grafted trees. The combination might be too complex.")
+    
+  } else {
+    cat(length(all_new_tree), "trees successfully simulated. Increase the value of argument n to get more trees.")
+    return(all_new_tree)
+  }
   
 }

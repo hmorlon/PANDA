@@ -537,7 +537,7 @@ get.node.ages <-  function(nodes, ...){
   return(nodes_ages_selected)
 }
 
-## Get banching nodes from a combination for the clade-shift model.
+## Get branching nodes from a combination for the clade-shift model.
 ## N. Mazet
 
 get.branching.nodes <- function(comb, ...){
