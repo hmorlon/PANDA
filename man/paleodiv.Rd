@@ -10,7 +10,7 @@
 \usage{
   paleodiv(phylo, data, sampling.fractions, shift.res,
            backbone.option = "crown.shift", combi = 1,
-           split.div = F)
+           time.interval = 1, split.div = F)
 }
 
 \arguments{
@@ -37,6 +37,9 @@
   \item{combi}{
     numeric. The combination of shifts defined by its rank in the global comparison.
   }
+   \item{time.interval}{
+  numeric. Define the time interval (in million years) at which paleodiversity values are calculated. Default is 1 for a value at each million year.
+  }
   \item{split.div}{
     bolean. Specifies if paleodiversity should be plitted by parts of the selected combination (TRUE) or not. 
   }
@@ -47,7 +50,7 @@
 }
 
 \references{
-	Mazet, N., Morlon, H., Fabre, P., Condamine, F.L., (2023). Estimating clade‐specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. \emph{Methods in Ecology and in Evolution} 14, 2575–2591. https://doi.org/10.1111/2041-210X.14195
+  Mazet, N., Morlon, H., Fabre, P., Condamine, F.L., (2023). Estimating clade‐specific diversification rates and palaeodiversity dynamics from reconstructed phylogenies. \emph{Methods in Ecology and in Evolution} 14, 2575–2591. https://doi.org/10.1111/2041-210X.14195
 }
 \author{Nathan Mazet}
 \seealso{
