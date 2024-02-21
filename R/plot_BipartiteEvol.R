@@ -23,21 +23,21 @@ plot_div.BipartiteEvol=function(gen,spec,trait.id,lwdgen=1,lwdsp=lwdgen,scale=NU
   
   # plot the genealogies
   #for P
-  plot.with.trait(gen$P,gen$P$x[[trait.id]],lwd=lwdgen,scale=scale)
+  plot_with_trait(gen$P,gen$P$x[[trait.id]],lwd=lwdgen,scale=scale)
   title(main=paste("P",gen$P$ini))
   # for H
-  plot.with.trait(gen$H,gen$H$x[[trait.id]],lwd=lwdgen,scale=scale)
+  plot_with_trait(gen$H,gen$H$x[[trait.id]],lwd=lwdgen,scale=scale)
   title(main=paste("H",gen$H$ini))
   
   # plot the species trees
   # for P
   if(!is.null(spec$Pphylo$tree)){
-    plot.with.trait(spec$Pphylo$tree,spec$Pphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
+    plot_with_trait(spec$Pphylo$tree,spec$Pphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
     title(main=length(spec$Pphylo$tree$tip.label))
   }else{plot(1,spec$Pphylo$mean.trait[trait.id])}
   # for H
   if(!is.null(spec$Hphylo$tree)){
-    plot.with.trait(spec$Hphylo$tree,spec$Hphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
+    plot_with_trait(spec$Hphylo$tree,spec$Hphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
     title(main=length(spec$Hphylo$tree$tip.label))
   }else{plot(1,spec$Hphylo$mean.trait[trait.id])}
   
@@ -70,7 +70,7 @@ plot_div.BipartiteEvol=function(gen,spec,trait.id,lwdgen=1,lwdsp=lwdgen,scale=NU
 
 ######## Plot a phylogeny with colored branches ##############################
 
-plot.with.trait=function(phylo,rate,scale=NULL,lwd=1,direction="rightwards"){
+plot_with_trait=function(phylo,rate,scale=NULL,lwd=1,direction="rightwards"){
   
   # define scale
   scale=range(c(scale,rate))
@@ -116,7 +116,7 @@ spatial.plot=function(out,trait.id,scale=NULL,nx=NULL, sort_trait = F){
 
 ######## Plot the network ##################################
 
-plot.network=function(link,spec,trait.id=1,method="bipartite",order=T,scale=c()){
+plot_network=function(link,spec,trait.id=1,method="bipartite",order=T,scale=c()){
   
   if(method=="bipartite"){
     if(is.vector(spec$Pphylo$mean.trait)){
@@ -165,21 +165,21 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
   
   # plot the genealogies
   #for P
-  plot.with.trait(gen$P,gen$P$x[[trait.id]],lwd=lwdgen,scale=scale)
+  plot_with_trait(gen$P,gen$P$x[[trait.id]],lwd=lwdgen,scale=scale)
   title(main=paste("P",gen$P$ini))
   # for H
-  plot.with.trait(gen$H,gen$H$x[[trait.id]],lwd=lwdgen,scale=scale)
+  plot_with_trait(gen$H,gen$H$x[[trait.id]],lwd=lwdgen,scale=scale)
   title(main=paste("H",gen$H$ini))
   
   # plot the species trees
   # for P
   if(!is.null(spec$Pphylo$tree)){
-    plot.with.trait(spec$Pphylo$tree,spec$Pphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
+    plot_with_trait(spec$Pphylo$tree,spec$Pphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
     title(main=length(spec$Pphylo$tree$tip.label))
   }else{plot(1,spec$Pphylo$mean.trait[trait.id])}
   # for H
   if(!is.null(spec$Hphylo$tree)){
-    plot.with.trait(spec$Hphylo$tree,spec$Hphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
+    plot_with_trait(spec$Hphylo$tree,spec$Hphylo$trait[[trait.id]],lwd=lwdsp,scale=scale)
     title(main=length(spec$Hphylo$tree$tip.label))
   }else{plot(1,spec$Hphylo$mean.trait[trait.id])}
   
@@ -195,7 +195,7 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
     if(is.null(spec)){
       plot(1,1)
     }else{
-      plot.species(spec,cex=2,xlab=c(),ylab=c(), net = link)}
+      plot_species(spec,cex=2,xlab=c(),ylab=c(), net = link)}
   }
   cor=try(cor(gen$P$x.tip[trait.id,],sapply(gen$P$tip.label,function(i){gen$H$x.tip[trait.id,gen$H$tip.label==i]})))
   if (inherits(cor,"try_error")){
@@ -215,7 +215,7 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
   par(mar = ma)
   
   # plot.new()
-  t=try(plot.network(link,spec,trait.id,method=network.method))
+  t=try(plot_network(link,spec,trait.id,method=network.method))
   if(inherits(t,"try-error")) plot.new()
   
   if(spatial){
@@ -241,7 +241,7 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
 
 
 
-plot.species=function(spec,trait.id=1:3,net = NULL,...){
+plot_species=function(spec,trait.id=1:3,net = NULL,...){
   D = max(1,nrow(spec$Pphylo$mean.trait))
   trait.id[trait.id>D] = D
   gr = "gray50"
