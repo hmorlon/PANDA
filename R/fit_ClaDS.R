@@ -367,7 +367,7 @@ InterpolatedKhi=function(phi,m,lambda){
   }
 }
 
-abs.to.rel=function(tree,true.rate,lambda_0){
+abs_to_rel=function(tree,true.rate,lambda_0){
   rate=c(lambda_0,rep(0,length(true.rate)))
   ntips=tree$Nnode+1
   for(i in 1:nrow(tree$edge)){
