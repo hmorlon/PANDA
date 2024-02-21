@@ -99,13 +99,17 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     }
     
     names_leg <- sampling.fractions[sampling.fractions$nodes %in% comb.sub,]
-    names_leg <- names_leg$data[match(comb.sub, names_leg$nodes)]
+    names_leg <- names_leg[order(names_leg$data),]
+    comb.sub <- comb.sub[match(names_leg$nodes, comb.sub)]
+    names_leg <- names_leg$data
     
     if(is.null(comb.bck)){
       names_leg <- c(names_leg,"Backbone")
     } else{
       names_leg1 <- sampling.fractions[sampling.fractions$nodes %in% comb.bck,]
-      names_leg1 <- names_leg1$data[match(comb.bck, names_leg1$nodes)]
+      names_leg1 <- names_leg1[order(names_leg1$data),]
+      comb.bck <- comb.bck[match(names_leg1$nodes, comb.bck)]
+      names_leg1 <- names_leg1$data
       names_leg1 <- c(paste("Backbone of", names_leg1),"Deep backbone")
       names_leg <- c(names_leg,names_leg1)
     }
