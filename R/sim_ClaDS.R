@@ -425,7 +425,7 @@ rigth.order=function(phy,rates){
   return(list(tree=phy,rates=rates))
 }
 
-mean.rate=function(tree,rate){
+mean_rate=function(tree,rate){
   nh=nodeHeights(tree)
   times=sort(unique(c(nh[,1],nh[,2])))
   meanRate=c()
@@ -444,5 +444,5 @@ mean.rate=function(tree,rate){
   return(rbind(times[keep.i],c(meanRate[1],meanRate)))
 }
 # 
-# X=mean.rate(tree,true.rate)
+# X=mean_rate(tree,true.rate)
 # plot.default(t(X), xaxs = "r", yaxs = "r",  type = "S")
