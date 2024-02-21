@@ -1,6 +1,6 @@
 citHeader("To cite RPANDA in a publication use:")
 
-bibentry(entry="Article",
+bibentry(bibtype="Article",
 	title = "RPANDA: an R package for macroevolutionary analyses on phylogenetic trees",
         author = c(as.person("H Morlon"),
 		as.person("E Lewitus"),
