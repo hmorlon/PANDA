@@ -100,7 +100,7 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     
     names_leg <- sampling.fractions[sampling.fractions$nodes %in% comb.sub,]
     names_leg <- names_leg[order(names_leg$data),]
-    comb.sub <- comb.sub[match(names_leg$nodes, comb.sub)]
+    comb.sub2 <- comb.sub[match(names_leg$nodes, comb.sub)]
     names_leg <- names_leg$data
     
     if(is.null(comb.bck)){
@@ -108,7 +108,7 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     } else{
       names_leg1 <- sampling.fractions[sampling.fractions$nodes %in% comb.bck,]
       names_leg1 <- names_leg1[order(names_leg1$data),]
-      comb.bck <- comb.bck[match(names_leg1$nodes, comb.bck)]
+      comb.bck2 <- comb.bck[match(names_leg1$nodes, comb.bck)]
       names_leg1 <- names_leg1$data
       names_leg1 <- c(paste("Backbone of", names_leg1),"Deep backbone")
       names_leg <- c(names_leg,names_leg1)
@@ -133,10 +133,10 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     
     lty_clades <- rep(lty.bck, Nedge(phylo1))
     
-    for(i in 1:length(comb.sub)){
-      clade_edges <- Descendants(phylo1, as.numeric(comb.sub[i]), type = "all")
+    for(i in 1:length(comb.sub2)){
+      clade_edges <- Descendants(phylo1, as.numeric(comb.sub2[i]), type = "all")
       if(backbone.option == "stem.shift"){
-        clade_edges <- c(as.numeric(comb.sub[i]),clade_edges)
+        clade_edges <- c(as.numeric(comb.sub2[i]),clade_edges)
       }
       colors_clades[which(phylo1$edge[,2] %in% clade_edges)] <- col.sub[i]
       lty_clades[which(phylo1$edge[,2] %in% clade_edges)] <- 1
@@ -144,10 +144,10 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     
     clade_edges <- list()
     if(!is.null(comb.bck)){
-      for(j in 1:length(comb.bck)){
-        clade_edges[[j]] <- Descendants(phylo1, as.numeric(comb.bck[j]), type = "all")
+      for(j in 1:length(comb.bck2)){ # ordered comb.bck
+        clade_edges[[j]] <- Descendants(phylo1, as.numeric(comb.bck2[j]), type = "all")
         if(backbone.option == "stem.shift"){
-          clade_edges[[j]] <- c(as.numeric(comb.bck[j]),clade_edges[[j]])
+          clade_edges[[j]] <- c(as.numeric(comb.bck2[j]),clade_edges[[j]])
         }
         if(j>1){
           clade_edges[[j]] <- clade_edges[[j]][!clade_edges[[j]] %in% unlist(clade_edges[1:(j-1)])]
@@ -158,13 +158,15 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     }
     
     if(!is.null(shift.res)){
-      model_leg <- sapply(shift.res$subclades[comb.sub], function(x) x$Models[1])
+      model_leg <- sapply(shift.res$subclades[comb.sub2], function(x) x$Models[1])
       
     if(any(grepl("/", shift.res$total$Combination))){
       model_leg_bck <- unlist(sapply(shift.res$backbones[paste(paste(comb.sub, collapse = "."),paste0(comb.bck, collapse = "."), sep = "/")][[1]], function(x) x$Models[1]))
-    }
-    
+      names(model_leg_bck) <- c(comb.bck, Ntip(phylo)+1)
+      model_leg_bck <- model_leg_bck[match(c(comb.bck2, Ntip(phylo)+1) , names(model_leg_bck))]
       model_leg <- c(model_leg, model_leg_bck)
+    }
+      
       model_leg <- gsub("_", " ", model_leg)
       model_leg <- paste0(names_leg, " (", model_leg, ")")
     } else {
