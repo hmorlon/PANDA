@@ -160,12 +160,13 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
     if(!is.null(shift.res)){
       model_leg <- sapply(shift.res$subclades[comb.sub2], function(x) x$Models[1])
       
-    if(any(grepl("/", shift.res$total$Combination))){
-      model_leg_bck <- unlist(sapply(shift.res$backbones[paste(paste(comb.sub, collapse = "."),paste0(comb.bck, collapse = "."), sep = "/")][[1]], function(x) x$Models[1]))
+      model_leg_bck <- unlist(sapply(shift.res$backbones[comb][[1]], function(x) x$Models[1]))
       names(model_leg_bck) <- c(comb.bck, Ntip(phylo)+1)
-      model_leg_bck <- model_leg_bck[match(c(comb.bck2, Ntip(phylo)+1) , names(model_leg_bck))]
-      model_leg <- c(model_leg, model_leg_bck)
-    }
+      
+      if(!is.null(comb.bck)){
+        model_leg_bck <- model_leg_bck[match(c(comb.bck2, Ntip(phylo)+1) , names(model_leg_bck))]
+      }
+      model_leg <- c(model_leg, model_leg_bck)        
       
       model_leg <- gsub("_", " ", model_leg)
       model_leg <- paste0(names_leg, " (", model_leg, ")")
