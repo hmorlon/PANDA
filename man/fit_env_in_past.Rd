@@ -48,7 +48,7 @@ a numeric vector of initial values for the parameters of f.mu to be estimated (t
   the number of  lineages present at present in the reconstructed phylogenetic tree.
 }
   \item{tot_desc}{
-  the total number of extant species (included in the unsampled ones). 
+  the total number of extant species (including in the unsampled ones). 
 }
   \item{meth}{
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.
