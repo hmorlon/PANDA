@@ -42,7 +42,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   
   
   if (!is.rooted(tree_A)){tree_A <- phytools::midpoint.root(tree_A) }
-  if (only_A==FALSE) { if (!is.rooted(tree_B)){tree_A <- phytools::midpoint.root(tree_B) }}
+  if (only_A==FALSE) { if (!is.rooted(tree_B)){tree_B <- phytools::midpoint.root(tree_B) }}
   
   if (only_A==TRUE) { 
     network <- network[1:nrow(network),tree_A$tip.label]
