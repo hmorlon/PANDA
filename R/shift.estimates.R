@@ -194,7 +194,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   }
   
   names_phylo2 <- sampling.fractions[sampling.fractions$nodes %in% as.numeric(names(phylo2)),]
-  names_phylo2 <- names_phylo2$data[match(names_phylo2$nodes, as.numeric(names(phylo2)))]
+  names_phylo2 <- names_phylo2$data[match(as.numeric(names(phylo2)), names_phylo2$nodes)]
   names_phylo2 <- ifelse(is.na(names_phylo2), paste("at node", names(phylo2)), paste("for", names_phylo2))
   
   # subclades to parallelize
