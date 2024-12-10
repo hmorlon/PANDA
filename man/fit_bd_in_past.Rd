@@ -117,10 +117,17 @@ tot_time<-max(node.age(Cetacea)$ages)
 time_stop=10
 sliced_tree <- Cetacea
 sliced_sub_trees <- treeSlice(sliced_tree,slice = tot_time-time_stop, trivial=TRUE)
-for (i in 1:length(sliced_sub_trees)){if (Ntip(sliced_sub_trees[[i]])>1){
-  sliced_tree <- drop.tip(sliced_tree,tip=sliced_sub_trees[[i]]$tip.label[2:Ntip(sliced_sub_trees[[i]])])
+for (i in 1:length(sliced_sub_trees)){
+
+  if (Ntip(sliced_sub_trees[[i]])>1){
+  sliced_tree <- drop.tip(sliced_tree, 
+    tip=sliced_sub_trees[[i]]$tip.label[2:Ntip(sliced_sub_trees[[i]])])
 }}
-for (i in which(node.depth.edgelength(sliced_tree)>(tot_time-time_stop))){sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)] <- sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)]-time_stop}
+
+for (i in which(node.depth.edgelength(sliced_tree)>(tot_time-time_stop))){
+  temp = sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)]-time_stop
+  sliced_tree$edge.length[which(sliced_tree$edge[,2]==i)] <- temp
+  }
 
 Ntip(sliced_tree) # 27 lineages present 10 Myr have survived until today
 
