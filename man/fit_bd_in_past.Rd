@@ -8,7 +8,7 @@ Maximum likelihood fit of the general birth-death model excluding the recent pas
 Fits the birth-death model with potentially time-varying rates and potentially missing extant species to a phylogeny, by maximum likelihood while excluding the recent past. Notations follow Morlon et al. PNAS 2011.
 }
 \usage{
-fit_bd_in_past(phylo, tot_time, time_stop, f.lamb, f.mu, desc, tot_desc, lamb_par, mu_par,
+fit_bd_in_past(phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, mu_par, desc, tot_desc, 
        meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
        dt=0, cond = "crown")
@@ -44,7 +44,6 @@ a numeric vector of initial values for the parameters of f.mu to be estimated (t
   \item{tot_desc}{
   the total number of extant species (including in the unsampled ones). 
 }
-
   \item{meth}{
 optimization to use to maximize the likelihood function, see \emph{optim} for more details.
 }
