@@ -8,8 +8,8 @@ Maximum likelihood fit of the environmental birth-death model excluding the rece
 Fits the environmental birth-death model with potentially missing extant species to a phylogeny, by maximum likelihood while excluding the recent past. Notations follow Morlon et al. PNAS 2011 and Condamine et al. ELE 2013.
 }
 \usage{
-fit_env_in_past(phylo, env_data, tot_time, time_stop, f.lamb, f.mu, desc, tot_desc, 
-lamb_par, mu_par, df= NULL, meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
+fit_env_in_past(phylo, env_data, tot_time, time_stop, f.lamb, f.mu, lamb_par, mu_par, 
+       desc, tot_desc, df= NULL, meth = "Nelder-Mead", cst.lamb = FALSE, cst.mu = FALSE,
        expo.lamb = FALSE, expo.mu = FALSE, fix.mu = FALSE,
        dt=0, cond = "crown")
 }

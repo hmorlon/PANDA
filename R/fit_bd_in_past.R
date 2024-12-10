@@ -285,9 +285,9 @@ fit_bd_in_past <- function (phylo, tot_time, time_stop, f.lamb, f.mu, lamb_par, 
 
 
 
-fit_env_in_past <- function (phylo, env_data, tot_time, time_stop, f.lamb,f.mu,lamb_par, mu_par, desc, tot_desc, df=NULL,
-                             meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, expo.lamb=FALSE,
-                             expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown"){
+fit_env_in_past <- function (phylo, env_data, tot_time, time_stop, f.lamb, f.mu, lamb_par, mu_par, 
+							 desc, tot_desc, df=NULL, meth = "Nelder-Mead", cst.lamb=FALSE, cst.mu=FALSE, 
+							 expo.lamb=FALSE, expo.mu=FALSE, fix.mu=FALSE, dt=0, cond="crown"){
   if (tot_time > max(env_data[,1])){
     stop("The environmental data does not cover the time span of the phylogeny: either enter data that covers the full time span or run analyses on younger clades")
   }
