@@ -1,6 +1,6 @@
 Package: RPANDA
-Version: 2.3
-Date: 2024-01-22
+Version: 2.4
+Date: 2024-12-10
 Type: Package
 Title: Phylogenetic ANalyses of DiversificAtion
 Depends:
