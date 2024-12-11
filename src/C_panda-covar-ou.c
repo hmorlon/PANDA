@@ -95,7 +95,7 @@ static void multi_weight_matrix (int *nchar, int *neps, double *epochs, double *
     double t;
     int n = *nchar, np = *neps;
     int i, j, k, r;
-    elt = Calloc(np*n,double);
+    elt = calloc(np*n,sizeof(double));
     for (i = 0; i < np; i++) {
         t = epochs[0]-epochs[i];
         for (j = 0; j < n; j++)
@@ -118,7 +118,7 @@ static void multi_weight_matrix (int *nchar, int *neps, double *epochs, double *
         }
     }
     
-    Free(elt);
+    free(elt);
 }
 
 // row standardization
@@ -148,7 +148,7 @@ SEXP C_panda_weights (SEXP nterm, SEXP epochs, SEXP lambda, SEXP S, SEXP S1, SEX
     nchar = GET_LENGTH(lambda);
     nt = INTEGER(nterm)[0];
     thetaO = INTEGER(root)[0];
-    nreg = Calloc(nchar,int);
+    nreg = calloc(nchar,sizeof(int));
     totreg = 0;
     
     for (i = 0; i < nchar; i++) {
@@ -161,7 +161,7 @@ SEXP C_panda_weights (SEXP nterm, SEXP epochs, SEXP lambda, SEXP S, SEXP S1, SEX
         
         for (i = 0; i < nt; i++) {
             np = GET_LENGTH(VECTOR_ELT(epochs,i));
-            double *y = Calloc(nchar*nchar*np, double);
+            double *y = calloc(nchar*nchar*np, sizeof(double));
             multi_weight_matrix(&nchar,&np,REAL(VECTOR_ELT(epochs,i)),REAL(lambda),REAL(S),REAL(S1),y);
             
             for (n = 0, ptr = 0; n < nchar; ptr += nt*nchar*nreg[n++]) {
@@ -178,10 +178,10 @@ SEXP C_panda_weights (SEXP nterm, SEXP epochs, SEXP lambda, SEXP S, SEXP S1, SEX
             }
             
             
-            Free(y);
+            free(y);
         }
     
-    Free(nreg);
+    free(nreg);
     
     // Row standardize the matrix if the root is not estimated
     if(thetaO==1){
