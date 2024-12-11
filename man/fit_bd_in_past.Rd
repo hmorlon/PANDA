@@ -93,7 +93,7 @@ this is that negative speciation/extinction rates estimates can be returned. The
 	
 	Lewitus, E., Bittner, L., Malviya, S., Bowler, C., & Morlon, H. (2018) Clade-specific diversification dynamics of marine diatoms since the Jurassic \emph{Nature Ecology and Evolution}, 2(11), 1715–1723
 	
-  Perez-Lamarque, B., Öpik, M., Maliet, O., Afonso Silva, A., Selosse, M-A., Martos, F., Morlon, H., Analysing diversification dynamics using barcoding data: The case of an obligate mycorrhizal symbiont, \emph{Molecular Ecology} 31: 3496–3512
+  Perez-Lamarque, B., Öpik, M., Maliet, O., Afonso Silva, A., Selosse, M-A., Martos, F., Morlon, H. (2022) Analysing diversification dynamics using barcoding data: The case of an obligate mycorrhizal symbiont, \emph{Molecular Ecology} 31: 3496–3512
 	
 }
 
