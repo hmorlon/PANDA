@@ -99,7 +99,7 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 \code{\link{phyl.pca_pl}},  
 \code{\link{GIC.fit_pl.rpanda}}, 
 \code{\link{gic_criterion}}
-\code{\link{mvgls}}
+\code{\link[mvMORPH]{mvgls}}
 }
 
 \examples{

@@ -17,7 +17,7 @@ sim_t_tworegime(regime.map, pars, root.value, Nsegments=2500,
 
 \arguments{
   \item{regime.map}{
-a stochastic map of the two regimes stored as a simmap object output from \code{\link{make.simmap}}
+a stochastic map of the two regimes stored as a simmap object output from \code{\link[phytools]{make.simmap}}
 }
   \item{pars}{
 a vector containing the three parameters for the chosen model; all models require \code{sig2}, and additionally, the MC model requires \code{S1} and \code{S2},

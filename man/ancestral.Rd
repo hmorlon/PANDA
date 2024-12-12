@@ -49,7 +49,7 @@ Martins E.P., Hansen T.F. 1997. Phylogenies and the comparative method: a genera
 \code{\link{fit_t_pl}},
 \code{\link{fit_t_env}},
 \code{\link{phyl.pca_pl}},
-\code{\link{GIC}}, 
+\code{\link[mvMORPH]{GIC}}, 
 \code{\link{gic_criterion}}
 }
 

@@ -27,7 +27,7 @@ a named vector of trait values for subgroup members with names matching \code{fu
   subgroup whose members are competing
 }
   \item{subgroup.map}{
-a phylo object created using \code{\link{make.simmap}} in phytools that contains reconstructed subgroup membership
+a phylo object created using \code{\link[phytools]{make.simmap}} in phytools that contains reconstructed subgroup membership
 }
   \item{model}{
 model chosen to fit trait data, \code{"MC"} is the matching competition model of Nuismer & Harmon 2014, \code{"DDlin"} is the diversity-dependent linear model, and \code{"DDexp"} is the diversity-dependent exponential model of Weir & Mursleen 2013.
@@ -43,7 +43,7 @@ the "clado.events" table produced in BioGeoBEARS that lists cladogenetic events 
 logical indicating whether the stochastic map was built from a stratified analysis in BioGeoBEARS
 }
   \item{regime.map}{
-a phylo object created using \code{\link{make.simmap}} in phytools that contains reconstructed competitive regime membership (see Details)
+a phylo object created using \code{\link[phytools]{make.simmap}} in phytools that contains reconstructed competitive regime membership (see Details)
 }
 
  \item{error}{
@@ -53,7 +53,7 @@ A named vector with standard error (SE) for each species (with names matching \c
 vector specifying starting parameter values for maximum likelihood optimization. If unspecified, default values are used (see Details)
 }
   \item{method}{
-optimization algorithm to use (see \code{\link{optim}}; for DD models without biogeography, \code{method="BB"} is also supported, which uses \link{spg})
+optimization algorithm to use (see \code{\link{optim}}; for DD models without biogeography, \code{method="BB"} is also supported, which uses \link[BB]{spg})
 }
   \item{bounds}{
 (optional) list of bounds to pass to optimization algorithm (see details at \code{\link{optim}})

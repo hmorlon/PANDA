@@ -19,7 +19,7 @@ CreateClassObject(map,rnd=5,return.mat=FALSE)
 \arguments{
 
   \item{map}{
-  stochastic map from \code{\link{make.simmap}} in \code{phytools}
+  stochastic map from \code{\link[phytools]{make.simmap}} in \code{phytools}
 }
   \item{rnd}{ 
   integer indicating the number of decimal places to which times should be rounded (default value is 5) (see \code{\link{round}})

@@ -46,7 +46,7 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 %% add later  \code{\link{sim_t_env}}  
 \code{\link{gic_criterion}}, 
 \code{\link{fit_t_pl}}
-\code{\link{mvgls}}
+\code{\link[mvMORPH]{mvgls}}
 }
 
 \examples{

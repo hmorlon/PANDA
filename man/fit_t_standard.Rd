@@ -14,7 +14,7 @@ fit_t_standard(phylo, data, model=c("BM","OU","EB"), error=NULL, two.regime=FALS
 
 \arguments{
   \item{phylo}{
-an object of type 'phylo' (see ape documentation); if \code{two.regime=TRUE}, this must be a simmap object from \code{\link{make.simmap}} with two regimes
+an object of type 'phylo' (see ape documentation); if \code{two.regime=TRUE}, this must be a simmap object from \code{\link[phytools]{make.simmap}} with two regimes
 }
   \item{data}{
 a named vector of trait values with names matching \code{phylo$tip.label}

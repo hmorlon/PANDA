@@ -35,7 +35,7 @@ either a matrix modified from \code{phylo$edge} or a phylo object created using 
 This function should be used to format the geography object so that it can be correctly
 passed to the numerical integration performed in \code{\link{fit_t_comp}}. 
 
-The \code{map} can either be a matrix formed by specifying the region in which each branch specified by \code{phylo$edge} existed, or a stochastic map stored as a phylo object output from \code{\link{make.simmap}} (see Examples).
+The \code{map} can either be a matrix formed by specifying the region in which each branch specified by \code{phylo$edge} existed, or a stochastic map stored as a phylo object output from \code{\link[phytools]{make.simmap}} (see Examples).
 }
 
 \references{

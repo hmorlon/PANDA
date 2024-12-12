@@ -34,7 +34,7 @@ vector specifying starting parameter values for maximum likelihood optimization.
 if incorporating biogeography, a list of sympatry through time created using \code{\link{CreateGeoObject}}
 }
   \item{regime.map}{
-if running two-regime versions of models, a stochastic map of the two regimes stored as a simmap object output from \code{\link{make.simmap}}
+if running two-regime versions of models, a stochastic map of the two regimes stored as a simmap object output from \code{\link[phytools]{make.simmap}}
 }
 
 }

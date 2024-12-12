@@ -21,7 +21,7 @@ CreateGeobyClassObject(phylo,simmap,trim.class,ana.events,clado.events,
 the object of type 'phylo' (see ape documentation) used to build ancestral range stochastic maps in BioGeoBEARS
 }
   \item{simmap}{
-a phylo object created using \code{\link{make.simmap}} in phytools
+a phylo object created using \code{\link[phytools]{make.simmap}} in phytools
 }
   \item{trim.class}{
 category in the simmap object that represents the subgroup of interest (see Details and Examples)
