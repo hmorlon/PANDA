@@ -21,7 +21,7 @@ CreateGeoObject(phylo,map)
 an object of type 'phylo' (see ape documentation)
 }
   \item{map}{
-either a matrix modified from \code{phylo$edge} or a phylo object created using \code{\link{make.simmap}} (see Details and Examples)
+either a matrix modified from \code{phylo$edge} or a phylo object created using \code{\link[phytools]{make.simmap}} (see Details and Examples)
 }
 }
 \value{
