@@ -1,5 +1,5 @@
 plot_phylosignal_sub_network <-
-function(tree_A, results_sub_clades, network=NULL, legend=TRUE, show.tip.label=FALSE, where="bottomleft"){
+function(tree_A, results_sub_clades, network=NULL, legend=TRUE, show.tip.label=FALSE, where="bottomleft", corrected_pvalue=TRUE){
   
   set.seed(1)
   host_tree <- tree_A
@@ -18,6 +18,9 @@ function(tree_A, results_sub_clades, network=NULL, legend=TRUE, show.tip.label=F
   if ((Ntip(host_tree)+1)!=results_sub_clades$node[1]){
     stop("object \"tree_A\" contains more node than \"results_sub_clades\". Remove these nodes from \"tree_A\" before plotting.")
   }
+  
+  if (!corrected_pvalue) results_sub_clades$pvalue_upper_corrected <- results_sub_clades$pvalue_upper
+  
   
   plot(host_tree, show.tip.label=show.tip.label)
   # significant and R>=0.05
