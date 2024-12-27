@@ -44,11 +44,11 @@ an object of type 'phylo' (see ape documentation)}
 
 
 \examples{
+\donttest{
 data(Cetacea)
 n<-length(Cetacea$tip.label)
 mat<-replicate(20, rnorm(n)) 
 colnames(mat)<-1:dim(mat)[2]
-\donttest{
 JSDt_cluster(Cetacea,mat)
 }
 }
