@@ -6,7 +6,7 @@ Build the phylogenies for BipartiteEvol}
 Build the phylogenies from the output of BipartiteEvol and the corresponding genealogies}
 \usage{
 define_species.BipartiteEvol(genealogy, threshold = 1, 
-      distanceH = NULL, distanceP = NULL, verbose = T,
+      distanceH = NULL, distanceP = NULL, verbose = TRUE,
       monophyly = TRUE, seed = NULL)
 }
 \arguments{
