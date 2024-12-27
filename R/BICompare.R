@@ -1,5 +1,4 @@
 BICompare <- function(phylo,t,meth=c("ultrametric")){
-	options(warn=-1)
 	#get lLk, BIC
 	kmeansBIC <- function(fit){
 		m <- ncol(fit$centers)
