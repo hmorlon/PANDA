@@ -55,8 +55,10 @@ Manceau, M., Lambert, A., Morlon, H. (2015) Phylogenies support out-of-equilibri
 
 \examples{
 # Some examples may take a little bit of time. Be patient!
+\donttest{
 data(Calomys)
 tot_time <- max(node.age(Calomys)$ages)
 par_init <- c(1e7, 1e7-0.5, 1)
-#fit_sgd(Calomys, tot_time, par_init, f=11/13)
+fit_sgd(Calomys, tot_time, par_init, f=11/13)
+}
 }
