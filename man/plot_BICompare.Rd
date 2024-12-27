@@ -35,8 +35,9 @@ a plot of the phylogeny with branches colored according to which modalities they
 }
 
 \examples{
-
+\donttest{
 data(Cetacea)
-#result <- BICompare(Cetacea,5)
-#plot_BICompare(Cetacea,result)
+result <- BICompare(Cetacea,5)
+plot_BICompare(Cetacea,result)
+}
 }
