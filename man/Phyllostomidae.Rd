@@ -18,8 +18,10 @@ Rolland, J., Condamine, F. L., Jiguet, F., & Morlon, H. (2014) Faster speciation
 \code{\link{Phyllostomidae_genera}}}
 
 \examples{
+\donttest{
 data(Phyllostomidae)
 print(Phyllostomidae)
-#plot(Phyllostomidae)
+plot(Phyllostomidae)
+}
 }
 \keyword{datasets}
