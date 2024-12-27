@@ -9,10 +9,10 @@
 }
 \usage{
   div.models(phylo, tot_time, f,
-             backbone = F, spec_times = NULL, branch_times = NULL,
+             backbone = FALSE, spec_times = NULL, branch_times = NULL,
              models = c("BCST", "BCST_DCST", "BVAR",
                         "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
-             cond, verbose = T, n.max = NULL, rate.max = NULL)
+             cond, verbose = TRUE, n.max = NULL, rate.max = NULL)
 }
 
 \arguments{
