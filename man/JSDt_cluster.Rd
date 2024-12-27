@@ -48,6 +48,7 @@ data(Cetacea)
 n<-length(Cetacea$tip.label)
 mat<-replicate(20, rnorm(n)) 
 colnames(mat)<-1:dim(mat)[2]
-#JSDt_cluster(Cetacea,mat)
-
+\donttest{
+JSDt_cluster(Cetacea,mat)
+}
 }
