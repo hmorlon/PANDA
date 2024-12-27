@@ -10,7 +10,7 @@ Computes the Jensen-Shannon distance metric between spectral density profiles of
 }
 
 \usage{
-JSDt_cluster(phylo,mat,plot=F)
+JSDt_cluster(phylo,mat,plot=FALSE)
 }
 
 \arguments{
