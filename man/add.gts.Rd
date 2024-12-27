@@ -61,7 +61,7 @@ add.gts(thickness, quaternary = TRUE, is.phylo = FALSE,
 \author{Nathan Mazet}
 
 \examples{
-\dontrun{
+\donttest{
 # with a phylogeny
 data("Cetacea")
 # first plot to get the dimensions of the gts
