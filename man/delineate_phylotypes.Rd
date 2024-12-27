@@ -65,7 +65,9 @@ alignment <- as.character(woodmouse) # nucleotidic alignment
 tree <- midpoint.root(nj(dist.dna(woodmouse, pairwise.deletion = TRUE, 
 model = "K80"))) # rooted neighbor-joining tree
 
-# delineate_phylotypes(tree, thresh = 99, alignment, method = "pi")
+\donttest{
+delineate_phylotypes(tree, thresh = 99, alignment, method = "pi")
+}
 
 }
 
