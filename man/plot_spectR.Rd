@@ -35,5 +35,5 @@ A 2-panel plot with the spectral density profile on the first panel and the eige
 
 data(Cetacea)
 result <- spectR(Cetacea)
-#plot_spectR(result)
+plot_spectR(result)
 }
