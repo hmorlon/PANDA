@@ -8,8 +8,8 @@
   Provides the sampling fractions of a phylogenetic tree from a complete database.
 }
 \usage{
-  get.sampling.fractions(phylo, data, clade.size = 5, plot = F,
-                         lad = T, text.cex = 1, pch.cex = 0.8, ...)
+  get.sampling.fractions(phylo, data, clade.size = 5, plot = FALSE,
+                         lad = TRUE, text.cex = 1, pch.cex = 0.8, ...)
 }
 
 \arguments{
