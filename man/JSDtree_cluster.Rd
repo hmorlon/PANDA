@@ -6,7 +6,7 @@ Clustering of phylogenies
 }
 \description{Clusters phylogenies using hierarchical and k-medoids clustering}
 \usage{
-JSDtree_cluster(JSDtree,alpha=0.9,draw=T)
+JSDtree_cluster(JSDtree,alpha=0.9,draw=TRUE)
 }
 
 \arguments{
