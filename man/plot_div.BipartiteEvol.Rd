@@ -30,6 +30,11 @@ Width of the branches of the phylogenies, default to 1
 Optional, used to force the trait scale
 }
 }
+
+\value{
+Plot simulated genealogies and phylogenies 
+}
+
 \details{
 The upper line shows the genealogies colored with trait values for both guilds (the number above shows the depth of the respective genealogy). 
 
