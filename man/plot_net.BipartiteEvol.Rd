@@ -9,8 +9,8 @@ Plot the genealogies, phylogenies and interaction network simulated with Biparti
 \usage{
 plot_net.BipartiteEvol(gen, spec, trait.id, link, 
     out, lwdgen = 1, lwdsp = lwdgen, scale = NULL, 
-    nx = NULL, cor = F, network.method = "bipartite", 
-    spatial = F)
+    nx = NULL, cor = FALSE, network.method = "bipartite", 
+    spatial = FALSE)
 }
 \arguments{
   \item{gen}{
@@ -39,12 +39,15 @@ Optional, used to force the trait scale
   \item{nx}{
 Grid size parameter used in sim.BipartiteEvol. If NULL, squrt(N) is used, where N is the number of individuals in a guild}
   \item{cor}{
-If F (the default), the middle panel displays the interraction network with species positionned in trait space. If T, it shows all the individual in trait space}
+If FALSE (the default), the middle panel displays the interraction network with species positionned in trait space. If TRUE, it shows all the individual in trait space}
   \item{network.method}{
 How should the network be plotted? Can be "bipartite" (the default) or "matrix"}
   \item{spatial}{
-Should the grid with trait values of the individual of both guilds been shown? Default to F}
+Should the grid with trait values of the individual of both guilds been shown? Default to FALSE}
 }
+
+\value{Plot outputs of BipartiteEvol} 
+
 \details{
 The upper line shows the genealogies colored with trait values for both guilds (the number above shows the depth of the respective genealogy). 
 
