@@ -45,5 +45,5 @@ mu_par<-c()
 result <- fit_bd(Balaenopteridae,tot_time,f.lamb,f.mu,lamb_par,mu_par,
                      expo.lamb = TRUE, fix.mu=TRUE)
 # plot fitted rates
-#plot_fit_bd(result, tot_time)
+plot_fit_bd(result, tot_time)
 }
