@@ -56,5 +56,5 @@ result <- fit_bd(Balaenopteridae,tot_time,f.lamb,f.mu,lamb_par,mu_par,f=1,
                      expo.lamb = TRUE, fix.mu=TRUE)
 
 # plot estimated number of species through time
-# plot_dtt(result, tot_time, N0=9)
+plot_dtt(result, tot_time, N0=9)
 }
