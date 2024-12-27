@@ -10,8 +10,7 @@ Ultrametric phylogenetic tree of 11 of the 13 extant Calomys species
 
 \references{
 Pigot et al.(2012) Speciation and extinction drive the appearance of directional range size evolution in phylogenies and the fossil record \emph{PloS Biol} 10:1-9
-
-Manceau, M., Lambert, A., Morlon, H. (submitted)
+Manceau, M., Lambert, A., Morlon, H. (2015) Phylogenies support out-of-equilibrium models of biodiversity Ecology Letters 18: 347-356
 }
 
 \examples{
