@@ -12,8 +12,8 @@
 plot_phylo_comb(phylo, data, sampling.fractions, shift.res = NULL,
                 combi, backbone.option = "crown.shift",
                 main = NULL, col.sub = NULL, col.bck = "black",
-                lty.bck = 1, tested_nodes = F, lad = T,
-                leg = T, text.cex = 1, pch.cex = 1, \dots)
+                lty.bck = 1, tested_nodes = FALSE, lad = TRUE,
+                leg = TRUE, text.cex = 1, pch.cex = 1, \dots)
 }
 \arguments{
   \item{phylo}{

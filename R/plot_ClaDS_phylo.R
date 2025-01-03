@@ -1,5 +1,5 @@
 
-plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,log=T,show.tip.label= F, ...){
+plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=TRUE,main=NULL,lwd=2,log=TRUE,show.tip.label= FALSE, ...){
   Colors = colorRampPalette(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4"))( 100 ) 
 
   if(is.null(rates2)){
@@ -8,9 +8,9 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
       col=rep(1,length(rates))
       plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,main=main,edge.width =lwd, ...)
       if(log){
-        image.plot(z = c(exp(rates[1]),2*exp(rates[1])),col = Colors, horizontal=T,legend.only = T)
+        image.plot(z = c(exp(rates[1]),2*exp(rates[1])),col = Colors, horizontal=TRUE,legend.only = TRUE)
       }else{
-        image.plot(z = c(rates[1],2*rates[1]),col = Colors, horizontal=T,legend.only = T)
+        image.plot(z = c(rates[1],2*rates[1]),col = Colors, horizontal=TRUE,legend.only = TRUE)
       }
     }else{
       col = round( (rates - min(rates)) / diff(range(rates))*99   )+1
@@ -28,9 +28,9 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
         ticks=as.vector(sapply(m10:M10,function(k){return(ticks*10^k)}))
         lt=length(ticks[ticks>exp(min) & ticks<exp(max)])
         if(lt<4){ticks=c(round(exp(min),max(0,-1*m10+(lt<2))),ticks,round(exp(max),max(0,-1*M10+1+(lt<2))))}
-        image.plot(z = c(min,max),col = Colors, horizontal=T,legend.only = T,axis.args=list( at=log(ticks), labels=ticks))
+        image.plot(z = c(min,max),col = Colors, horizontal=TRUE,legend.only = TRUE,axis.args=list( at=log(ticks), labels=ticks))
       }else{
-        image.plot(z = as.matrix(rates),col = Colors, horizontal=T,legend.only = T)
+        image.plot(z = as.matrix(rates),col = Colors, horizontal=TRUE,legend.only = TRUE)
       }
     }
   }else{
@@ -59,9 +59,9 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
         lt=length(ticks[ticks>exp(min) & ticks<exp(max)])
         if(lt<4){ticks=c(round(exp(min),max(0,-1*m10+(lt<2))),ticks,round(exp(max),max(0,-1*M10+1+(lt<2))))}
         # ticks=seq(min,max,length.out = 5)
-        image.plot(z = c(min,max),col = Colors, horizontal=T,legend.only = T,axis.args=list( at=log(ticks), labels=ticks))
+        image.plot(z = c(min,max),col = Colors, horizontal=TRUE,legend.only = TRUE,axis.args=list( at=log(ticks), labels=ticks))
       }else{
-        image.plot(z = c(min,max),col = Colors, horizontal=T,legend.only = T)
+        image.plot(z = c(min,max),col = Colors, horizontal=TRUE,legend.only = TRUE)
       }
     }else{
       par(mfrow=c(1,2))
@@ -70,9 +70,9 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
         plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
         if(log){
           
-          image.plot(z = c(exp(rates[1]),2*exp(rates[1])),col = Colors, horizontal=T,legend.only = T)
+          image.plot(z = c(exp(rates[1]),2*exp(rates[1])),col = Colors, horizontal=TRUE,legend.only = TRUE)
         }else{
-          image.plot(z = c(rates[1],2*rates[1]),col = Colors, horizontal=T,legend.only = T)
+          image.plot(z = c(rates[1],2*rates[1]),col = Colors, horizontal=TRUE,legend.only = TRUE)
         }
       }else{
         col = round(( (rates - min(rates)) / (max(rates)-min(rates)))*99   )+1
@@ -90,18 +90,18 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
           ticks=as.vector(sapply(m10:M10,function(k){return(ticks*10^k)}))
           lt=length(ticks[ticks>exp(min) & ticks<exp(max)])
           if(lt<4){ticks=c(round(exp(min),max(0,-1*m10+(lt<2))),ticks,round(exp(max),max(0,-1*M10+1+(lt<2))))}
-          image.plot(z = c(min,max),col = Colors, horizontal=T,legend.only = T,axis.args=list( at=log(ticks), labels=ticks))
+          image.plot(z = c(min,max),col = Colors, horizontal=TRUE,legend.only = TRUE,axis.args=list( at=log(ticks), labels=ticks))
         }else{
-          image.plot(z = as.matrix(rates),col = Colors, horizontal=T,legend.only = T)
+          image.plot(z = as.matrix(rates),col = Colors, horizontal=TRUE,legend.only = TRUE)
         }
       }
       if(isTRUE(all.equal(rep(rates2[1],length(rates2)),rates2))){
         col=rep(1,length(rates2))
         plot(phylo, edge.color = Colors[col], show.tip.label = show.tip.label ,edge.width =lwd, ...)
         if(log){
-          image.plot(z = c(exp(rates2[1]),2*exp(rates2[1])),col = Colors, horizontal=T,legend.only = T)
+          image.plot(z = c(exp(rates2[1]),2*exp(rates2[1])),col = Colors, horizontal=TRUE,legend.only = TRUE)
         }else{
-          image.plot(z = c(rates2[1],2*rates2[1]),col = Colors, horizontal=T,legend.only = T)
+          image.plot(z = c(rates2[1],2*rates2[1]),col = Colors, horizontal=TRUE,legend.only = TRUE)
         }
       }else{
         col = round(( (rates2 - min(rates2)) / (max(rates2)-min(rates2)))*99   )+1
@@ -119,9 +119,9 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=T,main=NULL,lwd=2,l
           ticks=as.vector(sapply(m10:M10,function(k){return(ticks*10^k)}))
           lt=length(ticks[ticks>exp(min) & ticks<exp(max)])
           if(lt<4){ticks=c(round(exp(min),max(0,-1*m10+(lt<2))),ticks,round(exp(max),max(0,-1*M10+1+(lt<2))))}
-          image.plot(z = c(min,max),col = Colors, horizontal=T,legend.only = T,axis.args=list( at=log(ticks), labels=ticks))
+          image.plot(z = c(min,max),col = Colors, horizontal=TRUE,legend.only = TRUE,axis.args=list( at=log(ticks), labels=ticks))
         }else{
-          image.plot(z = as.matrix(rates2),col = Colors, horizontal=T,legend.only = T)
+          image.plot(z = as.matrix(rates2),col = Colors, horizontal=TRUE,legend.only = TRUE)
         }
       }
     }

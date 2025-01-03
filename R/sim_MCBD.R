@@ -20,7 +20,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   if (length(bounds)!=2){stop("Lower and upper bounds should be provided")}
   if (root.value < bounds[1] || root.value > bounds [2]) {print("Warning: root value outside boundaries; continuing simulation")}
   
-  process_dead = F
+  process_dead = FALSE
   traits <- list(c(1,1,2,NA,root.value),c(2,-1,1,root.value,root.value)) #lineage number, status (incipient=-1/good=1/extinct=-2), parental lineage (if incipient), current trait value of parental lineage, trait values 
   lineages <- rbind(c(1,0,0,-1,1,0,0),c(1,0,0,-1,-1,0,NA)) #parental node, descendant node, starting t, ending t (still alive=-1), status, sp completion/extinction t, sp completion t
   active_lineages = c(1,2)
@@ -41,9 +41,9 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
     diag(mat_diff) <- NA
     diff_sign <- sign(mat_diff)
     #if there are any equal lineages, assigns random and opposing repulsion directions
-    if (any(diff_sign==0, na.rm = T)){
+    if (any(diff_sign==0, na.rm = TRUE)){
       diff_sign[lower.tri(diff_sign)] <- NA
-      eq_ind <- which(diff_sign == 0, arr.ind = T, useNames = F)
+      eq_ind <- which(diff_sign == 0, arr.ind = TRUE, useNames = FALSE)
       for (i in 1:nrow(eq_ind)){diff_sign[eq_ind[i,1],eq_ind[i,2]] <- sign(rnorm(1))}
       diff_sign[lower.tri(diff_sign)] <- -diff_sign[upper.tri(diff_sign)]
       }
@@ -146,7 +146,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
     n_lineages = length(active_lineages)
     
     if (n_lineages == 0) {print ("process died")
-        process_dead = T
+        process_dead = TRUE
         break()
       }
     }
@@ -181,7 +181,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   #traits
   tip_values_gsp_fossil <- tip_values[names(tip_values) %in% tree_gsp_fossil$tip.label]
   
-  if(process_dead == T){
+  if(process_dead == TRUE){
     tree_gsp_extant <- "process died"
     tip_values_gsp_extant <- "process died"
   }
@@ -204,7 +204,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
               gsp_fossil=list(tree=tree_gsp_fossil,tips=tip_values_gsp_fossil), 
               gsp_extant=list(tree=tree_gsp_extant,tips=tip_values_gsp_extant))
   
-  if (full.sim == T){
+  if (full.sim == TRUE){
     res$all$trait_mat <- traits
     res$all$lin_mat <- lineages
   }
@@ -216,8 +216,8 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
       max_trait <- NULL
       min_trait <- NULL
       for (i in 1:nrow(linmat)){#find extremes for plot limits
-        max_trait <- c(max_trait, max(traitmat[[i]][-(1:3)], na.rm = T))
-        min_trait <- c(min_trait, min(traitmat[[i]][-(1:3)], na.rm = T))
+        max_trait <- c(max_trait, max(traitmat[[i]][-(1:3)], na.rm = TRUE))
+        min_trait <- c(min_trait, min(traitmat[[i]][-(1:3)], na.rm = TRUE))
       }
       if (is.null(ylims)){
         plot(1, type="n",xlim=c(1,steps), ylim = c(min(min_trait),max(max_trait)), ylab = "trait value",

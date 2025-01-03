@@ -28,7 +28,7 @@ get.branching.nodes <- function(comb, ...){
   }
     
   # coalescence (core of the function)
-  df_ALL <- as.data.frame(sapply(unlist(shift,recursive = F), function(m) m[2]))
+  df_ALL <- as.data.frame(sapply(unlist(shift,recursive = FALSE), function(m) m[2]))
   colnames(df_ALL) <- "node"
   row.names(df_ALL) <- 1:nrow(df_ALL)
   
@@ -42,7 +42,7 @@ get.branching.nodes <- function(comb, ...){
   
   if(nrow(df_ALL) > 1){
     
-    all_ancestors <- unlist(list(rep(list(NULL), nrow(df_ALL))),recursive = F)
+    all_ancestors <- unlist(list(rep(list(NULL), nrow(df_ALL))),recursive = FALSE)
     
     for(df_l in 1:nrow(df_ALL)){
       
@@ -58,13 +58,13 @@ get.branching.nodes <- function(comb, ...){
     
     coal <- as.data.frame(table(sapply(all_ancestors, function(m) m[1])))
     
-    while(any(coal$Freq == 2) & is.null(all_ancestors) == F){
+    while(any(coal$Freq == 2) & is.null(all_ancestors) == FALSE){
       
       if(any(coal$Freq == 2)){
         ALL_par_nodes <- c(ALL_par_nodes,as.numeric(as.character(coal$Var1[coal$Freq == 2])))
         all_ancestors <- unique(all_ancestors)
         
-        all_ancestors <- lapply(all_ancestors, function(x) x[x %in% ALL_par_nodes == F])
+        all_ancestors <- lapply(all_ancestors, function(x) x[x %in% ALL_par_nodes == FALSE])
         
         coal <- as.data.frame(table(sapply(all_ancestors, function(m) m[1])))
         
@@ -79,7 +79,7 @@ get.branching.nodes <- function(comb, ...){
   
   if(length(ALL_par_nodes) != 0){
     
-    parental_nodes <- unlist(list(rep(list(NULL),length(ALL_par_nodes))),recursive = F)
+    parental_nodes <- unlist(list(rep(list(NULL),length(ALL_par_nodes))),recursive = FALSE)
     
     # ALL OTHER NODES
     if(length(parental_nodes) != 0){
@@ -106,7 +106,7 @@ get.branching.nodes <- function(comb, ...){
     parental_nodes <- NULL
   }
   
-  df_ALL <- t(as.data.frame(unlist(shift,recursive = F)))
+  df_ALL <- t(as.data.frame(unlist(shift,recursive = FALSE)))
   
   branches_df_all <- apply(df_ALL, 1, paste, collapse = ".")
   if(!is.null(parental_nodes)){
@@ -115,9 +115,9 @@ get.branching.nodes <- function(comb, ...){
   }
   
   #
-  branch_times_to <- unlist(list(rep(list(NULL),nrow(df_ALL) + length(parental_nodes) + root_clade)),recursive = F)
+  branch_times_to <- unlist(list(rep(list(NULL),nrow(df_ALL) + length(parental_nodes) + root_clade)),recursive = FALSE)
   
-  bt_1 <-  unlist(shift,recursive = F)
+  bt_1 <-  unlist(shift,recursive = FALSE)
   for(bt in 1:length((bt_1))){
     branch_times_to[bt] <- bt_1[bt]
   }
@@ -131,7 +131,7 @@ get.branching.nodes <- function(comb, ...){
   
   branch_root <- c(Siblings(phylo, root_node),Ancestors(phylo, root_node, type = "parent"))
   
-  if(root_clade == 1 & paste(branch_root, collapse = ".") %in% sapply(branch_times_to, paste0, collapse= ".") == F){
+  if(root_clade == 1 & paste(branch_root, collapse = ".") %in% sapply(branch_times_to, paste0, collapse= ".") == FALSE){
     branch_times_to[bt + p + root_clade] <- list(branch_root)
   }
   

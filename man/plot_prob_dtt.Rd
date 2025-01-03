@@ -11,7 +11,7 @@
   plot_prob_dtt(mat, grain =0.1, plot.prob = TRUE, 
                 plot.mean = TRUE, int = TRUE, plot.bound=FALSE,
                 conf = 0.95, add = FALSE, col.mean = "red", col.bound = "blue",
-                lty="solid", lwd=1, lty.bound=1, add.present=T, ...)
+                lty="solid", lwd=1, lty.bound=1, add.present=TRUE, ...)
 }
 
 \arguments{

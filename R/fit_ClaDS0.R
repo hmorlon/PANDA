@@ -26,7 +26,7 @@ create_model=function(start_val,posterior,proposalKernel,tuning=1,pamhType="Univ
       new = rnorm(1,meanMcmc[indice],sqrt(varMcmc[indice]))
       par=param[indice]
       hastings = ((((new-meanMcmc[indice])^2)/varMcmc[indice])-(((par-meanMcmc[indice])^2)/varMcmc[indice]))/2
-      #   hastings = dnorm(par,meanMcmc[indice],sqrt(varMcmc[indice]),log=T)-dnorm(new,meanMcmc[indice],sqrt(varMcmc[indice]),log=T)
+      #   hastings = dnorm(par,meanMcmc[indice],sqrt(varMcmc[indice]),log=TRUE)-dnorm(new,meanMcmc[indice],sqrt(varMcmc[indice]),log=TRUE)
       #   print(paste(hastings,hastings1,sep=" ; "))
       param[indice]=new
       returnProp <- list(
@@ -253,13 +253,13 @@ autoMetropolisGibbs <-
     
     chain <- read.table(filename, sep="\t", header=TRUE, row.names=1)
     # To speed up the computations
-    # chain <- fread(filename, sep="\t", header=T, skip=1)
+    # chain <- fread(filename, sep="\t", header=TRUE, skip=1)
     
     results <- list(chain=mcmc(chain), finetune=tuning, acceptance=mcmc_acceptance)
     return(results)
   }
 
-createLikelihood_ClaDS0 <- function(phylo, root_depth=0, relative=T){
+createLikelihood_ClaDS0 <- function(phylo, root_depth=0, relative=TRUE){
   
   nbtips = Ntip(phylo)
   edge = phylo$edge
@@ -468,7 +468,7 @@ fit_ClaDS0=function(tree,name,pamhLocalName = "pamhLocal",
   ptm <- proc.time()
   sampler=mclapply(1:3,function(j){ autoMetropolisGibbs(model, iterations=iteration, consoleupdates=1000000, 
                                                                     thin=thin, autoOptimize=TRUE, filename=paste(pamhLocalName,j,sep=""),
-                                                                    update=update, adaptation=adaptation * update, verbose=F)},mc.cores = nCPU)
+                                                                    update=update, adaptation=adaptation * update, verbose=FALSE)},mc.cores = nCPU)
   
   rep=mcmc.list(lapply(1:3,function(j){mcmc(sampler[[j]]$chain[-(1:10),-c((npar+1):(npar+3))])}))
   gelman=try(gelman.diag(rep))
@@ -480,9 +480,9 @@ fit_ClaDS0=function(tree,name,pamhLocalName = "pamhLocal",
       modelI=model
       modelI$tuning=sampler[[j]]$finetune
       modelI$start_val=sampler[[j]]$chain[nrow(sampler[[j]]$chain),1:npar]
-      autoMetropolisGibbs(modelI, iterations=iteration, consoleupdates=1000000, thin=thin, autoOptimize=F, 
+      autoMetropolisGibbs(modelI, iterations=iteration, consoleupdates=1000000, thin=thin, autoOptimize=FALSE, 
                           filename=paste(pamhLocalName,j,sep=""), 
-                          update=1000,adaptation=10000,verbose=F)},mc.cores = nCPU)
+                          update=1000,adaptation=10000,verbose=FALSE)},mc.cores = nCPU)
     for(j in 1:3){sampler[[j]]$chain=mcmc(rbind(sampler[[j]]$chain,sampler2[[j]]$chain[-1,]))}
     rep=mcmc.list(lapply(1:3,function(j){mcmc(sampler[[j]]$chain[-(1:10),-c((npar+1):(npar+3))])}))
     gelman=try(gelman.diag(rep))

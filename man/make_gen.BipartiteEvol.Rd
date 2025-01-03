@@ -6,7 +6,7 @@ Compute the genealogies for BipartiteEvol}
 Compute the genealogies from a run of BipartiteEvol
 }
 \usage{
-make_gen.BipartiteEvol(out, treeP = NULL, treeH = NULL, verbose = T)
+make_gen.BipartiteEvol(out, treeP = NULL, treeH = NULL, verbose = TRUE)
 }
 \arguments{
   \item{out}{

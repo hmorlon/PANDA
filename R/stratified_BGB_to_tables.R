@@ -24,7 +24,7 @@ desc<-clado_events_tables[[i]][rows,1]
 anc<-clado_events_tables[[i]][rows,5]
 anmat<-cbind(desc,anc,hold)
 m<-regexpr("->",anmat$event_txt)
-regs<-regmatches(as.character(anmat$event_txt),m,invert=T)
+regs<-regmatches(as.character(anmat$event_txt),m,invert=TRUE)
 new_rangetxt<-unlist(lapply(regs,function(x)x[2]))
 nodenum_at_top_of_branch<-anmat[,1]
 abs_event_time<-anmat$abs_event_time

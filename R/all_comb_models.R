@@ -11,7 +11,7 @@ all_comb_models <- function(to){
     comb.bck <- NULL
   }
   
-  cat("\n", to, "/", length(comb.shift))
+  message("\n", to, "/", length(comb.shift))
   
   # plot to illustrate
   # plot_phylo_comb(phylo, data, sampling.fractions, comb = comb.shift[to], cex = 0.8, label.offset = 0.2)
@@ -94,14 +94,14 @@ all_comb_models <- function(to){
         
         tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
         # remaining comb.sub in the deep backbone
-        #tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
+        #tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = FALSE)]])
         
         phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_core, tips_up_bck)
         names(phylo_backbone_cut)[sb] <- paste(int_nodes[sb-1],"bck", sep = "_")
         
-        int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = F)]
+        int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = FALSE)]
  
-        comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
+        comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = FALSE)], int_nodes_deep_backbone)
   
         branch_time_sb <- get.branching.nodes(comb_deep_backbone, phylo = phylo,
                                               ALL_branch_times_clades = ALL_branch_times_clades,
@@ -127,9 +127,9 @@ all_comb_models <- function(to){
   
   nodes_backbone_th <- setdiff(phylo$node.label, unlist(desc_comb.sub))
   
-  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names = F)
-  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names = F)
-  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names = F)
+  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names = FALSE)
+  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names = FALSE)
+  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names = FALSE)
   
   nodes_backbone_obs <- as.numeric(c(nodes_backbone_obs,
                                      branch_nodes_to_bck,
@@ -224,12 +224,12 @@ all_comb_models <- function(to){
     
     results <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
                           backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                          cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = T)
+                          cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = TRUE)
     if(btb < length(phylo_backbone_cut)){
       # cond has to be changed to properly estimate likelihood of each part if they are not the last part
       results1 <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
                              backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                             cond = F, models = models, n.max = n.max, rate.max = rate.max, verbose = F)
+                             cond = FALSE, models = models, n.max = n.max, rate.max = rate.max, verbose = FALSE)
       
       results2 <- merge(results1[,c(1:4)], results[,c(1,5:8)], by="Models")
       results <- results2[match(results$Models, results2$Models),]

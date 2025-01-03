@@ -284,7 +284,7 @@ all_comb_models <- function(to){
     comb.bck <- NULL
   }
   
-  cat("\n", to, "/", length(comb.shift))
+  message("\n", to, "/", length(comb.shift))
   
   # plot to illustrate
   # plot.phylo.comb(phylo, data, sampling.fractions, comb = comb.shift[to], cex = 0.8, label.offset = 0.2)
@@ -367,14 +367,14 @@ all_comb_models <- function(to){
         
         tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
         # remaining comb.sub in the deep backbone
-        tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
+        tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names =FALSE)]])
         
         phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_core, tips_up_bck)
         names(phylo_backbone_cut)[sb] <- paste(int_nodes[sb-1],"bck", sep = "_")
         
-        int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = F)]
+        int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names =FALSE)]
         
-        comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
+        comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names =FALSE)], int_nodes_deep_backbone)
         
         branch_time_sb <- get.branching.nodes(comb_deep_backbone, phylo = phylo,
                                               ALL_branch_times_clades = ALL_branch_times_clades,
@@ -479,12 +479,12 @@ all_comb_models <- function(to){
     
     results <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
                           backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                          cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = T)
+                          cond = cond, models = models, n.max = n.max, rate.max = rate.max, verbose = TRUE)
     if(btb < length(phylo_backbone_cut)){
       # cond has to be changed to properly estimate likelihood of each part if they are not the last part
       results1 <- div.models(phylo = phylo_backbone_cut[[btb]], tot_time = tot_time3, f = f[[btb]],
                              backbone = backbone, spec_times = spec_times, branch_times = branch_times_to_bck[[btb]],
-                             cond = F, models = models, n.max = n.max, rate.max = rate.max, verbose = F)
+                             cond =FALSE, models = models, n.max = n.max, rate.max = rate.max, verbose =FALSE)
       
       results2 <- merge(results1[,c(1:4)], results[,c(1,5:8)], by="Models")
       results <- results2[match(results$Models, results2$Models),]
@@ -503,9 +503,9 @@ all_comb_models <- function(to){
   
   nodes_backbone_th <- setdiff(phylo$node.label, unlist(desc_comb.sub))
   
-  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names = F)
-  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names = F)
-  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names = F)
+  nodes_backbone_obs <- unlist(lapply(phylo_backbone_cut, function(x) x$node.label), use.names =FALSE)
+  all_branching_nodes_to <- unlist(lapply(branch_nodes_to_bck, function(x) unique(sapply(x, "[[", 2))), use.names =FALSE)
+  branch_nodes_to_bck <- unlist(lapply(branch_nodes_to_bck, names), use.names =FALSE)
   
   nodes_backbone_obs <- as.numeric(c(nodes_backbone_obs,
                                      branch_nodes_to_bck,
@@ -570,7 +570,7 @@ get.branching.nodes <- function(comb, ...){
   }
   
   # coalescence (core of the function)
-  df_ALL <- as.data.frame(sapply(unlist(shift,recursive = F), function(m) m[2]))
+  df_ALL <- as.data.frame(sapply(unlist(shift,recursive =FALSE), function(m) m[2]))
   colnames(df_ALL) <- "node"
   row.names(df_ALL) <- 1:nrow(df_ALL)
   
@@ -584,7 +584,7 @@ get.branching.nodes <- function(comb, ...){
   
   if(nrow(df_ALL) > 1){
     
-    all_ancestors <- unlist(list(rep(list(NULL), nrow(df_ALL))),recursive = F)
+    all_ancestors <- unlist(list(rep(list(NULL), nrow(df_ALL))),recursive =FALSE)
     
     for(df_l in 1:nrow(df_ALL)){
       
@@ -600,13 +600,13 @@ get.branching.nodes <- function(comb, ...){
     
     coal <- as.data.frame(table(sapply(all_ancestors, function(m) m[1])))
     
-    while(any(coal$Freq == 2) & is.null(all_ancestors) == F){
+    while(any(coal$Freq == 2) & is.null(all_ancestors) ==FALSE){
       
       if(any(coal$Freq == 2)){
         ALL_par_nodes <- c(ALL_par_nodes,as.numeric(as.character(coal$Var1[coal$Freq == 2])))
         all_ancestors <- unique(all_ancestors)
         
-        all_ancestors <- lapply(all_ancestors, function(x) x[x %in% ALL_par_nodes == F])
+        all_ancestors <- lapply(all_ancestors, function(x) x[x %in% ALL_par_nodes == FALSE])
         
         coal <- as.data.frame(table(sapply(all_ancestors, function(m) m[1])))
         
@@ -621,7 +621,7 @@ get.branching.nodes <- function(comb, ...){
   
   if(length(ALL_par_nodes) != 0){
     
-    parental_nodes <- unlist(list(rep(list(NULL),length(ALL_par_nodes))),recursive = F)
+    parental_nodes <- unlist(list(rep(list(NULL),length(ALL_par_nodes))),recursive = FALSE)
     
     # ALL OTHER NODES
     if(length(parental_nodes) != 0){
@@ -648,7 +648,7 @@ get.branching.nodes <- function(comb, ...){
     parental_nodes <- NULL
   }
   
-  df_ALL <- t(as.data.frame(unlist(shift,recursive = F)))
+  df_ALL <- t(as.data.frame(unlist(shift,recursive = FALSE)))
   
   branches_df_all <- apply(df_ALL, 1, paste, collapse = ".")
   if(!is.null(parental_nodes)){
@@ -657,9 +657,9 @@ get.branching.nodes <- function(comb, ...){
   }
   
   #
-  branch_times_to <- unlist(list(rep(list(NULL),nrow(df_ALL) + length(parental_nodes) + root_clade)),recursive = F)
+  branch_times_to <- unlist(list(rep(list(NULL),nrow(df_ALL) + length(parental_nodes) + root_clade)),recursive = FALSE)
   
-  bt_1 <-  unlist(shift,recursive = F)
+  bt_1 <-  unlist(shift,recursive = FALSE)
   for(bt in 1:length((bt_1))){
     branch_times_to[bt] <- bt_1[bt]
   }
@@ -673,7 +673,7 @@ get.branching.nodes <- function(comb, ...){
   
   branch_root <- c(Siblings(phylo, root_node),Ancestors(phylo, root_node, type = "parent"))
   
-  if(root_clade == 1 & paste(branch_root, collapse = ".") %in% sapply(branch_times_to, paste0, collapse= ".") == F){
+  if(root_clade == 1 & paste(branch_root, collapse = ".") %in% sapply(branch_times_to, paste0, collapse= ".") == FALSE){
     branch_times_to[bt + p + root_clade] <- list(branch_root)
   }
   

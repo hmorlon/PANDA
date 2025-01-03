@@ -126,7 +126,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       rate.test <- rate(init, tot_time, model) 
       
       check1 <- length(lamb_par) == 1 & length(mu_par) == 1 & lamb_par[1] <= mu_par[1]
-      check2 <- min(rate.test, na.rm = T) < 0
+      check2 <- min(rate.test, na.rm = TRUE) < 0
       if(all(is.na(rate.test[2,]))){
         check3 <- F
       } else {
@@ -135,7 +135,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       
       if(!is.null(n.max)){ # constraint on maximum diversity
         div.test <- div(init, phylo = phylo, backbone = backbone, branch_times = branch_times, model = model)
-        if(max(div.test, na.rm = T) > n.max | any(c(check1, check2, check3) == T)){
+        if(max(div.test, na.rm = TRUE) > n.max | any(c(check1, check2, check3) == TRUE)){
           LH <- Inf
         } else {
           LH <- likelihood_bd_backbone(phylo, tot_time, f, f.lamb.par, f.mu.par,
@@ -147,7 +147,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       }
       
       if(!is.null(rate.max)){ # constraint on maximum rate
-        if(max(rate.test, na.rm = T) > rate.max | min(rate.test, na.rm = T) < 0 | any(c(check1, check2, check3) == T)){
+        if(max(rate.test, na.rm = TRUE) > rate.max | min(rate.test, na.rm = TRUE) < 0 | any(c(check1, check2, check3) == TRUE)){
           LH <- Inf
         } else {
           LH <- likelihood_bd_backbone(phylo, tot_time, f, f.lamb.par, f.mu.par,
@@ -187,11 +187,11 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       }
       
       rate.test <- rate(init, tot_time = tot_time, model = model) 
-      check2 <- min(rate.test, na.rm = T) < 0
+      check2 <- min(rate.test, na.rm = TRUE) < 0
       
       if(!is.null(n.max)){
         div.test <- div(init, phylo = phylo, backbone = backbone, branch_times = branch_times, model = model) 
-        if(max(div.test, na.rm = T) > n.max){
+        if(max(div.test, na.rm = TRUE) > n.max){
           LH <- Inf
         } else {
           LH <- likelihood_bd_backbone(phylo, tot_time, f, f.lamb.par, f.mu.par, 
@@ -203,7 +203,7 @@ fit_bd_backbone_c <- function (phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, 
       
       if(!is.null(rate.max)){
         rate.test <- rate(init, tot_time, model) 
-        if(max(rate.test, na.rm = T) > rate.max | check2){
+        if(max(rate.test, na.rm = TRUE) > rate.max | check2){
           LH <- Inf
         } else {
           LH <- likelihood_bd_backbone(phylo, tot_time, f, f.lamb.par, f.mu.par, 

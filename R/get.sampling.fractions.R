@@ -1,4 +1,4 @@
-get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = T, text.cex = 1, pch.cex = 0.8, ...){
+get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = FALSE, lad = TRUE, text.cex = 1, pch.cex = 0.8, ...){
   
   # Checks ####
   if(is.null(phylo) | is(phylo)[1] != "phylo"){
@@ -11,7 +11,7 @@ get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = 
     stop("Object \"data\" is NULL or not of class \"data.frame\".")
   }
   
-  if(any("Species" %in% colnames(data)) == F){
+  if(any("Species" %in% colnames(data)) == FALSE){
     stop("No column named \"Species\" in the database
          \nPlease rename the corresponding column with the name \"Species\".")
   }
@@ -84,14 +84,14 @@ get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = 
   phylo.df[phylo.df$nodes == Ntip(phylo)+1, c("f", "sp_in", "sp_tt")] <- c(Ntip(phylo)/nrow(data), Ntip(phylo), nrow(data))
   
   # PLOT optionnal ####
-  if(plot == T){
+  if(plot == TRUE){
     
-    if(lad == T){
+    if(lad == TRUE){
       pos_leg <- "bottomleft"
-      phylo <- ladderize(phylo, right = T)
+      phylo <- ladderize(phylo, right = TRUE)
     } else {
       pos_leg <- "topleft"
-      phylo <- ladderize(phylo, F)
+      phylo <- ladderize(phylo, FALSE)
     }
     
     phylo$node.label <- c(Ntip(phylo)+1):c(Ntip(phylo)+Nnode(phylo))
@@ -100,10 +100,10 @@ get.sampling.fractions <- function(phylo, data, clade.size = 5, plot = F, lad = 
     #node_legends <- ifelse(grepl("clade", node_legends), NA, node_legends)
     
     
-    plot(phylo, show.node.label = F, label.offset = 0.4, ...)
+    plot(phylo, show.node.label = FALSE, label.offset = 0.4, ...)
     nodelabels(node_legends, adj = c(1.1,-0.5), bg = "white", cex = text.cex, frame = "n")  
     
-    axisPhylo(backward = T, cex.axis = text.cex)
+    axisPhylo(backward = TRUE, cex.axis = text.cex)
     mtext(text = "Time (Myrs)", side = 1, line = 2, at = max(branching.times(phylo))/2, cex = text.cex)
     
     lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)

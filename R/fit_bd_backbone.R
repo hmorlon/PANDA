@@ -69,14 +69,14 @@ fit_bd_backbone <- function(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f =
       rate.test <- rate(init, tot_time, model) 
       
       check1 <- length(lamb_par) == 1 & length(mu_par) == 1 & lamb_par[1] <= mu_par[1]
-      check2 <- min(rate.test, na.rm = T) < 0
+      check2 <- min(rate.test, na.rm = TRUE) < 0
       if(all(is.na(rate.test[2,]))){
         check3 <- F
       } else {
         check3 <- ifelse(apply(rate.test, 2, function(x) x[1] - x[2])[1] < 0, T, F)
       }
       
-      if(any(c(check1, check2, check3) == T)){
+      if(any(c(check1, check2, check3) == TRUE)){
         LH <- Inf
       } else {
         LH <- likelihood_bd_backbone(phylo, tot_time, f, f.lamb.par, f.mu.par,
@@ -114,7 +114,7 @@ fit_bd_backbone <- function(phylo, tot_time, f.lamb, f.mu, lamb_par, mu_par, f =
       }
       
       rate.test <- rate(init, tot_time, model) 
-      check2 <- min(rate.test, na.rm = T) < 0
+      check2 <- min(rate.test, na.rm = TRUE) < 0
       
       if(check2){
         LH <- Inf

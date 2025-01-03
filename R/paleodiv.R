@@ -1,6 +1,6 @@
 paleodiv <- function(phylo, data, sampling.fractions, shift.res,
                      backbone.option = "crown.shift", combi = 1,
-                     time.interval = 1, split.div = F){
+                     time.interval = 1, split.div = FALSE){
 
   # Checking arguments ####
   # phylo
@@ -30,8 +30,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   }
   
   if(!backbone.option %in% c("stem.shift", "crown.shift")){
-    cat("\nArgument \"backbone.option\" is incorrect.")
-    stop()
+    stop("\nArgument \"backbone.option\" is incorrect.")
   }
   
   best_subclades_df <- do.call(rbind.data.frame, lapply(shift.res$subclades, function(x) x[1,]))
@@ -186,7 +185,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
     for(clade in 1:length(all_tested_nodes)){
       
       parental_node <- Ancestors(phylo, as.numeric(all_tested_nodes[clade]), type = "parent")
-      branch_times_clade <- unlist(list(rep(list(NULL),1)),recursive = F)
+      branch_times_clade <- unlist(list(rep(list(NULL),1)),recursive = FALSE)
       
       bt_cl <- as.numeric(c(all_tested_nodes[clade], parental_node))
       branch_times_clade[1] <- list(bt_cl)
@@ -265,14 +264,14 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
           
           tips_up_bck <- unlist(lapply(phylo_backbone_cut, function(x) x$tip.label))
           # remaining comb.sub in the deep backbone
-          tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)]])
+          tips_last_bck <- unlist(ALL_clade_names[comb.sub[!comb.sub %in% unlist(sb.desc, use.names = FALSE)]])
           
           phylo_backbone_cut[[sb]] <- drop.tip(phylo_backbone_core, tips_up_bck)
           names(phylo_backbone_cut)[sb] <- paste(int_nodes[sb-1],"bck", sep = "_")
           
-          int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = F)]
+          int_nodes_deep_backbone <- int_nodes[!int_nodes %in% unlist(sapply(branch_times_to_bck, names), use.names = FALSE)]
           
-          comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = F)], int_nodes_deep_backbone)
+          comb_deep_backbone <- c(comb.sub[!comb.sub %in% unlist(sb.desc, use.names = FALSE)], int_nodes_deep_backbone)
           
           branch_time_sb <- get.branching.nodes(comb_deep_backbone, phylo = phylo,
                                                 ALL_branch_times_clades = ALL_branch_times_clades,
@@ -358,7 +357,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
         }
         agei <- as.numeric(branching.times(phylo)[as.character(parental_nodes)])
       } else { # if branching times contain older branches
-        agei <- max(branching.times(phylo)[lin.node$node[j]], max(unlist(branch_times_to_bck[[j]], use.names = F)))
+        agei <- max(branching.times(phylo)[lin.node$node[j]], max(unlist(branch_times_to_bck[[j]], use.names = FALSE)))
       }
       sizei <- lin.node$sp_tt_prev[j]
       
@@ -403,12 +402,12 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   globaldiv <- globaldiv[,ncol(globaldiv):1]
   
   if(comb != "whole_tree"){
-    past.div.curve<-apply(globaldiv,2,function(x)sum(x,na.rm=T))  
+    past.div.curve<-apply(globaldiv,2,function(x)sum(x,na.rm=TRUE))  
   } else {
     past.div.curve <- globaldiv
   }
   
-  if(split.div == T){
+  if(split.div){
     return(globaldiv)
   }else{
     return(past.div.curve)

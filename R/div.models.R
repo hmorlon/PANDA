@@ -48,7 +48,7 @@ div.models <- function(phylo, tot_time, f,
       p = p + 1
     }    
     
-    if(verbose == TRUE){cat("   ", name, " \t \t AICc =", treei_BCST$aicc,"\n")}
+    if(verbose == TRUE){message("   ", name, " \t \t AICc = ", treei_BCST$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda")] <- c(name, 1, c(treei_BCST$LH,treei_BCST$aicc, treei_BCST$lamb_par))
     res_l <- res_l + 1
     
@@ -87,7 +87,7 @@ div.models <- function(phylo, tot_time, f,
       p = p + 1
     }
     
-    if(verbose == TRUE){cat("   ", name, "\t \t AICc =", treei_BCST_DCST$aicc,"\n")}
+    if(verbose == TRUE){message("   ", name, "\t \t AICc = ", treei_BCST_DCST$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda", "Mu")] <- c(name, 2, c(treei_BCST_DCST$LH, treei_BCST_DCST$aicc, treei_BCST_DCST$lamb_par, treei_BCST_DCST$mu_par))
     res_l <- res_l + 1
     
@@ -127,7 +127,7 @@ div.models <- function(phylo, tot_time, f,
     }
     
     
-    if(verbose == TRUE){cat("   ",name," \t \t AICc =", treei_BVAR$aicc,"\n")}
+    if(verbose == TRUE){message("   ",name," \t \t AICc = ", treei_BVAR$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda", "Alpha")] <- c(name, 2, c(treei_BVAR$LH, treei_BVAR$aicc, treei_BVAR$lamb_par))
     res_l <- res_l + 1
     list_param[["improved"]][c(1,2)] <- treei_BVAR$lamb_par
@@ -164,7 +164,7 @@ div.models <- function(phylo, tot_time, f,
       p = p + 1
     }
     
-    if(verbose == TRUE){cat("   ",name,"\t \t AICc =", treei_BVAR_DCST$aicc,"\n")}
+    if(verbose == TRUE){message("   ",name,"\t \t AICc = ", treei_BVAR_DCST$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda", "Alpha", "Mu")] <- c(name, 3, c(treei_BVAR_DCST$LH, treei_BVAR_DCST$aicc, treei_BVAR_DCST$lamb_par, treei_BVAR_DCST$mu_par))
     res_l <- res_l + 1
   }
@@ -201,7 +201,7 @@ div.models <- function(phylo, tot_time, f,
       p = p + 1
     }
     
-    if(verbose == TRUE){cat("   ",name,"\t \t AICc =", treei_BCST_DVAR$aicc,"\n")}
+    if(verbose == TRUE){message("   ",name,"\t \t AICc = ", treei_BCST_DVAR$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda", "Mu", "Beta")] <- c(name, 3, c(treei_BCST_DVAR$LH, treei_BCST_DVAR$aicc, treei_BCST_DVAR$lamb_par, treei_BCST_DVAR$mu_par))
     res_l <- res_l + 1
   }
@@ -236,7 +236,7 @@ div.models <- function(phylo, tot_time, f,
       p = p + 1
     }
     
-    if(verbose == TRUE){cat("   ",name,"\t \t AICc =", treei_BVAR_DVAR$aicc,"\n")}
+    if(verbose == TRUE){message("   ",name,"\t \t AICc = ", treei_BVAR_DVAR$aicc,"\n")}
     results[res_l, colnames(results) %in% c("Models","Parameters","logL","AICc","Lambda", "Alpha", "Mu", "Beta")] <- c(name, 4, c(treei_BVAR_DVAR$LH, treei_BVAR_DVAR$aicc, treei_BVAR_DVAR$lamb_par, treei_BVAR_DVAR$mu_par))
     res_l <- res_l + 1
   }

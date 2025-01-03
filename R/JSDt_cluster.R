@@ -1,7 +1,7 @@
 
 
 #get Jensen-Shannon divergence	
-JSDt_cluster <- function(phylo,mat,plot=F){
+JSDt_cluster <- function(phylo,mat,plot=FALSE){
 	dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
 	KLD <- function(x,y) sum(x*log(x/y))
 	JSD <- function(x,y) sqrt(0.5*KLD(x,(x+y)/2)+0.5*KLD(y,(x+y)/2))
@@ -70,9 +70,9 @@ Ds<-c()
 	#return list of divergence matrix table, clusters with silhouette widths 
 	ret<-list(JSD,clustersMedoid[[1]]$clusinfo,clustersMedoid[[1]]$silinfo$widths[,c(1,3)])
 	
-	if(plot==T){
+	if(plot==TRUE){
 	#plot heatmap
-	heatmap(JSD,symm=T)
+	heatmap(JSD,symm=TRUE)
 		dev.new()
 	#plot hierarchical clustering with bootstrap support
 	clustersHierarchy <- pvclust(JSD,r=seq(0.5,1.5,0.2))

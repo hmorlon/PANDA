@@ -10,7 +10,7 @@
 \usage{
   paleodiv(phylo, data, sampling.fractions, shift.res,
            backbone.option = "crown.shift", combi = 1,
-           time.interval = 1, split.div = F)
+           time.interval = 1, split.div = FALSE)
 }
 
 \arguments{

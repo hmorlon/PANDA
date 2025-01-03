@@ -10,7 +10,7 @@ Computes the spectra of eigenvalues for the modified graph Laplacian of a phylog
 }
 
 \usage{
-spectR(phylo, meth=c("standard"),zero_bound=F)
+spectR(phylo, meth=c("standard"),zero_bound=FALSE)
 }
 
 \arguments{

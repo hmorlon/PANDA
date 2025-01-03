@@ -11,10 +11,10 @@ plot_spectR <- function(spectR)
 
 			
 		par(mfrow=c(1,2))
-			plot(d$x,dsc,type="l",ann=F)
+			plot(d$x,dsc,type="l",ann=FALSE)
 				mtext(expression(f*(x)/integral(f(y)*dy)),2,2)
 					mtext("ln eigenvalue",1,2)
-			plot(sort(log(m),decreasing=T),ann=F)
+			plot(sort(log(m),decreasing=TRUE),ann=FALSE)
 				mtext("rank",1,2)
 					mtext("ln eigenvalue",2,3)				
 }

@@ -1,4 +1,4 @@
-JSDtree_cluster <- function(JSDtree,alpha=0.9,draw=T)
+JSDtree_cluster <- function(JSDtree,alpha=0.9,draw=TRUE)
 {
 
 
@@ -7,9 +7,9 @@ maxCluster<-dim(JSDtree)[1]-1
 clustersMedoid <- pamk(JSDtree,krange=1:maxCluster)
 clustersMedoidSupport <- pam(JSDtree,clustersMedoid$nc)
 
-if(draw == T){
+if(draw == TRUE){
 #plot heatmap
-heatmap(JSDtree,symm=T)
+heatmap(JSDtree,symm=TRUE)
 
 #plot hierarchical clustering with bootstrap support
 	dev.new()
