@@ -152,9 +152,9 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   anc_sub <- Ancestors(phylo, as.numeric(comb.sub))
   comb.sub_bybck <-c()
   backbones <- rep(list(NULL),length(comb.bck)+1)
-  cat("Backbone simulations...\n")
+  message("Backbone simulations...\n")
   for(cb in 1:length(backbones)){
-    cat("\t backbone", cb, "/", length(backbones),"\n")
+    message("\t backbone ", cb, "/", length(backbones),"\n")
     if(cb != length(backbones)){
       comb.sub_bybck[[cb]] <- comb.sub[sapply(anc_sub, function(x) comb.bck[cb] %in% x)]
       model_backbone <- shift.res$backbones[shift.res$total$Combination[combi]][[1]][[cb]]$Models[1]
@@ -193,10 +193,10 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   
   # subclades 
   # subclades
-  cat("Subclade simulations...\n")
+  message("Subclade simulations...\n")
   all_subclades <- c()
   for(i in 1:length(comb.sub)){
-    cat("\t subclade", i, "/", length(comb.sub),"\n")
+    message("\t subclade", i, "/", length(comb.sub),"\n")
     # param
     param_sub <- shift.res$subclades[comb.sub[i]][[1]][1, c("Lambda", "Alpha", "Mu", "Beta")]
     model_sub <- shift.res$subclades[comb.sub[i]][[1]]$Models[1]
@@ -280,13 +280,13 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
   }
   
   # Check if some grafting were impossible
-  sum(sapply(all_shift_nodes, anyNA) == F)
+  sum(sapply(all_shift_nodes, anyNA) == FALSE)
   
-  all_shift_nodes_ok <- all_shift_nodes[sapply(all_shift_nodes, anyNA) == F]
-  all_parts_ok <- all_parts[sapply(all_shift_nodes, anyNA) == F]
+  all_shift_nodes_ok <- all_shift_nodes[sapply(all_shift_nodes, anyNA) == FALSE]
+  all_parts_ok <- all_parts[sapply(all_shift_nodes, anyNA) == FALSE]
   
   # grafting on a backbone
-  cat("Shifts grafting...\n")
+  message("Shifts grafting...\n")
   all_new_tree <- c()
   pb = txtProgressBar(min = 0, max = length(all_parts_ok), initial = 0, style = 3)
   for(j in 1:length(all_parts_ok)){
@@ -337,17 +337,17 @@ simul.comb.shift <- function(n = 10000, phylo, sampling.fractions,
     monophyly <- sapply(names(ntip_by_group), function(y) is.monophyletic(x, x$tip.label[grepl(y, x$tip.label)]))
     monophyly_backbones <- monophyly[backbone_letters]
     checks <- c(all(backbone_letters %in% names(ntip_by_group)),
-                all(monophyly_backbones == F),
+                all(monophyly_backbones == FALSE),
                 all(ntip_by_group >= clade.size))
-    ifelse(any(checks == F), F, T)
+    ifelse(any(checks == FALSE), FALSE, TRUE)
   })
   all_new_tree <- all_new_tree[to_keep]
   
   if(length(all_new_tree) == 0){
-    cat("Did not success to simulate valid grafted trees. The combination might be too complex.")
+    message("Did not success to simulate valid grafted trees. The combination might be too complex.")
     
   } else {
-    cat(length(all_new_tree), "trees successfully simulated. Increase the value of argument n to get more trees.")
+    message(length(all_new_tree), " trees successfully simulated. Increase the value of argument n to get more trees.")
     return(all_new_tree)
   }
   

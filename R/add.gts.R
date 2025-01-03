@@ -1,9 +1,11 @@
-add.gts <- function(thickness, quaternary = T, is.phylo = F,
-                    xpd.x = T, time.interval = 1, names = NULL, fill = T,
+add.gts <- function(thickness, quaternary = TRUE, is.phylo = FALSE,
+                    xpd.x = TRUE, time.interval = 1, names = NULL, fill = TRUE,
                     cex = 1, padj = -0.5, direction = "rightwards"){
   
-  # BETA VERSION: SHOULD BE TESTED MORE DEEPLY
-  par(xpd = T)
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  
+  par(xpd = TRUE)
   plot_dim = par("usr")
   
   if(is.phylo){
@@ -40,7 +42,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
     ages[,c(1,2)] <- apply(ages[,c(1,2)], 2, function(x) -x)
   }
   
-  if(quaternary == T){
+  if(quaternary == TRUE){
     ages[2,] <- c(ages[1,1], ages[2,2])
     ages <- ages[-1,]
     col <- c("#FFF1C4", "#FFF7B2", "#FFED00", "#FBCC98", "#FAC18A",
@@ -122,7 +124,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
   }
   
   # working for rightwards only
-  if(xpd.x == F){
+  if(xpd.x == FALSE){
     ages$end[nrow(ages)] <- plot_dim[1]
   }
   
@@ -160,7 +162,7 @@ add.gts <- function(thickness, quaternary = T, is.phylo = F,
     #seq_time <- rev(seq_time)
     
   }
-  if(is.phylo == F){
+  if(is.phylo == FALSE){
     if(any(round(time.seq) != time.seq)){
       labels <- labels[round(time.seq) == time.seq]
       time.seq <- time.seq[round(time.seq) == time.seq]

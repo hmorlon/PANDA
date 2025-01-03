@@ -1,9 +1,14 @@
 shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                             models = c("BCST", "BCST_DCST", "BVAR", "BVAR_DCST", "BCST_DVAR", "BVAR_DVAR"),
-                            backbone.option = "crown.shift", multi.backbone = F, 
+                            backbone.option = "crown.shift", multi.backbone = FALSE, 
                             np.sub = 4, rate.max = NULL, n.max = NULL, Ncores = 1){
+  
+  # reset global options when exiting the function
+  old_options <- options()
+  on.exit(options(old_options))
+  
   env.func <- environment()
-  options(echo = T)
+  options(echo = TRUE)
   
   #### argument check ####
   if(!inherits(data, "data.frame")){
@@ -20,20 +25,19 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     stop("object \"sampling.fractions\" is not of class \"data.frame\"")
   }
   
-  if(any("Species" %in% colnames(data)) == F){
+  if(any("Species" %in% colnames(data)) == FALSE){
     stop("No column named \"Species\" in the database.
          \nPlease rename the corresponding column with the name \"Species\".")
   }
   
   if(any(!phylo$tip.label %in% data$Species)){
-    cat("The following tips are not in the database.\n \n")
-    cat(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
+    message("The following tips are not in the database.\n \n")
+    message(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
     stop()
   }
   
   if(!np.sub %in% 1:4 & np.sub != "no_extinction"){
-    cat("\nArgument \"np.sub\" is incorrect.")
-    stop()
+    stop("\nArgument \"np.sub\" is incorrect.")
   }
   
   if(!backbone.option %in% c("stem.shift","crown.shift")){
@@ -41,8 +45,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   }
   
   if(!is.null(n.max) & !is.null(rate.max)){
-    cat("\nArguments \"rate.max\" and \"n.max\" cannot be used together.")
-    stop()
+    stop("\nArguments \"rate.max\" and \"n.max\" cannot be used together.")
   }
   
   # Final list to return
@@ -63,20 +66,20 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ####_____________ ####
   #### WHOLE TREE ####
   
-  cat("\n Estimating shifts of diversification from phylogeny.\n")
-  cat("-----------------------------------------------------------")
+  message("\n Estimating shifts of diversification from phylogeny.\n")
+  message("-----------------------------------------------------------")
   if(!is.null(n.max)){
-    cat("\nA constrain will be applied: maximum diversity value is fixed at", n.max, "\n")
+    message("\nA constrain will be applied: maximum diversity value is fixed at ", n.max, "\n")
   }
   
   if(!is.null(rate.max)){
-    cat("\nA constrain will be applied: maximum rate value is fixed at", rate.max, "\n")
+    message("\nA constrain will be applied: maximum rate value is fixed at ", rate.max, "\n")
   }
   
   f1 <- Ntip(phylo)/totalsp
-  cat("\n--- WHOLE TREE ---\n \n")
+  message("\n--- WHOLE TREE ---\n \n")
   
-  cat("\n","Sampling fraction =",  paste0(Ntip(phylo), "/", nrow(data), " (",round(f1,3)*100," %)"), "\n") 
+  message("\n","Sampling fraction = ",  paste0(Ntip(phylo), "/", nrow(data), " (",round(f1,3)*100,"%)"), "\n") 
   
   res_phylo <- div.models(phylo = phylo, tot_time = max(branching.times(phylo)), f = f1,
                           cond = "crown", models = models, n.max = n.max, rate.max = rate.max)
@@ -101,7 +104,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   ALL_nodes_ages <- as.data.frame(apply(data.frame(nodesID=names(branching.times(phylo)),ages=branching.times(phylo)), 2, as.numeric))
   
   #### SUBCLADES ####
-  cat("\n--- SUBCLADES ---\n \n")
+  message("\n--- SUBCLADES ---\n \n")
   ## Subclades trees
   # Check whether all groups are monophyletic 
   subclade_check <- NULL
@@ -111,8 +114,8 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
     }
   }
   if(!is.null(subclade_check)){
-    cat("The following subclades are not monophyletic:")
-    cat("",subclade_check,sep="\n  - ")
+    message("The following subclades are not monophyletic:")
+    message("",subclade_check,sep="\n  - ")
     stop()
   }
   
@@ -149,16 +152,16 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   names(phylosp2) <- sampling.fractions$nodes[as.numeric(names(ALL_clade_names))]
   
   f2 <- as.list(unlist(phylosp2)/unlist(totalsp2))
-  # totalsp2 <- totalsp2[names(totalsp2) %in% "others" == F]
+  # totalsp2 <- totalsp2[names(totalsp2) %in% "others" == FALSE]
   
   final2<-list()
   # all parameters
   
   backbone <- rep(list(F),length(phylo2))
-  spec_times <- unlist(list(rep(list(NULL),length(phylo2))),recursive = F)
-  branch_times <- unlist(list(rep(list(NULL),length(phylo2))),recursive = F)
-  tot_time2 <- unlist(list(rep(list(NULL),length(phylo2))),recursive = F)
-  cond <- unlist(list(rep(list(NULL),length(phylo2))),recursive = F)
+  spec_times <- unlist(list(rep(list(NULL),length(phylo2))),recursive = FALSE)
+  branch_times <- unlist(list(rep(list(NULL),length(phylo2))),recursive = FALSE)
+  tot_time2 <- unlist(list(rep(list(NULL),length(phylo2))),recursive = FALSE)
+  cond <- unlist(list(rep(list(NULL),length(phylo2))),recursive = FALSE)
   
   # backbone selection
   if(backbone.option == "stem.shift"){
@@ -203,15 +206,15 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   #                       "fitLikelihood", "suppressWarnings", "try","getLikelihood", ".Phi", "integrate", ".Psi", ".Integrate"), envir = env.func)
   
   final2 <- lapply(seq_along(phylo2), function(i){
-    cat(i, "/", length(phylo2))
+    message(i, "/", length(phylo2))
     n_tree <- sampling.fractions$sp_in[sampling.fractions$nodes == as.numeric(names(phylo2)[i])]
     n_tot <- sampling.fractions$sp_tt[sampling.fractions$nodes == as.numeric(names(phylo2)[i])]
-    cat("\n","Sampling fraction", names_phylo2[i], "=",  paste0(n_tree, "/", n_tot, " (",round(f2[[i]],3)*100," %)"), "\n") 
+    message("\n","Sampling fraction of ", names_phylo2[i], " = ",  paste0(n_tree, "/", n_tot, " (",round(f2[[i]],3)*100," %)"), "\n") 
     
     results <- div.models(phylo = phylo2[[i]], tot_time = tot_time2[[i]], f = f2[[i]],
-                          cond = F, models = models.sub, n.max = n.max, rate.max = rate.max)
+                          cond = FALSE, models = models.sub, n.max = n.max, rate.max = rate.max)
     results1 <- div.models(phylo2[[i]], tot_time2[[i]], f = f2[[i]],
-                           cond = cond[[i]], models = models.sub, n.max = n.max, rate.max = rate.max, verbose = F)
+                           cond = cond[[i]], models = models.sub, n.max = n.max, rate.max = rate.max, verbose = FALSE)
     
     results <- merge(results[, c("Models", "Parameters", "logL", "AICc")], results1[,c("Models", "Lambda", "Alpha", "Mu", "Beta")], by = "Models")
     
@@ -238,7 +241,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   # Best model by clades
   best_subclades <- lapply(final2, function(x) x[x$AIC == min(x$AICc),])
-  best_subclades_df <- data.frame(matrix(unlist(best_subclades), nrow = length(best_subclades), byrow = T))
+  best_subclades_df <- data.frame(matrix(unlist(best_subclades), nrow = length(best_subclades), byrow = TRUE))
   names(best_subclades_df) <- names(best_subclades[[1]])
   best_subclades_df$Clades <- names(best_subclades)
   best_subclades_df <- best_subclades_df[,c("Clades", names(best_subclades[[1]]))]
@@ -247,24 +250,24 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   ####_____________ ####
   #### BACKBONES ####
-  cat("\n--- BACKBONES ---\n")
+  message("\n--- BACKBONES ---\n")
   
   # multi.backbone change
-  if(multi.backbone == F){
+  if(multi.backbone == FALSE){
     # should be comb.shift1
-    cat("\n", "The", length(comb.shift1),"combinations with simple backbones will be compared. \n")
+    message("\n", "The ", length(comb.shift1)," combinations with simple backbones will be compared.\n")
     comb.shift <- comb.shift1
   }
   
-  if(multi.backbone == T){
+  if(multi.backbone == TRUE){
     # should be comb.shift2
-    cat("\n", "The", length(comb.shift2),"combinations with multiple backbones will be compared. \n")
+    message("\n", "The ", length(comb.shift2)," combinations with multiple backbones will be compared.\n")
     comb.shift <- comb.shift2
   }
   
   if(multi.backbone == "all"){
     # should be comb.shift
-    cat("\n", "All the", length(comb.shift),"combinations will be compared. \n")
+    message("\n", "All the ", length(comb.shift), " combinations will be compared.\n")
   }
   
   ALL_backbones <- rep(list(NULL),length(comb.shift))
@@ -282,7 +285,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   for(clade in 1:length(all_tested_nodes)){
     
     parental_node <- Ancestors(phylo, as.numeric(all_tested_nodes[clade]), type = "parent")
-    branch_times_clade <- unlist(list(rep(list(NULL),1)),recursive = F)
+    branch_times_clade <- unlist(list(rep(list(NULL),1)),recursive = FALSE)
     
     bt_cl <- as.numeric(c(all_tested_nodes[clade], parental_node))
     branch_times_clade[1] <- list(bt_cl)
@@ -292,7 +295,7 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   
   # LOOP ON COMBINATIONS ####
   # Parallelization of backbone models
-  cat("\nDiversification models are running: \n")
+  message("\nDiversification models are running: \n")
   
   cl <- parallel::makeCluster(Ncores, type="SOCK")
   
@@ -302,21 +305,20 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
                          "branching.times", "ALL_clade_names", "sampling.fractions", "backbone.option", "models", "ALL_final3", "rate.max",
                          "Children", "extract.clade.ln", "expand.grid", "get.branching.nodes"), envir = env.func)
   
-  ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(comb.shift), all_comb_models, progressBar = T, stopOnError = T)
+  ALL_final3 <- ParallelLogger::clusterApply(cl, seq_along(comb.shift), all_comb_models, progressBar = TRUE, stopOnError = TRUE)
   stopCluster(cl)
   
-  #ALL_final3 <- ParallelLogger::clusterApply(cl, 1, all_comb_models, progressBar = T, stopOnError = T)
+  #ALL_final3 <- ParallelLogger::clusterApply(cl, 1, all_comb_models, progressBar = TRUE, stopOnError = TRUE)
   
   #ALL_final3 <- lapply(1, all_comb_models)
   
   names(ALL_final3) <- comb.shift
-  #ALL_final3 <- lapply(ALL_final3, unlist, recursive = F)
+  #ALL_final3 <- lapply(ALL_final3, unlist, recursive = FALSE)
   
-  cat("\n\n--- Comparison(s) of the", length(ALL_final3), "combinations ---\n")
+  message("\n\n--- Comparison(s) of the ", length(ALL_final3), " combinations ---\n\n")
   
   best_ALL_final3 <- ALL_final3
   
-  cat("\n")
   for(to in 1:length(ALL_final3)){
     for(sub_to in 1:length(ALL_final3[[to]])){
       ALL_final3[[to]][[sub_to]]$delta_AICc <- ALL_final3[[to]][[sub_to]]$AICc - min(ALL_final3[[to]][[sub_to]]$AICc)
@@ -360,15 +362,15 @@ shift.estimates <- function(phylo, data, sampling.fractions, comb.shift,
   names(all_res)[c(3,4)] <- c("backbones", "total")
   
   if(!"whole_tree" %in% best_ALL_TOTAL$Combination){
-    cat("\n A total of", nrow(best_ALL_TOTAL), "combination(s) got the best fit(s) (delta AICc < 2). \n")
+    message("\n A total of ", nrow(best_ALL_TOTAL), " combination(s) got the best fit(s) (delta AICc < 2).\n")
   } else{
     if(best_ALL_TOTAL$Combination[1] == "whole_tree"){
-      cat("\n No shift has been detected. \n")
+      message("\n No shift has been detected.\n")
     } else {
       if(which(best_ALL_TOTAL$Combination == "whole_tree")-1 == 1){
-        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combination is better than the homogeneous model (but non-significant). \n")
+        message("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1," combination is better than the homogeneous model (but non-significant).\n")
       } else {
-        cat("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combinations are better than the homogeneous model (but non-significant). \n")
+        message("\n",which(best_ALL_TOTAL$Combination == "whole_tree")-1,"combinations are better than the homogeneous model (but non-significant).\n")
       }
     }
   }

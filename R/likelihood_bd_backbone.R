@@ -27,7 +27,7 @@ likelihood_bd_backbone <- function (phylo, tot_time, f, f.lamb, f.mu,
                                                      expo.lamb = expo.lamb, expo.mu = expo.mu, dt = dt)))
   
 #Type of analysis (options backbone, branch_times and spec_time should be added here)
-  if (backbone == F) {
+  if (backbone == FALSE) {
     log_data_lik <- sum(log_indLikelihood) + nbtips * log(f)
   } else if (backbone == "stem.shift"){
 

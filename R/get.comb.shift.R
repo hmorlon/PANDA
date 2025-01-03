@@ -1,7 +1,11 @@
 get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncores = 1){
   
+  # reset global options when exiting the function
+  old_options <- options()
+  on.exit(options(old_options))
+  
   env.func <- environment()
-  options(echo = T)
+  options(echo = TRUE)
 
   #### argument check ####
   if(!inherits(data, "data.frame")){
@@ -14,14 +18,14 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   
   phylo$node.label <- c(Ntip(phylo) + 1):c(Ntip(phylo) + Nnode(phylo))
   
-  if(any("Species" %in% colnames(data)) == F){
+  if(any("Species" %in% colnames(data)) == FALSE){
     stop("No column named \"Species\" in the database
          \nPlease rename the corresponding column with the name \"Species\".")
   }
   
   if(any(!phylo$tip.label %in% data$Species)){
-    cat("The following tips are not in database.\n \n")
-    cat(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
+    message("The following tips are not in database.\n \n")
+    message(phylo$tip.label[!phylo$tip.label %in% data$Species], "\n")
     stop()
   }
   
@@ -94,11 +98,11 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
     return(ALL_comb)
     
   }
-  cat("\n SIMPLE BACKBONES:\n")
+  message("\n SIMPLE BACKBONES:\n")
   cl <- parallel::makeCluster(Ncores, type="SOCK")
   clusterExport(cl, list("phylo","Descendants", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste", "clade.size"),
                 envir = env.func)
-  ALL_comb <- unlist(ParallelLogger::clusterApply(cl, seq_along(n_clade_comb), get.all.comb, progressBar = T))
+  ALL_comb <- unlist(ParallelLogger::clusterApply(cl, seq_along(n_clade_comb), get.all.comb, progressBar = TRUE))
   stopCluster(cl)
   
   names(ALL_comb) <- NULL
@@ -127,7 +131,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   ALL_bck_comb <- rep(list(NULL),length(ALL_comb))
   names(ALL_bck_comb) <- lapply(ALL_comb, function(x) paste(x, collapse = "."))
   
-  cat("\n MULTIPLE BACKBONES:\n")
+  message("\n MULTIPLE BACKBONES:\n")
   cl <- parallel::makeCluster(Ncores, type="SOCK")
   clusterExport(cl, list("phylo","Descendants", "Ancestors", "diff_lineages", "Siblings","n_clade_comb","expand.grid","paste",
                          "ALL_comb", "ALL_clade_names", "sampling.fractions","Ntip", "clade.size", "ALL_bck_comb", "drop.tip",
@@ -136,7 +140,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   
   ALL_bck_comb <- ParallelLogger::clusterApply(cl, seq_along(ALL_comb), function(comb){
     
-    cat(comb, "/",length(ALL_comb), "\n")
+    message(comb, "/",length(ALL_comb), "\n")
     names(ALL_bck_comb)[comb] <- paste(ALL_comb[[comb]], collapse = ".")
     
     phylo_bck <- drop.tip(phylo, unlist(ALL_clade_names[ALL_comb[[comb]]]))
@@ -147,7 +151,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
     
     sf_bck <- sampling.fractions[!sampling.fractions$nodes %in% sub_node,c("nodes", "data", "f","to_test")]
     matching <- data.frame(bck.nodes = unique(phylo_bck$edge[,1]), phylo = phylo_bck$node.label)
-    sf_bck <- merge(sf_bck, matching, by.x = "nodes", by.y = "phylo", all = T)
+    sf_bck <- merge(sf_bck, matching, by.x = "nodes", by.y = "phylo", all = TRUE)
     
     sf_bck <- sf_bck[!is.na(sf_bck$to_test),]
     sub_diff_lineages <- diff_lineages[sapply(diff_lineages, function(x) any(ALL_comb[[comb]] %in% x))]
@@ -279,7 +283,7 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
       
     }
     return(ALL_bck_comb[[comb]])
-  }, progressBar = T)
+  }, progressBar = TRUE)
   stopCluster(cl)
   
   names(ALL_bck_comb) <- sapply(ALL_comb, function(x) paste(x, collapse = "."))
@@ -299,10 +303,10 @@ get.comb.shift <- function(phylo, data, sampling.fractions, clade.size = 5, Ncor
   }
   
 
-  cat("\n ONLY SIMPLE BACKBONES:")
-  cat("\t\n",   sum(sapply(strsplit(ALL_bck_comb1, "/"), length) == 1) ,"combination(s) have been detected. \n")
-  cat("\n WITH MULTIPLE BACKBONES:")
-  cat("\n", length(ALL_bck_comb1), "combination(s) have been detected. \n")
+  message("\n ONLY SIMPLE BACKBONES:")
+  message("\t\n",   sum(sapply(strsplit(ALL_bck_comb1, "/"), length) == 1) ," combination(s) have been detected. \n")
+  message("\n WITH MULTIPLE BACKBONES:")
+  message("\n", length(ALL_bck_comb1), " combination(s) have been detected. \n")
   
   return(ALL_bck_comb1)
 }

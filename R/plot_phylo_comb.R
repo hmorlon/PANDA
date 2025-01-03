@@ -1,8 +1,12 @@
 plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
                             combi, backbone.option = "crown.shift",
                             main = NULL, col.sub = NULL, col.bck = "black",
-                            lty.bck = 1, tested_nodes = F, lad = T,
-                            leg = T, text.cex = 1, pch.cex = 1, ...){
+                            lty.bck = 1, tested_nodes = FALSE, lad = TRUE,
+                            leg = TRUE, text.cex = 1, pch.cex = 1, ...){
+  
+  # returns old graphical parameter value when exiting the function
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   
   # Checking arguments ####
   # phylo
@@ -48,8 +52,7 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
   }
   
   if(!backbone.option %in% c("stem.shift", "crown.shift")){
-    cat("\nArgument \"backbone.option\" is incorrect.")
-    stop()
+    stop("\nArgument \"backbone.option\" is incorrect.")
   }
   
   # Script ####
@@ -60,12 +63,12 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
   
   phylo1 <- phylo
   
-  if(lad == T){
+  if(lad == TRUE){
     pos_leg <- "bottomleft"
-    phylo1 <- ladderize(phylo1, right = T)
+    phylo1 <- ladderize(phylo1, right = TRUE)
   } else {
     pos_leg <- "topleft"
-    phylo1 <- ladderize(phylo1, F)
+    phylo1 <- ladderize(phylo1, FALSE)
   }
   
   phylo1$node.label <- c(Ntip(phylo1)+1):c(Ntip(phylo1)+Nnode(phylo1))
@@ -190,7 +193,7 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
   plot(phylo1, edge.color = colors_clades,
        edge.lty = lty_clades, main = main, ...)
   
-  if(tested_nodes == T){
+  if(tested_nodes == TRUE){
     pos_leg_n <- c(par("xaxp")[1]-2, c(par("yaxp")[2]+3))
     lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
     node <- (lastPP$Ntip + 1):length(lastPP$xx)
@@ -205,7 +208,7 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
   }
   leg_title <- ""
   if(comb == "whole_tree"){
-    if(leg == T){
+    if(leg == TRUE){
       if(!is.null(shift.res)){
         model_leg <- shift.res$whole_tree$Models[shift.res$whole_tree$AICc == min(shift.res$whole_tree$AICc)]
         legend(pos_leg, legend = paste0("whole_tree (", model_leg, ")"), text.col = "black",cex = text.cex, bty = "n")  
@@ -216,7 +219,7 @@ plot_phylo_comb <- function(phylo, data, sampling.fractions, shift.res = NULL,
       title <- ""
     }
   } else {
-    if(leg == T){
+    if(leg == TRUE){
       if(!is.null(shift.res)){
         leg_title <- "Shifts (Best model)"
       } else {

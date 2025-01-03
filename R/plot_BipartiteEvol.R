@@ -10,7 +10,7 @@
 plot_div.BipartiteEvol=function(gen,spec,trait.id,lwdgen=1,lwdsp=lwdgen,scale=NULL){
   
   # cut the plot window
-  layout(mat = matrix(c(1,1,8,2,2,3,3,8,4,4,5,7,7,7,6),ncol=5,byrow = T),
+  layout(mat = matrix(c(1,1,8,2,2,3,3,8,4,4,5,7,7,7,6),ncol=5,byrow = TRUE),
          widths = c(3,2,1.5,2,3), heights = c(3,3,2))
   
   # define the scale range
@@ -61,7 +61,7 @@ plot_div.BipartiteEvol=function(gen,spec,trait.id,lwdgen=1,lwdsp=lwdgen,scale=NU
   plot.new()
   rasterImage(as.raster(colorRampPalette(rev(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4")))( 100 )),0,0,0.5,1)
   text(x=0.7, y = seq(0,1,l=5), labels = round(seq(scale[1],scale[2],l=5),digits = 2))
-  axis(side=4,at=seq(0,1,l=5),pos=0.5,labels = F)
+  axis(side=4,at=seq(0,1,l=5),pos=0.5,labels = FALSE)
   
   par(mar = ma)
 }
@@ -82,12 +82,12 @@ plot_with_trait=function(phylo,rate,scale=NULL,lwd=1,direction="rightwards"){
   # define branch colors
   col = round( (rate - min(scale)) / diff(range(scale))*99   )+1
   
-  plot(phylo, edge.color = Colors[col], show.tip.label = F,edge.width =lwd,direction=direction)
+  plot(phylo, edge.color = Colors[col], show.tip.label = FALSE,edge.width =lwd,direction=direction)
 }
 
 ######## Plot the colored spatial matrix ################################
 
-spatial.plot=function(out,trait.id,scale=NULL,nx=NULL, sort_trait = F){
+spatial.plot=function(out,trait.id,scale=NULL,nx=NULL, sort_trait = FALSE){
   if(is.null(nx))   nx=sqrt(length(out$P[1,]))
   scale=range(c(scale,out$P[trait.id,],out$H[trait.id,]))
   if(scale[1]==scale[2]){
@@ -102,21 +102,21 @@ spatial.plot=function(out,trait.id,scale=NULL,nx=NULL, sort_trait = F){
   par(mfrow=c(1,2))
   if (sort_trait){
     order_P = order(out$P[trait.id,])
-    image(matrix(out$P[trait.id,][order_P],ncol=nx,byrow = T),col=Colors[(round( (mP - min(scale)) / diff(range(scale))*99   )+1):(round( (MP - min(scale)) / diff(range(scale))*99   )+1)],
-          main="",axes=F)
-    image(matrix(out$H[trait.id,][order_P],ncol=nx,byrow = T),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
-          ,main="",axes=F)
+    image(matrix(out$P[trait.id,][order_P],ncol=nx,byrow = TRUE),col=Colors[(round( (mP - min(scale)) / diff(range(scale))*99   )+1):(round( (MP - min(scale)) / diff(range(scale))*99   )+1)],
+          main="",axes=FALSE)
+    image(matrix(out$H[trait.id,][order_P],ncol=nx,byrow = TRUE),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
+          ,main="",axes=FALSE)
   }else{
-    image(matrix(out$P[trait.id,],ncol=nx,byrow = T),col=Colors[(round( (mP - min(scale)) / diff(range(scale))*99   )+1):(round( (MP - min(scale)) / diff(range(scale))*99   )+1)],
-          main="",axes=F)
-    image(matrix(out$H[trait.id,],ncol=nx,byrow = T),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
-          ,main="",axes=F)
+    image(matrix(out$P[trait.id,],ncol=nx,byrow = TRUE),col=Colors[(round( (mP - min(scale)) / diff(range(scale))*99   )+1):(round( (MP - min(scale)) / diff(range(scale))*99   )+1)],
+          main="",axes=FALSE)
+    image(matrix(out$H[trait.id,],ncol=nx,byrow = TRUE),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
+          ,main="",axes=FALSE)
   }
 }
 
 ######## Plot the network ##################################
 
-plot_network=function(link,spec,trait.id=1,method="bipartite",order=T,scale=c()){
+plot_network=function(link,spec,trait.id=1,method="bipartite",order=TRUE,scale=c()){
   
   if(method=="bipartite"){
     if(is.vector(spec$Pphylo$mean.trait)){
@@ -131,12 +131,12 @@ plot_network=function(link,spec,trait.id=1,method="bipartite",order=T,scale=c())
     col.H=rep(0,length(spec$Hphylo$tree$tip.label))
     col.P[spec$Pphylo$tree$tip.label]=Colors[(round( (spec$Pphylo$mean.trait[trait.id,] - min(scale)) / diff(range(scale))*99   )+1)]
     col.H[spec$Hphylo$tree$tip.label]=Colors[(round( (spec$Hphylo$mean.trait[trait.id,] - min(scale)) / diff(range(scale))*99   )+1)]
-    try(plotweb(as.matrix(link),col.low=col.P,col.high = col.H,col.interaction = "lightgray",empty=T))
+    try(plotweb(as.matrix(link),col.low=col.P,col.high = col.H,col.interaction = "lightgray",empty=TRUE))
   }else{
     Mat=as.matrix(link)
-    if(order) Mat=Mat[order(rowSums(Mat),decreasing = T),order(colSums(Mat),decreasing = F)]
+    if(order) Mat=Mat[order(rowSums(Mat),decreasing = TRUE),order(colSums(Mat),decreasing = FALSE)]
     image(log(Mat+1), axes = FALSE, col = grey(seq(1, 0.2, length = 256)))
-    title(xlab = "P", ylab="H",outer = F,line=1)
+    title(xlab = "P", ylab="H",outer = FALSE,line=1)
   }
 }
 
@@ -144,14 +144,14 @@ plot_network=function(link,spec,trait.id=1,method="bipartite",order=T,scale=c())
 
 ######## Plot the results with the network ###############
 
-plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdgen,scale=NULL,nx=NULL,cor=F,network.method="bipartite",spatial=F){
+plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdgen,scale=NULL,nx=NULL,cor=FALSE,network.method="bipartite",spatial=FALSE){
   
   # cut the plot window
   if(spatial){
-    layout(mat = matrix(c(1,1,8,2,2,2,2,3,3,8,4,4,4,4,5,7,7,7,6,6,6,9,9,9,10,10,11,11),ncol=7,byrow = T),
+    layout(mat = matrix(c(1,1,8,2,2,2,2,3,3,8,4,4,4,4,5,7,7,7,6,6,6,9,9,9,10,10,11,11),ncol=7,byrow = TRUE),
            widths = c(3,2,1.5,2,0.5,0.5,2), heights = c(3,3,2.5,4))
   }else{
-    layout(mat = matrix(c(1,1,8,2,2,2,2,3,3,8,4,4,4,4,5,7,7,7,6,6,6,9,9,9,9,9,9,9),ncol=7,byrow = T),
+    layout(mat = matrix(c(1,1,8,2,2,2,2,3,3,8,4,4,4,4,5,7,7,7,6,6,6,9,9,9,9,9,9,9),ncol=7,byrow = TRUE),
            widths = c(3,2,1.5,2,0.5,0.5,2), heights = c(3,3,2.5,4))
   }
   
@@ -210,7 +210,7 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
   plot.new()
   rasterImage(as.raster(colorRampPalette(rev(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4")))( 100 )),0,0,0.5,1)
   text(x=0.7, y = seq(0,1,l=5), labels = round(seq(scale[1],scale[2],l=5),digits = 2))
-  axis(side=4,at=seq(0,1,l=5),pos=0.5,labels = F)
+  axis(side=4,at=seq(0,1,l=5),pos=0.5,labels = FALSE)
   
   par(mar = ma)
   
@@ -226,10 +226,10 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
     MH=max(out$H[trait.id,])
     mH=min(out$H[trait.id,])
     Colors = colorRampPalette(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4"))( 100 ) 
-      image(matrix(out$P[trait.id,],ncol=nx,byrow = T),col=Colors[(round( (mP - min(scale)) / diff(range(scale))*99   )+1):(round( (MP - min(scale)) / diff(range(scale))*99   )+1)],
-            main="",axes=F)
-      image(matrix(out$H[trait.id,],ncol=nx,byrow = T),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
-            ,main="",axes=F)
+      image(matrix(out$P[trait.id,],ncol=nx,byrow = TRUE),col=Colors[(round( (mP - min(scale)) / diff(range(scale))*99   )+1):(round( (MP - min(scale)) / diff(range(scale))*99   )+1)],
+            main="",axes=FALSE)
+      image(matrix(out$H[trait.id,],ncol=nx,byrow = TRUE),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
+            ,main="",axes=FALSE)
   }
   
   

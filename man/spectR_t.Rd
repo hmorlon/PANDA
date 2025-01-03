@@ -9,7 +9,7 @@ Spectral density plot of phylogenetic trait data
 Computes the spectra of eigenvalues for the modified graph Laplacian of a phylogenetic tree with associated tip data, convolves the eigenvalues with a Gaussian kernel and plots the density profile of eigenvalues, and estimates the summary statistics of the profile.}
 
 \usage{
-spectR_t(phylo, dat, draw=F)
+spectR_t(phylo, dat, draw=FALSE)
 }
 
 \arguments{

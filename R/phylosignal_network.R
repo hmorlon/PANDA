@@ -57,16 +57,16 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
       
       # binary Jaccard distances
       if (method=="Jaccard_binary"){
-        jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=T))
-        if (only_A==FALSE) jaccard_B <- as.matrix(vegan::vegdist(network, "jaccard", binary=T))
+        jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=TRUE))
+        if (only_A==FALSE) jaccard_B <- as.matrix(vegan::vegdist(network, "jaccard", binary=TRUE))
         eco_A <- jaccard_A
         if (only_A==FALSE) eco_B <- jaccard_B
       }
       
       # quantitative Jaccard distances
       if (method=="Jaccard_weighted"){
-        jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=F))
-        if (only_A==FALSE) jaccard_B <- as.matrix(vegan::vegdist(network, "jaccard", binary=F))
+        jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=FALSE))
+        if (only_A==FALSE) jaccard_B <- as.matrix(vegan::vegdist(network, "jaccard", binary=FALSE))
         eco_A <- jaccard_A
         if (only_A==FALSE) eco_B <- jaccard_B
       }
@@ -74,8 +74,8 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
       
       # Bray-Curtis dissimilarity 
       if (method=="Bray-Curtis"){
-        bray_A <- as.matrix(vegan::vegdist(t(network), "bray", binary=F))
-        if (only_A==FALSE) bray_B <- as.matrix(vegan::vegdist(network, "bray", binary=F))
+        bray_A <- as.matrix(vegan::vegdist(t(network), "bray", binary=FALSE))
+        if (only_A==FALSE) bray_B <- as.matrix(vegan::vegdist(network, "bray", binary=FALSE))
         eco_A <- bray_A
         if (only_A==FALSE) eco_B <- bray_B
       }
@@ -167,7 +167,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
   
   # PBLM (non binary)
   if ((method=="PBLM")&(only_A==FALSE)){
-    model_pblm <- R.utils::withTimeout(pblm(assocs=network, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
+    model_pblm <- R.utils::withTimeout(pblm(assocs=network, tree1=tree_B, tree2=tree_A, bootstrap=FALSE, nreps=0), timeout = 60*60*24, onTimeout = "silent")
     
     if (!is.null(model_pblm)) {
       results <- c(as.integer(nb_A), as.integer(nb_B), model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )
@@ -184,7 +184,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", nperm = 1000
     network_binary <- network
     network_binary[network_binary>0] <- 1
     
-    model_pblm <- R.utils::withTimeout(pblm(assocs=network_binary, tree1=tree_B, tree2=tree_A, bootstrap=F, nreps=0), timeout = 60*60*24, onTimeout = "silent")
+    model_pblm <- R.utils::withTimeout(pblm(assocs=network_binary, tree1=tree_B, tree2=tree_A, bootstrap=FALSE, nreps=0), timeout = 60*60*24, onTimeout = "silent")
     
     if (!is.null(model_pblm)) {
       results <- c(as.integer(nb_A), as.integer(nb_B), model_pblm$signal.strength$estimate[2], model_pblm$signal.strength$estimate[1], model_pblm$MSE )

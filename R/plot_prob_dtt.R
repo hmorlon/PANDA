@@ -1,7 +1,7 @@
 plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE, 
                            int = TRUE, plot.bound = FALSE, conf = 0.95, add = FALSE, 
                            col.mean = "red", col.bound = "blue", lty = "solid", lwd = 1,
-                           lty.bound = 1, add.present = T, ...) 
+                           lty.bound = 1, add.present = TRUE, ...) 
 {
 
     int.conf <- function(vect, conf = 0.95, div) {
@@ -19,7 +19,7 @@ plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE,
     return(out)
   }
   
-  if(add.present == F){
+  if(add.present == FALSE){
     mat <- mat[,-ncol(mat)]
   }
   
@@ -57,13 +57,13 @@ plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE,
     if (plot.prob == TRUE) 
       plot(pm[, 2], pm[, 1], col = pm[, 4], pch = 20, 
            xlim = c(max(as.numeric(pm[, 2]))+1,
-                    min(as.numeric(pm[, 2]))), ann = T, ...)
+                    min(as.numeric(pm[, 2]))), ann = TRUE, ...)
   }
   if (plot.bound) {
     if (plot.prob == FALSE) {
       if (add == FALSE) {
         plot(as.numeric(colnames(mat)), bound.max, type = "l",lty = lty.bound,
-             col = col.bound, ann = T, lwd = lwd,
+             col = col.bound, ann = TRUE, lwd = lwd,
              xlim = c(max(as.numeric(pm[, 2]))+1,
                       min(as.numeric(pm[, 2]))), ...)
         lines(as.numeric(colnames(mat)), bound.min,
@@ -88,7 +88,7 @@ plot_prob_dtt <- function (mat, grain = 0.1, plot.prob = TRUE, plot.mean = TRUE,
     if (plot.prob == FALSE & plot.bound == FALSE) {
       if (add == FALSE) {
         plot(as.numeric(colnames(mat)), mean.val, type = "l", 
-             col = col.mean, ann = T, lwd = lwd,
+             col = col.mean, ann = TRUE, lwd = lwd,
              xlim = c(max(as.numeric(pm[, 2]))+1,
                       min(as.numeric(pm[, 2]))), ...)
       }

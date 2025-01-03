@@ -1,6 +1,6 @@
 #library(RPANDA)
 library(igraph)
-spectR<-function (phylo, meth = c("standard"), zero_bound=F) 
+spectR<-function (phylo, meth = c("standard"), zero_bound=FALSE) 
 			{
 #define skewness function				
 skewness <- function(x, na.rm = FALSE) {
@@ -74,8 +74,8 @@ integr <- function(x, f)
 }
  if (meth == "standard") {
 e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)), 
-            weighted = T), normalized = F), symmetric = T, only.values = T)
-	if(zero_bound==T){
+            weighted = TRUE), normalized = FALSE), symmetric = TRUE, only.values = TRUE)
+	if(zero_bound==TRUE){
 		x = subset(e$values,e$values > 0)}
 	 else{
 	x = subset(e$values, e$values >= 1)}
@@ -94,7 +94,7 @@ e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)),
 	}
  if (meth == "normal") {
 e = eigen(graph.laplacian(graph.adjacency(data.matrix(dist.nodes(phylo)), 
-            weighted = T), normalized = T), symmetric = T, only.values = T)
+            weighted = TRUE), normalized = TRUE), symmetric = TRUE, only.values = TRUE)
 	x = subset(e$values, e$values >= 0)
 	d = dens(log(x))
 	dsc = d$y/(integr(d$x,d$y))

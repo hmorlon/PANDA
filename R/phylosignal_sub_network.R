@@ -53,7 +53,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
     sub_host_tree <- ape::extract.clade(host_tree, i)
     if (Ntip(sub_host_tree)>=minimum){
       sub_network <- network[,sub_host_tree$tip.label]
-      sub_network <- sub_network[which(rowSums(sub_network)>0),,drop=F]
+      sub_network <- sub_network[which(rowSums(sub_network)>0),,drop=FALSE]
       if (!is.null(symbiont_tree)){
         sub_symbiont_tree <- ape::drop.tip(symbiont_tree, tip= symbiont_tree$tip.label[!symbiont_tree$tip.label %in% rownames(sub_network)])
       }else{sub_symbiont_tree <- NULL}
@@ -80,7 +80,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   }else{
     colnames(results_sub_clades) <- c("node", "nb_A", "nb_B", "mantel_cor", "pvalue_upper", "pvalue_lower", "pvalue_upper_corrected","pvalue_lower_corrected") 
   }
-  results_sub_clades <- data.frame(results_sub_clades, stringsAsFactors = F)
+  results_sub_clades <- data.frame(results_sub_clades, stringsAsFactors = FALSE)
   results_sub_clades$nb_A <- as.integer(as.numeric(results_sub_clades$nb_A))
   results_sub_clades$nb_B <- as.integer(as.numeric(results_sub_clades$nb_B))
   results_sub_clades$mantel_cor <- as.numeric(results_sub_clades$mantel_cor)

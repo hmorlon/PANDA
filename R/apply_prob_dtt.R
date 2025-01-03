@@ -17,7 +17,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     stop("object \"sampling.fractions\" is not of class \"data.frame\"")
   }
   
-  if(any("Species" %in% colnames(data)) == F){
+  if(any("Species" %in% colnames(data)) == FALSE){
     stop("No column named \"Species\" in the database.
          \nPlease rename the corresponding column with the name \"Species\".")
   }
@@ -50,13 +50,13 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     
     if(grepl("BCST", mod[[1]][1])){
       f.lamb <- function(x,y){y}
-      cst.lamb = T
-      expo.lamb = F
+      cst.lamb = TRUE
+      expo.lamb = FALSE
       
     } else {
       f.lamb <- function(x,y){y[1]*exp(y[2]*x)}
-      cst.lamb = F
-      expo.lamb = T
+      cst.lamb = FALSE
+      expo.lamb = TRUE
     }
     
     lamb_par <- res[1,c("Lambda", "Alpha")]
@@ -69,12 +69,12 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     if(length(mod[[1]]) > 1){
       if(grepl("DCST", mod[[1]][2])){
         f.mu <- function(x,y){y}
-        cst.mu = T
-        expo.mu = F
+        cst.mu = TRUE
+        expo.mu = FALSE
       } else {
         f.mu <- function(x,y){y[1]*exp(y[2]*x)}
-        cst.mu = F
-        expo.mu = T
+        cst.mu = FALSE
+        expo.mu = TRUE
       }
       
       mu_par <- res[1,c("Mu", "Beta")]
@@ -85,7 +85,7 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       }
     } else {
       f.mu <- function(x,y){0}
-      cst.mu = T
+      cst.mu = TRUE
     }
     
     if(length(mod[[1]]) == 1){
@@ -120,18 +120,18 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     N0 <- sampling.fractions$sp_tt[sampling.fractions$nodes == Ntip(phylo)+1]
     l <- sampling.fractions$sp_in[sampling.fractions$nodes == Ntip(phylo)+1]    
     
-    whole_diversity <- paleodiv(phylo = phylo, data = data, split.div = F,
+    whole_diversity <- paleodiv(phylo = phylo, data = data, split.div = FALSE,
                                 sampling.fractions = sampling.fractions,
                                 shift.res = shift.res, combi = combi)
     min_sumprob <- c()
-    check_prob <- F
+    check_prob <- FALSE
     if(no_decline(whole_diversity)){
       m_range <- 1
     } else{
       m_range <- c(2, 3, 5, 7, 10) 
     }
     
-    while(check_prob == F){
+    while(check_prob == FALSE){
       
       if(no_decline(whole_diversity)){
         prob_whole <- list(prob_dtt(whole_fit.bd, tot_time, 1:tot_time,
@@ -154,18 +154,18 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       cat(" -> minimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
       
       if(min_sumprob[length(min_sumprob)] >= 0.95){
-        check_prob <- T
+        check_prob <- TRUE
       
       } else {
         if(length(m_range) == 0){
-          check_prob <- T
+          check_prob <- TRUE
           cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.
                 You should use another range of m for the backbone.")
         }
       }
       if(length(min_sumprob) > 1){
         if(min_sumprob[length(min_sumprob)] == min_sumprob[length(min_sumprob)-1]){
-          check_prob <- T
+          check_prob <- TRUE
           cat("\nWarnings: the sum of probabilities did not reach 95% for each time Myr.\n")
         }
       }
@@ -185,12 +185,12 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     }
     
     # Deterministic diversity to set the limit
-    diversities <- paleodiv(phylo = phylo, data = data, split.div = T,
+    diversities <- paleodiv(phylo = phylo, data = data, split.div = TRUE,
                             sampling.fractions = sampling.fractions, shift.res = shift.res, combi = combi)
     
     if(is.null(m)){
       row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
-      max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = T))/10)*10
+      max_diversities <- ceiling(round(apply(diversities, 1, max, na.rm = TRUE))/10)*10
     } else {
       
       row.names(diversities)[!row.names(diversities) %in% comb.sub] <- unlist(ifelse(!is.null(comb.bck), list(c(comb.bck, as.character(Ntip(phylo)+1))), Ntip(phylo)+1))
@@ -359,17 +359,17 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
     #                                 f.lamb = f.lamb, f.mu = f.mu, f = l/N0,
     #                                 lamb_par = c(0.1,0.01), mu_par = c(0.01, 0.001),
     #                                 backbone = backbone, spec_times = spec_times, branch_times = branch_times,
-    #                                 cst.lamb = F, cst.mu = F, expo.lamb = T, expo.mu = T,
-    #                                 cond = cond, model = "BVAR_DVAR", fix.mu = F)
+    #                                 cst.lamb = FALSE, cst.mu = FALSE, expo.lamb = TRUE, expo.mu = TRUE,
+    #                                 cond = cond, model = "BVAR_DVAR", fix.mu = FALSE)
     
-    cat("\nDTT calculation for backbone(s):\n")
+    message("\nDTT calculation for backbone(s):\n")
     
     prob_backbone <- list()
     for(i in 1:length(backbone_fit.bd)){
       # first attempt to get a minimum of 95% for the sum of the probabilities per Myr
       min_sumprob <- c()
-      check_prob <- F
-      cat("\t", i, "/", length(backbone_fit.bd), "\n")
+      check_prob <- FALSE
+      message("\t", i, " / ", length(backbone_fit.bd), "\n")
       if(is.null(m)){
         m_range <- c(2, 3, 5, 7, 10) 
       } else{
@@ -381,8 +381,8 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
       method <- ifelse(l/N0 == 1, "simple", "hard")
       max_div <- max_diversities[names(max_diversities) == names(backbone_fit.bd)[i]]
       
-      while(check_prob == F){
-        cat("with a maximum value of m =", max_div*m_range[1], paste0("(max. deterministic value x",m_range[1],")"), "\n")
+      while(check_prob == FALSE){
+        message("with a maximum value of m = ", max_div*m_range[1], paste0(" (max. deterministic value x",m_range[1],")"), "\n")
         prob_backbone[[i]] <- prob_dtt(fit.bd = backbone_fit.bd[[i]], tot_time = backbone_tot_times[i],
                                        time = 1:backbone_tot_times[i], type = type[i], prec = 1000,
                                        method = method, l = l, N0 = N0,
@@ -397,19 +397,19 @@ apply_prob_dtt <- function(phylo, data, sampling.fractions, shift.res,
         min_sumprob <- c(min_sumprob, min(colSums(prob_backbone[[i]])))
         
         if(min_sumprob[length(min_sumprob)] >= 0.95){
-          check_prob <- T
-          cat(" -> minimum value of the sum of probabilities/Myr=", min_sumprob[length(min_sumprob)], "\n")
+          check_prob <- TRUE
+          message("-> minimum value of the sum of probabilities/Myr = ", min_sumprob[length(min_sumprob)], "\n")
         } else {
           if(length(m_range) == 0){
-            check_prob <- T
-            cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.\nYou should use another range of m for the backbone.")
+            check_prob <- TRUE
+            message("\nWarnings: the sum of probabilities for each time point did not reach 95%.\nYou should use another range of m for the backbone.")
           }
         }
         
         if(length(min_sumprob) > 1){
           if(min_sumprob[length(min_sumprob)] == min_sumprob[length(min_sumprob)-1]){
-            check_prob <- T
-            cat("\nWarnings: the sum of probabilities for each time point did not reach 95%.\nThe minimum value reached is m =", paste0(as.character(round(min_sumprob[length(min_sumprob)]*100, 2)), "%."))
+            check_prob <- TRUE
+            message("\nWarnings: the sum of probabilities for each time point did not reach 95%.\nThe minimum value reached is m = ", paste0(as.character(round(min_sumprob[length(min_sumprob)]*100, 2)), "%."))
           }
         }
       }

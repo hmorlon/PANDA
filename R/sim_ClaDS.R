@@ -18,7 +18,7 @@ sim_ClaDS <- function (lambda_0, mu_0,
     mu=mu_0
     rates=c()
     nShift=0
-    tooHigh=F
+    tooHigh=FALSE
     
     nblineages<-c(1)
     times<-c(0)
@@ -170,17 +170,17 @@ sim_ClaDS <- function (lambda_0, mu_0,
     		}
     		
     		if (any(lamb>maxRate)) {
-    		  tooHigh=T
+    		  tooHigh=TRUE
     		  break
     		}
     		
     		r <- runif(1)
     		s=0
-    		continue=T
+    		continue=TRUE
     		if(theta<1) {
     		  Walive=unique(live_rates)
     		}else{
-    		    Walive=live_rates[order(b[live_rates],decreasing = T)]
+    		    Walive=live_rates[order(b[live_rates],decreasing = TRUE)]
     		  }
     		k=1
     		sumBirth=sum(b[live_rates])/totalrate
@@ -193,7 +193,7 @@ sim_ClaDS <- function (lambda_0, mu_0,
     		    s=s+b[i]/totalrate
     		    }
     		  if(r<=s){
-    		    continue=F
+    		    continue=FALSE
     		    #print("speciation")
     		    if(theta<1){if(length(which(rates==i & alive))>1){
     		      random_lineage = sample(which(rates==i & alive),1)
@@ -311,7 +311,7 @@ sim_ClaDS <- function (lambda_0, mu_0,
     		    }}else{
     		      random_lineage = which(rates==i)
     		    }
-    		    continue=F
+    		    continue=FALSE
     		    edge.length[random_lineage] <- t - stem.depth[random_lineage]
     		    alive[random_lineage] <- FALSE
     		    times<-c(times,t)

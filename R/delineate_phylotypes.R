@@ -26,7 +26,7 @@ function(tree, thresh=97, sequences, method="pi"){
           if (method=="theta") mean_dist <- theta_estimator(sequences[which(rownames(sequences) %in% extracted_tree$tip.label),])
           if (method=="mean"){
             extracted_sequences <- as.DNAbin(sequences[which(rownames(sequences) %in% extracted_tree$tip.label),])
-            distances_matrix <- dist.dna(x=extracted_sequences, pairwise.deletion=T, as.matrix=F, model="raw") 
+            distances_matrix <- dist.dna(x=extracted_sequences, pairwise.deletion=TRUE, as.matrix=FALSE, model="raw") 
             mean_dist <- mean(as.vector(distances_matrix), na.rm=TRUE)
           }
           
@@ -41,7 +41,7 @@ function(tree, thresh=97, sequences, method="pi"){
         }
       }
   }
-  bins <- data.frame(bins, stringsAsFactors = F)
+  bins <- data.frame(bins, stringsAsFactors = FALSE)
   colnames(bins) <- c("phylotype", "representative_sequence")
   
   print(paste0("Number of phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
