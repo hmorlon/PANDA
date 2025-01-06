@@ -51,9 +51,11 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
+oldpar <- par(no.readonly = TRUE)
 par(mar=c(1,1,0,0))
 plot_ClaDS_phylo(tree,speciation_rates)
 
 plot_ClaDS_phylo(tree,speciation_rates, lwd = 4, log = FALSE)
+par(oldpar) # restore the old par
 
 }

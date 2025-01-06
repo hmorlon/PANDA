@@ -22,8 +22,9 @@ data(BGB.examples)
 
 \examples{
 data(BGB.examples)
+oldpar <- par(no.readonly = TRUE)
 par(mfrow=c(1,2))
 plot(BGB.examples$Canidae.phylo)
 plot(BGB.examples$Ochotonidae.phylo)
-
+par(oldpar) # restore the old par
 }

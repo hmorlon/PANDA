@@ -64,6 +64,7 @@ add.gts(thickness, quaternary = TRUE, is.phylo = FALSE,
 \donttest{
 # with a phylogeny
 data("Cetacea")
+oldpar <- par(no.readonly = TRUE)
 # first plot to get the dimensions of the gts
 plot(Cetacea, cex = 0.5, label.offset = 0.2, tip.color = "white")
 add.gts(-3, quaternary = TRUE, is.phylo = TRUE, xpd.x = FALSE,
@@ -72,6 +73,7 @@ add.gts(-3, quaternary = TRUE, is.phylo = TRUE, xpd.x = FALSE,
 par(new = TRUE)
 plot(Cetacea, cex = 0.5, label.offset = 0.2)
 mtext("Time (Myrs)", side = 1, line = 3, at = 18)
+par(oldpar) # restore the old par
 
 # see Appendix S4 from Mazet et al. (2023) for more examples.
 

@@ -45,11 +45,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   }
   
   
-  set.seed(1)
-  
   nb_sub_clades <- 0
   results_sub_clades <- c()
-  for (i in sort(unique(host_tree$edge[,1]))){  # include root  and can be non binary
+  for (i in sort(unique(host_tree$edge[,1]))){  # include root and can be non binary
     sub_host_tree <- ape::extract.clade(host_tree, i)
     if (Ntip(sub_host_tree)>=minimum){
       sub_network <- network[,sub_host_tree$tip.label]
