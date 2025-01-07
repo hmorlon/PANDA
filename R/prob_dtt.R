@@ -110,8 +110,8 @@ prob_dtt<- function(fit.bd, tot_time, time, N0, l=N0, f = l/N0, m = seq(N0), met
     
     p <- mat.or.vec(nr=length(m), nc=length(t))
     init.final <- t==0|t==tot_time
-    if (init.final[1]==T) p[,1] <- Init(m, type=type)
-    if (init.final[length(t)]==T) p[,length(t)] <- Final(m = m, N0 = N0)      
+    if (init.final[1]==TRUE) p[,1] <- Init(m, type=type)
+    if (init.final[length(t)]==TRUE) p[,length(t)] <- Final(m = m, N0 = N0)      
     t <- t[!init.final]
     
     qst.tp <- mapply(qu.gen,a=t,MoreArgs= list(b=tot_time,f.lamb=f.lamb,f.mu=f.mu,method=method,prec=prec))
@@ -135,8 +135,8 @@ prob_dtt<- function(fit.bd, tot_time, time, N0, l=N0, f = l/N0, m = seq(N0), met
     if (sum(init.final)==2){
       p[,2:(length(init.final)-1)] <- t(mat)
     }else if (sum(init.final)==1){
-      if (init.final[1]==T) p[,2:length(init.final)] <- t(mat)
-      if (init.final[length(t)]==T) p[,1:(length(init.final)-1)] <- t(mat)
+      if (init.final[1]==TRUE) p[,2:length(init.final)] <- t(mat)
+      if (init.final[length(t)]==TRUE) p[,1:(length(init.final)-1)] <- t(mat)
     }else{
       p <- t(mat)
     }

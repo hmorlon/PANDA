@@ -66,7 +66,7 @@ fit_t_env_ou <- function(phylo, data, env_data, error=NULL, model, method="Nelde
       env_data<-splinefun(t,env_func(t))
     }else{
       curve_int<-env_func(t)
-      curve_scaled=scale(curve_int,min(curve_int,na.rm=T),max(curve_int, na.rm=T)-min(curve_int,na.rm=T))
+      curve_scaled=scale(curve_int,min(curve_int,na.rm=TRUE),max(curve_int, na.rm=TRUE)-min(curve_int,na.rm=TRUE))
       env_data<-splinefun(t,curve_scaled)
     }
      

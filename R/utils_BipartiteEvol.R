@@ -74,7 +74,7 @@ rigth.order.BE=function(phy,trait){
 # gen an object obtained with make.gen
 
 
-compute.dist=function(gen, verbose=T){
+compute.dist=function(gen, verbose=TRUE){
   
   N=length(gen$tip.label)               # number of tips
   distance=matrix(0,nrow=N,ncol=N)      # initiate distance matrix

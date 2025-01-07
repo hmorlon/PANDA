@@ -11,7 +11,7 @@
 	subclade.root=getMRCA(anc.phylo,subclade.tips)
 	tips = clado.events$node[which(clado.events$label%in%subclade.tips)]
 	nn<-unique(apply(combn(tips,2),2,function(x)getMRCA(anc.phylo,x)))
-	M<-mrca(anc.phylo,full=T)
+	M<-mrca(anc.phylo,full=TRUE)
 	desc=unique(as.vector(M[which(rownames(M)%in%c(tips,nn)),]))
 	desc=desc[c(which(desc>=subclade.root),which(desc<=length(anc.phylo$tip.label)))]
 	subnodes=c(desc[which(desc>length(anc.phylo$tip.label))])
