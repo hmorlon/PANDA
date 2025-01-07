@@ -26,8 +26,6 @@ create_model=function(start_val,posterior,proposalKernel,tuning=1,pamhType="Univ
       new = rnorm(1,meanMcmc[indice],sqrt(varMcmc[indice]))
       par=param[indice]
       hastings = ((((new-meanMcmc[indice])^2)/varMcmc[indice])-(((par-meanMcmc[indice])^2)/varMcmc[indice]))/2
-      #   hastings = dnorm(par,meanMcmc[indice],sqrt(varMcmc[indice]),log=TRUE)-dnorm(new,meanMcmc[indice],sqrt(varMcmc[indice]),log=TRUE)
-      #   print(paste(hastings,hastings1,sep=" ; "))
       param[indice]=new
       returnProp <- list(
         proposal=param,
@@ -66,7 +64,7 @@ create_model=function(start_val,posterior,proposalKernel,tuning=1,pamhType="Univ
 }
 
 autoMetropolisGibbs <-
-  function(model, startvalue, iterations, consoleupdates=1000, thin=100, autoOptimize=TRUE, filename,...){
+  function(model, startvalue, iterations, consoleupdates=1000, thin=100, autoOptimize=TRUE, filename, verbose=FALSE, ...){
     
     proposalKernel = model$proposalKernel
     if(missing(startvalue)){
@@ -431,7 +429,7 @@ get_ancestors <- function(phylo){
 
 fit_ClaDS0=function(tree,name,pamhLocalName = "pamhLocal",
                        iteration=10000000, thin=20000,update=1000, adaptation=10,
-                       seed=NULL, nCPU=3){
+                       seed=NULL, nCPU=3, verbose=TRUE){
   if (! nCPU %in% c(1,3)){
     warning("nCPU should either be 1 or 3. nCPU is set to 1.")
     nCPU = 1
@@ -473,7 +471,7 @@ fit_ClaDS0=function(tree,name,pamhLocalName = "pamhLocal",
   rep=mcmc.list(lapply(1:3,function(j){mcmc(sampler[[j]]$chain[-(1:10),-c((npar+1):(npar+3))])}))
   gelman=try(gelman.diag(rep))
   if(! inherits(gelman,"try-error")) {gelman=max(gelman$psrf[,2])} else {gelman=10}
-  print(paste0("Current gelman statistics = ",gelman))
+  if (verbose) print(paste0("Current gelman statistics = ",gelman))
   
   while(gelman>1.05){
     sampler2=mclapply(1:3,function(j){
@@ -487,7 +485,7 @@ fit_ClaDS0=function(tree,name,pamhLocalName = "pamhLocal",
     rep=mcmc.list(lapply(1:3,function(j){mcmc(sampler[[j]]$chain[-(1:10),-c((npar+1):(npar+3))])}))
     gelman=try(gelman.diag(rep))
     if(! inherits(gelman,"try-error")) {gelman=max(gelman$psrf[,2])} else {gelman=10}
-    print(paste0("Current gelman statistics = ",gelman))
+    if (verbose) print(paste0("Current gelman statistics = ",gelman))
   }
   
   colnames=c("sigma","alpha","l_0",paste0("lambda_",1:nrow(tree$edge)))

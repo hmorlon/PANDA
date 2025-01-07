@@ -213,7 +213,7 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
   time.step=nrow(out$Pmut)
   
   # auxiliary function creating a genalogy for one type
-  aux=function(P.trait,Gen,X,Mut,ini,thin,tree){
+  aux=function(P.trait,Gen,X,Mut,ini,thin,tree, verbose){
     
     edgeP=matrix(ncol=2)                       # the edges of the genealogy tree
     xP=lapply(1:D,function(i){c()})            # trait values at the beginning of the edges
@@ -443,9 +443,9 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
   }
   
   if(verbose) print("P")
-  P=aux(out$P,out$Pgenealogy,out$xP,out$Pmut,out$iniP,out$thin.factor,treeP)
+  P=aux(out$P, out$Pgenealogy, out$xP, out$Pmut, out$iniP, out$thin.factor, treeP, verbose=verbose)
   if(verbose) print("H")
-  H=aux(out$H,out$Hgenealogy,out$xH,out$Hmut,out$iniH,out$thin.factor,treeH)
+  H=aux(out$H, out$Hgenealogy, out$xH, out$Hmut, out$iniH, out$thin.factor, treeH, verbose=verbose)
   return(list(P=P,H=H))
 }
 
@@ -465,7 +465,7 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
     D=length(genealogy$P$x)       # dimension of trait space
     
     # auxiliary function to define the species for one type
-    aux = function(gen,distance){
+    aux = function(gen, distance, verbose=TRUE){
       N=length(gen$tip.label)    # number of individuals
       
       # first we define the genetic types of the individuals
@@ -569,8 +569,8 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
                 }
               }
             }
-          }else{print("error : one node has only one offspring... ???")}
-        }else{print(paste("error : this node should not be in next node :",i))}
+          }else{if (verbose) print("error : one node has only one offspring... ???")}
+        }else{if (verbose) print(paste("error : this node should not be in next node :",i))}
       }   # end of main loop
       
       # rename the species so that there is no gap in the names
@@ -609,23 +609,23 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
       return(tree)
     }
     
-    P=aux(genealogy$P,distanceP)
-    H=aux(genealogy$H,distanceH)
-    Pphylo=make.phylo(genealogy$P,P)
-    Hphylo=make.phylo(genealogy$H,H)
+    P=aux(genealogy$P, distanceP, verbose=verbose)
+    H=aux(genealogy$H, distanceH, verbose=verbose)
+    Pphylo=make.phylo(genealogy$P, P)
+    Hphylo=make.phylo(genealogy$H, H)
     
   } else {   # Monophyly == False
     
     D=length(genealogy$P$x)       # dimention of trait space
     
     # auxiliary function to define the species for one type
-    aux = function(gen,distance){
+    aux = function(gen,distance, verbose=TRUE){
       N=length(gen$tip.label)    # number of individuals
       
       # first we define the genetic types of the individuals
       
       if(threshold!=1){
-        print("Threshold set to 1 when monophyly==FALSE")
+        if (verbose) print("Threshold set to 1 when monophyly==FALSE")
         threshold <- 1}
       
       
@@ -693,10 +693,10 @@ define_species.BipartiteEvol=function(genealogy,threshold=1,distanceH=NULL,dista
       return(tree)
     }
     
-    P=aux(genealogy$P,distanceP)
-    H=aux(genealogy$H,distanceH)
-    Pphylo=make.phylo(genealogy$P,P)
-    Hphylo=make.phylo(genealogy$H,H)
+    P=aux(genealogy$P,distanceP, verbose=verbose)
+    H=aux(genealogy$H,distanceH, verbose=verbose)
+    Pphylo=make.phylo(genealogy$P, P)
+    Hphylo=make.phylo(genealogy$H, H)
     
   }
   

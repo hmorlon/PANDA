@@ -68,7 +68,6 @@ proposalGeneratorFactoryDE_gibbs <- function(proba.gibbs,p=0.01,var=1e-6,burn=0,
       
       
       rep=x
-      # print(x)
       rep=rep+(gamma*snook)
       if(n<N.sigma){rep[1]=x[1]}
       
@@ -116,7 +115,6 @@ proposalGeneratorFactoryDE_gibbs <- function(proba.gibbs,p=0.01,var=1e-6,burn=0,
       
       
       rep=x
-      # print(x)
       rep[gibbs]=rep[gibbs]+e+(gamma*(chains[[ind1.1]][ind1.2,1:npar]-chains[[ind2.1]][ind2.2,1:npar]))[gibbs]
       if(n<N.sigma){rep[1]=x[1]}
       
@@ -251,7 +249,7 @@ prepare_ClaDS=function(tree,sample_fraction, Nchain=3,model_id="ClaDS2", res_Cla
   return(sampler)
 }
 
-add_iter_ClaDS <- function(mcmcSampler, iterations, thin=NULL,nCPU=1){
+add_iter_ClaDS <- function(mcmcSampler, iterations, thin=NULL,nCPU=1, verbose=TRUE){
   snookProb=0.05
   colnames=c("sigma","alpha","mu","l_0")
   post=mcmcSampler$post
@@ -320,7 +318,7 @@ add_iter_ClaDS <- function(mcmcSampler, iterations, thin=NULL,nCPU=1){
       k=k+1
       i=i+1
     }
-    if( i %% mcmcSampler$consoleupdates == 0 ) cat("\r","MCMC in progress",(i-2)*mcmcSampler$thin,"of",iterations+mcmcSampler$thin*(lastvalue-1),"please wait!","\r")}
+    if( i %% mcmcSampler$consoleupdates == 0 ) if (verbose) cat("\r","MCMC in progress",(i-2)*mcmcSampler$thin,"of",iterations+mcmcSampler$thin*(lastvalue-1),"please wait!","\r")}
   
   message("Done.")
   for(i in 1:mcmcSampler$Nchain){
@@ -523,7 +521,6 @@ Khi_ClaDS1=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=
   tend=which.min(abs(timePhi-t))
   nlambda=length(lambdas)
   expLambda=phi$expLambda
-  # print(c(tini,tend))
   
   if(func=="Khi" | func=="Psi"){
     
@@ -686,7 +683,6 @@ createLikelihood_ClaDS1 <- function(phylo, root_depth=0, relative = FALSE,nt=100
       change=which(abs(lambda2-former$lambda)>0)-1
       change=unique(c(change,sapply(change, function(x){if(x>0){parents[x]}else{-1}})))
       change=change[change>(-1)]
-      # print(length(change))
       PsiKhi=former$PsiKhi
       phi=former$phi
       for( i in change){
@@ -873,7 +869,6 @@ Khi_ClaDS2=function(phi,s,t,func="Khi",lambda1=0,lambda2=0,lambdas=phi$lambda,M=
   tend=which.min(abs(timePhi-t))
   nlambda=length(lambdas)
   expLambda=phi$expLambda
-  # print(c(tini,tend))
   
   if(func=="Khi" | func=="Psi"){
     
@@ -1037,7 +1032,6 @@ createLikelihood_ClaDS2 <- function(phylo, root_depth=0, relative = FALSE,nt=100
       change=which(abs(lambda2-former$lambda)>0)-1
       change=unique(c(change,sapply(change, function(x){if(x>0){parents[x]}else{-1}})))
       change=change[change>(-1)]
-      # print(length(change))
       PsiKhi=former$PsiKhi
       phi=former$phi
       for( i in change){
@@ -1081,7 +1075,7 @@ createLikelihood_ClaDS2 <- function(phylo, root_depth=0, relative = FALSE,nt=100
 #### the fit_ClaDS function ####
 
 fit_ClaDS = function(tree,sample_fraction,iterations, thin = 50, file_name = NULL, it_save = 1000,
-                     model_id="ClaDS2", nCPU = 1, mcmcSampler = NULL, ...){
+                     model_id="ClaDS2", nCPU = 1, mcmcSampler = NULL, verbose=TRUE, ...){
   args = list(...)
   
   if (is.null(args$Nchain)) args$Nchain=3
@@ -1108,13 +1102,12 @@ fit_ClaDS = function(tree,sample_fraction,iterations, thin = 50, file_name = NUL
         mcmcSampler = mcmcSampler,     
         iterations = it_save,            
         thin = thin,  
-        nCPU = nCPU)   
+        nCPU = nCPU,
+        verbose=verbose)   
       
       if (! is.null(file_name)){
         save(mcmcSampler, file = file_name)
       }
-      
-      #print(paste0("iteration ", i * it_save," out of ", iterations))
     }
   }
   
@@ -1123,13 +1116,12 @@ fit_ClaDS = function(tree,sample_fraction,iterations, thin = 50, file_name = NUL
       mcmcSampler = mcmcSampler,     
       iterations = iterations - n_run *it_save,            
       thin = thin,  
-      nCPU = nCPU)   
+      nCPU = nCPU,
+      verbose=verbose)   
     
     if (! is.null(file_name)){
       save(mcmcSampler, file = file_name)
     }
-    
-    #print(paste0("iteration ", iterations," out of ", iterations))
   }
 
   return(mcmcSampler)

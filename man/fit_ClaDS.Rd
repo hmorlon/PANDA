@@ -9,7 +9,8 @@ Performs the inferrence of branch-specific speciation rates and the model's hype
 }
 \usage{
 fit_ClaDS(tree,sample_fraction,iterations, thin = 50, file_name = NULL, it_save = 1000,
-                     model_id="ClaDS2", nCPU = 1, mcmcSampler = NULL, ...)
+                     model_id = "ClaDS2", nCPU = 1, mcmcSampler = NULL,
+                     verbose = TRUE, ...)
 }
 \arguments{
   \item{tree}{
@@ -37,6 +38,8 @@ The number of CPUs to use. Should be either 1 or 3.
 }
   \item{mcmcSampler}{
 Optional output of \code{\link{fit_ClaDS}} to continue an already started run.}
+  \item{verbose}{
+if TRUE, enables printing of messages.}
   \item{\dots}{
 Optional arguments, see details.}
 }
