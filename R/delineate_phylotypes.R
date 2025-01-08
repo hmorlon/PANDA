@@ -13,7 +13,7 @@ delineate_phylotypes <- function(tree, thresh=97, sequences, method="pi", verbos
   
   it_OTU <- 0 
   if (N.tip==1){
-    if (verbose) print("single")
+    if (verbose) message("single")
     sequence<-tree$tip.label
     bins[sequence,1]<-1
   } else {
@@ -43,8 +43,8 @@ delineate_phylotypes <- function(tree, thresh=97, sequences, method="pi", verbos
   bins <- data.frame(bins, stringsAsFactors = FALSE)
   colnames(bins) <- c("phylotype", "representative_sequence")
   
-  if (verbose) print(paste0("Number of phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
-  if (verbose) print(paste0("Number of phylotypes (excluding singletons): ", it_OTU))
-  if (verbose) print(paste0("Number of singletons: ", length(which(bins$phylotype=="0"))))
+  if (verbose) message(paste0("Number of phylotypes (including singletons): ", it_OTU+length(which(bins$phylotype=="0"))))
+  if (verbose) message(paste0("Number of phylotypes (excluding singletons): ", it_OTU))
+  if (verbose) message(paste0("Number of singletons: ", length(which(bins$phylotype=="0"))))
   return(bins)
 }

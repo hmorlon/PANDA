@@ -104,8 +104,7 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 
 \examples{
 \donttest{
-\dontshow{test = FALSE}
-if(test){
+
 require(mvMORPH)
 set.seed(1)
 n <- 32 # number of species
@@ -127,6 +126,6 @@ fit_t_pl(trans$x, tree, model="BM", method="RidgeAlt")
 # Estimate the SE (similar to Pagel's lambda for BM). 
 # Advised with empirical datasets
 fit_t_pl(Y, tree, model="BM", method="RidgeAlt", SE=TRUE)
-}
-}
+
+  }
 }

@@ -45,9 +45,9 @@ likelihood_subgroup_model<-function(data, phylo, geography.object, model=c("MC",
 		return(1000000)
 		} else{
   		op <- getOption("show.error.messages")
+        on.exit( options(show.error.messages=op) )
   		options(show.error.messages=FALSE)
 		IV=try(solve(V))
-  		options(show.error.messages=op)
   		if(inherits(IV, "try-error")){
   			IV=pseudoinverse(V) 
   			if(max(IV)==0){return(1000000)}

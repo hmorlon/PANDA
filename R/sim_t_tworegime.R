@@ -15,7 +15,7 @@ if(is.null(regime.map)){
 				
 	SMatrix<-.CreateSMatrix(class.object)
 	if(verbose){
-	cat(paste0("regime 1 is ",SMatrix$S1,"; regime 2 is ",SMatrix$S2))
+	message(paste0("regime 1 is ",SMatrix$S1,"; regime 2 is ",SMatrix$S2))
 	}
 	if(length(pars)!=3){stop("pars must be a vector with a value for sig2 and either S1 and S2 for MC model, r1 and r2 for DDexp model, b1 and b2 for DDlin model, or r1 and r2 for EB model")}
 	S1=pars[2]

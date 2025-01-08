@@ -52,7 +52,7 @@
 		}	
 	for(i in 2:length(nodeDiff)){			##THIS LOOP checks for an error
 		if(length(unlist(nat[[i]]))!=(length(unlist(nat[[i-1]]))+1)){
-			print(paste("ERROR at node",i+length(phylo$tip.label)))
+			message(paste("ERROR at node",i+length(phylo$tip.label)))
 			}	
 		}
 	

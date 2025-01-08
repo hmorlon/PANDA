@@ -8,7 +8,7 @@ setMethod(
     signature="PhenotypicModel",
     definition=function(object, data, error=NULL, params, v=FALSE){
         if(v){
-            cat("*** Computing -log( likelihood ) of tip trait data under a given set of parameters ***\n")
+            message("*** Computing -log( likelihood ) of tip trait data under a given set of parameters ***\n")
             beginning <- Sys.time()
         }
 
@@ -28,9 +28,10 @@ setMethod(
 			data<-data[rownames(V)]
 	
   			op <- getOption("show.error.messages")
+            on.exit( options(show.error.messages=op) )
   			options(show.error.messages=FALSE)
 			IV=try(solve(V))
-  			options(show.error.messages=op)
+  
   			if(inherits(IV,"try-error")){
     			IV=pseudoinverse(V) 
   				if(max(IV)==0){return(Inf)}
@@ -49,7 +50,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
         return(as.numeric(calcul))
     }

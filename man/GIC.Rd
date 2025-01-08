@@ -51,9 +51,7 @@ Clavel, J., Aristide, L., Morlon, H., 2019. A Penalized Likelihood framework for
 
 \examples{
 \donttest{
-if(require(mvMORPH)){
-\dontshow{test = FALSE}
-if(test){
+
       set.seed(1)
       n <- 32 # number of species
       p <- 40 # number of traits
@@ -68,6 +66,4 @@ if(test){
       
       GIC(fit1); GIC(fit2)
       }
-}
-}
 }
