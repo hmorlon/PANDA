@@ -1,6 +1,10 @@
 # Load data and get tot_time
 data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
+
+oldop <- getOption("digits")
+on.exit(options(oldop))
+
 options(digits=17)
 
 # # Parameters for validation
