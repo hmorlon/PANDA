@@ -1106,7 +1106,7 @@ fit_ClaDS = function(tree,sample_fraction,iterations, thin = 50, file_name = NUL
         verbose=verbose)   
       
       if (! is.null(file_name)){
-        save(mcmcSampler, file = file_name)
+        saveRDS(mcmcSampler, file = file_name)
       }
     }
   }
@@ -1120,7 +1120,7 @@ fit_ClaDS = function(tree,sample_fraction,iterations, thin = 50, file_name = NUL
       verbose=verbose)   
     
     if (! is.null(file_name)){
-      save(mcmcSampler, file = file_name)
+      saveRDS(mcmcSampler, file = file_name)
     }
   }
 
