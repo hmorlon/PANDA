@@ -83,7 +83,8 @@ autoMetropolisGibbs <-
     mcmc_acceptance <- NULL
     
     if(missing(filename)){
-      filename <- paste("mcmc.log.txt")
+      tmp <- tempdir()
+      filename <- paste(tmp, "/mcmc.log.txt", sep="")
     }
     
     ## --- Indices for auto-optimization
@@ -427,13 +428,18 @@ get_ancestors <- function(phylo){
 #### the fit_ClaDS0 function ####
 
 
-fit_ClaDS0=function(tree,name,pamhLocalName = "pamhLocal",
+fit_ClaDS0=function(tree,name,pamhLocalName = NULL,
                        iteration=10000000, thin=20000,update=1000, adaptation=10,
                        seed=NULL, nCPU=3, verbose=TRUE){
   if (! nCPU %in% c(1,3)){
     warning("nCPU should either be 1 or 3. nCPU is set to 1.")
     nCPU = 1
   }
+  # if no path/names are givn, we save the results into the tempdir()
+  if(is.null(pamhLocalName)){
+    tmp <- tempdir()
+    pamhLocalName = paste(tmp, "/pamhLocal", sep="")
+    }
   proposalKernel="bactrian"
   if(! is.null(seed)) set.seed(seed)
   pamhType="None"
