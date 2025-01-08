@@ -8,12 +8,12 @@ setMethod(
     signature="PhenotypicModel",
     definition=function(object, params, method=3, v=TRUE){
         if(v){
-            cat("*** Simulation of tip trait values ***\n")
+            message("*** Simulation of tip trait values ***\n")
             beginning <- Sys.time()
         }
 
         if( method == 1 ){
-            if(v){ cat("Computes the tip distribution, and returns a simulated dataset drawn in this distribution.\n") }
+            if(v){ message("Computes the tip distribution, and returns a simulated dataset drawn in this distribution.\n") }
             tipdistribution <- getTipDistribution(object, params)
             X <- rmvnorm_util(1, tipdistribution$mean, tipdistribution$Sigma)
             X <- matrix(data=X, ncol=1)
@@ -21,7 +21,7 @@ setMethod(
 
         }else{
             if( method==2 ){
-                if(v){ cat("Simulates step-by-step the whole trajectory, plots it, and returns tip data.\n") }
+                if(v){ message("Simulates step-by-step the whole trajectory, plots it, and returns tip data.\n") }
                 firstGraph <- TRUE
                 # Here you can try "rainbow()", "terrain.colors()", "heat.colors()", "topo.colors()"
                 colorChoice <- terrain.colors(length(object@tipLabels))
@@ -33,7 +33,7 @@ setMethod(
                 }
                 ylim <- c( min(findLim) , max( findLim ) )
                 ylim <- c( ylim[1] - (ylim[2]-ylim[1])/10, ylim[2] + (ylim[2]-ylim[1])/10)
-            }else{ if(v){ cat("Simulates step-by-step the whole trajectory, but returns only the tip data.\n") } }
+            }else{ if(v){ message("Simulates step-by-step the whole trajectory, but returns only the tip data.\n") } }
             
             initialCondition <- object@initialCondition(params)
             X <- rnorm(length(initialCondition$mean), initialCondition$mean, initialCondition$var)
@@ -87,7 +87,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }  
 
         return(X)

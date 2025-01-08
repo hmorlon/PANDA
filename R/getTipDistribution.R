@@ -8,7 +8,7 @@ setMethod(
     signature="PhenotypicModel",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Computation of tip traits distribution through ODE resolution ***\n(Method working for any model)\n")
+            message("*** Computation of tip traits distribution through ODE resolution ***\n(Method working for any model)\n")
             beginning <- Sys.time()
         }
         # Initialisation of the distribution at the beginning of the process
@@ -64,7 +64,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         return(list(mean = mean, Sigma = Sigma))
@@ -77,7 +77,7 @@ setMethod(
     signature="PhenotypicACDC",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Computation of tip traits distribution through the analytical formula for an EB process ***\n")
+            message("*** Computation of tip traits distribution through the analytical formula for an EB process ***\n")
             beginning <- Sys.time()
         }
         # params is the vector of parameters, but we do not know in which order. So we get back the parameter values with a, A, Gamma and the initial conditions.
@@ -94,7 +94,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         mean <- matrix(data=mean, ncol=1)
@@ -111,7 +111,7 @@ setMethod(
     signature="PhenotypicBM",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Computation of tip traits distribution through the analytical formula for a BM ***\n")
+            message("*** Computation of tip traits distribution through the analytical formula for a BM ***\n")
             beginning <- Sys.time()
         }
         # params is the vector of parameters, but we do not know in which order. So we get back the parameter values with a, A, Gamma and the initial conditions.
@@ -127,7 +127,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         mean <- matrix(data=mean, ncol=1)
@@ -144,7 +144,7 @@ setMethod(
     signature="PhenotypicDD",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Computation of tip traits distribution through the analytical formula for a DD ***\n")
+            message("*** Computation of tip traits distribution through the analytical formula for a DD ***\n")
             beginning <- Sys.time()
         }
         # Warning : parameters must be given in the following order :
@@ -167,7 +167,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         mean <- matrix(data=mean, ncol=1)
@@ -184,7 +184,7 @@ setMethod(
     signature="PhenotypicGMM",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Analytical computation of tip traits distribution ***\n(Method working for the GMM model only)\n")
+            message("*** Analytical computation of tip traits distribution ***\n(Method working for the GMM model only)\n")
             beginning <- Sys.time()
         }
         # Initialisation of the distribution at the beginning of the process
@@ -243,7 +243,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         return(list(mean = mean, Sigma = Sigma))
@@ -256,7 +256,7 @@ setMethod(
     signature="PhenotypicADiag",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Computation of tip traits distribution through integrated formula ***\n(Method working for models with a constant, A diagonalizable, and Gamma constant)\n")
+            message("*** Computation of tip traits distribution through integrated formula ***\n(Method working for models with a constant, A diagonalizable, and Gamma constant)\n")
             beginning <- Sys.time()
         }
         # Initialisation of the distribution at the beginning of the process
@@ -317,7 +317,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         return(list(mean = mean, Sigma = Sigma))
@@ -330,7 +330,7 @@ setMethod(
     signature="PhenotypicPM",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Analytical computation of tip traits distribution ***\n(Method working for models with a constant, A = aI + bU, and Gamma constant)\n")
+            message("*** Analytical computation of tip traits distribution ***\n(Method working for models with a constant, A = aI + bU, and Gamma constant)\n")
             beginning <- Sys.time()
         }
         # Initialisation of the distribution at the beginning of the process
@@ -404,7 +404,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         return(list(mean = mean, Sigma = Sigma))
@@ -417,7 +417,7 @@ setMethod(
     signature="PhenotypicOU",
     definition=function(object, params, v=FALSE){
         if(v){
-            cat("*** Computation of tip traits distribution through the analytical formula for an OU process ***\n")
+            message("*** Computation of tip traits distribution through the analytical formula for an OU process ***\n")
             beginning <- Sys.time()
         }
         # params is the vector of parameters, but we do not know in which order. So we get back the parameter values with a, A, Gamma and the initial conditions.
@@ -442,7 +442,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         mean <- matrix(data=mean, ncol=1)

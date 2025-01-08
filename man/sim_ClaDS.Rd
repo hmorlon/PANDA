@@ -168,9 +168,10 @@ tree = obj$tree
 speciation_rates = obj$lamb[obj$rates]
 extinction_rates = obj$mu[obj$rates]
 
+oldpar <- par(no.readonly = TRUE)
 par(mar=c(1,1,0,0))
 plot_ClaDS_phylo(tree,speciation_rates)
-
+par(oldpar) # restore the old par
 
 
 # Simulation of a phylogeny with constant extinction rate and at most one shift

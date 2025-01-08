@@ -53,15 +53,15 @@ r parameter for clade H (r is the ratio between the fitness maximum and minimum)
 Standard deviation of the trait mutation kernel
 }
   \item{verbose}{
-The simulation }
+if TRUE, enables printing of messages}
   \item{thin}{
 The number of iterations between two recording of the state of the model (default to 1)
 }
   \item{P}{
-Optionnal, used to continue one precedent run: traits of the individuals of clade P at the end of the precedent run
+Optional, used to continue one precedent run: traits of the individuals of clade P at the end of the precedent run
 }
   \item{H}{
-Optionnal, used to continue one precedent run: traits of the individuals of clade H at the end of the precedent run
+Optional, used to continue one precedent run: traits of the individuals of clade H at the end of the precedent run
 }
 }
 
@@ -122,7 +122,7 @@ mod = sim.BipartiteEvol(nx = 8,ny = 4,NG = 500,
                         alphaP = 0.12,alphaH = 0.12,
                         rP = 10, rH = 10,
                         verbose = 100, thin = 5,
-                        P=mod$P,H=mod$H)  # former ru output
+                        P = mod$P, H = mod$H)  # former ru output
 
 # update the genealogy
 gen = make_gen.BipartiteEvol(mod,

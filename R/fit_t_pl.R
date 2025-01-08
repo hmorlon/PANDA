@@ -387,9 +387,9 @@ fit_t_pl <- function(Y, tree, model=c("BM","OU","EB","lambda"), method=c("RidgeA
         })
         if(echo==TRUE){
             if(method=="RidgeArch"){
-                cat("Best starting for the tuning: ",as.numeric(tuning))
+                message("Best starting for the tuning: ",as.numeric(tuning))
             }else{
-                cat("Best starting for the tuning: ",as.numeric(exp(tuning)))
+                message("Best starting for the tuning: ",as.numeric(exp(tuning)))
             }
         }
     }else{

@@ -148,7 +148,9 @@ sim.convergence.geo<-function(phylo,pars, Nsegments=2500, plot=FALSE, geo.object
   }
 
   if(plot==TRUE){
-    print("plotting last simulated dataset")
+    message("plotting last simulated dataset")
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
     par(mfrow=c(2,1))
     M=seq(0,sum(nodeDiff),length=sum(segmentSize))
     O=list()

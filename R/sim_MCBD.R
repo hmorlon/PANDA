@@ -18,7 +18,7 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
   m = m * step.size
   
   if (length(bounds)!=2){stop("Lower and upper bounds should be provided")}
-  if (root.value < bounds[1] || root.value > bounds [2]) {print("Warning: root value outside boundaries; continuing simulation")}
+  if (root.value < bounds[1] || root.value > bounds [2]) {message("Warning: root value outside boundaries; continuing simulation")}
   
   process_dead = FALSE
   traits <- list(c(1,1,2,NA,root.value),c(2,-1,1,root.value,root.value)) #lineage number, status (incipient=-1/good=1/extinct=-2), parental lineage (if incipient), current trait value of parental lineage, trait values 
@@ -142,10 +142,10 @@ sim_MCBD <- function (pars, root.value=0, age.max=50, step.size=0.01, bounds=c(-
     
     step_count = step_count + 1L
     t = t + step.size
-    cat("\r","time:", t)
+    message("\r","time:", t)
     n_lineages = length(active_lineages)
     
-    if (n_lineages == 0) {print ("process died")
+    if (n_lineages == 0) {message("process died")
         process_dead = TRUE
         break()
       }

@@ -7,9 +7,9 @@ setMethod(
     f="modelSelection",
     signature="PhenotypicModel",
     definition=function(object, data){
-        cat("*** Model selection with tip trait data ***\n")
-        cat("For each model in \"object\", fits the model and returns its AIC value in a recap table...\n")
-        cat("**WARNING** : This function relies on the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\n distinct parameter sets for the initialisation.")
+        message("*** Model selection with tip trait data ***\n")
+        message("For each model in \"object\", fits the model and returns its AIC value in a recap table...\n")
+        message("**WARNING** : This function relies on the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\n distinct parameter sets for the initialisation.")
 
         aic <- c()
         names <- c()

@@ -5,9 +5,9 @@
 	if (is.null(events_txt_list))
 		{
 		errortxt = paste("\nWARNING in events_txt_list_into_events_table(): your events_txt_list has NO events!\n\nThis means your tree has NO d/e/a events across the whole tree.\nThis is *expected* e.g. if you inferred d=e=0 under DEC+J. Input a list of '' or NA to avoid this error.\n\n", sep="")
-		cat(errortxt)
+		warning(errortxt)
 		errortxt2 = paste("events_txt_list_into_events_table() is returning NULL which will might cause issues later.\n\n", sep="")
-		cat(errortxt2)
+		warning(errortxt2)
 		return(NULL)
 		}
 	
@@ -98,13 +98,13 @@
     tmp_classes = .cls.df(dtf)
     dtf_classes$newclasses = tmp_classes[, ncol(tmp_classes)]
     if (printout) {
-        cat("\n")
-        cat("dfnums_to_numeric(dtf, max_NAs=", max_NAs, ") reports: dataframe 'dtf_classes' has ", 
+        message("\n")
+        message("dfnums_to_numeric(dtf, max_NAs=", max_NAs, ") reports: dataframe 'dtf_classes' has ", 
             nrow(dtf_classes), " rows, ", ncol(dtf_classes), 
             " columns.\n", sep = "")
-        cat("...names() and classes() of each column below...\n", 
+        message("...names() and classes() of each column below...\n", 
             sep = "")
-        cat("\n")
+        message("\n")
         print(dtf_classes)
     }
     return(dtf)
@@ -131,14 +131,14 @@
     dtf_classes = cbind(colnum, dtf_names, cls_col_list)
     dtf_classes = data.frame(dtf_classes, row.names = colnum)
     if (printout) {
-        cat("\n")
-        cat("cls.df(dtf) reports: dataframe 'dtf' has ", nrow(dtf), 
+        message("\n")
+        message("cls.df(dtf) reports: dataframe 'dtf' has ", nrow(dtf), 
             " rows, ", numcols, " columns.\n", sep = "")
-        cat("...names() and classes() of each column below...\n", 
+        message("...names() and classes() of each column below...\n", 
             sep = "")
-        cat("\n")
+        message("\n")
         print(dtf_classes)
-        cat("\n")
+        message("\n")
     }
     return(dtf_classes)
 }
@@ -536,7 +536,7 @@ if(is.null(regime.map)){ 	# single slope version
     estim$value <- clikCLIM(param=estim$par,dat=data,phy,mtot=mtot,times=times,fun=fun,model)
     estim$convergence <- 0
     
-    ## Return the tree --- just some modifications to the previous code to allow retrieving the tree
+    ## Return the tree --- just some modifimessageions to the previous code to allow retrieving the tree
     # create vector of parameters
     beta <- numeric(nstates)
     sigma <- numeric(nstates)
@@ -605,11 +605,11 @@ if(is.null(regime.map)){ 	# single slope version
   ##---------------------Diagnostics--------------------------------------------##
   
   if(estim$convergence==0 & diagnostic==TRUE){
-    cat("\n","successful convergence of the optimizer","\n")
+    message("\n","successful convergence of the optimizer","\n")
   }else if(estim$convergence==1 & diagnostic==TRUE){
-    cat("\n","maximum limit iteration has been reached, please consider increase maxit","\n")
+    message("\n","maximum limit iteration has been reached, please consider increase maxit","\n")
   }else if(diagnostic==TRUE){
-    cat("\n","convergence of the optimizer has not been reached, try simpler model","\n")
+    message("\n","convergence of the optimizer has not been reached, try simpler model","\n")
   }
   
   # Hessian eigen decomposition to check the derivatives
@@ -621,33 +621,33 @@ if(is.null(regime.map)){ 	# single slope version
   if(any(hess<0)){
     hess.value<-1
     if(diagnostic==TRUE){
-      cat("unreliable solution has been reached, check hessian eigenvectors or try simpler model","\n")}
+      message("unreliable solution has been reached, check hessian eigenvectors or try simpler model","\n")}
   }else{
     hess.value<-0
     if(diagnostic==TRUE){
-      cat("a reliable solution has been reached","\n")}
+      message("a reliable solution has been reached","\n")}
   }
   
   ##-------------------Print results--------------------------------------------##
   if(echo==TRUE){
-    cat("\n")
-    cat("Summary results for the",model," model","\n")
-    cat("LogLikelihood:","\t",LL,"\n")
-    cat("AIC:","\t",AIC,"\n")
-    cat("AICc:","\t",AICc,"\n")
-    cat(nparam,"parameters")
-    cat("\n")
-    cat("Estimated rates matrix","\n")
+    message("\n")
+    message("Summary results for the",model," model","\n")
+    message("LogLikelihood:","\t",LL,"\n")
+    message("AIC:","\t",AIC,"\n")
+    message("AICc:","\t",AICc,"\n")
+    message(nparam,"parameters")
+    message("\n")
+    message("Estimated rates matrix","\n")
     print(resultList)
-    cat("\n")
-    cat("Estimated ancestral state","\n")
-    cat(anc)
-    cat("\n")
+    message("\n")
+    message("Estimated ancestral state","\n")
+    message(anc)
+    message("\n")
     if(!is.null(error)){
-      cat("\n")
-      cat("Estimated error","\n")
-      cat(errorValue)
-      cat("\n") 
+      message("\n")
+      message("Estimated error","\n")
+      message(errorValue)
+      message("\n") 
     }
   }
   

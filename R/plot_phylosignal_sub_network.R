@@ -1,7 +1,6 @@
 plot_phylosignal_sub_network <-
 function(tree_A, results_sub_clades, network=NULL, legend=TRUE, show.tip.label=FALSE, where="bottomleft", corrected_pvalue=TRUE){
   
-  set.seed(1)
   host_tree <- tree_A
   
   if (!inherits(host_tree, "phylo")) {stop("object \"tree_A\" is not of class \"phylo\".")}

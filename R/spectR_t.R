@@ -34,12 +34,15 @@ spectR_t<-function(phylo,dat,draw=FALSE){
 		res<-list(eigenvalues=x,splitter=splitter,tracer=tracer,fragmenter=fragmenter)
 		#plot spectral density profile
 		if(draw==TRUE){
+			oldpar<-par(no.readonly=TRUE)
+			on.exit(par(oldpar))
 		par(mar=c(4,5,1,1))
 		plot(d$x,dsc,type='l',
 			xlab=expression(''[n]*lambda),
 			ylab=expression(paste('f(x)/',integral(f(y)*dy)),sep=''))
 			polygon(d$x,dsc,col=colors(1)[runif(1,1,500)])	
-		return(res)
+
+			return(res)
 		}
 	else{return(res)}
 	}

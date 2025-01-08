@@ -8,9 +8,9 @@ setMethod(
     signature="PhenotypicModel",
     definition=function(object, data, error=NULL, params0=NULL, GLSstyle=FALSE, v=FALSE){
         if(v){
-            cat("*** Fit of tip trait data ***\n")
-            cat("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
-            cat("**WARNING** : This function uses the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\ndistinct parameter sets for the initialisation.\n")
+            message("*** Fit of tip trait data ***\n")
+            message("Finds the maximum likelihood estimators of the parameters, \nreturns the likelihood and the inferred parameters.\n")
+            message("**WARNING** : This function uses the standard R optimizer \"optim\".\nIt may not always converge well.\nPlease double check the convergence by trying\ndistinct parameter sets for the initialisation.\n")
             beginning <- Sys.time()
         }
 
@@ -46,9 +46,11 @@ setMethod(
 					}
 		            data<-data[rownames(V)]
 		  			op <- getOption("show.error.messages")
+                    on.exit( options(show.error.messages=op) )
+                    
 		  			options(show.error.messages=FALSE)
 					IV=try(solve(V))
-		  			options(show.error.messages=op)
+                    
 		  			if(inherits(IV,"try-error")){
 		    			IV=pseudoinverse(V) 
 		  				if(max(IV)==0){return(Inf)}
@@ -93,9 +95,9 @@ setMethod(
 			}
 			
 		  	op <- getOption("show.error.messages")
+            on.exit( options(show.error.messages=op) )
 		  	options(show.error.messages=FALSE)
 			IV=try(solve(V))
-		  	options(show.error.messages=op)
 		  	if(inherits(IV,"try-error")){
 		    	IV=pseudoinverse(V) 
 		  		if(max(IV)==0){return(Inf)}
@@ -110,7 +112,7 @@ setMethod(
 
         if(v){
             end <- Sys.time()
-            cat("Computation time :", format(end-beginning), "\n")
+            message("Computation time :", format(end-beginning), "\n")
         }
 
         return(list(value = optimisation$value, inferredParams = inferredParams, convergence = optimisation$convergence))

@@ -1,6 +1,6 @@
-phylosignal_sub_network <-
-function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", 
-                                    nperm = 1000, correlation = "Pearson", minimum=10, degree=FALSE, permutation ="shuffle"){
+phylosignal_sub_network <- function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted", 
+         nperm = 1000, correlation = "Pearson", minimum=10, degree=FALSE, 
+         permutation ="shuffle", verbose=TRUE){
   
   host_tree <- tree_A
   symbiont_tree <- tree_B
@@ -45,11 +45,9 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
   }
   
   
-  set.seed(1)
-  
   nb_sub_clades <- 0
   results_sub_clades <- c()
-  for (i in sort(unique(host_tree$edge[,1]))){  # include root  and can be non binary
+  for (i in sort(unique(host_tree$edge[,1]))){  # include root and can be non binary
     sub_host_tree <- ape::extract.clade(host_tree, i)
     if (Ntip(sub_host_tree)>=minimum){
       sub_network <- network[,sub_host_tree$tip.label]
@@ -66,7 +64,7 @@ function(network, tree_A, tree_B=NULL, method = "Jaccard_weighted",
           mantel_degree <- rep("NA", 5)
           tryCatch({
             mantel_degree <- RPANDA::phylosignal_network(sub_network, sub_host_tree, sub_symbiont_tree, method = "degree", nperm = nperm, correlation = correlation)
-          }, error=function(e){cat("clade ",i,": ", conditionMessage(e), "\n")})
+          }, error=function(e){if (verbose) {cat("clade ",i,": ", conditionMessage(e), "\n")}})
           results_sub_clades <- rbind(results_sub_clades, c(i, mantel_test[1:5],NA,NA, mantel_degree[3:5] ))
         }else{
           results_sub_clades <- rbind(results_sub_clades, c(i, mantel_test[1:5],NA,NA))

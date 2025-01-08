@@ -1,5 +1,8 @@
 
 plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=TRUE,main=NULL,lwd=2,log=TRUE,show.tip.label= FALSE, ...){
+  
+  oldpar <- par(no.readonly = TRUE) # current par
+
   Colors = colorRampPalette(c("steelblue2","paleturquoise3","palegreen2","yellow2","salmon1","darkorange", "red","red4"))( 100 ) 
 
   if(is.null(rates2)){
@@ -127,4 +130,7 @@ plot_ClaDS_phylo=function(phylo,rates,rates2=NULL,same.scale=TRUE,main=NULL,lwd=
     }
     par(mfrow=c(1,1))
   }
+  
+  on.exit(par(oldpar)) # restore the previous par at the end of the function
+  
 }

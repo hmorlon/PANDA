@@ -15,7 +15,7 @@ Mantel tests can be computed using quantified or binary networks, with the Jacca
 phylosignal_sub_network(network, tree_A, tree_B = NULL, 
 method = "Jaccard_weighted", nperm = 1000, 
 correlation = "Pearson", minimum = 10, degree = FALSE, 
-permutation = "shuffle")
+permutation = "shuffle", verbose=TRUE)
 }
 
 \arguments{
@@ -34,16 +34,12 @@ a phylogenetic tree of guild A (the columns of the interaction network). It must
 indicates which method is used to compute the phylogenetic signal in species interactions using Mantel tests. You can choose "Jaccard_weighted" (default) for computing ecological distances using Jaccard dissimilarities (or "Jaccard_binary" to not take into account the abundances of the interactions), "Bray-Curtis" for computing the Bray-Curtis dissimilarity, or "GUniFrac" for computing the weighted (or generalized) UniFrac distances ("UniFrac_unweighted" to not take into account the interaction abundances).
 }
 
-\item{correlation}{
-indicates which correlation (R) must be used in the Mantel test, among Pearson (default), Spearman, and Kendall correlations.
-}
-
 \item{nperm}{
 a number of permutations to evaluate the significance of the Mantel test. By default, it equals 10,000, but this can be very long for the Kendall correlation.
 }
 
-\item{permutation}{
-(optional) indicates which permutations must be performed to evaluate the significance of the Mantel correlation: either "shuffle" (by default - i.e. random shufflying of the distance matrix) or "nbpartners" (i.e. keeping constant the number of partners per species and shuffling at random their identity).
+\item{correlation}{
+indicates which correlation (R) must be used in the Mantel test, among Pearson (default), Spearman, and Kendall correlations.
 }
 
 \item{minimum}{
@@ -52,6 +48,14 @@ indicates the minimal number of descending species for a node in tree A to compu
 
 \item{degree}{
 if degree=TRUE, Mantel tests testing for phylogenetic signal in the number of partners are additionally performed in each sub-clade.
+}
+
+\item{permutation}{
+(optional) indicates which permutations must be performed to evaluate the significance of the Mantel correlation: either "shuffle" (by default - i.e. random shufflying of the distance matrix) or "nbpartners" (i.e. keeping constant the number of partners per species and shuffling at random their identity).
+}
+
+\item{verbose}{
+if TRUE, enables printing of messages.
 }
 }
 

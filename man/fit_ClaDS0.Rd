@@ -9,7 +9,8 @@ Infer branch-specific speciation rates and the model's hyper parameters for the 
 \usage{
 fit_ClaDS0(tree, name, pamhLocalName = "pamhLocal",  
             iteration = 1e+07, thin = 20000, update = 1000, 
-            adaptation = 10, seed = NULL, nCPU = 3)
+            adaptation = 10, seed = NULL, nCPU = 3,
+            verbose=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -39,6 +40,9 @@ An optional seed for the MCMC run.
 }
   \item{nCPU}{
 The number of CPUs to use. Should be either 1 or 3.
+}
+  \item{verbose}{
+if TRUE, enables printing of messages.
 }
 }
 \details{
