@@ -10,6 +10,7 @@
 plot_div.BipartiteEvol=function(gen,spec,trait.id,lwdgen=1,lwdsp=lwdgen,scale=NULL){
   
   oldpar <- par(no.readonly = TRUE) # current par
+  on.exit(par(oldpar)) # restore the previous par at the end of the function
   
   # cut the plot window
   layout(mat = matrix(c(1,1,8,2,2,3,3,8,4,4,5,7,7,7,6),ncol=5,byrow = TRUE),
@@ -67,7 +68,7 @@ plot_div.BipartiteEvol=function(gen,spec,trait.id,lwdgen=1,lwdsp=lwdgen,scale=NU
   
   par(mar = ma)
   
-  on.exit(par(oldpar)) # restore the previous par at the end of the function
+  
 }
 
 
@@ -94,6 +95,7 @@ plot_with_trait=function(phylo,rate,scale=NULL,lwd=1,direction="rightwards"){
 spatial.plot=function(out,trait.id,scale=NULL,nx=NULL, sort_trait = FALSE){
   
   oldpar <- par(no.readonly = TRUE) # current par
+  on.exit(par(oldpar)) # restore the previous par at the end of the function
 
   if(is.null(nx))   nx=sqrt(length(out$P[1,]))
   scale=range(c(scale,out$P[trait.id,],out$H[trait.id,]))
@@ -119,8 +121,6 @@ spatial.plot=function(out,trait.id,scale=NULL,nx=NULL, sort_trait = FALSE){
     image(matrix(out$H[trait.id,],ncol=nx,byrow = TRUE),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
           ,main="",axes=FALSE)
   }
-  
-  on.exit(par(oldpar)) # restore the previous par at the end of the function
 }
 
 ######## Plot the network ##################################
@@ -156,6 +156,7 @@ plot_network=function(link,spec,trait.id=1,method="bipartite",order=TRUE,scale=c
 plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdgen,scale=NULL,nx=NULL,cor=FALSE,network.method="bipartite",spatial=FALSE){
   
   oldpar <- par(no.readonly = TRUE) # current par
+  on.exit(par(oldpar)) # restore the previous par at the end of the function
   
   # cut the plot window
   if(spatial){
@@ -242,8 +243,6 @@ plot_net.BipartiteEvol=function(gen,spec,trait.id, link,out,lwdgen=1,lwdsp=lwdge
       image(matrix(out$H[trait.id,],ncol=nx,byrow = TRUE),col=Colors[(round( (mH - min(scale)) / diff(range(scale))*99   )+1):(round( (MH - min(scale)) / diff(range(scale))*99   )+1)]
             ,main="",axes=FALSE)
   }
-  
-  on.exit(par(oldpar)) # restore the previous par at the end of the function
 }
 
 
