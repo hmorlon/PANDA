@@ -402,7 +402,7 @@ paleodiv <- function(phylo, data, sampling.fractions, shift.res,
   globaldiv <- globaldiv[,ncol(globaldiv):1]
   
   if(comb != "whole_tree"){
-    past.div.curve<-apply(globaldiv,2,function(x)sum(x,na.rm=T))  
+    past.div.curve<-apply(globaldiv,2,function(x)sum(x,na.rm=TRUE))  
   } else {
     past.div.curve <- globaldiv
   }

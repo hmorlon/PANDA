@@ -1,5 +1,9 @@
 # Load data and get tot_time
 data(Cetacea)
+
+oldop <- getOption("digits")
+on.exit(options(oldop))
+
 options(digits=16)
 
 # Parameters for validation

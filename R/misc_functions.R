@@ -244,7 +244,7 @@ if(is.null(regime.map)){ 	# single slope version
 		hold<-rep("A",length(phylo$tip.label))
 		hold[1]<-"B"
 		names(hold)<-phylo$tip.label
-		smap<-make.simmap(phylo,hold,message=F)
+		smap<-make.simmap(phylo,hold,message=FALSE)
 		new.maps<-list()
 		for(i in 1:length(phylo$edge.length)){
 			new.maps[[i]]<-phylo$edge.length[i]
@@ -561,7 +561,7 @@ if(is.null(regime.map)){ 	# single slope version
      # constrain some values to zero (should be only for beta as sigma=0 is undefined)
      beta[is.na(beta)] <- 0
       
-    resultList<-matrix(c(beta, sigma), ncol=nstates, byrow=T)
+    resultList<-matrix(c(beta, sigma), ncol=nstates, byrow=TRUE)
     colnames(resultList)<-c(colnames(tree$mapped.edge))
     rownames(resultList)<-c("beta","sigma")
       
@@ -574,7 +574,7 @@ if(is.null(regime.map)){ 	# single slope version
      # constrain some values to zero (should be only for beta as sigma=0 is undefined)
      beta[is.na(beta)] <- 0
       
-    resultList<-matrix(c(beta, exp(sigma)), ncol=nstates, byrow=T)
+    resultList<-matrix(c(beta, exp(sigma)), ncol=nstates, byrow=TRUE)
     colnames(resultList)<-c(colnames(tree$mapped.edge))
     rownames(resultList)<-c("beta","sigma")
   }
@@ -667,7 +667,7 @@ if(is.null(geo.map)&&is.null(subgroup.map)&&is.null(regime.map)){ 	# single slop
 		hold<-rep("A",length(phylo$tip.label))
 		hold[1]<-"B"
 		names(hold)<-phylo$tip.label
-		smap<-make.simmap(phylo,hold,message=F)
+		smap<-make.simmap(phylo,hold,message=FALSE)
 		new.maps<-list()
 		for(i in 1:length(phylo$edge.length)){
 			new.maps[[i]]<-phylo$edge.length[i]

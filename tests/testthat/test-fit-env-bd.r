@@ -3,6 +3,10 @@ data(Cetacea)
 tot_time<-max(node.age(Cetacea)$ages)
 data(InfTemp)
 dof<-smooth.spline(InfTemp[,1], InfTemp[,2])$df
+
+oldop <- getOption("digits")
+on.exit(options(oldop))
+
 options(digits=16)
 
 context("B exponential, function of temperature")

@@ -42,20 +42,20 @@ function(network, tree_A, tree_B = NULL, method="Jaccard_binary",
   compute_eco_dist <- function(network){
     # binary Jaccard distances
     if (method=="Jaccard_binary"){
-      jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=T))
+      jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=TRUE))
       eco_A <- jaccard_A
     }
     
     # quantitative Jaccard distances
     if (method=="Jaccard_weighted"){
-      jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=F))
+      jaccard_A <- as.matrix(vegan::vegdist(t(network), "jaccard", binary=FALSE))
       eco_A <- jaccard_A
     }
     
     
     # Bray-Curtis dissimilarity 
     if (method=="Bray-Curtis"){
-      bray_A <- as.matrix(vegan::vegdist(t(network), "bray", binary=F))
+      bray_A <- as.matrix(vegan::vegdist(t(network), "bray", binary=FALSE))
       eco_A <- bray_A
     }
     
