@@ -9,14 +9,16 @@ plot_spectR <- function(spectR)
 			integr(d$x,d$y)->dint
 				(d$y/dint)->dsc
 
-			
+		oldpar<-par(no.readonly=TRUE)
+	
 		par(mfrow=c(1,2))
 			plot(d$x,dsc,type="l",ann=F)
 				mtext(expression(f*(x)/integral(f(y)*dy)),2,2)
 					mtext("ln eigenvalue",1,2)
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
-					mtext("ln eigenvalue",2,3)				
+					mtext("ln eigenvalue",2,3)	
+		on.exit(par(oldpar))
 }
 
 #gaussian kernel convolution		
