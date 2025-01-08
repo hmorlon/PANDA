@@ -10,6 +10,7 @@ plot_spectR <- function(spectR)
 				(d$y/dint)->dsc
 
 		oldpar<-par(no.readonly=TRUE)
+		on.exit(par(oldpar))
 	
 		par(mfrow=c(1,2))
 			plot(d$x,dsc,type="l",ann=F)
@@ -18,7 +19,7 @@ plot_spectR <- function(spectR)
 			plot(sort(log(m),decreasing=T),ann=F)
 				mtext("rank",1,2)
 					mtext("ln eigenvalue",2,3)	
-		on.exit(par(oldpar))
+		
 }
 
 #gaussian kernel convolution		
