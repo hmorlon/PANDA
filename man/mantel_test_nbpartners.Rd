@@ -11,7 +11,7 @@ This function tests for phylogenetic signal in species interactions in guild  A 
 
 \usage{
 mantel_test_nbpartners(network, tree_A, tree_B = NULL, method="Jaccard_binary",
-nperm = 1000, correlation = "Pearson")
+nperm = 1000, correlation = "Pearson", verbose=TRUE)
 }
 
 \arguments{
