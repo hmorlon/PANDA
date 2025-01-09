@@ -7,7 +7,7 @@ Infer ClaDS0's parameter on a phylogeny}
 Infer branch-specific speciation rates and the model's hyper parameters for the pure-birth model
 }
 \usage{
-fit_ClaDS0(tree, name, pamhLocalName = "pamhLocal",  
+fit_ClaDS0(tree, name, pamhLocalName = NULL,  
             iteration = 1e+07, thin = 20000, update = 1000, 
             adaptation = 10, seed = NULL, nCPU = 3,
             verbose=TRUE)
