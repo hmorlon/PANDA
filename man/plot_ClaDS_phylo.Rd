@@ -8,7 +8,8 @@ Plot a phylogeny with branches colored according to branch-specific rate values
 }
 \usage{
 plot_ClaDS_phylo(phylo, rates, rates2 = NULL, 
-                same.scale = TRUE, main = NULL, lwd = 2, log = TRUE, show.tip.label = FALSE, ...)
+                same.scale = TRUE, main = NULL, lwd = 2, 
+                log = TRUE, show.tip.label = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
