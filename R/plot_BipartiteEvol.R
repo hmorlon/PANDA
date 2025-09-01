@@ -140,7 +140,7 @@ plot_network=function(link,spec,trait.id=1,method="bipartite",order=TRUE,scale=c
     col.H=rep(0,length(spec$Hphylo$tree$tip.label))
     col.P[spec$Pphylo$tree$tip.label]=Colors[(round( (spec$Pphylo$mean.trait[trait.id,] - min(scale)) / diff(range(scale))*99   )+1)]
     col.H[spec$Hphylo$tree$tip.label]=Colors[(round( (spec$Hphylo$mean.trait[trait.id,] - min(scale)) / diff(range(scale))*99   )+1)]
-    try(plotweb(as.matrix(link),col.low=col.P,col.high = col.H,col.interaction = "lightgray",empty=TRUE))
+    try(plotweb(as.matrix(link),lower_color=col.P,higher_color = col.H,link_color = "lightgray",empty=TRUE))
   }else{
     Mat=as.matrix(link)
     if(order) Mat=Mat[order(rowSums(Mat),decreasing = TRUE),order(colSums(Mat),decreasing = FALSE)]
