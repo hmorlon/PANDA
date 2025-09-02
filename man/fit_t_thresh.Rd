@@ -86,7 +86,7 @@ Melendez-Vazquez, F., Lucaci, A. G., Selberg A., Clavel, J., Rincon-Sandoval, M.
 
 \examples{
 \donttest{
-## test pagel lambda
+## Comparison between models
 ## require(phytools)
 set.seed(1)
 tree <- pbtree(n=150, scale=67)
@@ -94,7 +94,7 @@ tree <- reorder(tree, "postorder")
 trait <- rTraitCont(tree)
 th <- sapply(trait, threshState, thresholds = setNames(c(0,Inf), letters[1:2]))
 
-# BM liability model - Comparison of AIC
+# Data were simulated with BM liabilities - Comparison of AIC
 bm_fit <- fit_t_thresh(tree, th, model="BM")
 lambda_fit <- fit_t_thresh(tree, th, model="lambda")
 ou_fit <- fit_t_thresh(tree, th, model="OU")
