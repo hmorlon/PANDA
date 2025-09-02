@@ -62,11 +62,11 @@ Arguments to be passed to the function. See details.
 }
 
 \details{
-\code{fit_t_env_ou} allows fitting OU-environmental models of trait evolution (Troyer et al. 2020, Goswami & Clavel 2024). Compared to model implemented in \code{fit_t_env} where the rate of phenotypic evolution evolves as a function of an environmental variable (Clavel & Morlon 2020), here it's the optimum of a generalized Ornstein-Uhlenbeck (also called Hull-White model) that can changes as a function of an environmental variable T(t). More formally, the model is defined by the following process:
+\code{fit_t_env_ou} allows fitting OU-environmental models of trait evolution (Brinkworth 2019, Troyer et al. 2020, Goswami & Clavel 2024). Compared to model implemented in \code{fit_t_env} where the rate of phenotypic evolution evolves as a function of an environmental variable (Clavel & Morlon 2017), here it's the optimum of a generalized Ornstein-Uhlenbeck (also called Hull-White model) that can changes as a function of an environmental variable T(t). More formally, the model is defined by the following process:
 
 \deqn{dX(t)  =  \alpha  (\theta(t) -X(t))dt + \sigma dB(t)}{dX(t) = alpha*(theta(t) - X(t))dt + sigma*dB(t) }
 
-Note that this model works only on NON-ULTRAMETRIC trees (e.g., with fossils)
+Note that this model works only on NON-ULTRAMETRIC trees (e.g., with fossils; see Goswami & Clavel 2025)
 
 
 The default model has the optimum changing as a function of environmental changes though times as 
@@ -126,9 +126,11 @@ The various options are passed through "...".
 
 Clavel, J. & Morlon, H., 2017. Accelerated body size evolution during cold climatic periods in the Cenozoic. Proceedings of the National Academy of Science, 114(16): 4183-4188.
 
+Brinkworth, A. 2019. Body mass evolution of South American hystricognath rodents, and the role of climate. Unpublished M.S. thesis. Imperial College London, London. Supervisors: J. Clavel, A. Goswami.
+
 Troyer, E., Betancur-R, R., Hughes, L., Westneat, M., Carnevale, G., White W.T., Pogonoski, J.J., Tyler, J.C., Baldwin, C.C., Orti, G., Brinkworth, A., Clavel, J., Arcila, D., 2022 - The impact of paleoclimatic changes on body size evolution in marine fishes. Proceedings of the National Academy of Sciences, 119 (29), e2122486119.
 
-Goswami, A. & Clavel, J., 2024. Morphological evolution in a time of Phenomics. EcoEvoRxiv, https://doi.org/10.32942/X22G7Q
+Goswami, A. & Clavel, J., 2024. Morphological evolution in a time of Phenomics. Paleobiology, 51 (1): 195-213 https://doi.org/10.1017/pab.2024.35
 
 }
 
