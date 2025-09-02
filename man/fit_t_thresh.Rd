@@ -109,7 +109,7 @@ eb_fit$aic
 # Fit the climatic model
 data(InfTemp)
 clim_fit <- fit_t_thresh(tree, th, model="Clim", env_data=InfTemp)
-
+clim_fit$aic
 
 # Now simulate under the climatic model
 # I use an (arbitrary) parameter value for the climatic model of -0.2
