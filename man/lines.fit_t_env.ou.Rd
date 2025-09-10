@@ -29,7 +29,7 @@ further arguments to be passed to \code{plot}. See ?\code{plot}.
 \value{
 	\code{lines.fit_t.env.ou} returns invisibly a list with the following components used to add the line segments to the current plot:
   
-  \item{time_steps}{the times steps where the climatic function was evaluated to compute the rate. The number of steps is controlled through the argument \code{steps}.}
+  \item{time_steps}{the times steps where the climatic function was evaluated to compute the reconstructed optimum. The number of steps is controlled through the argument \code{steps}.}
   \item{values}{the estimated optimum through time estimated at each \code{time_steps}}
   
 }
