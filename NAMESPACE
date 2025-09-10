@@ -35,7 +35,7 @@ importFrom(raster, as.raster)
 importFrom(RColorBrewer, brewer.pal)
 importFrom(Rmpfr, mpfr, chooseMpfr)
 importFrom(R.utils,withTimeout)
-importFrom(stats, rnorm, runif, optim, integrate, smooth.spline, splinefun,
+importFrom(stats, rnorm, qnorm, runif, optim, integrate, smooth.spline, splinefun,
            as.dist, bw.nrd0, dnorm, heatmap, kmeans, na.omit, pnorm, predict,
            sd, var, reorder, rexp, cov2cor, rlnorm, density, fft, optimize, dist,
            cor, cov, model.matrix, quantile)
