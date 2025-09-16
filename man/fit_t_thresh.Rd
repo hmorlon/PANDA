@@ -89,7 +89,7 @@ Melendez-Vazquez, F., Lucaci, A. G., Selberg A., Clavel, J., Rincon-Sandoval, M.
 ## Comparison between models
 ## require(phytools)
 set.seed(1)
-tree <- pbtree(n=150, scale=67)
+tree <- phytools::pbtree(n=150, scale=67)
 tree <- reorder(tree, "postorder")
 trait <- rTraitCont(tree)
 th <- sapply(trait, threshState, thresholds = setNames(c(0,Inf), letters[1:2]))
