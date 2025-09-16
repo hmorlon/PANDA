@@ -92,7 +92,17 @@ set.seed(1)
 tree <- phytools::pbtree(n=150, scale=67)
 tree <- reorder(tree, "postorder")
 trait <- rTraitCont(tree)
-th <- sapply(trait, threshState, thresholds = setNames(c(0,Inf), letters[1:2]))
+
+# small function to define a threshold
+threshold <- function(x, thresh){
+  thresh_val = names(thresh)
+  discr = thresh_val[as.factor(x >= thresh[1] & x<thresh[2])]
+  names(discr) = names(x)
+  return(discr)
+}
+
+# create discrete traits from the latent model
+th <- threshold(trait, thresh = setNames(c(0,Inf), letters[1:2])) 
 
 # Data were simulated with BM liabilities - Comparison of AIC
 bm_fit <- fit_t_thresh(tree, th, model="BM")
@@ -120,8 +130,7 @@ x <- sim_t_env(tree, param=c(0.1, beta), env_data=InfTemp, model="EnvExp", root.
                step=0.001, plot=TRUE)
 
 # Use the "threshState" function to simulate the discrete traits from the continuous one 'x'.
-th <- sapply(x, threshState, thresholds = setNames(c(0,Inf), letters[1:2]))
-
+th <- threshold(x, thresh = setNames(c(0,Inf), letters[1:2])) 
 
 clim_fit2 <- fit_t_thresh(tree, th, model="Clim", env_data=InfTemp)
 bm_fit2 <- fit_t_thresh(tree, th, model="BM")
