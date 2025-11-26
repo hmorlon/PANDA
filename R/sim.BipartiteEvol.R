@@ -1,5 +1,5 @@
 
-sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace=Inf,D=1,muP,muH,alphaP=0,alphaH=0,iniP=0,iniH=0,nP=1,nH=1,rP=1,rH=1,effect=1,
+sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alphaP=0,alphaH=0,iniP=0,iniH=0,nP=1,nH=1,rP=1,rH=1,effect=1,
                            verbose=100,thin=1,P=NULL,H=NULL){
 
   N=nx*ny     # number of individuals
@@ -13,11 +13,12 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace=Inf,D=1,muP,muH,alphaP=0,alphaH=0,
   changeP=c()
   changeH=c()
   
-  kernel=sapply(1:nx,function(x){sapply(1:ny,function(y){exp(-(1/2)*((min(abs(1-x),abs(nx+1-x))^2+min(abs(1-y),abs(ny+1-y))^2)/(dSpace^2)))})})
+  # kernel=sapply(1:nx,function(x){sapply(1:ny,function(y){exp(-(1/2)*((min(abs(1-x),abs(nx+1-x))^2+min(abs(1-y),abs(ny+1-y))^2)/(dSpace^2)))})})
+  
   Ys=rep(1:ny,each=nx,times=1)
   Xs=rep(1:nx,times=ny)
   # choice of the fitness function
-  f=function(X,x,r,alpha,pos){
+  f=function(X,x,r,alpha,pos,dSpace){
     .Call("fitnessFunction", X=as.numeric(t(X)), x=as.numeric(x),r=as.numeric(r),alpha=as.numeric(alpha), Ncol=as.integer(N), D=as.integer(D),
           dSpace=as.numeric(dSpace), Xs=as.numeric(Xs),Ys=as.numeric(Ys),I=as.integer(pos),PACKAGE = "RPANDA")
   }
@@ -88,7 +89,7 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace=Inf,D=1,muP,muH,alphaP=0,alphaH=0,
         # space=t(kernel[c(Y1,Y2),c(X1,X2)])
         
         p=P[,deadH]
-        prob=f(H,p,rH,alphaH,deadH)
+        prob=f(H,p,rH,alphaH,deadH,dSpace_H)
         if(any(prob==Inf)|any(is.na(prob))){
           is.inf=(prob==Inf|is.na(prob))
           prob[!is.inf]=0.0000001
@@ -132,7 +133,7 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace=Inf,D=1,muP,muH,alphaP=0,alphaH=0,
         
         # space=t(kernel[c(Y1,Y2),c(X1,X2)])
         h=H[,deadP]
-        prob=f(P,h,rP,alphaP,deadP)
+        prob=f(P,h,rP,alphaP,deadP,dSpace_P)
         prob[prob<0]
         if(any(prob==Inf)|any(is.na(prob))){
           is.inf=(prob==Inf|is.na(prob))
