@@ -3,6 +3,7 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
                            verbose=100,thin=1,P=NULL,H=NULL){
 
   N=nx*ny     # number of individuals
+  NTime=ceiling((min(u*timeStep*thin,NG)-time)/thin) # number of time steps in one loop run
   timeStep=floor(sqrt(NG/(nH+nP)))
   oneByOne=FALSE
 
@@ -32,20 +33,22 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   out_xP <- lapply(1:D, function(j) list(
     t = integer(0),
     ind  = integer(0),
-    val  = numeric(0)
+    val  = numeric(0),
+    dim = c(Ntime, N)
   ))
   
   out_xH <- lapply(1:D, function(j) list(
     t = integer(0),
     ind  = integer(0),
-    val  = numeric(0)
+    val  = numeric(0),
+    dim = c(Ntime, N)
   ))
   
-  out_Pgen <- list(t = integer(0), child = integer(0), parent = integer(0))
-  out_Hgen <- list(t = integer(0), child = integer(0), parent = integer(0))
+  out_Pgen <- list(t = integer(0), child = integer(0), parent = integer(0), dim = c(Ntime, N))
+  out_Hgen <- list(t = integer(0), child = integer(0), parent = integer(0), dim = c(Ntime, N))
   
-  out_Pmut <- list(t = integer(0), ind = integer(0), count = integer(0))
-  out_Hmut <- list(t = integer(0), ind = integer(0), count = integer(0))
+  out_Pmut <- list(t = integer(0), ind = integer(0), count = integer(0), dim = c(Ntime, N))
+  out_Hmut <- list(t = integer(0), ind = integer(0), count = integer(0), dim = c(Ntime, N))
   
   # creation of lists to help with the execution time
   Phist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE)}))
@@ -67,8 +70,6 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   
   # beginning of the main loop
   for(u in 1:max(1,ceiling(NG/(timeStep*thin)))){
-    
-    NTime=ceiling((min(u*timeStep*thin,NG)-time)/thin) # number of time steps in one loop run
     
     t=0
     
