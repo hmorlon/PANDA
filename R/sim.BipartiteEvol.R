@@ -28,6 +28,25 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   if(is.null(P)) P=matrix(iniP,nrow=D,ncol=N)
   if(is.null(H)) H=matrix(iniH,nrow=D,ncol=N)
   
+  # === compressed outputs ===
+  out_xP <- lapply(1:D, function(j) list(
+    t = integer(0),
+    ind  = integer(0),
+    val  = numeric(0)
+  ))
+  
+  out_xH <- lapply(1:D, function(j) list(
+    t = integer(0),
+    ind  = integer(0),
+    val  = numeric(0)
+  ))
+  
+  out_Pgen <- list(t = integer(0), child = integer(0), parent = integer(0))
+  out_Hgen <- list(t = integer(0), child = integer(0), parent = integer(0))
+  
+  out_Pmut <- list(t = integer(0), ind = integer(0), count = integer(0))
+  out_Hmut <- list(t = integer(0), ind = integer(0), count = integer(0))
+  
   # creation of lists to help with the execution time
   Phist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE)}))
   Hhist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE)}))
@@ -60,7 +79,6 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     hmut=phist[[1]]     # number of mutations for H
     pgen=phist[[1]]     # parents for P
     hgen=phist[[1]]     # parents for H
-    
     
     # begining of the internal loop _ execution between two timeStep
     while(time<min(u*timeStep*thin,NG)){
@@ -173,31 +191,136 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
       
       # recording
       if((t) %% thin ==0){
+        # for(i in 1:D){
+        #   phist[[i]][t/thin,changeP]=P[i,changeP]
+        #   hhist[[i]][t/thin,changeH]=H[i,changeH]
+        # }
+        
+        # compact version of the block above
         for(i in 1:D){
-          phist[[i]][t/thin,changeP]=P[i,changeP]
-          hhist[[i]][t/thin,changeH]=H[i,changeH]
+          if (length(changeP)) {
+            out_xP[[i]]$t <- c(out_xP[[i]]$t, rep(t, length(changeP)))
+            out_xP[[i]]$ind  <- c(out_xP[[i]]$ind,  changeP)
+            out_xP[[i]]$val  <- c(out_xP[[i]]$val,  P[i, changeP])
+            
+            out_xP[[i]]$t <- out_xP[[i]]$t[out_xP[[i]]$val != 0]
+            out_xP[[i]]$ind <- out_xP[[i]]$ind[out_xP[[i]]$val != 0]
+            out_xP[[i]]$val <- out_xP[[i]]$val[out_xP[[i]]$val != 0]
+            
+            out_xP[[i]]$dim <- c(NTime, N)
+          }
+          if (length(changeH)) {
+            out_xH[[i]]$t <- c(out_xH[[i]]$t, rep(t, length(changeH)))
+            out_xH[[i]]$ind  <- c(out_xH[[i]]$ind,  changeH)
+            out_xH[[i]]$val  <- c(out_xH[[i]]$val,  H[i, changeH])
+            
+            out_xH[[i]]$t <- out_xH[[i]]$t[out_xH[[i]]$val != 0]
+            out_xH[[i]]$ind <- out_xH[[i]]$ind[out_xH[[i]]$val != 0]
+            out_xH[[i]]$val <- out_xH[[i]]$val[out_xH[[i]]$val != 0]
+            
+            out_xH[[i]]$dim <- c(NTime, N)
+          }
         }
         
-        pgen[t/thin,changeP]=parentsP[changeP]
-        hgen[t/thin,changeH]=parentsH[changeH]
         
-        pmut[t/thin,]=pmut_act
-        hmut[t/thin,]=hmut_act
+        # pgen[t/thin,changeP]=parentsP[changeP]
+        # hgen[t/thin,changeH]=parentsH[changeH]
+        
+        # compact version of the block above
+        if (length(changeP)) {
+          out_Pgen$t   <- c(out_Pgen$t, rep(t, length(changeP)))
+          out_Pgen$child  <- c(out_Pgen$child, changeP)
+          out_Pgen$parent <- c(out_Pgen$parent, parentsP[changeP])
+          out_Pgen$dim <- c(NTime, N)
+        }
+        
+        if (length(changeH)) {
+          out_Hgen$t   <- c(out_Hgen$t, rep(t, length(changeH)))
+          out_Hgen$child  <- c(out_Hgen$child, changeH)
+          out_Hgen$parent <- c(out_Hgen$parent, parentsH[changeH])
+          out_Hgen$dim <- c(NTime, N)
+        }
+        
+        
+        # pmut[t/thin,]=pmut_act
+        # hmut[t/thin,]=hmut_act
+        
+        # compact version of the block above
+        mut_indsP <- which(pmut_act > 0)
+        if (length(mut_indsP)) {
+          out_Pmut$t  <- c(out_Pmut$t,  rep(t, length(mut_indsP)))
+          out_Pmut$ind   <- c(out_Pmut$ind,   mut_indsP)
+          out_Pmut$count <- c(out_Pmut$count, pmut_act[mut_indsP])
+          out_Pmut$dim <- c(NTime, N)
+        }
+        
+        mut_indsH <- which(hmut_act > 0)
+        if (length(mut_indsH)) {
+          out_Hmut$t  <- c(out_Hmut$t,  rep(t, length(mut_indsH)))
+          out_Hmut$ind   <- c(out_Hmut$ind,   mut_indsH)
+          out_Hmut$count <- c(out_Hmut$count, hmut_act[mut_indsH])
+          out_Hmut$dim <- c(NTime, N)
+        }
+        
       }
       
     }
     
-    Phist[[listInd]]=phist
-    Hhist[[listInd]]=hhist
-    Pmut[[listInd]]=pmut
-    Hmut[[listInd]]=hmut
-    Pgen[[listInd]]=pgen
-    Hgen[[listInd]]=hgen
+    Phist[[listInd]]=out_xP
+    Hhist[[listInd]]=out_xH
+    Pmut[[listInd]]=out_Pmut
+    Hmut[[listInd]]=out_Hmut
+    Pgen[[listInd]]=out_Pgen
+    Hgen[[listInd]]=out_Hgen
+    
+    # re-initialize the intermediate variables
+    out_Pgen$t <- integer(0)
+    out_Pgen$child <- integer(0)
+    out_Pgen$parent <- integer(0)
+    out_Pgen$dim <- c(NTime, N)
+    out_Hgen$t <- integer(0)
+    out_Hgen$child <- integer(0)
+    out_Hgen$parent <- integer(0)
+    out_Hgen$dim <- c(NTime, N)
+    
+    for(i in 1:D){
+      out_xP[[i]]$t <- integer(0)
+      out_xP[[i]]$ind <- integer(0)
+      out_xP[[i]]$val <- integer(0)
+      out_xP[[i]]$dim <- c(NTime, N)
+      out_xH[[i]]$t <- integer(0)
+      out_xH[[i]]$ind <- integer(0)
+      out_xH[[i]]$val <- integer(0)
+      out_xH[[i]]$dim <- c(NTime, N)
+    }
+    
+    out_Pmut$t <- integer(0)
+    out_Pmut$ind <- integer(0)
+    out_Pmut$count <- integer(0)
+    out_Pmut$dim <- c(NTime, N)
+    out_Hmut$t <- integer(0)
+    out_Hmut$ind <- integer(0)
+    out_Hmut$count <- integer(0)
+    out_Hmut$dim <- c(NTime, N)
     
     listInd=listInd+1
   }
   
-  return(list(Pgenealogy=Pgen,Hgenealogy=Hgen,xP=Phist,xH=Hhist,P=P,H=H,Pmut=Pmut,Hmut=Hmut,iniP=iniP,iniH=iniH,thin.factor=thin))
+
+  return(list(
+    Pgenealogy=Pgen,
+    Hgenealogy=Hgen,
+    xP=Phist,
+    xH=Hhist,
+    P=P,
+    H=H,
+    Pmut=Pmut,
+    Hmut=Hmut,
+    iniP=iniP,
+    iniH=iniH,
+    thin.factor=thin
+    ))
+  
 }
 
 
