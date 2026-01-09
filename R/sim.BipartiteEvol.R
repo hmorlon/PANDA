@@ -3,7 +3,6 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
                            verbose=100,thin=1,P=NULL,H=NULL){
 
   N=nx*ny     # number of individuals
-  NTime=ceiling((min(u*timeStep*thin,NG)-time)/thin) # number of time steps in one loop run
   timeStep=floor(sqrt(NG/(nH+nP)))
   oneByOne=FALSE
 
@@ -33,22 +32,20 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   out_xP <- lapply(1:D, function(j) list(
     t = integer(0),
     ind  = integer(0),
-    val  = numeric(0),
-    dim = c(Ntime, N)
+    val  = numeric(0)
   ))
   
   out_xH <- lapply(1:D, function(j) list(
     t = integer(0),
     ind  = integer(0),
-    val  = numeric(0),
-    dim = c(Ntime, N)
+    val  = numeric(0)
   ))
   
-  out_Pgen <- list(t = integer(0), child = integer(0), parent = integer(0), dim = c(Ntime, N))
-  out_Hgen <- list(t = integer(0), child = integer(0), parent = integer(0), dim = c(Ntime, N))
+  out_Pgen <- list(t = integer(0), child = integer(0), parent = integer(0))
+  out_Hgen <- list(t = integer(0), child = integer(0), parent = integer(0))
   
-  out_Pmut <- list(t = integer(0), ind = integer(0), count = integer(0), dim = c(Ntime, N))
-  out_Hmut <- list(t = integer(0), ind = integer(0), count = integer(0), dim = c(Ntime, N))
+  out_Pmut <- list(t = integer(0), ind = integer(0), count = integer(0))
+  out_Hmut <- list(t = integer(0), ind = integer(0), count = integer(0))
   
   # creation of lists to help with the execution time
   Phist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE)}))
@@ -70,6 +67,8 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   
   # beginning of the main loop
   for(u in 1:max(1,ceiling(NG/(timeStep*thin)))){
+    
+    NTime=ceiling((min(u*timeStep*thin,NG)-time)/thin) # number of time steps in one loop run
     
     t=0
     
@@ -207,9 +206,9 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
             out_xP[[i]]$t <- out_xP[[i]]$t[out_xP[[i]]$val != 0]
             out_xP[[i]]$ind <- out_xP[[i]]$ind[out_xP[[i]]$val != 0]
             out_xP[[i]]$val <- out_xP[[i]]$val[out_xP[[i]]$val != 0]
-            
-            out_xP[[i]]$dim <- c(NTime, N)
           }
+          out_xP[[i]]$dim <- c(NTime, N)
+          
           if (length(changeH)) {
             out_xH[[i]]$t <- c(out_xH[[i]]$t, rep(t, length(changeH)))
             out_xH[[i]]$ind  <- c(out_xH[[i]]$ind,  changeH)
@@ -218,9 +217,8 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
             out_xH[[i]]$t <- out_xH[[i]]$t[out_xH[[i]]$val != 0]
             out_xH[[i]]$ind <- out_xH[[i]]$ind[out_xH[[i]]$val != 0]
             out_xH[[i]]$val <- out_xH[[i]]$val[out_xH[[i]]$val != 0]
-            
-            out_xH[[i]]$dim <- c(NTime, N)
           }
+          out_xH[[i]]$dim <- c(NTime, N)
         }
         
         
@@ -232,16 +230,15 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
           out_Pgen$t   <- c(out_Pgen$t, rep(t, length(changeP)))
           out_Pgen$child  <- c(out_Pgen$child, changeP)
           out_Pgen$parent <- c(out_Pgen$parent, parentsP[changeP])
-          out_Pgen$dim <- c(NTime, N)
         }
+        out_Pgen$dim <- c(NTime, N)
         
         if (length(changeH)) {
           out_Hgen$t   <- c(out_Hgen$t, rep(t, length(changeH)))
           out_Hgen$child  <- c(out_Hgen$child, changeH)
           out_Hgen$parent <- c(out_Hgen$parent, parentsH[changeH])
-          out_Hgen$dim <- c(NTime, N)
         }
-        
+        out_Hgen$dim <- c(NTime, N)
         
         # pmut[t/thin,]=pmut_act
         # hmut[t/thin,]=hmut_act
@@ -252,16 +249,16 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
           out_Pmut$t  <- c(out_Pmut$t,  rep(t, length(mut_indsP)))
           out_Pmut$ind   <- c(out_Pmut$ind,   mut_indsP)
           out_Pmut$count <- c(out_Pmut$count, pmut_act[mut_indsP])
-          out_Pmut$dim <- c(NTime, N)
         }
+        out_Pmut$dim <- c(NTime, N)
         
         mut_indsH <- which(hmut_act > 0)
         if (length(mut_indsH)) {
           out_Hmut$t  <- c(out_Hmut$t,  rep(t, length(mut_indsH)))
           out_Hmut$ind   <- c(out_Hmut$ind,   mut_indsH)
           out_Hmut$count <- c(out_Hmut$count, hmut_act[mut_indsH])
-          out_Hmut$dim <- c(NTime, N)
         }
+        out_Hmut$dim <- c(NTime, N)
         
       }
       
