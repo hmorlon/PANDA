@@ -1,51 +1,3 @@
-# some helper functions to reduce memory usage
-# grow_init <- function(mode = "integer", initial_capacity = 1e6L) {
-#   buf <- switch(mode, # buf meaning buffer
-#                 integer = integer(initial_capacity),
-#                 numeric  = numeric(initial_capacity),
-#                 logical = logical(initial_capacity),
-#                 character = character(initial_capacity),
-#                 stop("Unsupported mode")
-#   )
-#   list(
-#     buf = buf,
-#     len = 0L,
-#     cap = initial_capacity,
-#     mode = mode
-#   )
-# }
-# 
-# grow_append <- function(obj, values) {
-#   n <- length(values)
-#   if (n == 0L) return(obj)
-#   
-#   new_len <- obj$len + n
-#   
-#   # enlarge if needed
-#   if (new_len > obj$cap) {
-#     new_cap <- max(obj$cap * 2L, new_len)
-#     length(obj$buf) <- new_cap
-#     obj$cap <- new_cap
-#   }
-#   
-#   idx <- (obj$len + 1L):new_len
-#   obj$buf[idx] <- values
-#   obj$len <- new_len
-#   obj
-# }
-# 
-# grow_finalize <- function(obj) {
-#   if (obj$len < obj$cap) {
-#     obj$buf <- obj$buf[seq_len(obj$len)]
-#   }
-#   obj$buf
-# }
-# 
-# reset_grow <- function(obj) {
-#   obj$len <- 0L        # means “logically empty”
-#   obj
-# }
-
 sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alphaP=0,alphaH=0,iniP=0,iniH=0,nP=1,nH=1,rP=1,rH=1,effect=1,
                            verbose=100,thin=1,P=NULL,H=NULL){
 
@@ -108,7 +60,7 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   # Pgen=Pmut
   # Hgen=Pmut
   
-  # maximum vector size needed to record a full inner loop. Need to be multiplied by 2 since the dead individuals are replaced by the same number of born individuals
+  # maximum vector size needed to record a full inner loop. nP and nH are assumed to be equal. Need to be multiplied by 2 since the dead individuals are replaced by the same number of born individuals
   len_inner <- floor(sqrt(NG/(nH+nP))) * nP * 2
   # number of inner loops contained in a main loop
   len_outer <- max(1,ceiling(NG/(timeStep*thin)))
@@ -558,7 +510,11 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     Hmut=Hmut,
     iniP=iniP,
     iniH=iniH,
-    thin.factor=thin
+    thin.factor=thin,
+    N = N,
+    NG = NG,
+    timeStep = timeStep,
+    D = D
     ))
   
 }
@@ -571,10 +527,9 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
 
 make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
   
-  N=ncol(out$Pmut[[1]])                                                  # number of individuals
-  NG=sum(sapply(1:length(out$Pmut),function(i){nrow(out$Pmut[[i]])}))    # total time steps number
-  D=length(out$xP[[1]])                                                  # dimension of trait space
-  time.step=nrow(out$Pmut)
+  N=out$N     # number of individuals
+  NG=out$NG    # total time steps number
+  D=out$D     # dimension of trait space
   
   # auxiliary function creating a genealogy for one type
   aux=function(P.trait,Gen,X,Mut,ini,thin,tree, verbose){
@@ -589,7 +544,8 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
     nMut=rep(0,N)                              # number of mutation between a node and its parent node
     t=NG                                       # actual time
     
-    listInd=length(Mut)+1                      # indice of the current matrix in the list
+    # listInd=length(Mut)+1                    # indice of the current matrix in the list
+    listInd=length(Mut$start)+1            # indice of the current matrix in the list
     time=NG                                    # time at the first row of the current matrix
     newInd=NULL                                # who was born at time t
     
@@ -598,16 +554,42 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
       # ie we are not yet at the root and there is more than one individual with descendant in the present
       
       listInd=listInd-1
-      time.step=nrow(Mut[[listInd]])
+      # time.step=nrow(Mut[[listInd]])
+      time.step=out$timeStep
       time=time-time.step
       if(time<0){
         time.step=time.step+time
         time=0
       }
       
-      x=lapply(1:D,function(i){X[[listInd]][[i]]})  # trait values
-      gen=Gen[[listInd]]                            # parents
-      mut=Mut[[listInd]]                            # mutation number
+      # x=lapply(1:D,function(i){X[[listInd]][[i]]})  # trait values
+      # gen=Gen[[listInd]]                            # parents
+      # mut=Mut[[listInd]]                            # mutation number
+      
+      # matric version
+      # trait values (here each row correspond to a dimension in the trait space)
+      x_start=X$start[,listInd]
+      x_siz=X$siz[,listInd]
+      x_t=X$t[,x_start[1]:(x_start[1]+x_siz[1]-1)]
+      x_ind=X$ind[,x_start[1]:(x_start[1]+x_siz[1]-1)]
+      x_val=X$val[,x_start[1]:(x_start[1]+x_siz[1]-1)]
+      # parents
+      gen_start=Gen$start[listInd]
+      gen_siz=Gen$siz[listInd]
+      gen_t=Gen$t[gen_start:(gen_start+gen_siz-1)]
+      gen_child=Gen$child[gen_start:(gen_start+gen_siz-1)]
+      gen_parent=Gen$parent[gen_start:(gen_start+gen_siz-1)]
+      # mutation number
+      mut_start=Mut$start[listInd]
+      mut_siz=Mut$siz[listInd]
+      mut_t <- integer(0)
+      mut_ind <- integer(0)
+      mut_count <- integer(0)
+      if(!is.na(mut_start) && !is.na(mut_siz)){
+        mut_t=Mut$t[mut_start:(mut_start+mut_siz-1)]
+        mut_ind=Mut$ind[mut_start:(mut_start+mut_siz-1)]
+        mut_count=Mut$count[mut_start:(mut_start+mut_siz-1)]
+      }
       
       # internal loop
       while(t>time){
@@ -618,19 +600,39 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
         if(verbose) cat(paste("\r",length(currentP),t,"\r"))
         
         if(is.null(newInd)){
-          newInd=which(gen[t-time,currentP]>0)
+          # newInd=which(gen[t-time,currentP]>0)
+          newInd=which(currentP %in% gen_child[which(gen_t == t-time)])
+          
         }
         
         # if there was a birth at time t
         if (sum(newInd)>0){
           newCurrentP=currentP
           newNodes=nodes
-          fathers=gen[t-time,currentP[newInd]]    # parents of the new individuals
+          # fathers=gen[t-time,currentP[newInd]]    # parents of the new individuals
+          if(length(which(gen_t == t-time)) > 0){
+            if(length(which(gen_child %in% currentP[newInd])) > 0){
+              temp_ind <- intersect(which(gen_t == t-time), which(gen_child %in% currentP[newInd]))
+            }
+          }
+          fathers=gen_parent[temp_ind]    # parents of the new individuals
           
           for(i in 1:length(newInd)){
             father=fathers[i]
             newCurrentP[newInd[i]]=father
-            nMut[nodes[newInd[i]]]=nMut[nodes[newInd[i]]]+(mut[t-time,currentP])[newInd[i]]
+            # nMut[nodes[newInd[i]]]=nMut[nodes[newInd[i]]]+(mut[t-time,currentP])[newInd[i]]
+            temp <- 0
+            if(length(which(mut_t == t-time)) > 0){
+              if(length(which(mut_ind == currentP[newInd[i]])) > 0){
+                temp_ind <- intersect(which(mut_t == t-time), which(mut_ind == currentP[newInd[i]]))
+                if(length(temp_ind) == 1){
+                  temp <- mut_count[temp_ind]
+                }else{
+                  print("wrong")
+                }
+              }
+            }
+            nMut[nodes[newInd[i]]]=nMut[nodes[newInd[i]]]+temp
             
             if(sum(fathers[1:i]==father)==1){
               # ie the individual do not have the same parent than another born at this time already treated
@@ -648,14 +650,44 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
                 # edge 1
                 edgeP=rbind(edgeP,c(node,nodes[newInd[i]]))
                 for(j in 1:D){
-                  xP[[j]]=c(xP[[j]],(x[[j]][t-time,currentP])[newInd[i]])
+                  
+                  temp <- 0
+                  if(length(which(x_t[1,] == t-time)) > 0){
+                    if(length(which(x_ind[1,] == currentP[newInd[i]])) > 0){
+                      temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == currentP[newInd[i]]))
+                      if(length(temp_ind) > 0){
+                        temp <- x_val[j,temp_ind]
+                      }
+                    }
+                  }
+                  
+                  xP[[j]]=c(
+                    xP[[j]],
+                    # (x[[j]][t-time,currentP])[newInd[i]]
+                    temp
+                    )
                 }
                 edge.length=c(edge.length,nodes_age[nodes[newInd[i]]]-t)
                 
                 # edge 2
                 edgeP=rbind(edgeP,c(node,nodes[currentP==father]))
                 for(j in 1:D){
-                  xP[[j]]=c(xP[[j]],x[[j]][t-time,father])
+                  
+                  temp <- 0
+                  if(length(which(x_t[1,] == t-time)) > 0){
+                    if(length(which(x_ind[1,] == father)) > 0){
+                      temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == father))
+                      if(length(temp_ind) > 0){
+                        temp <- x_val[j,temp_ind]
+                      }
+                    }
+                  }
+                  
+                  xP[[j]]=c(
+                    xP[[j]],
+                    # x[[j]][t-time,father]
+                    temp
+                    )
                 }
                 edge.length=c(edge.length,nodes_age[nodes[currentP==father]]-t)
                 
@@ -675,7 +707,23 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
                   # and the first of its offspring edges
                   edgeP=rbind(edgeP,c(node,nodes[newInd[i]]))
                   for(j in 1:D){
-                    xP[[j]]=c(xP[[j]],(x[[j]][t-time,currentP])[newInd[i]])
+                    
+                    temp <- 0
+                    if(length(which(x_t[1,] == t-time)) > 0){
+                      if(length(which(x_ind[1,] == currentP[newInd[i]])) > 0){
+                        temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == currentP[newInd[i]]))
+                        if(length(temp_ind) > 0){
+                          temp <- x_val[j,temp_ind]
+                        }
+                      }
+                    }
+                    
+                    xP[[j]]=c(
+                      xP[[j]],
+                      # (x[[j]][t-time,currentP])[newInd[i]])
+                      temp
+                    )
+                      
                   }
                   edge.length=c(edge.length,nodes_age[nodes[newInd[i]]]-t)
                   
@@ -699,7 +747,23 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
               #and add the corresponding edge
               edgeP=rbind(edgeP,c(Node,nodes[newInd[i]]))
               for(j in 1:D){
-                xP[[j]]=c(xP[[j]],(x[[j]][t-time,currentP])[newInd[i]])
+                
+                temp <- 0
+                if(length(which(x_t[1,] == t-time)) > 0){
+                  if(length(which(x_ind[1,] == currentP[newInd[i]])) > 0){
+                    temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == currentP[newInd[i]]))
+                    if(length(temp_ind) > 0){
+                      temp <- x_val[j,temp_ind]
+                    }
+                  }
+                }
+                
+                xP[[j]]=c(
+                  xP[[j]],
+                  # (x[[j]][t-time,currentP])[newInd[i]])
+                  temp
+                )
+                
               }
               newNodes[newInd[i]]=Node
               edge.length=c(edge.length,nodes_age[nodes[newInd[i]]]-t)
@@ -716,7 +780,8 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
           t=t-1
           newInd=NULL
         }else{
-          newInd=which(gen[t-time-1,currentP]>0)
+          # newInd=which(gen[t-time-1,currentP]>0)
+          newInd=which(currentP %in% gen_child[which(gen_t == t-time-1)])
           if(sum(newInd)>0 ){
             # ie there is a change in the next time step
             t=t-1
@@ -724,7 +789,12 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
             # we look for the next change
             newInd=NULL
             if(t>1 & length(currentP)>1){
-              mat=Matrix::which(gen[1:(t-time-1),currentP]>0,arr.ind = TRUE)
+              # mat=Matrix::which(comp_gen[1:(t-time-1),currentP]>0,arr.ind = TRUE)
+              ordr <- order(gen_child[gen_t >= 1 & gen_t <= t-time-1])
+              row <- gen_t[gen_t >= 1 & gen_t <= t-time-1][ordr]
+              col <- gen_child[gen_t >= 1 & gen_t <= t-time-1][ordr]
+              mat <- cbind(row, col)
+              
               if(length(mat)==0) {
                 t=time
               }else{
@@ -758,7 +828,12 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
         tree$edge=tree$edge+M
         edgeP=rbind(edgeP,tree$edge)
         edge.length=c(edge.length,tree$edge.length/thin)
-        for(j in 1:D) xP[[j]]=c(xP[[j]],tree$x[[j]])
+        for(j in 1:D){
+          xP[[j]]=c(
+            xP[[j]],
+            tree$x[[j]]
+            )
+        }
         for (i in 1:length(currentP)){
           ind=which(tree$tip.label==currentP[i])+M
           ind.edge=which(edgeP[,2]==ind)
@@ -782,7 +857,7 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
     traits[[D+1]]=nMut
     if(verbose) cat(".")
     
-    # make the tree well conformed and supress extinct lineages
+    # make the tree well conformed and suppress extinct lineages
     treeP=rigth.order.BE(treeP,traits)
     if(!is.null(tree) & (2*N-length(currentP))>N){
       extinct=treeP$tree$tip.label[treeP$tree$tip.label>N]
