@@ -1,3 +1,5 @@
+# this version requires the "bigmemory" and "ff" packages to avoid the copy-on-write behavior of R, which causes an explosion of memory usage.
+
 sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alphaP=0,alphaH=0,iniP=0,iniH=0,nP=1,nH=1,rP=1,rH=1,effect=1,
                            verbose=100,thin=1,P=NULL,H=NULL){
 
@@ -65,41 +67,83 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   # number of inner loops contained in a main loop
   len_outer <- max(1,ceiling(NG/(timeStep*thin)))
   
-  Phist_start <- matrix(NA, nrow = D, ncol = len_outer)
-  Phist_siz <- matrix(NA, nrow = D, ncol = len_outer)
-  Phist_t <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
-  Phist_ind <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
-  Phist_val <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # implemented with R's native data structures - can cause memeory blow-up sometimes
+  # Phist_start <- matrix(NA, nrow = D, ncol = len_outer)
+  # Phist_siz <- matrix(NA, nrow = D, ncol = len_outer)
+  # Phist_t <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # Phist_ind <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # Phist_val <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # 
+  # Hhist_start <- matrix(NA, nrow = D, ncol = len_outer)
+  # Hhist_siz <- matrix(NA, nrow = D, ncol = len_outer)
+  # Hhist_t <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # Hhist_ind <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # Hhist_val <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # 
+  # Pmut_start <- rep(NA, len_outer)
+  # Pmut_siz <- rep(NA, len_outer)
+  # Pmut_t <- rep(NA, len_inner * len_outer)
+  # Pmut_ind <- rep(NA, len_inner * len_outer)
+  # Pmut_count <- rep(NA, len_inner * len_outer)
+  # 
+  # Hmut_start <- rep(NA, len_outer)
+  # Hmut_siz <- rep(NA, len_outer)
+  # Hmut_t <- rep(NA, len_inner * len_outer)
+  # Hmut_ind <- rep(NA, len_inner * len_outer)
+  # Hmut_count <- rep(NA, len_inner * len_outer)
+  # 
+  # Pgen_start <- rep(NA, len_outer)
+  # Pgen_siz <- rep(NA, len_outer)
+  # Pgen_t <- rep(NA, len_inner * len_outer)
+  # Pgen_child <- rep(NA, len_inner * len_outer)
+  # Pgen_parent <- rep(NA, len_inner * len_outer)
+  # 
+  # Hgen_start <- rep(NA, len_outer)
+  # Hgen_siz <- rep(NA, len_outer)
+  # Hgen_t <- rep(NA, len_inner * len_outer)
+  # Hgen_child <- rep(NA, len_inner * len_outer)
+  # Hgen_parent <- rep(NA, len_inner * len_outer)
   
-  Hhist_start <- matrix(NA, nrow = D, ncol = len_outer)
-  Hhist_siz <- matrix(NA, nrow = D, ncol = len_outer)
-  Hhist_t <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
-  Hhist_ind <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
-  Hhist_val <- matrix(NA, nrow = D, ncol = len_inner * len_outer)
+  # memory-friendly version using bigmemeory and ff
+  library(bigmemory)
+  library(ff)
   
-  Pmut_start <- rep(NA, len_outer)
-  Pmut_siz <- rep(NA, len_outer)
-  Pmut_t <- rep(NA, len_inner * len_outer)
-  Pmut_ind <- rep(NA, len_inner * len_outer)
-  Pmut_count <- rep(NA, len_inner * len_outer)
+  Phist_start <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
+  Phist_siz   <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
+  Phist_t     <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
+  Phist_ind   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
+  Phist_val   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="double", init=NA)
   
-  Hmut_start <- rep(NA, len_outer)
-  Hmut_siz <- rep(NA, len_outer)
-  Hmut_t <- rep(NA, len_inner * len_outer)
-  Hmut_ind <- rep(NA, len_inner * len_outer)
-  Hmut_count <- rep(NA, len_inner * len_outer)
+  Hhist_start <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
+  Hhist_siz   <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
+  Hhist_t     <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hhist_ind   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hhist_val   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="double", init=NA)
   
-  Pgen_start <- rep(NA, len_outer)
-  Pgen_siz <- rep(NA, len_outer)
-  Pgen_t <- rep(NA, len_inner * len_outer)
-  Pgen_child <- rep(NA, len_inner * len_outer)
-  Pgen_parent <- rep(NA, len_inner * len_outer)
+  Pmut_start <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Pmut_siz   <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Pmut_t     <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Pmut_ind   <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Pmut_count <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
   
-  Hgen_start <- rep(NA, len_outer)
-  Hgen_siz <- rep(NA, len_outer)
-  Hgen_t <- rep(NA, len_inner * len_outer)
-  Hgen_child <- rep(NA, len_inner * len_outer)
-  Hgen_parent <- rep(NA, len_inner * len_outer)
+  Hmut_start <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Hmut_siz   <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Hmut_t     <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hmut_ind   <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hmut_count <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  
+  Pgen_start  <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Pgen_siz    <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Pgen_t      <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Pgen_child  <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Pgen_parent <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  
+  Hgen_start  <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Hgen_siz    <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
+  Hgen_t      <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hgen_child  <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hgen_parent <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  
   
   # preallocated lists to minimize memory use (list-based, avoid)
   # Phist=lapply(as.list(1:D),function(i) vector("list", max(1,ceiling(NG/(timeStep*thin))) ))
@@ -368,28 +412,28 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     start <- start_Pmut
     siz <- length(grow_finalize(out_Pmut$t))
     if(siz == 0){
-      Pmut_start[listInd] <- NA
-      Pmut_siz[listInd] <- NA
+      Pmut_start[1, listInd] <- NA
+      Pmut_siz[1, listInd] <- NA
     }else{
-      Pmut_start[listInd] <- start
-      Pmut_siz[listInd] <- siz
-      Pmut_t[start: (start+siz-1)] <- grow_finalize(out_Pmut$t)
-      Pmut_ind[start: (start+siz-1)] <- grow_finalize(out_Pmut$ind)
-      Pmut_count[start: (start+siz-1)] <- grow_finalize(out_Pmut$count)
+      Pmut_start[1, listInd] <- start
+      Pmut_siz[1, listInd] <- siz
+      Pmut_t[1, start: (start+siz-1)] <- grow_finalize(out_Pmut$t)
+      Pmut_ind[1, start: (start+siz-1)] <- grow_finalize(out_Pmut$ind)
+      Pmut_count[1, start: (start+siz-1)] <- grow_finalize(out_Pmut$count)
       start_Pmut <- start_Pmut + siz
     }
     
     start <- start_Hmut
     siz <- length(grow_finalize(out_Hmut$t))
     if(siz == 0){
-      Hmut_start[listInd] <- NA
-      Hmut_siz[listInd] <- NA
+      Hmut_start[1, listInd] <- NA
+      Hmut_siz[1, listInd] <- NA
     }else{
-      Hmut_start[listInd] <- start
-      Hmut_siz[listInd] <- siz
-      Hmut_t[start: (start+siz-1)] <- grow_finalize(out_Hmut$t)
-      Hmut_ind[start: (start+siz-1)] <- grow_finalize(out_Hmut$ind)
-      Hmut_count[start: (start+siz-1)] <- grow_finalize(out_Hmut$count)
+      Hmut_start[1, listInd] <- start
+      Hmut_siz[1, listInd] <- siz
+      Hmut_t[1, start: (start+siz-1)] <- grow_finalize(out_Hmut$t)
+      Hmut_ind[1, start: (start+siz-1)] <- grow_finalize(out_Hmut$ind)
+      Hmut_count[1, start: (start+siz-1)] <- grow_finalize(out_Hmut$count)
       start_Hmut <- start_Hmut + siz
     }
 
@@ -397,28 +441,28 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     start <- start_Pgen
     siz <- length(grow_finalize(out_Pgen$t))
     if(siz == 0){
-      Pgen_start[listInd] <- NA
-      Pgen_siz[listInd] <- NA
+      Pgen_start[1, listInd] <- NA
+      Pgen_siz[1, listInd] <- NA
     }else{
-      Pgen_start[listInd] <- start
-      Pgen_siz[listInd] <- siz
-      Pgen_t[start: (start+siz-1)] <- grow_finalize(out_Pgen$t)
-      Pgen_child[start: (start+siz-1)] <- grow_finalize(out_Pgen$child)
-      Pgen_parent[start: (start+siz-1)] <- grow_finalize(out_Pgen$parent)
+      Pgen_start[1, listInd] <- start
+      Pgen_siz[1, listInd] <- siz
+      Pgen_t[1, start: (start+siz-1)] <- grow_finalize(out_Pgen$t)
+      Pgen_child[1, start: (start+siz-1)] <- grow_finalize(out_Pgen$child)
+      Pgen_parent[1, start: (start+siz-1)] <- grow_finalize(out_Pgen$parent)
       start_Pgen <- start_Pgen + siz
     }
     
     start <- start_Hgen
     siz <- length(grow_finalize(out_Hgen$t))
     if(siz == 0){
-      Hgen_start[listInd] <- NA
-      Hgen_siz[listInd] <- NA
+      Hgen_start[1, listInd] <- NA
+      Hgen_siz[1, listInd] <- NA
     }else{
-      Hgen_start[listInd] <- start
-      Hgen_siz[listInd] <- siz
-      Hgen_t[start: (start+siz-1)] <- grow_finalize(out_Hgen$t)
-      Hgen_child[start: (start+siz-1)] <- grow_finalize(out_Hgen$child)
-      Hgen_parent[start: (start+siz-1)] <- grow_finalize(out_Hgen$parent)
+      Hgen_start[1, listInd] <- start
+      Hgen_siz[1, listInd] <- siz
+      Hgen_t[1, start: (start+siz-1)] <- grow_finalize(out_Hgen$t)
+      Hgen_child[1, start: (start+siz-1)] <- grow_finalize(out_Hgen$child)
+      Hgen_parent[1, start: (start+siz-1)] <- grow_finalize(out_Hgen$parent)
       start_Hgen <- start_Hgen + siz
     }
     
@@ -453,6 +497,8 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     out_Hmut$dim <- c(NTime, N)
     
     listInd=listInd+1
+    
+    gc()
     
   }
   
