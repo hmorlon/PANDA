@@ -1,7 +1,7 @@
-# this version requires the "bigmemory" and "ff" packages to avoid the copy-on-write behavior of R, which causes an explosion of memory usage.
+# this version requires the "bigmemory" package to avoid the copy-on-write behavior of R, which causes an explosion of memory usage.
 
 sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alphaP=0,alphaH=0,iniP=0,iniH=0,nP=1,nH=1,rP=1,rH=1,effect=1,
-                           verbose=100,thin=1,P=NULL,H=NULL){
+                           verbose=100,thin=1,P=NULL,H=NULL,PROC){
 
   N=nx*ny     # number of individuals
   timeStep=floor(sqrt(NG/(nH+nP)))
@@ -51,13 +51,13 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   out_Hmut <- list(t = grow_init("integer", init_cap), ind = grow_init("integer", init_cap), count = grow_init("integer", init_cap))
   
   # creation of lists to help with the execution time
-  # Phist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE)}))
-  # Hhist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE)}))
+  # Phist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,ncol=1,ncol=N,sparse=TRUE)}))
+  # Hhist=list(a=lapply(1:D,function(i){Matrix::Matrix(0,ncol=1,ncol=N,sparse=TRUE)}))
   # for(j in 1:D){
   #   Phist[[1]][[j]][1,]=P[j,]
   #   Hhist[[1]][[j]][1,]=H[j,]
   # }
-  # Pmut=list(a=Matrix::Matrix(0,nrow=1,ncol=N,sparse=TRUE))
+  # Pmut=list(a=Matrix::Matrix(0,ncol=1,ncol=N,sparse=TRUE))
   # Hmut=Pmut
   # Pgen=Pmut
   # Hgen=Pmut
@@ -104,45 +104,44 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
   # Hgen_child <- rep(NA, len_inner * len_outer)
   # Hgen_parent <- rep(NA, len_inner * len_outer)
   
-  # memory-friendly version using bigmemeory and ff
+  # memory-friendly version using bigmemeory
   library(bigmemory)
-  library(ff)
   
-  Phist_start <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
-  Phist_siz   <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
-  Phist_t     <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
-  Phist_ind   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
-  Phist_val   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="double", init=NA)
+  Phist_start <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Phist_start', sep = '_'), backingpath='backingfiles')
+  Phist_siz   <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Phist_siz', sep = '_'), backingpath='backingfiles')
+  Phist_t     <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Phist_t', sep = '_'), backingpath='backingfiles')
+  Phist_ind   <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Phist_ind', sep = '_'), backingpath='backingfiles')
+  Phist_val   <- big.matrix(ncol=D, nrow=len_inner * len_outer, type="double", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Phist_val', sep = '_'), backingpath='backingfiles')
   
-  Hhist_start <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
-  Hhist_siz   <- big.matrix(nrow=D, ncol=len_outer, type="integer", init=NA)
-  Hhist_t     <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
-  Hhist_ind   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="integer", init=NA)
-  Hhist_val   <- big.matrix(nrow=D, ncol=len_inner * len_outer, type="double", init=NA)
+  Hhist_start <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hhist_start', sep = '_'), backingpath='backingfiles')
+  Hhist_siz   <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hhist_siz', sep = '_'), backingpath='backingfiles')
+  Hhist_t     <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hhist_t', sep = '_'), backingpath='backingfiles')
+  Hhist_ind   <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hhist_ind', sep = '_'), backingpath='backingfiles')
+  Hhist_val   <- big.matrix(ncol=D, nrow=len_inner * len_outer, type="double", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hhist_val', sep = '_'), backingpath='backingfiles')
   
-  Pmut_start <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Pmut_siz   <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Pmut_t     <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Pmut_ind   <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Pmut_count <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Pmut_start <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pmut_start', sep = '_'), backingpath='backingfiles')
+  Pmut_siz   <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pmut_siz', sep = '_'), backingpath='backingfiles')
+  Pmut_t     <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pmut_t', sep = '_'), backingpath='backingfiles')
+  Pmut_ind   <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pmut_ind', sep = '_'), backingpath='backingfiles')
+  Pmut_count <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pmut_count', sep = '_'), backingpath='backingfiles')
   
-  Hmut_start <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Hmut_siz   <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Hmut_t     <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Hmut_ind   <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Hmut_count <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hmut_start <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hmut_start', sep = '_'), backingpath='backingfiles')
+  Hmut_siz   <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hmut_siz', sep = '_'), backingpath='backingfiles')
+  Hmut_t     <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hmut_t', sep = '_'), backingpath='backingfiles')
+  Hmut_ind   <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hmut_ind', sep = '_'), backingpath='backingfiles')
+  Hmut_count <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hmut_count', sep = '_'), backingpath='backingfiles')
   
-  Pgen_start  <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Pgen_siz    <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Pgen_t      <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Pgen_child  <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Pgen_parent <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Pgen_start  <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pgen_start', sep = '_'), backingpath='backingfiles')
+  Pgen_siz    <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pgen_siz', sep = '_'), backingpath='backingfiles')
+  Pgen_t      <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pgen_t', sep = '_'), backingpath='backingfiles')
+  Pgen_child  <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pgen_child', sep = '_'), backingpath='backingfiles')
+  Pgen_parent <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Pgen_parent', sep = '_'), backingpath='backingfiles')
   
-  Hgen_start  <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Hgen_siz    <- big.matrix(nrow=1, ncol=len_outer, type="integer", init=NA)
-  Hgen_t      <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Hgen_child  <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
-  Hgen_parent <- big.matrix(nrow=1, ncol=len_inner * len_outer, type="integer", init=NA)
+  Hgen_start  <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hgen_start', sep = '_'), backingpath='backingfiles')
+  Hgen_siz    <- big.matrix(ncol=1, nrow=len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hgen_siz', sep = '_'), backingpath='backingfiles')
+  Hgen_t      <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hgen_t', sep = '_'), backingpath='backingfiles')
+  Hgen_child  <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hgen_child', sep = '_'), backingpath='backingfiles')
+  Hgen_parent <- big.matrix(ncol=1, nrow=len_inner * len_outer, type="integer", init=NA, shared=T, separated=T)#, backingfile=paste(PROC, 'Hgen_parent', sep = '_'), backingpath='backingfiles')
   
   
   # preallocated lists to minimize memory use (list-based, avoid)
@@ -377,16 +376,16 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     siz <- length(grow_finalize(out_xP[[1]]$t))
     if(siz == 0){
       for (i in 1:D) {
-        Phist_start[i, listInd] <- NA
-        Phist_siz[i, listInd] <- NA
+        Phist_start[listInd, 1] <- NA
+        Phist_siz[listInd, 1] <- NA
       }
     }else{
       for (i in 1:D) {
-        Phist_start[i, listInd] <- start
-        Phist_siz[i, listInd] <- siz
-        Phist_t[i, start: (start+siz-1)] <- grow_finalize(out_xP[[i]]$t)
-        Phist_ind[i, start: (start+siz-1)] <- grow_finalize(out_xP[[i]]$ind)
-        Phist_val[i, start: (start+siz-1)] <- grow_finalize(out_xP[[i]]$val)
+        Phist_start[listInd, 1] <- start
+        Phist_siz[listInd, 1] <- siz
+        Phist_t[start: (start+siz-1), 1] <- grow_finalize(out_xP[[i]]$t)
+        Phist_ind[start: (start+siz-1), 1] <- grow_finalize(out_xP[[i]]$ind)
+        Phist_val[start: (start+siz-1), i] <- grow_finalize(out_xP[[i]]$val)
       }
       start_Phist <- start_Phist + siz
     }
@@ -395,16 +394,16 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     siz <- length(grow_finalize(out_xP[[1]]$t))
     if(siz == 0){
       for (i in 1:D) {
-        Hhist_start[i, listInd] <- NA
-        Hhist_siz[i, listInd] <- NA
+        Hhist_start[listInd, 1] <- NA
+        Hhist_siz[listInd, 1] <- NA
       }
     }else{
       for (i in 1:D) {
-        Hhist_start[i, listInd] <- start
-        Hhist_siz[i, listInd] <- siz
-        Hhist_t[i, start: (start+siz-1)] <- grow_finalize(out_xP[[i]]$t)
-        Hhist_ind[i, start: (start+siz-1)] <- grow_finalize(out_xP[[i]]$ind)
-        Hhist_val[i, start: (start+siz-1)] <- grow_finalize(out_xP[[i]]$val)
+        Hhist_start[listInd, 1] <- start
+        Hhist_siz[listInd, 1] <- siz
+        Hhist_t[start: (start+siz-1), 1] <- grow_finalize(out_xP[[i]]$t)
+        Hhist_ind[start: (start+siz-1), 1] <- grow_finalize(out_xP[[i]]$ind)
+        Hhist_val[start: (start+siz-1), i] <- grow_finalize(out_xP[[i]]$val)
       }
       start_Hhist <- start_Hhist + siz
     }
@@ -412,28 +411,28 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     start <- start_Pmut
     siz <- length(grow_finalize(out_Pmut$t))
     if(siz == 0){
-      Pmut_start[1, listInd] <- NA
-      Pmut_siz[1, listInd] <- NA
+      Pmut_start[listInd, 1] <- NA
+      Pmut_siz[listInd, 1] <- NA
     }else{
-      Pmut_start[1, listInd] <- start
-      Pmut_siz[1, listInd] <- siz
-      Pmut_t[1, start: (start+siz-1)] <- grow_finalize(out_Pmut$t)
-      Pmut_ind[1, start: (start+siz-1)] <- grow_finalize(out_Pmut$ind)
-      Pmut_count[1, start: (start+siz-1)] <- grow_finalize(out_Pmut$count)
+      Pmut_start[listInd, 1] <- start
+      Pmut_siz[listInd, 1] <- siz
+      Pmut_t[start: (start+siz-1), 1] <- grow_finalize(out_Pmut$t)
+      Pmut_ind[start: (start+siz-1), 1] <- grow_finalize(out_Pmut$ind)
+      Pmut_count[start: (start+siz-1), 1] <- grow_finalize(out_Pmut$count)
       start_Pmut <- start_Pmut + siz
     }
     
     start <- start_Hmut
     siz <- length(grow_finalize(out_Hmut$t))
     if(siz == 0){
-      Hmut_start[1, listInd] <- NA
-      Hmut_siz[1, listInd] <- NA
+      Hmut_start[listInd, 1] <- NA
+      Hmut_siz[listInd, 1] <- NA
     }else{
-      Hmut_start[1, listInd] <- start
-      Hmut_siz[1, listInd] <- siz
-      Hmut_t[1, start: (start+siz-1)] <- grow_finalize(out_Hmut$t)
-      Hmut_ind[1, start: (start+siz-1)] <- grow_finalize(out_Hmut$ind)
-      Hmut_count[1, start: (start+siz-1)] <- grow_finalize(out_Hmut$count)
+      Hmut_start[listInd, 1] <- start
+      Hmut_siz[listInd, 1] <- siz
+      Hmut_t[start: (start+siz-1), 1] <- grow_finalize(out_Hmut$t)
+      Hmut_ind[start: (start+siz-1), 1] <- grow_finalize(out_Hmut$ind)
+      Hmut_count[start: (start+siz-1), 1] <- grow_finalize(out_Hmut$count)
       start_Hmut <- start_Hmut + siz
     }
 
@@ -441,28 +440,28 @@ sim.BipartiteEvol=function(nx,ny=nx,NG,dSpace_H=Inf,dSpace_P=Inf,D=3,muP,muH,alp
     start <- start_Pgen
     siz <- length(grow_finalize(out_Pgen$t))
     if(siz == 0){
-      Pgen_start[1, listInd] <- NA
-      Pgen_siz[1, listInd] <- NA
+      Pgen_start[listInd, 1] <- NA
+      Pgen_siz[listInd, 1] <- NA
     }else{
-      Pgen_start[1, listInd] <- start
-      Pgen_siz[1, listInd] <- siz
-      Pgen_t[1, start: (start+siz-1)] <- grow_finalize(out_Pgen$t)
-      Pgen_child[1, start: (start+siz-1)] <- grow_finalize(out_Pgen$child)
-      Pgen_parent[1, start: (start+siz-1)] <- grow_finalize(out_Pgen$parent)
+      Pgen_start[listInd, 1] <- start
+      Pgen_siz[listInd, 1] <- siz
+      Pgen_t[start: (start+siz-1), 1] <- grow_finalize(out_Pgen$t)
+      Pgen_child[start: (start+siz-1), 1] <- grow_finalize(out_Pgen$child)
+      Pgen_parent[start: (start+siz-1), 1] <- grow_finalize(out_Pgen$parent)
       start_Pgen <- start_Pgen + siz
     }
     
     start <- start_Hgen
     siz <- length(grow_finalize(out_Hgen$t))
     if(siz == 0){
-      Hgen_start[1, listInd] <- NA
-      Hgen_siz[1, listInd] <- NA
+      Hgen_start[listInd, 1] <- NA
+      Hgen_siz[listInd, 1] <- NA
     }else{
-      Hgen_start[1, listInd] <- start
-      Hgen_siz[1, listInd] <- siz
-      Hgen_t[1, start: (start+siz-1)] <- grow_finalize(out_Hgen$t)
-      Hgen_child[1, start: (start+siz-1)] <- grow_finalize(out_Hgen$child)
-      Hgen_parent[1, start: (start+siz-1)] <- grow_finalize(out_Hgen$parent)
+      Hgen_start[listInd, 1] <- start
+      Hgen_siz[listInd, 1] <- siz
+      Hgen_t[start: (start+siz-1), 1] <- grow_finalize(out_Hgen$t)
+      Hgen_child[start: (start+siz-1), 1] <- grow_finalize(out_Hgen$child)
+      Hgen_parent[start: (start+siz-1), 1] <- grow_finalize(out_Hgen$parent)
       start_Hgen <- start_Hgen + siz
     }
     
@@ -613,28 +612,28 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
       # mut=Mut[[listInd]]                            # mutation number
       
       # matric version
-      # trait values (here each row correspond to a dimension in the trait space)
-      x_start=X$start[,listInd]
-      x_siz=X$siz[,listInd]
-      x_t=X$t[,x_start[1]:(x_start[1]+x_siz[1]-1)]
-      x_ind=X$ind[,x_start[1]:(x_start[1]+x_siz[1]-1)]
-      x_val=X$val[,x_start[1]:(x_start[1]+x_siz[1]-1)]
+      # trait values (here each col correspond to a dimension in the trait space)
+      x_start=X$start[listInd, 1]
+      x_siz=X$siz[listInd, 1]
+      x_t=X$t[x_start[1]:(x_start[1]+x_siz[1]-1), 1]
+      x_ind=X$ind[x_start[1]:(x_start[1]+x_siz[1]-1), 1]
+      x_val=X$val[x_start[1]:(x_start[1]+x_siz[1]-1), ]
       # parents
-      gen_start=Gen$start[listInd]
-      gen_siz=Gen$siz[listInd]
-      gen_t=Gen$t[gen_start:(gen_start+gen_siz-1)]
-      gen_child=Gen$child[gen_start:(gen_start+gen_siz-1)]
-      gen_parent=Gen$parent[gen_start:(gen_start+gen_siz-1)]
+      gen_start=Gen$start[listInd, 1]
+      gen_siz=Gen$siz[listInd, 1]
+      gen_t=Gen$t[gen_start:(gen_start+gen_siz-1), 1]
+      gen_child=Gen$child[gen_start:(gen_start+gen_siz-1), 1]
+      gen_parent=Gen$parent[gen_start:(gen_start+gen_siz-1), 1]
       # mutation number
-      mut_start=Mut$start[listInd]
-      mut_siz=Mut$siz[listInd]
+      mut_start=Mut$start[listInd, 1]
+      mut_siz=Mut$siz[listInd, 1]
       mut_t <- integer(0)
       mut_ind <- integer(0)
       mut_count <- integer(0)
       if(!is.na(mut_start) && !is.na(mut_siz)){
-        mut_t=Mut$t[mut_start:(mut_start+mut_siz-1)]
-        mut_ind=Mut$ind[mut_start:(mut_start+mut_siz-1)]
-        mut_count=Mut$count[mut_start:(mut_start+mut_siz-1)]
+        mut_t=Mut$t[mut_start:(mut_start+mut_siz-1), 1]
+        mut_ind=Mut$ind[mut_start:(mut_start+mut_siz-1), 1]
+        mut_count=Mut$count[mut_start:(mut_start+mut_siz-1), 1]
       }
       
       # internal loop
@@ -698,11 +697,11 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
                 for(j in 1:D){
                   
                   temp <- 0
-                  if(length(which(x_t[1,] == t-time)) > 0){
-                    if(length(which(x_ind[1,] == currentP[newInd[i]])) > 0){
-                      temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == currentP[newInd[i]]))
+                  if(length(which(x_t == t-time)) > 0){
+                    if(length(which(x_ind == currentP[newInd[i]])) > 0){
+                      temp_ind <- intersect(which(x_t == t-time), which(x_ind == currentP[newInd[i]]))
                       if(length(temp_ind) > 0){
-                        temp <- x_val[j,temp_ind]
+                        temp <- x_val[temp_ind, j]
                       }
                     }
                   }
@@ -720,11 +719,11 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
                 for(j in 1:D){
                   
                   temp <- 0
-                  if(length(which(x_t[1,] == t-time)) > 0){
-                    if(length(which(x_ind[1,] == father)) > 0){
-                      temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == father))
+                  if(length(which(x_t == t-time)) > 0){
+                    if(length(which(x_ind == father)) > 0){
+                      temp_ind <- intersect(which(x_t == t-time), which(x_ind == father))
                       if(length(temp_ind) > 0){
-                        temp <- x_val[j,temp_ind]
+                        temp <- x_val[temp_ind, j]
                       }
                     }
                   }
@@ -755,11 +754,11 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
                   for(j in 1:D){
                     
                     temp <- 0
-                    if(length(which(x_t[1,] == t-time)) > 0){
-                      if(length(which(x_ind[1,] == currentP[newInd[i]])) > 0){
-                        temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == currentP[newInd[i]]))
+                    if(length(which(x_t == t-time)) > 0){
+                      if(length(which(x_ind == currentP[newInd[i]])) > 0){
+                        temp_ind <- intersect(which(x_t == t-time), which(x_ind == currentP[newInd[i]]))
                         if(length(temp_ind) > 0){
-                          temp <- x_val[j,temp_ind]
+                          temp <- x_val[temp_ind, j]
                         }
                       }
                     }
@@ -795,11 +794,11 @@ make_gen.BipartiteEvol=function(out, treeP=NULL, treeH=NULL, verbose=TRUE){
               for(j in 1:D){
                 
                 temp <- 0
-                if(length(which(x_t[1,] == t-time)) > 0){
-                  if(length(which(x_ind[1,] == currentP[newInd[i]])) > 0){
-                    temp_ind <- intersect(which(x_t[1,] == t-time), which(x_ind[1,] == currentP[newInd[i]]))
+                if(length(which(x_t == t-time)) > 0){
+                  if(length(which(x_ind == currentP[newInd[i]])) > 0){
+                    temp_ind <- intersect(which(x_t == t-time), which(x_ind == currentP[newInd[i]]))
                     if(length(temp_ind) > 0){
-                      temp <- x_val[j,temp_ind]
+                      temp <- x_val[temp_ind, j]
                     }
                   }
                 }
