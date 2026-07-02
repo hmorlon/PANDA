@@ -4,6 +4,7 @@ import(ape)
 import(pspline)
 import(methods)
 import(glassoFast)
+import(ggplot2)
 
 
 importFrom(BB,spg)
