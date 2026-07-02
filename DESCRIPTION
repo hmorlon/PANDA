@@ -24,6 +24,7 @@ Imports:
 	grDevices, 
 	igraph, 
 	Matrix,
+	ggplot2,
 	mvtnorm,
 	mvMORPH (>= 1.1.6),
 	GUniFrac,
