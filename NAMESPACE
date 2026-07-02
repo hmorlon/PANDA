@@ -5,6 +5,7 @@ import(pspline)
 import(methods)
 import(glassoFast)
 import(ggplot2)
+import(GenSA)
 
 
 importFrom(BB,spg)
