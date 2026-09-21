@@ -16,6 +16,7 @@ Imports:
 	cluster, 
 	coda, 
 	deSolve, 
+	dplyr,
 	fields, 
 	fpc,
 	geiger,
