@@ -44,7 +44,8 @@ Imports:
 	stats, 
 	TESS, 
 	utils,
-	vegan
+	vegan, 
+	xlsx 
 Encoding: UTF-8
 Author: Hélène Morlon [aut, cre, cph],
 	Eric Lewitus [aut, cph],
