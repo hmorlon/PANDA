@@ -1,5 +1,6 @@
 CreateGeoObject<-function(phylo,map){
   	if(any(grepl("___",phylo$tip.label))){stop("script will not work with '___' in tip labels; remove extra underscores")}
+	if(length(unique(unlist(lapply(map$maps, names)))) == 1){stop("script will not work with entirely sympatric clade, there is no need for geography.object in fit_t_comp()")}
 	paste(rep(LETTERS,each=26),LETTERS,sep="")->TWOLETTERS
 	paste(rep(TWOLETTERS,each=26),LETTERS,sep="")->THREELETTERS
 	nodeDist<-vector(mode = "numeric", length = phylo$Nnode)
